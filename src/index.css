@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+*{
+  @apply scroll-smooth;
+}
+
+@layer component {
+  .glass-effect {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.4px);
+    -webkit-backdrop-filter: blur(4.4px);
+    border: 1px solid rgba(14, 14, 14, 0.04);
+  }
+
+  .glass-effect-card {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border: 1px solid rgba(14, 14, 14, 0.04);
+  }
+
+  .filter-selectBox{
+    @apply flex items-center justify-center gap-2;
+  }
+  
+  .title-icon{
+    @apply inline-block ring-6 ring-sky-400/20 ring-offset-2 ring-offset-sky-400 p-1 bg-sky-400 rounded-full;
+  }
+
+}
+
+.filter-type input[type="radio"]:checked + label{
+  @apply bg-sky-500 !text-white;
+}
+
+.genreType input[type="radio"]:checked + label{
+  @apply bg-sky-500 text-white hover:text-white;
+}
+
+.filter-lang input[type="checkbox"]:checked + label > div > span{
+  @apply !-translate-x-4/5 dark:!bg-slate-900 !bg-sky-500;
+}
+
+.activeDay{
+  @apply !bg-secondary !text-white dark:!bg-white dark:!text-secondary;
+}
+
+.active-paginate{
+  @apply bg-sky-500 text-white dark:text-primary border-sky-500 hover:bg-sky-500 ;
+}
+
+/* fonts */
+
+@font-face {
+  font-family: Shabnam;
+  src: url("./assets/fonts/Shabnam-Medium.ttf");
+}
+
+@font-face {
+  font-family: Vazir;
+  src: url("./assets/fonts/Vazirmatn-Medium.ttf");
+}
+
+/* custom styles */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-vazir: "Vazir";
+  --font-Shabnam: "Shabnam";
+
+  --purpleCustom : #813167;
+  --orangeCustom : #ff5722;
+  /* --custom-bg-primary: #1d1c21;
+  --custom-bg-secondary: #0d0d0d; */
+  /* --color-light:#f8f9fa ; */
+  
+  --color-primary: #1b1c22 ;
+
+  --color-secondary: #23242a ;
+
+  --color-light:#f8fafa ;
+  
+  --color-light-gray: #6a89a9;
+  
+  --breakpoint-xs:30rem;
+  
+}
