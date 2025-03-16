@@ -9,7 +9,7 @@ export default function FilterModal({ showModal, setShowModal }) {
     }
 
     return (
-        <div className={`fixed overflow-y-auto z-50 top-0 left-0 w-full h-full py-10 px-10 bg-white dark:bg-secondary flex xl:hidden flex-col items-center justify-center gap-5 transition-all ${showModal ? 'visible opacity-100 scale-100' : 'invisible opacity-0 scale-95'}`}>
+        <div className={`fixed overflow-y-auto z-50 top-0 left-0 w-full h-full py-10 px-10 bg-white dark:bg-secondary flex xl:hidden flex-col items-center justify-center gap-5 transition-all mb-7 ${showModal ? 'visible opacity-100 scale-100' : 'invisible opacity-0 scale-95'}`}>
 
             <button className="w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 cursor-pointer" onClick={hideMenu}>
                 <RxCross2 className="text-xl" />

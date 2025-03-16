@@ -14,7 +14,7 @@ import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 
-export default function MovieCard({ title, mainTitle, desc, src, languages, countries, genre, rating, year, time, dubed, subtitle, quality }) {
+export default function MovieCard({ id , title, mainTitle, type , desc, src, languages, countries, genre, rating, year, time, dubed, subtitle, quality }) {
 
     const calcRates = rates => {
         let likedRates = rates.filter(rate => rate.liked).length
@@ -131,7 +131,7 @@ export default function MovieCard({ title, mainTitle, desc, src, languages, coun
                     <h1 className="text-gray-500 dark:text-white font-vazir font-bold text-sm md:text-md">خلاصه داستان</h1>
                     <span className="font-vazir text-slate-400 dark:text-slate-300 text-sm space-x-1">
                         <span>{desc}</span>
-                        <a href="#" className="group text-sky-600 dark:text-yellow-500 space-x-1">
+                        <a href={`${type}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1">
                             <span>دانلود/جزییات بیشتر</span>
                             <PiArrowCircleLeftDuotone className="inline fill-sky-600 dark:fill-yellow-500 text-2xl group-hover:-translate-x-2 transition-all duration-150" />
                         </a>

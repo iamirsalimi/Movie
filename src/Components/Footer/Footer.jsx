@@ -5,7 +5,7 @@ import { PiTelegramLogoDuotone } from "react-icons/pi";
 
 export default function Footer() {
     return (
-        <div className='-mt-5 bg-white shadow shadow-black/5 dark:bg-secondary pt-10 flex flex-col gap-5'>
+        <footer className='mt-12 bg-white dark:bg-secondary pt-10 flex flex-col gap-5'>
             <div className="container px-5 mx-auto flex flex-col md:flex-row gap-5">
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-5 lg:gap-x-2 gap-y-5 py-7">
                     <div className="flex flex-col gap-2">
@@ -54,6 +54,6 @@ export default function Footer() {
             <div className="mx-auto w-full bg-gray-100 dark:bg-primary py-3">
                 <h2 className="container mx-auto text-gray-500 dark:text-white font-vazir text-center text-sm md:text-base md:text-justify">تمامی حقوق مادی و معنوی سایت متعلق به LOGO میباشد</h2>
             </div>
-        </div>
+        </footer>
     )
 }

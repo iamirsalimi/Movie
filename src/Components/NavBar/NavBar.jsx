@@ -23,7 +23,7 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
     }
 
     return (
-        <nav className="w-full z-40 transition-colors fixed shadow-xl shadow-black/5 bg-white dark:bg-primary ">
+        <nav className="w-full z-40 transition-colors shadow-xl shadow-black/5 bg-white dark:bg-primary ">
             <div className="mx-auto container flex items-center justify-between py-3 px-7">
                 <div className="flex items-center justify-start gap-2 sm:gap-5">
 

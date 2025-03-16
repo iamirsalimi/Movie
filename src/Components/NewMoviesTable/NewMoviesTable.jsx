@@ -26,7 +26,7 @@ export default function NewMoviesTable({ movies }) {
             </div>
             <ul className="mt-5 grid grid-cols-4 gap-2">
                 {movies.slice(0, 8).map(movie => (  
-                    <a href="#">
+                    <a href={`Movie/${movie.id}`}>
                         <li key={movie.id} className="group overflow-hidden relative rounded-lg h-32 cursor-pointer">
                             <img src={movie.src} className="w-full h-full object-cover object-center" alt="" />
                             <span className="absolute top-0 left-0 w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center duration-200"></span>

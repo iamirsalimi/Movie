@@ -4,7 +4,7 @@ import { MdOutlineDateRange } from "react-icons/md";
 
 const days = ['یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه' , 'شنبه']
 
-export default function WeeklyTable({ movieTable }) {
+export default function WeeklyTable({ movieTable , movies }) {
     let date = new Date()
 
     const [activeDay, setActiveDay] = useState(days[date.getDay()])
@@ -15,7 +15,9 @@ export default function WeeklyTable({ movieTable }) {
     let daysArray = firstArray.concat(secondArray)
 
     useEffect(() => {
-        setWeekMovies(movieTable[activeDay])
+        let movieArray = movieTable[activeDay].map(movie => [...movies.filter(movieItem => movieItem.id == movie.movieId) , movie.newEpisode])
+        setWeekMovies(movieArray)
+        console.log(movieArray)
     } , [activeDay])
 
     return (
@@ -39,13 +41,13 @@ export default function WeeklyTable({ movieTable }) {
             </div>
             <ul className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 py-4 px-4 h-full bg-light dark:bg-primary rounded-lg">
                 {weekMovies.length ? weekMovies.map(movie => (
-                    <li key={movie.id} className="rounded-md bg-light border-2 border-gray-200 dark:border-secondary dark:bg-primary max-h-18 flex gap-1">
+                    <li key={movie[0].id} className="rounded-md bg-light border-2 border-gray-200 dark:border-secondary dark:bg-primary max-h-18 flex gap-1">
                         <div className="w-1/3 p-1.5 h-full rounded-r-md !overflow-hidden">
-                            <img src={movie.src} className="w-14 h-14 object-cover object-center rounded-md" alt="" />
+                            <img src={movie[0].src} className="w-14 h-14 object-cover object-center rounded-md" alt="" />
                         </div>
                         <div className="flex flex-col items-start justify-between py-2 w-full text-sm">
-                            <h1 className="text-secondary font-bold dark:text-white mt-1">{movie.title}</h1>
-                            <span className="text-red-500 font-vazir">قسمت 5 فصل اول</span>
+                            <h1 className="text-secondary font-bold dark:text-white mt-1">{movie[0].title}</h1>
+                            <span className={`${movie[1] == null && 'hidden'} text-red-500 font-vazir`}>قسمت {movie[1]?.episode} فصل  {movie[1]?.season}</span>
                         </div>
                     </li>
                 )) : (
