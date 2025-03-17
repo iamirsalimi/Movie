@@ -44,7 +44,7 @@ export default function GenreTables({ genre, movies }) {
     }
 
     return (
-        <div className="rounded-lg bg-white shadow shadow-black/5 dark:bg-secondary flex flex-col p-3">
+        <div className="rounded-xl bg-white shadow shadow-black/5 dark:bg-secondary flex flex-col p-3">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4 mr-1">
                     <span className="title-icon">

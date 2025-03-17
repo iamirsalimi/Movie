@@ -4,6 +4,7 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
 import GenreMovie from './../../Components/GenreMovie/GenreMovie'
+import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import { movies } from '../../moviesData'
 
 
@@ -28,9 +29,14 @@ import { BsTv } from "react-icons/bs";
 import { IoLanguageSharp } from "react-icons/io5";
 import { RiTimer2Line } from "react-icons/ri";
 import { FiPlus } from "react-icons/fi";
+import { LuDownload } from "react-icons/lu";
+import { ImFilm } from "react-icons/im";
+import { HiMiniUsers } from "react-icons/hi2";
+import { FaRegCommentDots } from "react-icons/fa6";
 
 function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
+    const [movieTab, setMovieTab] = useState("download")
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
     let { movieType, movieId = -1 } = useParams()
@@ -39,6 +45,7 @@ function Movie() {
 
     let navigate = useNavigate()
     hasRoute == false && navigate('/')
+
 
     useEffect(() => {
         let mainMovieObj = movies.filter(movie => movie.type == movieType).find(movie => movie.id == movieId)
@@ -57,9 +64,26 @@ function Movie() {
         }
     }
 
-    useEffect(() => {
-        console.log(mainMovie)
-    }, [mainMovie])
+    const findMoviesHandler = idsArray => {
+        let similarMovies = idsArray.reduce((prev, current) => {
+            return [...prev, movies.find(movieItem => movieItem.id == current)]
+        }, [])
+
+        return similarMovies
+    }
+
+    // to change the tabs we should update the state
+    const changeTab = e => {
+        let target = e.target.tagName == "LI" ? event.target :
+            e.target.parentElement.tagName == "LI" ? event.target.parentElement :
+                event.target.parentElement.parentElement == 'LI' ? event.target.parentElement.parentElement : null
+
+        setMovieTab(target.dataset.tab)
+    }
+
+    // useEffect(() => {
+    //     console.log(mainMovie)
+    // }, [mainMovie])
 
     return (
         <>
@@ -69,8 +93,8 @@ function Movie() {
 
                 </div>
             ) : (
-                <div className="container mx-auto rounded-xl relative flex gap-5 shadow shadow-black/5 bg-white dark:bg-secondary h-fit overflow-hidden">
-                    <div className="flex flex-col">
+                <div className="container mx-auto relative flex flex-col gap-7">
+                    <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit overflow-hidden">
                         <div className="relative p-4 pb-3 h-fit">
                             <div className={`absolute top-0 left-0 w-full h-full object-cover`}>
                                 <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
@@ -103,7 +127,7 @@ function Movie() {
 
                                             <div className="hidden sm:flex items-center justify-center gap-1">
                                                 <BiLike className="text-2xl sm:text-3xl fill-green-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.rating[3])}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir">(5 رای)</span> </span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.rating[3])}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir">({mainMovie?.rating[3].rates.length} رای)</span> </span>
                                             </div>
                                         </div>
 
@@ -173,6 +197,7 @@ function Movie() {
                                 <p className="font-vazir text-gray-200 text-sm space-x-1">{mainMovie.desc}</p>
                             </div>
                         </div>
+
                         <div className="py-4 grid grid-cols-4 gap-y-5 gap-x-2 px-4 content-start h-52">
                             <GenreMovie genreTitle="کیفیت" genreValue={mainMovie.quality}>
                                 <BsCameraVideo className="text-gray-400" />
@@ -205,13 +230,78 @@ function Movie() {
                             </GenreMovie>
 
                             <div className="absolute bottom-3 left-2 flex items-center gap-2">
-                                <button className="px-3 py-2 text-xs rounded-full bg-primary text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer ">گزارش خرابی</button>
-                                <button className="px-3 py-2 text-xs rounded-full bg-primary text-gray-400 transition-all duration-200 hover:text-white font-vazir cursor-pointer">اشتراک گزاری</button>
+                                <button className="px-3 py-2 text-xs rounded-full bg-red-100 text-red-500 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer ">گزارش خرابی</button>
+                                <button className="px-3 py-2 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:text-primary dark:hover:text-white font-vazir cursor-pointer">اشتراک گزاری</button>
                             </div>
                         </div>
                     </div>
+                    <div className="flex h-fit flex-col p-4 gap-2 rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary ">
+                        <ul className="flex items-center justify-start gap-5 border-b border-gray-100 dark:border-primary">
+                            <li
+                                data-tab="download"
+                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "download" && 'activeMovieTab'}`}
+                                onClick={changeTab}
+                            >
+                                <LuDownload className="text-base" />
+                                <span>باکس دانلود</span>
+                            </li>
+                            <li
+                                data-tab="similar"
+                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "similar" && 'activeMovieTab'}`}
+                                onClick={changeTab}
+                            >
+                                <ImFilm className="text-base" />
+                                <span>سریال های مشابه</span>
+                            </li>
+                            <li
+                                data-tab="actors"
+                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "actors" && 'activeMovieTab'}`}
+                                onClick={changeTab}
+                            >
+                                <HiMiniUsers className="text-base" />
+                                <span>عوامل و بازیگران</span>
+                            </li>
+                            <li
+                                data-tab="comments"
+                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "comments" && 'activeMovieTab'}`}
+                                onClick={changeTab}
+                            >
+                                <FaRegCommentDots className="text-base" />
+                                <span>دیدگاه ها</span>
+                            </li>
+                        </ul>
+                        <div className="pt-5">
+                            <div className="w-full h-fit rounded-lg">
+                                {movieTab == 'download' && (
+                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                        <h2 className="text-red-500 dark:bg-primary font-semibold font-vazir">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
+                                        <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
+                                    </div>
+                                )}
+                                {movieTab == 'similar' && (
+                                    <ul className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
+                                        {findMoviesHandler(mainMovie.similar).map(movie => (
+                                            <NewMovieCard {...movie} showTitle />
+                                        ))}
+                                    </ul>
+                                )}
 
+                                {movieTab == 'actors' && (
+                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                        actors
+                                    </div>
+                                )}
 
+                                {movieTab == 'comments' && (
+                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                        comments
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             )}
         </>

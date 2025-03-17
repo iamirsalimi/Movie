@@ -49,6 +49,10 @@
   @apply bg-sky-500 text-white dark:text-primary border-sky-500 hover:bg-sky-500 ;
 }
 
+.activeMovieTab{
+  @apply text-sky-500 font-bold border-b border-sky-500 after:border-sky-500 after:border-b-transparent after:border-r-transparent after:border-l-transparent;
+}
+
 /* fonts */
 
 @font-face {
