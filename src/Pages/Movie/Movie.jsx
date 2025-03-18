@@ -76,7 +76,6 @@ function Movie() {
             return [...prev, mainArray.find(item => item.id == realId)]
         }, [])
         
-        console.log(extractedArray)
         return extractedArray
     }
 
@@ -109,9 +108,6 @@ function Movie() {
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
-
-    console.log(actors)
-
 
     return (
         <>
@@ -316,7 +312,7 @@ function Movie() {
                                 )}
 
                                 {movieTab == 'actors' && (
-                                    <div className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
+                                    <div className="py-2 pb-5 px-5 grid grid-cols-6 gap-5">
                                         {findArrayByIds(mainMovie?.actors , actors , true).map(actor => (
                                             <ActorsCard {...actor} />
                                         ))}

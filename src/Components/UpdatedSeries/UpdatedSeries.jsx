@@ -60,7 +60,7 @@ export default function UpdatedSeries({ series }) {
             </div>
             <ul className="mt-5 flex flex-col gap-2">
                 {updatedSeries.map(seriesItem => (
-                    <a href={`series/${seriesItem.id}`}>
+                    <a href={`/series/${seriesItem.id}`}>
                         <li key={seriesItem.id} className="w-full bg-light dark:bg-primary flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
                             <div className="min-w-20 max-w-20 h-20 rounded-md overflow-hidden">
                                 <img src={seriesItem.src} className="w-full h-full object-cover object-center" alt="" />
