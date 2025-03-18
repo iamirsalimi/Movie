@@ -3,7 +3,6 @@ import React from 'react'
 import { FaPlay } from "react-icons/fa6";
 
 export default function NewMovieCard({ id, src, title, type , showTitle }) {
-    console.log(type , title ,id, `${!showTitle ? `${type == 'series' ? '/series' : '/movie'}/` : ''}${id}`)
     return (
         <a href={`/${type == 'series' ? 'series' : 'movie'}/${id}`} className="relative pb-2 group">
             <li key={id} className={`group overflow-hidden relative rounded-lg ${showTitle ? 'h-40' : 'h-32'} cursor-pointer`}>

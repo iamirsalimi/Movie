@@ -5,7 +5,8 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom'
 import WithPageContent from './../../HOCs/WithPageContent'
 import GenreMovie from './../../Components/GenreMovie/GenreMovie'
 import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
-import { movies } from '../../moviesData'
+import ActorsCard from './../../Components/ActorsCard/ActorsCard'
+import { movies, actors } from '../../moviesData'
 
 
 // icons
@@ -15,10 +16,8 @@ import { SiMetacritic } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import { SiRottentomatoes } from "react-icons/si";
 import { BiLike } from "react-icons/bi";
-import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
-import { CiBookmark } from "react-icons/ci";
 import { FiFlag } from "react-icons/fi";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
@@ -33,6 +32,9 @@ import { LuDownload } from "react-icons/lu";
 import { ImFilm } from "react-icons/im";
 import { HiMiniUsers } from "react-icons/hi2";
 import { FaRegCommentDots } from "react-icons/fa6";
+import { PiArrowCircleLeftDuotone } from "react-icons/pi";
+import { CiBookmark } from "react-icons/ci";
+
 
 function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
@@ -64,13 +66,36 @@ function Movie() {
         }
     }
 
-    const findMoviesHandler = idsArray => {
-        let similarMovies = idsArray.reduce((prev, current) => {
-            return [...prev, movies.find(movieItem => movieItem.id == current)]
-        }, [])
 
-        return similarMovies
+    // this function will find ids in mainArray and return the main Object of Ids we use this for finding similar movies and actors , in movie object we have two property "similar" and "actors" in both we have an array of ids and we should extract the main object of each value accord ids (on actors property in movie's object , we have an array which has object per indexes but in "similar" in movie's property we have ids per indexes so we use actors flag to realize when we have to use object instead of primitive type values) 
+    const findArrayByIds = (idsArray , mainArray , actorsFlag) => {
+        let extractedArray = idsArray.reduce((prev, realId) => {
+            if(actorsFlag){
+                return [...prev, mainArray.find(item => item.id == realId.id)]
+            }
+            return [...prev, mainArray.find(item => item.id == realId)]
+        }, [])
+        
+        console.log(extractedArray)
+        return extractedArray
     }
+
+    // const findMoviesHandler = movieIdsArray => {
+    //     let similarMovies = movieIdsArray.reduce((prev, current) => {
+    //         return [...prev, movies.find(movieItem => movieItem.id == current)]
+    //     }, [])
+        
+    //     return similarMovies
+    // }
+    
+    // const findActorsHandler = actorsIdsArray => {
+    //     let Actors = actorsIdsArray.reduce((prev, current) => {
+    //         return [...prev, movies.find(movieItem => movieItem.id == current)]
+    //     }, [])
+        
+    //     return Actors
+    // }
+
 
     // to change the tabs we should update the state
     const changeTab = e => {
@@ -84,6 +109,9 @@ function Movie() {
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
+
+    console.log(actors)
+
 
     return (
         <>
@@ -268,6 +296,7 @@ function Movie() {
                             >
                                 <FaRegCommentDots className="text-base" />
                                 <span>دیدگاه ها</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold">{mainMovie?.comments.length}</span>
                             </li>
                         </ul>
                         <div className="pt-5">
@@ -280,15 +309,17 @@ function Movie() {
                                 )}
                                 {movieTab == 'similar' && (
                                     <ul className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
-                                        {findMoviesHandler(mainMovie.similar).map(movie => (
+                                        {findArrayByIds(mainMovie.similar , movies).map(movie => (
                                             <NewMovieCard {...movie} showTitle />
                                         ))}
                                     </ul>
                                 )}
 
                                 {movieTab == 'actors' && (
-                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                        actors
+                                    <div className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
+                                        {findArrayByIds(mainMovie?.actors , actors , true).map(actor => (
+                                            <ActorsCard {...actor} />
+                                        ))}
                                     </div>
                                 )}
 
