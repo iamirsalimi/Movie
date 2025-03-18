@@ -57,16 +57,16 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                         </a>
                     </ul>
                 </div>
-                <div className="flex items-center justify-end gap-3 sm:gap-2">
+                <div className="flex items-center justify-end gap-2">
                     <button onClick={changeTheme} className="flex items-center p-2 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all">
                         {theme == 'dark' ? (
                             <IoSunnyOutline className="stroke-white text-2xl" />
                         ) : (
-                            <BsFillMoonStarsFill className="fill-gray-400 text-xl" />
+                            <BsFillMoonStarsFill className="fill-gray-400 text-2xl" />
                         )}
                     </button>
                     <button
-                        className="p-1 cursor-pointer p-2 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 transition-all"
+                        className="cursor-pointer p-2 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 transition-all"
                         onClick={showModal}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 stroke-gray-400  dark:stroke-white">

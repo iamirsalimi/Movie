@@ -6,6 +6,8 @@ import WithPageContent from './../../HOCs/WithPageContent'
 import GenreMovie from './../../Components/GenreMovie/GenreMovie'
 import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
+import Comment from './../../Components/Comment/Comment'
+import CommentForm from '../../Components/CommentForm/CommentForm'
 import { movies, actors } from '../../moviesData'
 
 
@@ -35,10 +37,10 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { CiBookmark } from "react-icons/ci";
 
-
 function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
     const [movieTab, setMovieTab] = useState("download")
+    const [showAddCommentForm, setShowAddCommentForm] = useState(true)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
     let { movieType, movieId = -1 } = useParams()
@@ -68,33 +70,16 @@ function Movie() {
 
 
     // this function will find ids in mainArray and return the main Object of Ids we use this for finding similar movies and actors , in movie object we have two property "similar" and "actors" in both we have an array of ids and we should extract the main object of each value accord ids (on actors property in movie's object , we have an array which has object per indexes but in "similar" in movie's property we have ids per indexes so we use actors flag to realize when we have to use object instead of primitive type values) 
-    const findArrayByIds = (idsArray , mainArray , actorsFlag) => {
+    const findArrayByIds = (idsArray, mainArray, actorsFlag) => {
         let extractedArray = idsArray.reduce((prev, realId) => {
-            if(actorsFlag){
+            if (actorsFlag) {
                 return [...prev, mainArray.find(item => item.id == realId.id)]
             }
             return [...prev, mainArray.find(item => item.id == realId)]
         }, [])
-        
+
         return extractedArray
     }
-
-    // const findMoviesHandler = movieIdsArray => {
-    //     let similarMovies = movieIdsArray.reduce((prev, current) => {
-    //         return [...prev, movies.find(movieItem => movieItem.id == current)]
-    //     }, [])
-        
-    //     return similarMovies
-    // }
-    
-    // const findActorsHandler = actorsIdsArray => {
-    //     let Actors = actorsIdsArray.reduce((prev, current) => {
-    //         return [...prev, movies.find(movieItem => movieItem.id == current)]
-    //     }, [])
-        
-    //     return Actors
-    // }
-
 
     // to change the tabs we should update the state
     const changeTab = e => {
@@ -305,7 +290,7 @@ function Movie() {
                                 )}
                                 {movieTab == 'similar' && (
                                     <ul className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
-                                        {findArrayByIds(mainMovie.similar , movies).map(movie => (
+                                        {findArrayByIds(mainMovie.similar, movies).map(movie => (
                                             <NewMovieCard {...movie} showTitle />
                                         ))}
                                     </ul>
@@ -313,15 +298,45 @@ function Movie() {
 
                                 {movieTab == 'actors' && (
                                     <div className="py-2 pb-5 px-5 grid grid-cols-6 gap-5">
-                                        {findArrayByIds(mainMovie?.actors , actors , true).map(actor => (
+                                        {findArrayByIds(mainMovie?.actors, actors, true).map(actor => (
                                             <ActorsCard {...actor} />
                                         ))}
                                     </div>
                                 )}
 
                                 {movieTab == 'comments' && (
-                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                        comments
+                                    <div className="py-2 pb-5 px-5 flex flex-col items-center justify-center gap-7">
+                                        <div className="flex flex-col gap-4">
+                                            <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
+                                                <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
+                                                <ul className="flex flex-col gap-1">
+                                                    <li className="text-red-500 font-vazir">ادب را رعایت کنید</li>
+                                                    <li className="text-red-500 font-vazir">پرهیز از دیدگاه های بی ربط</li>
+                                                    <li className="text-red-500 font-vazir">در صورتي كه دیدگاه شما داراي اسپویل می باشد ، حتما مطمین شوید که مقدار "دیدگاه دارای اسپویل است" را فعال می کنید</li>
+                                                    <li className="text-red-500 font-vazir">دیدگاه شما ابتدا توسط ادمین تایید سپس نمایش داده می شود ، در نتیجه مطمین شوید قوانین را رعایت می کنید</li>
+                                                </ul>
+                                            </div>
+                                            {/* leaving Comment */}
+                                            {showAddCommentForm && (
+                                                <CommentForm />
+                                            )}
+                                        </div>
+
+                                        {/* Movie's Comments */}
+                                        <div className="w-full py-5  border-t border-gray-100 dark:border-primary">
+                                            {mainMovie.comments.length ? (
+                                                <div className="flex flex-col items-center justify-center gap-5">
+                                                    {mainMovie.comments.map(comment => (
+                                                        <Comment key={comment.id} {...comment} showAddComment={setShowAddCommentForm} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="bg-red-100 dark:bg-primary text-center py-4 w-full rounded-md">
+                                                    <h2 className="text-red-500 font-semibold font-vazir text-sm">هیچ ديدگاهي ثبت نشده :(</h2>
+                                                </div>
+                                            )}
+                                        </div>
+
                                     </div>
                                 )}
 

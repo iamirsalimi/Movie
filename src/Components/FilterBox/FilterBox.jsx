@@ -73,8 +73,8 @@ export default function FilterBox({setShowFilterModal}) {
                         <input type="checkbox" className="hidden" id="subtitle" />
                         <label htmlFor="subtitle" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
                             <span>زيرنويس</span>
-                            <div className="flex items-center w-12 rounded-full bg-sky-100 dark:bg-white p-0.5 cursor-pointer transition-colors">
-                                <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-sky-500"></span>
+                            <div className="flex items-center w-12 rounded-full bg-gray-200 dark:bg-gray-700 p-0.5 cursor-pointer transition-colors">
+                                <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-white"></span>
                             </div>
                         </label>
                     </div>
@@ -82,8 +82,8 @@ export default function FilterBox({setShowFilterModal}) {
                         <input type="checkbox" className="hidden" id="dubed" />
                         <label htmlFor="dubed" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
                             <span>دوبله</span>
-                            <div className="flex items-center w-12 rounded-full bg-sky-100 dark:bg-white p-0.5 cursor-pointer transition-colors">
-                                <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-sky-500"></span>
+                            <div className="flex items-center w-12 rounded-full bg-gray-200 dark:bg-gray-700 p-0.5 cursor-pointer transition-colors">
+                                <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-white"></span>
                             </div>
                         </label>
                     </div>

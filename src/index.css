@@ -37,8 +37,12 @@
   @apply bg-sky-500 text-white hover:text-white;
 }
 
+.filter-lang input[type="checkbox"]:checked + label > div{
+  @apply !bg-sky-100;
+}
+
 .filter-lang input[type="checkbox"]:checked + label > div > span{
-  @apply !-translate-x-4/5 dark:!bg-slate-900 !bg-sky-500;
+  @apply !-translate-x-4/5  !bg-sky-500;
 }
 
 .activeDay{
