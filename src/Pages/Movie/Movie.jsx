@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Navigate, useNavigate } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
-import GenreMovie from './../../Components/GenreMovie/GenreMovie'
+import MovieInfos from '../../Components/MovieInfos/MovieInfos'
 import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
 
-import { movies, actors } from '../../moviesData'
+import { movies, casts } from '../../moviesData'
 
 
 // icons
@@ -72,10 +72,10 @@ function Movie() {
     }
 
 
-    // this function will find ids in mainArray and return the main Object of Ids we use this for finding similar movies and actors , in movie object we have two property "similar" and "actors" in both we have an array of ids and we should extract the main object of each value accord ids (on actors property in movie's object , we have an array which has object per indexes but in "similar" in movie's property we have ids per indexes so we use actors flag to realize when we have to use object instead of primitive type values) 
-    const findArrayByIds = (idsArray, mainArray, actorsFlag) => {
+    // this function will find ids in mainArray and return the main Object of Ids we use this for finding similar movies and casts , in movie object we have two property "similar" and "casts" in both we have an array of ids and we should extract the main object of each value accord ids (on casts property in movie's object , we have an array which has object per indexes but in "similar" in movie's property we have ids per indexes so we use casts flag to realize when we have to use object instead of primitive type values) 
+    const findArrayByIds = (idsArray, mainArray, castsFlag) => {
         let extractedArray = idsArray.reduce((prev, realId) => {
-            if (actorsFlag) {
+            if (castsFlag) {
                 return [...prev, mainArray.find(item => item.id == realId.id)]
             }
             return [...prev, mainArray.find(item => item.id == realId)]
@@ -127,21 +127,21 @@ function Movie() {
             ) : (
                 <div className="container mx-auto relative flex flex-col gap-7">
                     <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit overflow-hidden">
-                        <div className="relative p-4 pb-3 h-fit">
+                        <div className="relative p-4 pb-3 h-max">
                             <div className={`absolute top-0 left-0 w-full h-full object-cover`}>
                                 <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
                                 <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-l from-black from-35% to-black/30"></span>
                             </div>
 
                             <div className="relative flex flex-col gap-4 h-fit">
-                                <div className="w-full flex gap-5 overflow-hidden h-[315px]">
-                                    <div className="w-1/4 h-full overflow-hidden rounded-lg">
-                                        <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center" />
+                                <div className="w-full flex flex-col lg:flex-row gap-5 overflow-hidden h-max lg:h-[315px]">
+                                    <div className="w-full lg:w-1/4 overflow-hidden rounded-lg h-[400px]">
+                                        <img src={mainMovie?.src} alt="" className="w-full h-[400px] lg:h-full object-cover object-center" />
                                     </div>
-                                    <div className="w-3/4 flex flex-col items-start gap-4">
+                                    <div className="w-full lg:w-3/4 flex flex-col items-center lg:items-start justify-center gap-4">
                                         <h1 className="text-white font-bold text-xl line-clamp-1">{mainMovie.mainTitle}</h1>
 
-                                        <div className="w-full flex items-center justify-start gap-10">
+                                        <div className="w-full flex items-center justify-center lg:justify-start gap-10">
                                             <div className="flex items-center justify-center gap-1">
                                                 <FaImdb className="text-2xl sm:text-3xl fill-yellow-500" />
                                                 <span className="font-bold"><span className="text-lg sm:text-xl text-yellow-500">{mainMovie.rating[0].rate}</span><span className="text-white">/10</span></span>
@@ -163,7 +163,7 @@ function Movie() {
                                             </div>
                                         </div>
 
-                                        <ul className="flex flex-col gap-2">
+                                        <ul className="flex flex-col items-center justify-center lg:justify-start gap-2">
                                             <li className="flex items-center justify-start gap-2">
                                                 <span className="flex items-center justify-center gap-1 font-vazir text-gray-400">
                                                     <FaTheaterMasks className="text-xl" />
@@ -179,7 +179,7 @@ function Movie() {
                                                     <MdOutlineDateRange className="text-xl" />
                                                     <span>سال انتشار</span>
                                                 </span>
-                                                <span className="text-white text-light dark:text-white font-vazir text-nowrap font-semibold text-sm">{mainMovie.year}</span>
+                                                <span className="text-white dark:text-white font-vazir text-nowrap font-semibold text-sm">{mainMovie.year}</span>
                                             </li>
 
                                             <li className="flex items-center justify-start gap-2">
@@ -226,40 +226,40 @@ function Movie() {
                                         </div>
                                     </div>
                                 </div>
-                                <p className="font-vazir text-gray-200 text-sm space-x-1">{mainMovie.desc}</p>
+                                <p className="font-vazir text-gray-200 text-sm text-center lg:text-justify space-x-1">{mainMovie.desc}</p>
                             </div>
                         </div>
 
-                        <div className="py-4 grid grid-cols-4 gap-y-5 gap-x-2 px-4 content-start h-52">
-                            <GenreMovie genreTitle="کیفیت" genreValue={mainMovie.quality}>
-                                <BsCameraVideo className="text-gray-400" />
-                            </GenreMovie>
+                        <div className="py-4 grid grid-cols-2 lg:grid-cols-4 gap-y-5 gap-x-2 px-4 pb-20 content-start min-h-52">
+                            <MovieInfos infoTitle="کیفیت" infoValue={mainMovie.quality}>
+                                <BsCameraVideo className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
                             {mainMovie.type == 'series' && (
-                                <GenreMovie genreTitle="وضعیت پخش" genreValue={mainMovie.status}>
-                                    <FiEye className="text-gray-400" />
-                                </GenreMovie>
+                                <MovieInfos infoTitle="وضعیت پخش" infoValue={mainMovie.status}>
+                                    <FiEye className="text-gray-400 text-xs md:text-base" />
+                                </MovieInfos>
                             )}
 
-                            <GenreMovie genreTitle="شبکه" genreValue="Netflix">
-                                <BsTv className="text-gray-400" />
-                            </GenreMovie>
+                            <MovieInfos infoTitle="شبکه" infoValue="Netflix">
+                                <BsTv className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
-                            <GenreMovie genreTitle="سال های پخش" genreValue={mainMovie.year}>
-                                <MdOutlineDateRange className="text-gray-400" />
-                            </GenreMovie>
+                            <MovieInfos infoTitle="سال های پخش" infoValue={mainMovie.year}>
+                                <MdOutlineDateRange className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
-                            <GenreMovie genreTitle="زبان" genreValue={mainMovie.languages}>
-                                <IoLanguageSharp className="text-gray-400" />
-                            </GenreMovie>
+                            <MovieInfos infoTitle="زبان" infoValue={mainMovie.languages}>
+                                <IoLanguageSharp className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
-                            <GenreMovie genreTitle="مدت زمان" genreValue={mainMovie.time}>
-                                <RiTimer2Line className="text-gray-400" />
-                            </GenreMovie>
+                            <MovieInfos infoTitle="مدت زمان" infoValue={mainMovie.time}>
+                                <RiTimer2Line className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
-                            <GenreMovie genreTitle="رده سنی" genreValue={mainMovie.age}>
-                                <FiPlus className="text-gray-400" />
-                            </GenreMovie>
+                            <MovieInfos infoTitle="رده سنی" infoValue={mainMovie.age}>
+                                <FiPlus className="text-gray-400 text-xs md:text-base" />
+                            </MovieInfos>
 
                             <div className="absolute bottom-3 left-2 flex items-center gap-2">
                                 <button className="px-3 py-2 text-xs rounded-full bg-red-100 text-red-500 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer ">گزارش خرابی</button>
@@ -268,10 +268,10 @@ function Movie() {
                         </div>
                     </div>
                     <div className="flex h-fit flex-col p-4 gap-2 rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary ">
-                        <ul className="flex items-center justify-start gap-5 border-b border-gray-100 dark:border-primary">
+                        <ul className="movieTabs flex items-center justify-start gap-5 border-b border-gray-100 dark:border-primary overflow-x-scroll lg:overflow-x-auto overflow-y-hidden px-2 md:px-0">
                             <li
                                 data-tab="download"
-                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "download" && 'activeMovieTab'}`}
+                                className={`flex items-center justify-center text-nowrap gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "download" && 'activeMovieTab'}`}
                                 onClick={changeTab}
                             >
                                 <LuDownload className="text-base" />
@@ -279,15 +279,15 @@ function Movie() {
                             </li>
                             <li
                                 data-tab="similar"
-                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "similar" && 'activeMovieTab'}`}
+                                className={`flex items-center justify-center text-nowrap gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "similar" && 'activeMovieTab'}`}
                                 onClick={changeTab}
                             >
                                 <ImFilm className="text-base" />
                                 <span>سریال های مشابه</span>
                             </li>
                             <li
-                                data-tab="actors"
-                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "actors" && 'activeMovieTab'}`}
+                                data-tab="casts"
+                                className={`flex items-center justify-center text-nowrap gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "casts" && 'activeMovieTab'}`}
                                 onClick={changeTab}
                             >
                                 <HiMiniUsers className="text-base" />
@@ -295,7 +295,7 @@ function Movie() {
                             </li>
                             <li
                                 data-tab="comments"
-                                className={`flex items-center justify-center gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "comments" && 'activeMovieTab'}`}
+                                className={`flex items-center justify-center text-nowrap gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "comments" && 'activeMovieTab'}`}
                                 onClick={changeTab}
                             >
                                 <FaRegCommentDots className="text-base" />
@@ -307,21 +307,21 @@ function Movie() {
                             <div className="w-full h-fit rounded-lg">
                                 {movieTab == 'download' && (
                                     <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                        <h2 className="text-red-500 dark:bg-primary font-semibold font-vazir">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
+                                        <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
                                         <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
                                     </div>
                                 )}
                                 {movieTab == 'similar' && (
-                                    <ul className="py-2 pb-5 px-5 grid grid-cols-6 gap-x-5 gap-y-7">
+                                    <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-7">
                                         {findArrayByIds(mainMovie.similar, movies).map(movie => (
                                             <NewMovieCard {...movie} showTitle />
                                         ))}
                                     </ul>
                                 )}
 
-                                {movieTab == 'actors' && (
-                                    <div className="py-2 pb-5 px-5 grid grid-cols-6 gap-5">
-                                        {findArrayByIds(mainMovie?.actors, actors, true).map(actor => (
+                                {movieTab == 'casts' && (
+                                    <div className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+                                        {findArrayByIds(mainMovie?.casts, casts, true).map(actor => (
                                             <ActorsCard {...actor} />
                                         ))}
                                     </div>

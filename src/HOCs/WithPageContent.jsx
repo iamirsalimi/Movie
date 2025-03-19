@@ -10,7 +10,7 @@ import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
 
 
-export default function WithPageContent(Comp) {
+export default function WithPageContent(Comp , movieContent) {
     const NewComponent = () => {
         const [movieTable, setMovieTable] = useState({
             'شنبه': [{ movieId: 18, newEpisode: { season: 2, episode: 9 } }, { movieId: 19, newEpisode: { season: 1, episode: 4 } }],
@@ -30,7 +30,7 @@ export default function WithPageContent(Comp) {
         })
 
         return (
-            <div className="container mx-auto flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-12">
+            <div className={`container mx-auto ${movieContent && '!px-5'} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-12`}>
                 {/* right side */}
                 <div className="w-full lg:w-2/3 flex flex-col gap-7">
                     <Comp movies={slides} movieTable={movieTable} />
