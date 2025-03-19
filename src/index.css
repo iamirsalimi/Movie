@@ -27,6 +27,9 @@
     @apply inline-block ring-6 ring-sky-400/20 ring-offset-2 ring-offset-sky-400 p-1 bg-sky-400 rounded-full;
   }
 
+  .replied{
+    @apply bg-gray-100 border-none dark:bg-primary-dark;
+  }
 }
 
 .filter-type input[type="radio"]:checked + label{
@@ -84,7 +87,7 @@
   /* --color-light:#f8f9fa ; */
   
   --color-primary: #1b1c22 ;
-
+  --color-primary-dark:#141415;
   --color-secondary: #23242a ;
 
   --color-light:#f8fafa ;

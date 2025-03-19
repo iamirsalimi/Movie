@@ -93,6 +93,25 @@ function Movie() {
         setMovieTab(target.dataset.tab)
     }
 
+    // this function will calculate the amount of the real array length , because in this array we can have nested array and for getting the real length of my array we should constantly call function by itself when we have another array in any index of our objects  
+    const calcLength = mainArray => {
+        const calcArrayLength = array => {
+            let sum = 0
+              
+            for (let i = 0; i < array.length; i++) {
+                sum++;
+                // if the nested Comment Object has another array of replies and comments we should calculate them to so we call our function again for it
+                if (array[i].replies.length) {
+                    sum += calcArrayLength(array[i].replies);
+                }
+            }
+            return sum
+        }
+
+        let arrayLength = calcArrayLength(mainArray)
+        return arrayLength
+    }
+
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
@@ -281,7 +300,7 @@ function Movie() {
                             >
                                 <FaRegCommentDots className="text-base" />
                                 <span>دیدگاه ها</span>
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold">{mainMovie?.comments.length}</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold">{calcLength(mainMovie?.comments)}</span>
                             </li>
                         </ul>
                         <div className="pt-5">
@@ -309,7 +328,7 @@ function Movie() {
                                 )}
 
                                 {movieTab == 'comments' && (
-                                    <div className="py-2 pb-5 px-5 flex flex-col items-center justify-center gap-7">
+                                    <div className="py-2 px-5 flex flex-col items-center justify-center gap-7">
                                         <div className="flex flex-col gap-4">
                                             <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
                                                 <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
@@ -327,15 +346,11 @@ function Movie() {
                                         </div>
 
                                         {/* Movie's Comments */}
-                                        <div className="w-full py-5  border-t border-gray-100 dark:border-primary">
+                                        <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
                                             {mainMovie.comments.length ? (
-                                                <div className="flex flex-col items-center justify-center gap-5">
+                                                <div className="flex flex-col items-center justify-center gap-7">
                                                     {mainMovie.comments.map(comment => (
-                                                        <>
-                                                            <Comment replyName={replyName} key={comment.id} {...comment} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
-
-                                                            {/* we have to have a state to check on every comments if they are in reply position or not , and when we are in reply position we have to hide leave comment section and just show user the reply form */}
-                                                        </>
+                                                        <Comment replyName={replyName} key={comment.id} {...comment} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
                                                     ))}
                                                 </div>
                                             ) : (

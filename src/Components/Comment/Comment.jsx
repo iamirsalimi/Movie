@@ -8,11 +8,10 @@ import { AiOutlineDislike } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 
 
-export default function Comment({ id, userName, userRule, commentText, hasSpoil, likes, replied, repliedTo, replies, date, showAddComment, replyName , setReplyName, setShowAddCommentForm, isReply }) {
+export default function Comment({ id, userName, userRule, commentText, hasSpoil, likes, replied, repliedTo, replies, date, showAddComment, replyName , setReplyName, setShowAddCommentForm, isReplied }) {
     // the comments that they have spoil we shouldn't show them at first and give people choice to choose they wanna see comment or not regarded to spoil 
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
 
-    
     // return the easy readable time and date
     const calcDate = date => {
         let newDate = new Date(date)
@@ -23,7 +22,7 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
     return (
         <>
 
-            <div className="w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none flex flex-col gap-5">
+            <div className={`w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none flex flex-col gap-5 ${isReplied && 'replied'}`}>
                 <div className="flex items-center justify-start gap-2">
                     <div className="w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
                         <FaUser className="translate-y-2 text-white text-4xl" />
@@ -38,7 +37,7 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
                                 <span className="text-xs text-gray-400 dark:text-gray-600">در پاسخ به @{repliedTo}</span>
                             )}
                         </div>
-                        <span className="text-gray-300 dark:text-gray-600 text-xs">{calcDate(date)}</span>
+                        <span className={`${isReplied ? 'text-gray-400' : 'text-gray-300'} dark:text-gray-600 text-xs`}>{calcDate(date)}</span>
                     </div>
                 </div>
                 <div
@@ -53,7 +52,6 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
                             )}
 
                         </>
-
                     ) : (
                         <span>{commentText}</span>
                     )}
@@ -85,8 +83,8 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
 
             <div className="w-full flex flex-col gap-5">
                 {replies.length > 0 && replies.map(reply => (
-                    <div className="w-full pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1rem)] after:w-1 after:rounded-md after:bg-gray-200 dark:after:bg-primary after:top-0 after:right-0">
-                        <Comment isReply key={reply.id} {...reply} replyName={replyName} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
+                    <div className="w-full pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
+                        <Comment isReplied key={reply.id} {...reply} replyName={replyName} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
                     </div>
                 ))
                 }
