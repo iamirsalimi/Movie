@@ -14,6 +14,7 @@ import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 
+
 export default function MovieCard({ id , title, mainTitle, type , desc, src, languages, countries, genre, rating, year, time, dubed, subtitle, quality }) {
 
     const calcRates = rates => {

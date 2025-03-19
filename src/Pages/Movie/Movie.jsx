@@ -8,6 +8,7 @@ import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
+
 import { movies, actors } from '../../moviesData'
 
 
@@ -41,6 +42,8 @@ function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
     const [movieTab, setMovieTab] = useState("download")
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
+    // const [showReply, setShowReply] = useState(false)
+    const [replyName, setReplyName] = useState(null)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
     let { movieType, movieId = -1 } = useParams()
@@ -93,6 +96,7 @@ function Movie() {
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
+
 
     return (
         <>
@@ -318,7 +322,7 @@ function Movie() {
                                             </div>
                                             {/* leaving Comment */}
                                             {showAddCommentForm && (
-                                                <CommentForm />
+                                                <CommentForm userId={5} userName="Sarah" setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
                                             )}
                                         </div>
 
@@ -327,7 +331,11 @@ function Movie() {
                                             {mainMovie.comments.length ? (
                                                 <div className="flex flex-col items-center justify-center gap-5">
                                                     {mainMovie.comments.map(comment => (
-                                                        <Comment key={comment.id} {...comment} showAddComment={setShowAddCommentForm} />
+                                                        <>
+                                                            <Comment replyName={replyName} key={comment.id} {...comment} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
+
+                                                            {/* we have to have a state to check on every comments if they are in reply position or not , and when we are in reply position we have to hide leave comment section and just show user the reply form */}
+                                                        </>
                                                     ))}
                                                 </div>
                                             ) : (
