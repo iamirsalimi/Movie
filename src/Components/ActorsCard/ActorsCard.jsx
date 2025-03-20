@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function ActorsCard({ id, name ,rule, src }) {
     return (
-        <a href={`/Actors/${id}`} className="relative pb-2 group">
+        <a href={`/actors/${id}`} className="relative pb-2 group">
             <li key={id} className="group translate-0 transition-all hover:-translate-y-2 overflow-hidden relative rounded-lg h-40 cursor-pointer">
                 <img src={src} className="w-full h-full object-cover object-center" alt="" />
                 <span className="absolute top-0 left-0 w-full z-10 h-full bg-gradient-to-t from-black from-5% to-black/0 "></span>
