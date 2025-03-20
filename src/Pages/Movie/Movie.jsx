@@ -35,8 +35,8 @@ import { LuDownload } from "react-icons/lu";
 import { ImFilm } from "react-icons/im";
 import { HiMiniUsers } from "react-icons/hi2";
 import { FaRegCommentDots } from "react-icons/fa6";
-import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { CiBookmark } from "react-icons/ci";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
@@ -97,7 +97,7 @@ function Movie() {
     const calcLength = mainArray => {
         const calcArrayLength = array => {
             let sum = 0
-              
+
             for (let i = 0; i < array.length; i++) {
                 sum++;
                 // if the nested Comment Object has another array of replies and comments we should calculate them to so we call our function again for it
@@ -117,6 +117,7 @@ function Movie() {
     // }, [mainMovie])
 
 
+
     return (
         <>
             {mainMovie == -1 ? (
@@ -126,20 +127,29 @@ function Movie() {
                 </div>
             ) : (
                 <div className="container mx-auto relative flex flex-col gap-7">
-                    <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit overflow-hidden">
+                    <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit">
                         <div className="relative p-4 pb-3 h-max">
-                            <div className={`absolute top-0 left-0 w-full h-full object-cover`}>
+                            <div className="absolute top-0 left-0 w-full h-full object-cover rounded-t-xl overflow-hidden">
                                 <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
-                                <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-l from-black from-35% to-black/30"></span>
+                                <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-t lg:bg-gradient-to-l from-black from-25% lg:from-35% to-black/30"></span>
                             </div>
 
                             <div className="relative flex flex-col gap-4 h-fit">
-                                <div className="w-full flex flex-col lg:flex-row gap-5 overflow-hidden h-max lg:h-[315px]">
-                                    <div className="w-full lg:w-1/4 overflow-hidden rounded-lg h-[400px]">
+                                <div className="w-full flex flex-col lg:flex-row gap-5 h-max lg:h-[315px]">
+                                    <div className="w-full lg:w-1/4 overflow-hidden rounded-lg h-[400px] lg:h-[315px]">
                                         <img src={mainMovie?.src} alt="" className="w-full h-[400px] lg:h-full object-cover object-center" />
                                     </div>
-                                    <div className="w-full lg:w-3/4 flex flex-col items-center lg:items-start justify-center gap-4">
-                                        <h1 className="text-white font-bold text-xl line-clamp-1">{mainMovie.mainTitle}</h1>
+                                    <div className="w-full lg:w-3/4 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-4">
+                                        <div className="w-full flex flex-col md:flex-row gap-5 items-center justify-between pl-2">
+                                            <h1 className="text-white font-bold text-xl text-center md:text-justify md:line-clamp-1">{mainMovie.mainTitle}</h1>
+                                            <div className="flex items-center justify-center gap-2">
+                                                <span className="inline-block relative cursor-pointer group">
+                                                    <CiBookmark className="text-white text-2xl" />
+                                                    <span className="inline-block opacity-0 h-5 absolute left-2 -top-7 -translate-x-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-sm dark:text-white font-vazir text-nowrap z-20 after:!z-10 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:rotate-45 group-hover:opacity-100 transition-all">افزودن به لیست تماشا</span>
+                                                </span>
+                                                <IoNotificationsOutline className="text-white text-2xl cursor-pointer" />
+                                            </div>
+                                        </div>
 
                                         <div className="w-full flex items-center justify-center lg:justify-start gap-10">
                                             <div className="flex items-center justify-center gap-1">
@@ -159,11 +169,11 @@ function Movie() {
 
                                             <div className="hidden sm:flex items-center justify-center gap-1">
                                                 <BiLike className="text-2xl sm:text-3xl fill-green-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.rating[3])}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir">({mainMovie?.rating[3].rates.length} رای)</span> </span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.rating[3])}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir hidden md:inline lg:hidden xl:inline">({mainMovie?.rating[3].rates.length} رای)</span> </span>
                                             </div>
                                         </div>
 
-                                        <ul className="flex flex-col items-center justify-center lg:justify-start gap-2">
+                                        <ul className="flex flex-col items-center lg:items-start justify-center gap-2">
                                             <li className="flex items-center justify-start gap-2">
                                                 <span className="flex items-center justify-center gap-1 font-vazir text-gray-400">
                                                     <FaTheaterMasks className="text-xl" />
@@ -268,7 +278,7 @@ function Movie() {
                         </div>
                     </div>
                     <div className="flex h-fit flex-col p-4 gap-2 rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary ">
-                        <ul className="movieTabs flex items-center justify-start gap-5 border-b border-gray-100 dark:border-primary overflow-x-scroll lg:overflow-x-auto overflow-y-hidden px-2 md:px-0">
+                        <ul className="movieTabs no-scrollbar flex items-center justify-start gap-5 border-b border-gray-100 dark:border-primary overflow-x-scroll lg:overflow-x-auto overflow-y-hidden px-2 md:px-0">
                             <li
                                 data-tab="download"
                                 className={`flex items-center justify-center text-nowrap gap-1 text-light-gray dark:text-gray-300 font-shabnam text-sm pb-3 cursor-pointer select-none relative after:absolute after:-bottom-2.5 after:left-1/2 after:inline-block after:-translate-x-1/2  after:w-1 after:h-1 after:border-[5px] after:border-transparent ${movieTab == "download" && 'activeMovieTab'}`}

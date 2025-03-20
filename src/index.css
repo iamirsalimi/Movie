@@ -32,6 +32,18 @@
   }
 }
 
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 .filter-type input[type="radio"]:checked + label{
   @apply bg-sky-500 !text-white;
 }
@@ -62,6 +74,12 @@
 
 .movieTabs::-webkit-scrollbar {
   display: none;
+  opacity:0;
+}
+
+.movieTabs::-webkit-scrollbar-track {
+  display: none;
+  opacity:0;
 }
 
 /* fonts */
