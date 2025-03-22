@@ -9,7 +9,7 @@ import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
 
-import {findArrayByIds} from './../../utils'
+import { findArrayByIds } from './../../utils'
 import { movies, casts } from '../../moviesData'
 
 // icons
@@ -43,7 +43,7 @@ function Movie() {
     const [movieTab, setMovieTab] = useState("download")
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
     // const [showReply, setShowReply] = useState(false)
-    const [replyName, setReplyName] = useState(null)
+    const [replyId, setReplyId] = useState(null)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
     let { movieType, movieId = -1 } = useParams()
@@ -51,12 +51,12 @@ function Movie() {
     let hasRoute = regex.test(movieType)
 
     let navigate = useNavigate()
-    hasRoute == false && navigate('/')
+    hasRoute == false && navigate('/', { replace: true })
 
 
     useEffect(() => {
         let mainMovieObj = movies.filter(movie => movie.type == movieType).find(movie => movie.id == movieId)
-        !mainMovieObj && navigate('/')
+        !mainMovieObj && navigate('/', { replace: true })
         setMainMovie(mainMovieObj)
     }, [])
 
@@ -102,8 +102,6 @@ function Movie() {
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
-
-
 
     return (
         <>
@@ -280,7 +278,7 @@ function Movie() {
                                 onClick={changeTab}
                             >
                                 <ImFilm className="text-base" />
-                                <span>سریال های مشابه</span>
+                                <span>{mainMovie.type == 'series' ? 'سریال' : 'فیلم '} های مشابه</span>
                             </li>
                             <li
                                 data-tab="casts"
@@ -308,12 +306,23 @@ function Movie() {
                                         <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
                                     </div>
                                 )}
+
                                 {movieTab == 'similar' && (
-                                    <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-7">
-                                        {findArrayByIds(mainMovie.similar, movies).map(movie => (
-                                            <NewMovieCard {...movie} showTitle />
-                                        ))}
-                                    </ul>
+                                    <>
+                                        {
+                                            mainMovie.similar.length > 0 ? (
+                                                <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-7">
+                                                    {findArrayByIds(mainMovie.similar, movies).map(movie => (
+                                                        <NewMovieCard {...movie} showTitle />
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                                    <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">فیلم مشابهی وجود ندارد</h2>
+                                                </div>
+                                            )
+                                        }
+                                    </>
                                 )}
 
                                 {movieTab == 'casts' && (
@@ -329,7 +338,7 @@ function Movie() {
                                         <div className="flex flex-col gap-4">
                                             <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
                                                 <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
-                                                <ul className="flex flex-col gap-1">
+                                                <ul className="flex flex-col gap-1 text-sm md:text-base">
                                                     <li className="text-red-500 font-vazir">ادب را رعایت کنید</li>
                                                     <li className="text-red-500 font-vazir">پرهیز از دیدگاه های بی ربط</li>
                                                     <li className="text-red-500 font-vazir">در صورتي كه دیدگاه شما داراي اسپویل می باشد ، حتما مطمین شوید که مقدار "دیدگاه دارای اسپویل است" را فعال می کنید</li>
@@ -338,7 +347,7 @@ function Movie() {
                                             </div>
                                             {/* leaving Comment */}
                                             {showAddCommentForm && (
-                                                <CommentForm userId={5} userName="Sarah" setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
+                                                <CommentForm userId={5} userName="Sarah" setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
                                             )}
                                         </div>
 
@@ -347,7 +356,7 @@ function Movie() {
                                             {mainMovie.comments.length ? (
                                                 <div className="flex flex-col items-center justify-center gap-7">
                                                     {mainMovie.comments.map(comment => (
-                                                        <Comment replyName={replyName} key={comment.id} {...comment} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
+                                                        <Comment replyId={replyId} key={comment.id} {...comment} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
                                                     ))}
                                                 </div>
                                             ) : (

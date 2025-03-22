@@ -3,7 +3,7 @@ import React, { useId, useState } from 'react'
 import { addCommentHandler } from './../../utils'; //arguments userId , userName, commentText, hasSpoil, replied, repliedTo
 
 
-export default function CommentForm({ showReply = false , userId , userName, repliedTo = '' , setReplyName, setShowAddCommentForm }) {
+export default function CommentForm({ showReply = false , userId , userName, repliedTo = '' , setReplyId, setShowAddCommentForm }) {
     const [hasSpoil , setHasSpoil] = useState(false) 
     const [commentText , setCommentText] = useState('') 
     
@@ -12,7 +12,7 @@ export default function CommentForm({ showReply = false , userId , userName, rep
     // when we close the ComponentForm we should reset inputs value too
     const closeReplyForm = () => {
         setShowAddCommentForm(true)
-        setReplyName(null)
+        setReplyId(null)
         setHasSpoil(false)
         setCommentText('')
     }

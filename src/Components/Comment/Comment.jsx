@@ -8,7 +8,7 @@ import { AiOutlineDislike } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 
 
-export default function Comment({ id, userName, userRule, commentText, hasSpoil, likes, replied, repliedTo, replies, date, showAddComment, replyName , setReplyName, setShowAddCommentForm, isReplied }) {
+export default function Comment({ id, userName, userRule, commentText, hasSpoil, likes, replied, repliedTo, replies, date, replyId , setReplyId, setShowAddCommentForm, isReplied }) {
     // the comments that they have spoil we shouldn't show them at first and give people choice to choose they wanna see comment or not regarded to spoil 
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
 
@@ -70,21 +70,21 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
                     <button
                         className="px-2 py-1 text-xs text-gray-400 border border-gray-400 hover:text-gray-500 hover:border-gray-500 dark:hover:text-white dark:hover:border-white transition-colors cursor-pointer font-vazir rounded-full"
                         onClick={() => {
-                            showAddComment(false)
-                            setReplyName(userName)
+                            setShowAddCommentForm(false)
+                            setReplyId(id)
                         }}
                     >پاسخ</button>
                 </div>
             </div>
 
-            {replyName === userName && (
-                <CommentForm repliedTo={userName} showReply={true} userId={5} userName="Sarah" setReplyName={setReplyName} setShowAddCommentForm={showAddComment} />
+            {replyId === id && (
+                <CommentForm repliedTo={userName} showReply={true} userId={5} userName="Sarah" setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
             )}
 
             <div className="w-full flex flex-col gap-5">
                 {replies.length > 0 && replies.map(reply => (
-                    <div className="w-full pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
-                        <Comment isReplied key={reply.id} {...reply} replyName={replyName} showAddComment={setShowAddCommentForm} setReplyName={setReplyName} setShowAddCommentForm={setShowAddCommentForm} />
+                    <div className="w-full pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
+                        <Comment isReplied key={reply.id} {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
                     </div>
                 ))
                 }

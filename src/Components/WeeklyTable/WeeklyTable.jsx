@@ -17,7 +17,6 @@ export default function WeeklyTable({ movieTable , movies }) {
     useEffect(() => {
         let movieArray = movieTable[activeDay].map(movie => [...movies.filter(movieItem => movieItem.id == movie.movieId) , movie.newEpisode])
         setWeekMovies(movieArray)
-        console.log(movieArray)
     } , [activeDay])
 
     return (

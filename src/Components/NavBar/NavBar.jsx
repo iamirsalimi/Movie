@@ -55,6 +55,9 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                         <a href="#">
                             <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">انیمه های برتر</li>
                         </a>
+                        <a href="/dmca">
+                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">DMCA</li>
+                        </a>
                     </ul>
                 </div>
                 <div className="flex items-center justify-end gap-2">
