@@ -23,7 +23,7 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
         setShowModal(true)
     }
 
-    let links = [{title:'صفحه اصلی' , href: '/'}, {title:'خرید اشتراک' , href: '/vip-plan'},{title:'فیلم های برتر' , href: '/imdb-top/movies'},{title:'سریال های برتر' , href: '/imdb-top/series'},{title:'انیمه های برتر' , href: '/anime'},]
+    let links = [{title:'صفحه اصلی' , href: '/'}, {title:'خرید اشتراک' , href: '/vip-plan'},{title:'فیلم های برتر' , href: '/imdb-top/movies'},{title:'سریال های برتر' , href: '/imdb-top/series'},{title:'انیمه های برتر' , href: '/imdb-top/anime'},]
 
     return (
         <nav className="w-full z-40 transition-colors shadow-xl shadow-black/5 bg-white dark:bg-secondary ">

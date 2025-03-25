@@ -13,7 +13,7 @@ export default function ImdbTop() {
     let { movieType, pageId = 1 } = useParams()
 
     
-    const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount, startIndex] = usePagination(movies, +pageId , 15)
+    const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount, startIndex] = usePagination(movies.sort((a , b) => b.rating[0].rate - a.rating[0].rate), +pageId , 15)
     
     let movieTypeRoute = movieType == 'series' ? 'سريال' : movieType == 'movies' ? 'فيلم' : 'انيمه'
     

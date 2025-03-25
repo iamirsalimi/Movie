@@ -7,7 +7,7 @@ export default function Menu({ showMenu, setShowMenu }) {
     const hideMenu = () => setShowMenu(false)
     const location = useLocation()
 
-    let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/anime' },]
+    let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
 
     return (
         <div className={`absolute w-full top-0 left-0 z-50 lg:hidden ${showMenu ? 'visible' : 'invisible'}`}>
