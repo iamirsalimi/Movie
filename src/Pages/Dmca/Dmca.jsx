@@ -14,4 +14,4 @@ function Dmca(){
     )
 }
 
-export default WithPageContent(Dmca)
+export default WithPageContent(Dmca , true)

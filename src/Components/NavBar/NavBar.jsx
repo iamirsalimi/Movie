@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
+import { useLocation } from 'react-router-dom';
 
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 
 export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
-
+    const location = useLocation()
+    
     const changeTheme = () => {
         setTheme(prev => {
             localStorage.setItem('theme', 'dark' == prev ? 'light' : 'dark')
@@ -22,7 +23,7 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
         setShowModal(true)
     }
 
-    let links = [{title:'صفحه اصلی' , href: '/'}, {title:'خرید اشتراک' , href: '/'},{title:'فیلم های برتر' , href: '/'},{title:'سریال های برتر' , href: '/'},{title:'انیمه های برتر' , href: '/'},]
+    let links = [{title:'صفحه اصلی' , href: '/'}, {title:'خرید اشتراک' , href: '/vip-plan'},{title:'فیلم های برتر' , href: '/imdb-top/movies'},{title:'سریال های برتر' , href: '/imdb-top/series'},{title:'انیمه های برتر' , href: '/anime'},]
 
     return (
         <nav className="w-full z-40 transition-colors shadow-xl shadow-black/5 bg-white dark:bg-secondary ">
@@ -40,10 +41,12 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">
-                        <a href="#">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">صفحه اصلی</li>
-                        </a>
-                        <a href="#">
+                        {links.map(link => (
+                            <a href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
+                                <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">{link.title}</li>
+                            </a>
+                        ))}
+                        {/* <a href="#">
                             <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">خرید اشتراک</li>
                         </a>
                         <a href="#">
@@ -57,7 +60,7 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                         </a>
                         <a href="/dmca">
                             <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">DMCA</li>
-                        </a>
+                        </a> */}
                     </ul>
                 </div>
                 <div className="flex items-center justify-end gap-2">
