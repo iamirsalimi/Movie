@@ -33,7 +33,7 @@ export default function CommentForm({ showReply = false , userId , userName, rep
                 )}
             </label>
             <textarea id={toggleId} value={commentText} onChange={e => setCommentText(e.target.value.trim())} className="h-32 font-vazir rounded-lg border border-gray-300 text-gray-700 dark:border-primary dark:bg-primary dark:text-white resize-none px-2 py-1 outline-none focus:border-2 transition-all focus:border-sky-500" placeholder="دیدگاه شما ..." maxLength={500}></textarea>
-            <div className="flex items-center justify-start gap-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start gap-3 sm:gap-5">
                 <div className="filter-lang flex items-center">
                     <input type="checkbox" className="hidden" id="dubed" checked={hasSpoil} onChange={e => setHasSpoil(e.target.checked)} />
                     <label htmlFor="dubed" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">

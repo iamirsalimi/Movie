@@ -10,7 +10,7 @@ export default function TopMovieCard({id , type , src , title , rating , index})
                     <img src={src} className="w-full h-full object-cover object-center" alt="" />
                     <span className="inline-block absolute top-0 left-0 w-full h-full bg-gradient-to-t from-primary to-black/0"></span>
                 </div>
-                <span className="absolute z-20 -top-4 -right-3 min-w-9 h-9 font-bold p-1 py-2 text-base rounded-full flex items-center justify-center bg-orange-400 border-2 border-light dark:border-primary text-white dark:text-primary">{index}</span>
+                <span className="absolute z-20 -top-4 -right-3 min-w-9 h-9 font-bold p-1 py-2 text-base rounded-full flex items-center justify-center bg-yellow-400 border-2 border-light dark:border-primary text-white dark:text-primary">{index}</span>
                 <span className="absolute z-20 bottom-2 left-2 font-bold text-base text-gray-200 inline-flex items-center justify-center gap-1">
                     <span>{rating[0].rate}</span>
                     <FaStar className="text-lg" />

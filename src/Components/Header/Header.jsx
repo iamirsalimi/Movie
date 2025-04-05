@@ -101,8 +101,8 @@ export default function Header() {
 
                             </div>
 
-                            <div className="flex items-center justify-start gap-5">
-                                <h1 className="font-bold text-white text-3xl md:text-4xl font-sans shadow-black drop-shadow-2xl line-clamp-1">{activeObj.title}</h1>
+                            <div className="flex flex-col lg:flex-row items-center justify-start gap-1 md:gap-2 lg:gap-5">
+                                <h1 className="font-bold text-white text-3xl md:text-4xl font-sans shadow-black drop-shadow-2xl text-center lg:text-justify lg:line-clamp-1">{activeObj.title}</h1>
                                 <span className="inline-block p-1.5 md:p-2 border border-gray-300 text-gray-300 text-sm font-semibold">{activeObj.age}</span>
                             </div>
 

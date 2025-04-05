@@ -37,6 +37,8 @@ import { HiMiniUsers } from "react-icons/hi2";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { CiBookmark } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { GrUpdate } from "react-icons/gr";
+import { RiMedalFill } from "react-icons/ri";
 
 function Movie() {
     const [mainMovie, setMainMovie] = useState(-1)
@@ -107,9 +109,7 @@ function Movie() {
         <>
             {mainMovie == -1 ? (
                 // loader until the object of mainPage found
-                <div className="fixed top-0 left-0 w-full h-full bg-pink-500">
-
-                </div>
+                <></>
             ) : (
                 <div className="container mx-auto relative flex flex-col gap-7">
                     <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit">
@@ -188,20 +188,41 @@ function Movie() {
                                             </li>
                                         </ul>
 
-                                        <div className="flex items-center gap-2">
-                                            {mainMovie.subtitle && (
-                                                <div className="w-fit h-fit flex items-center justify-center gap-1">
-                                                    <BsFillCcSquareFill className="text-sm fill-sky-500" />
-                                                    <span className="text-sm text-sky-500 font-vazir">زیرنویس فارسی</span>
-                                                </div>
-                                            )}
+                                        <div className="flex flex-col items-center lg:items-start justify-center gap-2">
+                                            <div className="flex items-center gap-2">
+                                                {mainMovie.subtitle && (
+                                                    <div className="w-fit h-fit flex items-center justify-center gap-1">
+                                                        <BsFillCcSquareFill className="text-sm fill-sky-500" />
+                                                        <span className="text-sm text-sky-500 font-vazir">زیرنویس فارسی</span>
+                                                    </div>
+                                                )}
 
-                                            {mainMovie.dubed && (
-                                                <div className="w-fit h-fit flex items-center justify-center gap-1">
-                                                    <FaMicrophoneAlt className="text-sm md:text-xl fill-red-500" />
-                                                    <span className="text-sm text-red-500  font-vazir">دوبله فارسی</span>
-                                                </div>
-                                            )}
+                                                {mainMovie.dubed && (
+                                                    <div className="w-fit h-fit flex items-center justify-center gap-1">
+                                                        <FaMicrophoneAlt className="text-sm md:text-xl fill-red-500" />
+                                                        <span className="text-sm text-red-500  font-vazir">دوبله فارسی</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                {mainMovie.notifs.episodes.length != 0 && (
+                                                    <div className="w-fit h-fit flex items-center justify-center gap-2 bg-black/70 px-2 py-1 rounded-lg">
+                                                        <div className="p-1 rounded-full w-7 h-7 bg-red-500 flex items-center justify-center">
+                                                            <GrUpdate className="text-md text-primary" />
+                                                        </div>
+                                                        <span className="text-sm font-light text-gray-200 font-vazir">{mainMovie.notifs.episodes[mainMovie.notifs.episodes.length - 1]}</span>
+                                                    </div>
+                                                )}
+
+                                                {mainMovie.notifs.suggested && (
+                                                    <div className="w-fit h-fit flex items-center justify-center gap-1 bg-yellow-500 px-2 py-1 rounded-lg">
+                                                        <div className="p-1 rounded-full w-7 h-7 bg-primary flex items-center justify-center">
+                                                            <RiMedalFill className="text-xl text-yellow-500" />
+                                                        </div>
+                                                        <span className="text-sm text-primary font-vazir">پیشنهادی</span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
 
                                         <div className="flex items-center justify-start gap-2">
@@ -334,7 +355,7 @@ function Movie() {
                                 )}
 
                                 {movieTab == 'comments' && (
-                                    <div className="py-2 px-5 flex flex-col items-center justify-center gap-7">
+                                    <div className="py-2 px-1 sm:px-5 flex flex-col items-center justify-center gap-7">
                                         <div className="flex flex-col gap-4">
                                             <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
                                                 <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>

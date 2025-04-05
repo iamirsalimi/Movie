@@ -45,7 +45,7 @@ export default function ImdbTop() {
                         <TopMovieCard {...movie} index={startIndex + (index + 1)} />
                     ))}
                 </div>
-                <div className="w-full flex items-center justify-center gap-1.5 w-full rounded-lg py-4 bg-white shadow shadow-black/5 dark:bg-secondary">
+                <div className="w-full flex items-center justify-center gap-1.5 flex-wrap rounded-lg py-4 bg-white shadow shadow-black/5 dark:bg-secondary">
                     <PaginateBtns {...bindingObj} currentPage={currentPage} route={`/imdb-top/${movieType}`} />
                 </div>
             </div>

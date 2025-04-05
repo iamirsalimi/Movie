@@ -3,6 +3,8 @@ import React from 'react'
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
 
+let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
+
 export default function Footer() {
     return (
         <footer className='mt-12 bg-white dark:bg-secondary pt-10 flex flex-col gap-5'>
@@ -15,10 +17,12 @@ export default function Footer() {
                     <div className="flex flex-col gap-5">
                         <h2 className="text-sky-500 font-bold font-vazir text-2xl">دسترسی سریع</h2>
                         <ul className="grid grid-cols-2 gap-x-1 gap-y-2">
-                            <a className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir" href="#">
-                                <li>صفحه اصلی</li>
-                            </a>
-                            <a className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir" href="#">
+                            {links.map(link => (
+                                <a href={link.href} >
+                                    <li className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir">{link.title}</li>
+                                </a>
+                            ))}
+                            {/* <a className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir" href="#">
                                 <li>خرید اشتراک</li>
                             </a>
                             <a className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir" href="#">
@@ -29,7 +33,7 @@ export default function Footer() {
                             </a>
                             <a className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir" href="#">
                                 <li>انیمه های برتر</li>
-                            </a>
+                            </a> */}
                         </ul>
                     </div>
                 </div>
