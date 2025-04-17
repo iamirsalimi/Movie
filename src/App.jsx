@@ -1,6 +1,6 @@
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
-import { useRoutes } from 'react-router-dom'
+import { useRoutes, useLocation } from 'react-router-dom'
 
 import useLocalTheme from './Hooks/useLocalTheme'
 
@@ -10,12 +10,9 @@ import SearchModal from './Components/SearchModal/SearchModal'
 import Footer from './Components/Footer/Footer'
 import routes from './Routes'
 
-
 import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 
 import './App.css'
-
-
 
 function App() {
   const [theme, setTheme] = useLocalTheme()
@@ -25,7 +22,13 @@ function App() {
 
   let router = useRoutes(routes)
 
-  
+  let location = useLocation().pathname
+
+  let regex = /^(\/account\/((login)|(register))\/?)$/g
+
+  let isInLoginPage = regex.test(location)
+  console.log(isInLoginPage)
+
   const showBtn = e => {
     setBtnShowFlag(window.scrollY > 300 ? true : false)
   }
@@ -35,16 +38,22 @@ function App() {
   }
 
   useEffect(() => {
-    window.addEventListener('scroll' , showBtn)
-  } , [])
+    window.addEventListener('scroll', showBtn)
+  }, [])
 
   return (
     <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
-      <NavBar theme={theme} setTheme={setTheme} showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} />
+      {!isInLoginPage && (
+        <NavBar theme={theme} setTheme={setTheme} showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} />
+      )}
+      
       <main className="w-full h-full" >
         {router}
       </main>
-      <Footer />
+
+      {!isInLoginPage && (
+        <Footer />
+      )}
 
       {/* Modals */}
       <Menu showMenu={showMenu} setShowMenu={setShowMenu} />

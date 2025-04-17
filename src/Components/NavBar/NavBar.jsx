@@ -46,6 +46,7 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                                 <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">{link.title}</li>
                             </a>
                         ))}
+
                         {/* <a href="#">
                             <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">خرید اشتراک</li>
                         </a>
@@ -80,11 +81,10 @@ export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
                         </svg>
                     </button>
                     <div className="flex items-center justify-center gap-2">
-                        <button className="hidden md:block bg-sky-400 hover:bg-sky-500 transition-colors py-1 px-2 sm:px-4 rounded-sm text-white font-vazir cursor-pointer">ورود</button>
-                        <button className="hidden md:block transition-colors rounded-sm dark:text-white text-gray-500  font-vazir cursor-pointer">ثبت نام</button>
-                        <button className="md:hidden transition-colors rounded-sm dark:text-white text-gray-500 text-xl font-vazir cursor-pointer">
+                        <a href="/account/login" className="hidden md:block bg-sky-500 hover:bg-white dark:hover:bg-primary border border-white dark:border-primary hover:border-sky-500 transition-colors p-2 rounded-lg text-white hover:text-sky-500 font-vazir cursor-pointer">حساب کاربری</a>
+                        <a href="/account/login" className="md:hidden transition-colors rounded-sm dark:text-white text-gray-500 text-xl font-vazir cursor-pointer">
                             <FaRegUser />
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
