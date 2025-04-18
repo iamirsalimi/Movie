@@ -32,6 +32,6 @@ export default function usePagination(movies , current , rows) {
     }
 
 
-    // start Index is just used for imdb-top page that they can have access to the index of each movieElem
+    // start Index is just used for imdb-top page that they can have access to the index of each movieElem (in each page we show the index of the film so we need that to calculate movie index) 
     return [filteredMovies , bindingObj , currentPage , setCurrentPage , pagesCount , startIndex]
 }

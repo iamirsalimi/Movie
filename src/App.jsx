@@ -27,7 +27,6 @@ function App() {
   let regex = /^(\/account\/((login)|(register))\/?)$/g
 
   let isInLoginPage = regex.test(location)
-  console.log(isInLoginPage)
 
   const showBtn = e => {
     setBtnShowFlag(window.scrollY > 300 ? true : false)
