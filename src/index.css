@@ -76,6 +76,18 @@
   @apply !text-sky-500 font-bold;
 }
 
+.activePanelLink {
+  @apply bg-sky-500 hover:bg-sky-500;
+}
+
+.activePanelLink svg{
+  @apply text-white;
+}
+
+.activePanelLink span{
+  @apply text-white;
+}
+
 .movieTabs::-webkit-scrollbar {
   display: none;
   opacity:0;

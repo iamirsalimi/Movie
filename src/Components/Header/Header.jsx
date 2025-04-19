@@ -71,11 +71,13 @@ export default function Header() {
     }, [activeIndex])
 
     return (
-        <div className="relative h-full w-full -mt-12">
+        <div className="h-full w-full -mt-12">
             <div className="relative w-full h-screen overflow-hidden">
                 {/* <img src="/src/assets/YouTube Banner.jpg" alt="" className="w-full h-full" /> */}
                 <img src={activeObj.src} alt="" className="w-full h-full object-cover object-center transition-all" />
                 <div className="lg:bg-gradient-to-r bg-gradient-to-t z-20 from-black/95 from-40% to-gray-0 !absolute top-0 h-full w-full"></div>
+                {/* <div className="absolute top-0 left-0 w-full h-screen">
+                </div> */}
 
                 <div className="z-30 absolute bottom-0 w-full h-3/4  py-20">
                     <div className="container mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between gap-5">

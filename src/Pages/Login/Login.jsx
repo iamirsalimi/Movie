@@ -18,7 +18,7 @@ export default function Login() {
 
     return (
         <>
-            <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-300 dark:bg-gray-800" >
+            <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-200 dark:bg-gray-800" >
                 <IoIosArrowForward className="text-sm text-gray-500 dark:text-white" />
                 <span className="text-sm font-vazir text-gray-500 dark:text-white">بازگشت به صفحه اصلی</span>
             </a>
@@ -61,8 +61,8 @@ export default function Login() {
 
                 <button className="w-full py-4 rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-colors font-vazir text-white font-bold">ورود</button>
                 <div className="w-full flex items-center justify-between -mt-4">
-                    <a href="/account/register" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-white">ثبت نام</a>
-                    <a href="#" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-white">فراموشی رمز عبور</a>
+                    <a href="/account/register" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">ثبت نام</a>
+                    <a href="#" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">فراموشی رمز عبور</a>
                 </div>
             </form>
         </>

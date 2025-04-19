@@ -1,19 +1,18 @@
+import { useContext } from 'react'
 import { useLocation } from 'react-router-dom';
+
+import ThemeContext from '../../Contexts/ThemeContext';
 
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 
-export default function Navbar({ theme, setTheme, setShowModal, setShowMenu }) {
+export default function Navbar({ setShowModal, setShowMenu }) {
+    let {theme , changeTheme} = useContext(ThemeContext)
+
     const location = useLocation()
-    
-    const changeTheme = () => {
-        setTheme(prev => {
-            localStorage.setItem('theme', 'dark' == prev ? 'light' : 'dark')
-            document.documentElement.classList.toggle('dark')
-            return 'dark' == prev ? 'light' : 'dark'
-        })
-    }
+
+
 
     const ToggleMenu = () => {
         setShowMenu(prev => !prev)

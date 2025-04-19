@@ -136,7 +136,7 @@ export default function Register() {
         <>
 
             <div className="w-full flex items-center gap-2 sm:gap-5 justify-between">
-                <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-300 dark:bg-gray-800" >
+                <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-200 dark:bg-gray-800" >
                     <IoIosArrowForward className="text-sm text-gray-500 dark:text-white" />
                     <span className="text-sm font-vazir text-gray-500 dark:text-white">بازگشت به صفحه اصلی</span>
                 </a>
@@ -224,7 +224,7 @@ export default function Register() {
 
                 <div className="w-full flex items-center justify-between -mt-4">
                     <span className="ms-2 text-sm font-vazir text-light-gray dark:text-gray-600 select-none">حساب کاربری دارید؟</span>
-                    <a href="/account/login" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-white">وارد شوید</a>
+                    <a href="/account/login" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">وارد شوید</a>
                 </div>
             </form>
 
