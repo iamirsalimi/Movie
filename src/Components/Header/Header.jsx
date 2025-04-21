@@ -15,7 +15,6 @@ import { PiMedalBold } from "react-icons/pi";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { BiLike } from "react-icons/bi";
 
-
 // Swiper 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
@@ -34,9 +33,6 @@ export default function Header() {
 
     const [activeObj, setActiveObj] = useState(slides[0])
 
-    // const [widthValue , setWidthValue] = useState(2)
-    // let width = useRef(window.innerWidth)
-
     // calculate website rates bg average
     const calcRates = rates => {
         let likedRates = rates.filter(rate => rate.liked).length
@@ -45,26 +41,6 @@ export default function Header() {
         return totalRate
     }
 
-    // // change slide show from 1 to 2 or 2 to 1 when browser width is lower/upper than 1150 
-    // const changeWidth = e => {
-    //     width.current = window.innerWidth
-
-    //     if(window.innerWidth < 1026 || (width.current >= 1150 && widthValue == 2) || (width.current < 1150 && widthValue == 1)){
-    //         return false
-    //     }
-    
-    //     // widthValue is a flag that when it changed from 1 to 2 or 2 to 1 it force slider to update
-    //     setWidthValue(width.current < 1150 ? 1 : 2)
-    // }
-
-    // let height = window.innerHeight
-    // window.addEventListener('resize' , e => {
-    //     // if height changed we shouldn't run the function because function works with width  
-    //     if(height == window.innerHeight){
-    //         changeWidth(e)
-    //     }
-    // })
-
     useEffect(() => {
         // the object of current Active Index of slider movies 
         setActiveObj(slides[activeIndex])
@@ -72,12 +48,10 @@ export default function Header() {
 
     return (
         <div className="h-full w-full -mt-12">
-            <div className="relative w-full h-screen overflow-hidden">
+            <div className="relative w-full h-screen overflow-hidden bg-red-500">
                 {/* <img src="/src/assets/YouTube Banner.jpg" alt="" className="w-full h-full" /> */}
                 <img src={activeObj.src} alt="" className="w-full h-full object-cover object-center transition-all" />
                 <div className="lg:bg-gradient-to-r bg-gradient-to-t z-20 from-black/95 from-40% to-gray-0 !absolute top-0 h-full w-full"></div>
-                {/* <div className="absolute top-0 left-0 w-full h-screen">
-                </div> */}
 
                 <div className="z-30 absolute bottom-0 w-full h-3/4  py-20">
                     <div className="container mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between gap-5">

@@ -1,4 +1,5 @@
-import { useRoutes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useRoutes } from 'react-router-dom'
 
 import useLocalTheme from './Hooks/useLocalTheme'
 
@@ -10,6 +11,7 @@ import './App.css'
 
 function App() {
   const [theme, setTheme] = useLocalTheme()
+  const [navFlag, setNavFlag] = useState(true)
   let router = useRoutes(routes)
 
   const changeTheme = () => {
@@ -19,13 +21,24 @@ function App() {
       return 'dark' == prev ? 'light' : 'dark'
     })
   }
+  
+  let location = useLocation().pathname
+  
+  // home page regex
+  useEffect(() => {
+    let homeRegex = /^(\/|(\/page\/\d+)\/?)$/
+    let homeFlag = homeRegex.test(location)
+    setNavFlag(!homeFlag)
+  }, [])
 
   return (
     <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
       <ThemeContext.Provider value={{
         theme,
         setTheme,
-        changeTheme
+        changeTheme,
+        navFlag,
+        setNavFlag
       }}>
         {router}
       </ThemeContext.Provider>
