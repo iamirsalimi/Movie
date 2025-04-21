@@ -30,7 +30,9 @@ let links = [
 
 export default function UserPanel() {
     let location = useLocation().pathname
-    location = location.split('/').length == 3 ? location + '/' : location
+    let mainLocationObj = links.find(link => link.href.includes(location))
+
+    let dashboardLocation = location.split('/').length == 3 ? location + '/' : location
 
     let { theme, changeTheme } = useContext(ThemeContext)
 
@@ -80,7 +82,7 @@ export default function UserPanel() {
                 {/* panel links */}
                 <div className="grid grid-cols-2 gap-2 w-full">
                     {links.map(link => (
-                        <a href={link.href} className={`bg-gray-100 dark:bg-primary hover:bg-orange-500/10 transition-colors duration-250 py-3 px-2 rounded-lg cursor-pointer flex flex-col items-center gap-1 ${link.href == location ? 'activePanelLink' : ''}`}>
+                        <a href={link.href} className={`bg-gray-100 dark:bg-primary hover:bg-orange-500/10 transition-colors duration-250 py-3 px-2 rounded-lg cursor-pointer flex flex-col items-center gap-1 ${link.href == dashboardLocation ? 'activePanelLink' : ''}`}>
                             {link.icon}
                             <span className="text-light-gray dark:text-white text-xs font-vazir text-center">{link.title}</span>
                         </a>
@@ -96,7 +98,7 @@ export default function UserPanel() {
                             <MdKeyboardArrowRight className="stroke-white text-2xl" />
                             <span className="text-sm font-vazir">بازگشت به صفحه اصلی</span>
                         </a>
-                        <span className="text-light-gray dark:text-white font-vazir">داشبورد</span>
+                        <span className="text-light-gray dark:text-white font-vazir">{mainLocationObj.title}</span>
                     </div>
 
                     <Outlet />

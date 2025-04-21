@@ -26,30 +26,29 @@ export default function Actors() {
                     <h2 className="text-gray-700 dark:text-white font-bold">{actorObj.name}</h2>
                     <div className="flex items-center gap-5">
                         <div className="flex items-center justify-center gap-1 font-vazir">
-                            <span className="text-light-gray dark:text-gray-400">تولد :</span>
-                            <span className="text-light-gray dark:text-gray-400">نامشخص</span>
+                            <span className="text-light-gray dark:text-gray-500">تولد :</span>
+                            <span className="text-light-gray dark:text-gray-500">نامشخص</span>
                         </div>
 
                         <div className="flex items-center justify-center gap-1 font-vazir">
-                            <span className="text-light-gray dark:text-gray-400">سن :</span>
-                            <span className="text-light-gray dark:text-gray-400">نامشخص</span>
+                            <span className="text-light-gray dark:text-gray-500">سن :</span>
+                            <span className="text-light-gray dark:text-gray-500">نامشخص</span>
                         </div>
 
                         <div className="flex items-center justify-center gap-1 font-vazir">
-                            <span className="text-light-gray dark:text-gray-400">قد :</span>
-                            <span className="text-light-gray dark:text-gray-400">نامشخص</span>
+                            <span className="text-light-gray dark:text-gray-500">قد :</span>
+                            <span className="text-light-gray dark:text-gray-500">نامشخص</span>
                         </div>
                     </div>
-                    <p className="text-light-gray dark:text-gray-400 font-vazir text-center md:text-justify">ورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد </p>
+                    <p className="text-light-gray dark:text-gray-400 font-vazir-light text-center md:text-justify">ورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد </p>
                 </div>
             </div>
             <div className="container mx-auto py-5 space-y-9 px-5">
-                <h2 className="text-gray-700 dark:text-white text-xl font-vazir">مجموعه آثار</h2>
+                <h2 className="text-center lg:text-justify text-gray-700 dark:text-white text-2xl font-vazir">مجموعه آثار</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
                     {findArrayByIds(actorObj.movies, movies).map(movie => (
                         <ActorMovieCard {...movie} />
                     ))}
-
                 </div>
             </div>
 

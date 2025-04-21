@@ -10,7 +10,7 @@ export default function Card({id , title, src, desc, isActive, type }) {
         </div>
 
         {isActive && (
-          <p className="absolute top-0 rounded-lg opacity-0 transition-all group-hover:opacity-100 duration-300 bg-black/65 glass-effect-card h-full w-full text-justify font-vazir p-2 text-white text-sm">{desc}</p>
+          <p className="absolute top-0 rounded-lg opacity-0 transition-all group-hover:opacity-100 duration-300 bg-black/65 glass-effect-card h-full w-full text-justify font-vazir-light p-2 text-white text-sm">{desc}</p>
         )}
 
         {isActive && (

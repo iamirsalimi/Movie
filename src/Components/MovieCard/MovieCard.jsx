@@ -70,7 +70,7 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                             <FaTheaterMasks className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-sky-100 dark:bg-primary"></i>
-                        <span className="text-nowrap text-light-gray dark:text-white font-vazir text-xs sm:text-base">{genre.map(genreItem => (
+                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genre.map(genreItem => (
                             <span className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></span>
                         ))}</span>
                     </li>
@@ -80,7 +80,7 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                             <MdOutlineDateRange className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-dark bg-sky-100 dark:bg-primary"></i>
-                        <span className="text-light-gray dark:text-white font-vazir text-nowrap font-semibold text-xs sm:text-base">{year}</span>
+                        <span className="text-light-gray dark:text-white font-vazir-light text-nowrap font-semibold text-xs sm:text-base">{year}</span>
                     </li>
 
                     {/* <li className="flex items-center justify-between">
@@ -88,7 +88,7 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                             <FaRegFlag className="text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-primary"></i>
-                        <span className="text-nowrap text-white font-vazir">{countries.map(country => (
+                        <span className="text-nowrap text-white font-vazir-light">{countries.map(country => (
                             <span className="group px-1"><span>{country}</span><span className="group-last:hidden text-slate-400"> .</span></span>
                         ))}</span>
                     </li> */}
@@ -98,7 +98,7 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                             <RiTimer2Line className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px bg-sky-100 mx-2 dark:bg-primary"></i>
-                        <span className="text-light-gray dark:text-white font-vazir text-nowrap text-xs sm:text-base">{time}</span>
+                        <span className="text-light-gray dark:text-white font-vazir-light text-nowrap text-xs sm:text-base">{time}</span>
                     </li>
 
                     <li className="flex items-center justify-between">
@@ -106,7 +106,7 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                             <IoLanguageSharp className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-sky-100 dark:bg-primary"></i>
-                        <span className="text-nowrap text-light-gray dark:text-white font-vazir text-xs sm:text-base">{languages.map(language => (
+                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{languages.map(language => (
                             <span className="group px-1"><span>{language}</span><span className="group-last:hidden text-slate-400"> .</span></span>
                         ))}</span>
                     </li>
@@ -128,11 +128,11 @@ export default function MovieCard({ id , title, mainTitle, type , desc, src, lan
                     )}
                 </div>
 
-                <div className="border-2 border-light dark:border-primary rounded-lg p-2 flex flex-col gap-1 md:gap-2">
+                <div className="border-2 border-light dark:border-primary rounded-lg p-2 flex flex-col gap-1">
                     <h1 className="text-gray-500 dark:text-white font-vazir font-bold text-sm md:text-md">خلاصه داستان</h1>
-                    <span className="font-vazir text-slate-400 dark:text-slate-300 text-sm space-x-1">
-                        <span>{desc}</span>
-                        <a href={`${type}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1">
+                    <span className="text-slate-400 dark:text-slate-300 text-sm space-x-1">
+                        <span className="font-shabnam-light">{desc}</span>
+                        <a href={`${type}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1 font-shabnam">
                             <span>دانلود/جزییات بیشتر</span>
                             <PiArrowCircleLeftDuotone className="inline fill-sky-600 dark:fill-yellow-500 text-2xl group-hover:-translate-x-2 transition-all duration-150" />
                         </a>

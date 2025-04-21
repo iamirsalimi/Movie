@@ -73,7 +73,7 @@
 }
 
 .activeLink li{
-  @apply !text-sky-500 font-bold;
+  @apply !text-sky-500 font-shabnam font-bold;
 }
 
 .activePanelLink {
@@ -106,8 +106,18 @@
 }
 
 @font-face {
+  font-family: ShabnamLight;
+  src: url("./assets/fonts/Shabnam-Light.ttf");
+}
+
+@font-face {
   font-family: Vazir;
   src: url("./assets/fonts/Vazirmatn-Medium.ttf");
+}
+
+@font-face {
+  font-family: VazirLight;
+  src: url("./assets/fonts/Vazirmatn-Light.ttf");
 }
 
 /* custom styles */
@@ -116,7 +126,9 @@
 
 @theme {
   --font-vazir: "Vazir";
-  --font-Shabnam: "Shabnam";
+  --font-vazir-light: "VazirLight";
+  --font-shabnam: "Shabnam";
+  --font-shabnam-light: "ShabnamLight";
 
   --purpleCustom : #813167;
   --orangeCustom : #ff5722;

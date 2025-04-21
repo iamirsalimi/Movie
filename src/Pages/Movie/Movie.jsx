@@ -164,7 +164,7 @@ function Movie() {
                                                     <FaTheaterMasks className="text-xl" />
                                                     <span>ژانر</span>
                                                 </span>
-                                                <span className="text-nowrap text-white font-vazir text-sm">{mainMovie.genre.map(genreItem => (
+                                                <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genre.map(genreItem => (
                                                     <span className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                 ))}</span>
                                             </li>
@@ -174,7 +174,7 @@ function Movie() {
                                                     <MdOutlineDateRange className="text-xl" />
                                                     <span>سال انتشار</span>
                                                 </span>
-                                                <span className="text-white dark:text-white font-vazir text-nowrap font-semibold text-sm">{mainMovie.year}</span>
+                                                <span className="text-white dark:text-white font-vazir-light text-nowrap font-semibold text-sm">{mainMovie.year}</span>
                                             </li>
 
                                             <li className="flex items-center justify-start gap-2">
@@ -182,7 +182,7 @@ function Movie() {
                                                     <FiFlag className="text-xl" />
                                                     <span>محصول</span>
                                                 </span>
-                                                <span className="text-nowrap text-white font-vazir text-sm">{mainMovie.countries.map(country => (
+                                                <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.countries.map(country => (
                                                     <span className="group px-0.5 md:px-1"><span>{country}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                 ))}</span>
                                             </li>
@@ -242,7 +242,7 @@ function Movie() {
                                         </div>
                                     </div>
                                 </div>
-                                <p className="font-vazir text-gray-200 text-sm text-center lg:text-justify space-x-1">{mainMovie.desc}</p>
+                                <p className="font-shabnam-light text-gray-200 text-sm text-center lg:text-justify space-x-1">{mainMovie.desc}</p>
                             </div>
                         </div>
 
@@ -291,7 +291,7 @@ function Movie() {
                                 onClick={changeTab}
                             >
                                 <LuDownload className="text-base" />
-                                <span>باکس دانلود</span>
+                                <span className="font-shabnam">باکس دانلود</span>
                             </li>
                             <li
                                 data-tab="similar"
@@ -299,7 +299,7 @@ function Movie() {
                                 onClick={changeTab}
                             >
                                 <ImFilm className="text-base" />
-                                <span>{mainMovie.type == 'series' ? 'سریال' : 'فیلم '} های مشابه</span>
+                                <span className="font-shabnam">{mainMovie.type == 'series' ? 'سریال' : 'فیلم '} های مشابه</span>
                             </li>
                             <li
                                 data-tab="casts"
@@ -307,7 +307,7 @@ function Movie() {
                                 onClick={changeTab}
                             >
                                 <HiMiniUsers className="text-base" />
-                                <span>عوامل و بازیگران</span>
+                                <span className="font-shabnam">عوامل و بازیگران</span>
                             </li>
                             <li
                                 data-tab="comments"
@@ -315,15 +315,15 @@ function Movie() {
                                 onClick={changeTab}
                             >
                                 <FaRegCommentDots className="text-base" />
-                                <span>دیدگاه ها</span>
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold">{calcLength(mainMovie?.comments)}</span>
+                                <span className="font-shabnam">دیدگاه ها</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{calcLength(mainMovie?.comments)}</span>
                             </li>
                         </ul>
                         <div className="pt-5">
                             <div className="w-full h-fit rounded-lg">
                                 {movieTab == 'download' && (
                                     <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                        <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
+                                        <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir-light">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
                                         <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
                                     </div>
                                 )}
@@ -392,7 +392,6 @@ function Movie() {
 
                             </div>
                         </div>
-
                     </div>
                 </div>
             )}

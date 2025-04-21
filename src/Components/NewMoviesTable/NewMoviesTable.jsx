@@ -16,11 +16,11 @@ export default function NewMoviesTable({ movies }) {
                     </span>
                     <div className="flex flex-col gap-1">
                         <span className="text-secondary dark:text-white font-vazir text-sm sm:text-base font-semibold">فیلم های 2025</span>
-                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-vazir">دانلود فیلم های جدید</span>
+                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-shabnam-light">دانلود فیلم های جدید</span>
                     </div>
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                    <span className="font-vazir text-light-gray dark:text-white hidden xs:inline xs:text-xs sm:text-sm">مشاهده بیشتر</span>
+                    <span className="font-shabnam text-light-gray dark:text-white hidden xs:inline xs:text-xs sm:text-sm">مشاهده بیشتر</span>
                     <button className="bg-sky-500 cursor-pointer p-1 h-fit rounded-md">
                         <PiArrowCircleLeftDuotone className="text-white text-2xl" />
                     </button>

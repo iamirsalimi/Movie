@@ -52,7 +52,7 @@ export default function GenreTables({ genre, movies }) {
                     </span>
                     <div className="flex flex-col gap-1">
                         <span className="text-secondary dark:text-white font-vazir font-semibold">ژانر ها</span>
-                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-vazir">فیلم و سریال</span>
+                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-shabnam-light">فیلم و سریال</span>
                     </div>
                 </div>
                 <div className="genreType flex items-center justify-center gap-1 p-1 bg-sky-100 dark:bg-primary rounded-full">
@@ -66,9 +66,9 @@ export default function GenreTables({ genre, movies }) {
             <ul className="mt-5 grid grid-cols-2 gap-2">
                 {activeTypeArray.map(genre => (
                     <a href="#">
-                        <li className="group relative font-vazir rounded-lg bg-light hover:bg-sky-500 dark:bg-primary dark:hover:bg-sky-700 transition-colors duration-200 py-2 px-3 cursor-pointer flex items-center justify-between">
-                            <span className="text-secondary group-hover:text-white dark:text-white">{genre}</span>
-                            <span className="text-secondary dark:text-white opacity-100 group-hover:translate-x-2 group-hover:opacity-0 transition-all">{genresCount[genre]}</span>
+                        <li className="group relative font-shabnam-light rounded-lg bg-light hover:bg-sky-500 dark:bg-primary dark:hover:bg-sky-700 transition-colors duration-200 py-2 px-3 cursor-pointer flex items-center justify-between">
+                            <span className="text-light-gray group-hover:text-white dark:text-white">{genre}</span>
+                            <span className="text-light-gray dark:text-white opacity-100 group-hover:translate-x-2 group-hover:opacity-0 transition-all">{genresCount[genre]}</span>
                         </li>
                     </a>
                 ))}

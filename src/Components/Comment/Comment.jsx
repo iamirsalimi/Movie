@@ -48,12 +48,12 @@ export default function Comment({ id, userName, userRule, commentText, hasSpoil,
                             {!showSpoiledComment ? (
                                 <span className="text-red-500" onClick={() => setShowSpoiledComment(true)}>دیدگاه دارای اسپویل می باشد، برای مشاهده کلیک کنید</span>
                             ) : (
-                                <span onClick={() => setShowSpoiledComment(false)}>{commentText}</span>
+                                <span onClick={() => setShowSpoiledComment(false)} className="font-shabnam-light">{commentText}</span>
                             )}
 
                         </>
                     ) : (
-                        <span>{commentText}</span>
+                        <span className="font-shabnam-light">{commentText}</span>
                     )}
                 </div>
                 <div className="flex items-center justify-start gap-5">

@@ -48,7 +48,7 @@ export default function UpdatedSeries({ series }) {
                     </span>
                     <div className="flex flex-col gap-1">
                         <span className="text-secondary dark:text-white font-vazir font-semibold text-sm sm:text-base">سریال های به روز شده</span>
-                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-vazir">دانلود سریال ها</span>
+                        <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-shabnam-light">دانلود سریال ها</span>
                     </div>
                 </div>
                 <div className="flex items-center justify-center gap-2">

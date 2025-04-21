@@ -34,7 +34,7 @@ export default function ActorMovieCard({ id, type, src, mainTitle, rating, genre
                             <li className="px-2 py-1 text-nowrap text-center border border-light-gray dark:border-gray-400 text-light-gray dark:text-gray-400 rounded-md text-gray font-vazir text-xs">{genreItem}</li>
                         ))}
                     </ul>
-                    <p className="text-light-gray dark:text-white text-justify text-sm font-vazir  line-clamp-3">{desc}</p>
+                    <p className="text-light-gray dark:text-white text-justify text-sm font-vazir-light line-clamp-3">{desc}</p>
                 </div>
             </div>
         </a>

@@ -26,9 +26,9 @@ export default function WeeklyTable({ movieTable , movies }) {
                     <div className="title-icon">
                         <MdOutlineDateRange className="text-white text-2xl" />
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-0.5">
+                    <div className="flex flex-col items-start justify-center gap-0.5">
                         <span className="text-secondary dark:text-white font-vazir text-sm md:text-md">جدول پخش هفتگی</span>
-                        <span className="text-light-gray dark:text-slate-300 font-vazir text-xs md:text-sm">در حال پخش / انتشار</span>
+                        <span className="text-light-gray dark:text-slate-300 font-shabnam-light text-xs md:text-sm">در حال پخش / انتشار</span>
                     </div>
 
                 </div>
@@ -46,7 +46,7 @@ export default function WeeklyTable({ movieTable , movies }) {
                         </div>
                         <div className="flex flex-col items-start justify-between py-2 w-full text-sm">
                             <h1 className="text-secondary font-bold dark:text-white mt-1">{movie[0].title}</h1>
-                            <span className={`${movie[1] == null && 'hidden'} text-red-500 font-vazir`}>قسمت {movie[1]?.episode} فصل  {movie[1]?.season}</span>
+                            <span className={`${movie[1] == null && 'hidden'} text-red-500 font-shabnam-light`}>قسمت {movie[1]?.episode} فصل  {movie[1]?.season}</span>
                         </div>
                     </li>
                 )) : (
