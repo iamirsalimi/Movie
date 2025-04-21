@@ -20,6 +20,7 @@ import WatchList from './Pages/WatchList/WatchList'
 import Notifs from './Pages/Notifs/Notifs'
 import Requests from './Pages/Requests/Requests'
 import Comments from './Pages/Comments/Comments'
+import Messages from './Pages/Messages/Messages'
 
 let Routes = [
     {
@@ -49,6 +50,7 @@ let Routes = [
                 { path: 'notifications', element: <Notifs /> },
                 { path: 'requests', element: <Requests /> },
                 { path: 'comments', element: <Comments /> },
+                { path: 'messages', element: <Messages /> },
             ]}
         ]
     },
