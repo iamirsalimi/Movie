@@ -15,7 +15,7 @@ export default function ProfileEdit() {
 
 
   return (
-    <form className="w-full p-4 flex flex-col gap-7 shadow shadow-black/5 bg-white dark:bg-secondary rounded-2xl">
+    <form className="p-4 flex flex-col gap-7 panel-box rounded-2xl">
 
       {/* Update Profile Informations */}
       <ul className="col-start-1 col-end-4 bg-red-400 rounded-xl py-5 px-2 flex flex-col items-center gap-2 font-vazir text-white">

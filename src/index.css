@@ -30,6 +30,10 @@
   .replied{
     @apply bg-gray-100 border-none dark:bg-primary-dark;
   }
+
+  .panel-box{
+    @apply w-full shadow shadow-black/5 bg-white dark:bg-secondary rounded-xl;
+  }
 }
 
 @layer utilities {

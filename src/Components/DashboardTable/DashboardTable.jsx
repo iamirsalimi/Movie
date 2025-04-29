@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function DashboardTable({title , tableHeaders}) {
   return (
-    <div className="w-full py-3 px-4 flex flex-col gap-4 shadow shadow-black/5 bg-white dark:bg-secondary rounded-xl">
+    <div className="py-3 px-4 flex flex-col gap-4 panel-box">
         <div className="inline-flex items-center gap-2">
             <div className="flex items-center gap-0.5">
                 <span className="inline-block w-3 h-3 bg-sky-500 rounded-full"></span>
