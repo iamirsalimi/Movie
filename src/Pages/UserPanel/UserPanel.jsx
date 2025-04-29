@@ -90,8 +90,8 @@ export default function UserPanel() {
                 </div>
 
             </div>
-            <div className="w-3/4 mr-auto bg-light dark:bg-primary px-5 py-7">
-                <div className="w-full h-full flex flex-col items-center gap-2 ">
+            <div className="w-3/4 min-h-screen mr-auto bg-light dark:bg-primary px-5 py-7">
+                <div className="w-full h-full flex flex-col items-center gap-7">
 
                     <div className="w-full flex items-center justify-between">
                         <a href="/" className="flex items-center p-2 rounded-xl border text-light-gray dark:text-white border-gray-300 hover:bg-gray-100 hover:border-gray-200 dark:border-none dark:bg-secondary dark:hover:bg-white/5 cursor-pointer transition-all">

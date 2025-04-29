@@ -118,7 +118,7 @@ function Movie() {
                                 <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
                                 <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-t lg:bg-gradient-to-l from-black from-25% lg:from-35% to-black/30"></span>
                             </div>
-
+                            
                             <div className="relative flex flex-col gap-4 h-fit">
                                 <div className="w-full flex flex-col lg:flex-row gap-5 h-max lg:h-[315px]">
                                     <div className="w-full lg:w-1/4 overflow-hidden rounded-lg h-[400px] lg:h-[315px]">

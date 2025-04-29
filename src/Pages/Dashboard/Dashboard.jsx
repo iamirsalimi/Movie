@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-full grid grid-cols-4 gap-6 mt-7">
+      <div className="w-full grid grid-cols-4 gap-6">
         {userActivity.map(user => (
           <UserActivityInfo color={user.color} title={user.title} value={user.value}>
             {user.children}

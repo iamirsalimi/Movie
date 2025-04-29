@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 
 import toast, { Toaster } from 'react-hot-toast';
 
-
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { FaCircleInfo } from "react-icons/fa6";
