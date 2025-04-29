@@ -3,7 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function NotFound() {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     return (
         <div className="container mx-auto h-screen p-5 flex flex-col-reverse lg:flex-row items-center justify-center">
@@ -14,7 +14,7 @@ export default function NotFound() {
                 <div className="flex items-center justify-center gap-2">
                     <button
                         className="px-4 py-1 w-fit rounded-lg cursor-pointer text-lg bg-green-500 transition-colors hover:bg-green-600 text-white dark:text-primary font-vazir"
-                        onClick={() => navigate('/', { replace: true })}
+                        onClick={() => window.location.href = '/'}
                     >برگشت به صفحه اصلی</button>
                     <a href="movieWebsite.support@gmail.com:EMAIL?subject=گزارش مشکل و خرابی&body= درود وقت بخیر" target="_blank">
                         <button className="px-4 py-1 w-fit rounded-lg cursor-pointer text-lg bg-red-500 transition-colors hover:bg-red-600 text-white dark:text-primary font-vazir"

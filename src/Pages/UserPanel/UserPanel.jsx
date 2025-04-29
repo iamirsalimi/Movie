@@ -40,7 +40,7 @@ export default function UserPanel() {
         <>
             <div className="w-full fixed bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/3 xl:w-1/4 h-screen px-5 py-9 flex flex-col justify-start items-center gap-10">
                 <div className="flex flex-col items-center gap-5">
-                    <div className="relative w-24 h-24 rounded-full bg-gray-400 overflow-hidden ring-8 ring-gray-700/25">
+                    <div className="relative w-24 h-24 rounded-full bg-gray-400 overflow-hidden ring-8 ring-gray-300/25 dark:ring-gray-700/25">
                         <FaUser className="text-white absolute -bottom-10 left-1/2 -translate-1/2 w-20 h-20" />
                     </div>
                     <h2 className="text-light-gray dark:text-white font-vazir">سلام User خوش آمدید</h2>
@@ -90,7 +90,7 @@ export default function UserPanel() {
                 </div>
 
             </div>
-            <div className="h-screen w-3/4 mr-auto bg-light dark:bg-primary px-5 py-7">
+            <div className="w-3/4 mr-auto bg-light dark:bg-primary px-5 py-7">
                 <div className="w-full h-full flex flex-col items-center gap-2 ">
 
                     <div className="w-full flex items-center justify-between">

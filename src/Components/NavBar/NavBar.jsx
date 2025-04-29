@@ -5,7 +5,6 @@ import ThemeContext from '../../Contexts/ThemeContext';
 
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 
