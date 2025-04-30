@@ -102,6 +102,14 @@
   opacity:0;
 }
 
+.vipPlanSelection input[type="radio"]:checked + label{
+  @apply bg-yellow-400;
+}
+
+.vipPlanSelection input[type="radio"]:checked + label > span{
+  @apply text-primary;
+}
+
 /* fonts */
 
 @font-face {
@@ -149,5 +157,4 @@
   --color-light-gray: #6a89a9;
   
   --breakpoint-xs:30rem;
-  
 }
