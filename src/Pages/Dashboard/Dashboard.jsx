@@ -1,4 +1,4 @@
-import React , { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import UserActivityInfo from '../../Components/UserActivityInfo/UserActivityInfo'
 import DashboardTable from '../../Components/DashboardTable/DashboardTable'
@@ -18,7 +18,7 @@ let userActivity = [
 ]
 
 export default function Dashboard() {
-  const [ipObj , setIpObj] = useState(null)
+  const [ipObj, setIpObj] = useState(null)
 
   useEffect(() => {
     fetch('https://ipapi.co/json/')
@@ -27,7 +27,7 @@ export default function Dashboard() {
         setIpObj(data)
       })
       .catch(err => console.error(err));
-  }, []);  
+  }, []);
 
   return (
     <>
@@ -48,15 +48,38 @@ export default function Dashboard() {
       </div>
 
       <div className="w-full flex gap-5 mt-5 mb-12">
+        {/* tables */}
         <div className="w-3/4 flex flex-col items-center gap-5">
-          <DashboardTable title="تیکت ها" tableHeaders={['#', 'عنوان تیکت', 'دپارتمان', 'بروزرسانی']} />
-          <DashboardTable title="درخواست ها" tableHeaders={['#', 'عنوان', 'تاریخ ثبت', 'وضعیت']} />
+          <div className="py-3 px-4 flex flex-col gap-4 panel-box">
+            <div className="inline-flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                <span className="inline-block w-3 h-3 bg-sky-500 rounded-full"></span>
+                <span className="inline-block w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full"></span>
+              </div>
+              <h2 className="font-vazir text-gray-800 dark:text-white text-lg">تیکت ها</h2>
+            </div>
+
+            <DashboardTable tableHeaders={['#', 'عنوان تیکت', 'دپارتمان', 'بروزرسانی']} />
+          </div>
+
+          <div className="py-3 px-4 flex flex-col gap-4 panel-box">
+            <div className="inline-flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                <span className="inline-block w-3 h-3 bg-sky-500 rounded-full"></span>
+                <span className="inline-block w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full"></span>
+              </div>
+              <h2 className="font-vazir text-gray-800 dark:text-white text-lg">درخواست ها</h2>
+            </div>
+
+            <DashboardTable tableHeaders={['#', 'عنوان', 'تاریخ ثبت', 'وضعیت']} />
+          </div>
+
         </div>
 
         <div className="w-1/4 flex flex-col gap-5">
 
           <div className="p-4 flex flex-col gap-4 panel-box">
-            
+
             <div className="inline-flex items-center gap-2">
               <div className="flex items-center gap-0.5">
                 <span className="inline-block w-3 h-3 bg-sky-500 rounded-full"></span>
@@ -85,7 +108,7 @@ export default function Dashboard() {
                 <span className="text-gray-500 text-sm font-shabnam-light">آدرس IP :</span>
                 <span className="text-light-gray dark:text-white text-left text-sm font-vazir-light">{ipObj?.ip}</span>
               </li>
-              
+
               <li className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm font-shabnam-light">کشور :</span>
                 <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.country_name}</span>

@@ -31,6 +31,10 @@ let links = [
 export default function UserPanel() {
     let location = useLocation().pathname
     let mainLocationObj = links.find(link => link.href.includes(location))
+    if(!mainLocationObj){
+        // it means we are in one of subroutes , dashboard Route is in every other route's link so we don't need that 
+        mainLocationObj = links.slice(1).find(link => location.includes(link.href))
+    }
 
     let dashboardLocation = location.split('/').length == 3 ? location + '/' : location
 

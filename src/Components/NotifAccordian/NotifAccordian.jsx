@@ -27,5 +27,5 @@ export default function NotifAccordian({ title, content }) {
 
             <p className={`overflow-hidden px-4 py-2 rounded-md bg-gray-100 dark:bg-primary text-light-gray dark:text-white font-vazir-light ${isOpen ? 'hidden' : 'block'}`}>{content}</p>
         </div>
-    );
+    )
 }

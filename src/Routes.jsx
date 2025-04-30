@@ -16,11 +16,13 @@ import UserPanel from './Pages/UserPanel/UserPanel'
 import Dashboard from './Pages/Dashboard/Dashboard'
 import ProfileEdit from './Pages/ProfileEdit/ProfileEdit'
 import VipPlan from './Pages/VipPlan/VipPlan'
-import WatchList from './Pages/WatchList/WatchList'
+import WatchList from './Pages/Watchlist/WatchList'
 import Notifs from './Pages/Notifs/Notifs'
 import Requests from './Pages/Requests/Requests'
 import Comments from './Pages/Comments/Comments'
 import Messages from './Pages/Messages/Messages'
+import AllRequests from './Pages/AllRequests/AllRequests'
+import AddRequest from './Pages/AddRequest/AddRequest'
 
 let Routes = [
     {
@@ -42,16 +44,21 @@ let Routes = [
     },
     {
         path: '/my-account', element: <PanelLayout />, children: [
-            { path: 'userPanel', element: <UserPanel /> , children : [
-                { path:'' , element: <Dashboard /> },
-                { path: 'profile-edit', element: <ProfileEdit /> },
-                { path: 'vip-plan', element: <VipPlan /> },
-                { path: 'watchList', element: <WatchList /> },
-                { path: 'notifications', element: <Notifs /> },
-                { path: 'requests', element: <Requests /> },
-                { path: 'comments', element: <Comments /> },
-                { path: 'messages', element: <Messages /> },
-            ]}
+            {
+                path: 'userPanel', element: <UserPanel />, children: [
+                    { index: true, element: <Dashboard /> },
+                    { path: 'profile-edit', element: <ProfileEdit /> },
+                    { path: 'vip-plan', element: <VipPlan /> },
+                    { path: 'watchList', element: <WatchList /> },
+                    { path: 'notifications', element: <Notifs /> },
+                    { path: 'requests', element: <Requests /> , children : [
+                        {index : true , element : <AllRequests /> },
+                        {path : 'add-request' , element : <AddRequest /> }
+                    ] },
+                    { path: 'comments', element: <Comments /> },
+                    { path: 'messages', element: <Messages /> },
+                ]
+            }
         ]
     },
     { path: '*', element: <NotFound /> },
