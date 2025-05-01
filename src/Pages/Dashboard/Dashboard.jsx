@@ -39,7 +39,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="flex flex-col justify-center gap-2 mt-4 panel-box py-5 px-4">
+      <div className="flex flex-col justify-center gap-2 panel-box py-5 px-4">
         <h2 className="font-vazir text-gray-800 dark:text-white">اطلاعیه ها</h2>
         <span className="w-full rounded-sm inline-flex items-center gap-2 py-3 pr-3 border border-gray-100 dark:border-secondary border-r-4 !border-r-yellow-400">
           <AiFillInfoCircle className="text-yellow-400 text-lg" />
@@ -47,7 +47,7 @@ export default function Dashboard() {
         </span>
       </div>
 
-      <div className="w-full flex gap-5 mt-5 mb-12">
+      <div className="w-full flex gap-5 mb-12">
         {/* tables */}
         <div className="w-3/4 flex flex-col items-center gap-5">
           <div className="py-3 px-4 flex flex-col gap-4 panel-box">

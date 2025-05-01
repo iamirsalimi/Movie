@@ -23,6 +23,8 @@ import Comments from './Pages/Comments/Comments'
 import Messages from './Pages/Messages/Messages'
 import AllRequests from './Pages/AllRequests/AllRequests'
 import AddRequest from './Pages/AddRequest/AddRequest'
+import AllTickets from './Pages/AllTickets/AllTickets'
+import AddNewTicket from './Pages/AddNewTicket/AddNewTicket'
 
 let Routes = [
     {
@@ -56,7 +58,10 @@ let Routes = [
                         {path : 'add-request' , element : <AddRequest /> }
                     ] },
                     { path: 'comments', element: <Comments /> },
-                    { path: 'messages', element: <Messages /> },
+                    { path: 'messages', element: <Messages /> , children : [
+                        {index : true , element : <AllTickets /> },
+                        {path : 'add-new-ticket' , element : <AddNewTicket /> },
+                    ]},
                 ]
             }
         ]

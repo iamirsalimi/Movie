@@ -10,7 +10,6 @@ export default function Comments() {
         <PanelComment />
         <PanelComment />
       </div>
-
     </div>
   )
 }
