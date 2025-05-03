@@ -55,11 +55,11 @@ export default function TicketDetails() {
 
                     <div className="w-full flex flex-col items-center justify-between gap-2">
                         <div className="col-start-1 col-end-3 w-full relative select-none">
-                            <textarea className="w-full resize-none rounded-md p-3 h-20 border border-light-gray dark:border-gray-600 dark:bg-primary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                            <textarea className="w-full resize-none rounded-md p-3 h-20 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                             ></textarea>
-                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-primary">توضیحات</span>
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">توضیحات</span>
                         </div>
-                        <button className="py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-all inline-flex items-center justify-center gap-1">
+                        <button className="py-1 w-full rounded-md cursor-pointer bg-blue-500 hover:bg-blue-600 transition-all inline-flex items-center justify-center gap-1">
                             <TbSend2 className="text-white text-lg" />
                             <h2 className="text-white font-shabnam text-lg">ارسال</h2>
                         </button>   
