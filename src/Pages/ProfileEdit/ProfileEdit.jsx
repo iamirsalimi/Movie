@@ -15,17 +15,17 @@ export default function ProfileEdit() {
 
 
   return (
-    <form className="p-4 flex flex-col gap-7 panel-box rounded-2xl">
+    <form className="p-4 flex flex-col gap-7 panel-box rounded-2xl mb-16">
 
       {/* Update Profile Informations */}
-      <ul className="col-start-1 col-end-4 bg-red-400 rounded-xl py-5 px-2 flex flex-col items-center gap-2 font-vazir text-white">
+      <ul className="col-start-1 col-end-4 bg-red-500 rounded-xl py-5 px-2 flex flex-col items-center gap-2 font-vazir text-white text-sm lg:text-base">
         <li className="text-center">نام كاربري نميتواند با اعداد شروع شود همچنين بايد حداقل 5 و حداكثر 16 كاراكتر باشد</li>
         <li className="text-center">نام كاربري شما در بخش كامنت ها نمايش داده مي شود درصورتي كه نام نمایشی خود را مشخص نكرده باشيد</li>
         <li className="text-center">رمز عبور حداقل ميتواند 8 و حداکثر 16 کاراکتر می تواند باشد</li>
         <li className="text-center">رمز عبور باید حداقل یک حرف کوچک ،حداقل یک حرف بزرگ ، حداقل یک کارکتر (یکی از مقادیر # و @ و _ و .) و حداقل یک عدد داشته باشد</li>
       </ul>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* First Name */}
         <div className="w-full relative select-none">
           <input
@@ -71,7 +71,7 @@ export default function ProfileEdit() {
       <div className="grid grid-cols-3 gap-5">
         <h2 className="col-start-1 col-end-4 font-vazir text-gray-800 dark:text-white text-lg">تغییر رمز عبور</h2>
         {/* Current Password */}
-        <div className="w-full relative select-none">
+        <div className="col-start-1 col-end-4 lg:col-start-1 lg:col-end-2 w-full relative select-none">
           <input
             type={`${showCurrentPass ? 'text' : 'password'}`}
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
@@ -88,7 +88,7 @@ export default function ProfileEdit() {
         </div>
 
         {/* New Password */}
-        <div className="w-full relative select-none">
+        <div className="col-start-1 col-end-4 lg:col-start-2 lg:col-end-3 w-full relative select-none">
           <input
             type={`${showPass ? 'text' : 'password'}`}
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
@@ -105,7 +105,7 @@ export default function ProfileEdit() {
         </div>
 
         {/* Repeat New Password */}
-        <div className="w-full relative select-none">
+        <div className="col-start-1 col-end-4 lg:col-start-3 lg:col-end-4 w-full relative select-none">
           <input
             type={`${showRepeatPass ? 'text' : 'password'}`}
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}

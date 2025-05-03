@@ -34,9 +34,10 @@ export default function UserPanel() {
     const [showMenu, setShowMenu] = useState(false)
 
     let location = useLocation().pathname
+
     let mainLocationObj = links.find(link => link.href.includes(location))
     if (!mainLocationObj) {
-        // it means we are in one of subroutes , dashboard Route is in every other route's link so we don't need that 
+        // it means we are in one of subroutes , Route of Dashboard is in every other route's link so we don't need that 
         mainLocationObj = links.slice(1).find(link => location.includes(link.href))
     }
 
@@ -102,7 +103,7 @@ export default function UserPanel() {
                 </div>
             </div>
             <div className="w-full lg:w-3/4 min-h-screen mr-auto bg-light dark:bg-primary px-5 py-7">
-                <div className="w-full h-full flex flex-col items-center gap-7">
+                <div className="w-full h-full flex flex-col items-center gap-7 mb-10">
 
                     <div className="w-full flex items-center justify-between">
                         <a href="/" className="flex items-center p-2 rounded-xl border text-light-gray dark:text-white border-gray-300 hover:bg-gray-100 hover:border-gray-200 dark:border-none dark:bg-secondary dark:hover:bg-white/5 cursor-pointer transition-all">
@@ -119,18 +120,18 @@ export default function UserPanel() {
             <div className="w-full h-fit flex items-center justify-between fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-5 py-4 lg:hidden">
 
                 <a href="/my-account/userPanel/" className="flex flex-col items-center justify-center gap-1">
-                    <LuLayoutDashboard className={`text-light-gray dark:text-white text-2xl ${dashboardLocation.includes('/my-account/userPanel/') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${dashboardLocation.includes('/my-account/userPanel/') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>داشبورد</span>
+                    <LuLayoutDashboard className={`text-light-gray dark:text-white text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-sm ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>داشبورد</span>
                 </a>
 
-                <a href="/my-account/userPanel/edit-profile" className="flex flex-col items-center justify-center gap-1">
-                    <IoSettingsOutline className={`text-light-gray dark:text-white text-2xl ${dashboardLocation.includes('/my-account/userPanel/edit-profile') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${dashboardLocation.includes('/my-account/userPanel/edit-profile') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>ویرایش</span>
+                <a href="/my-account/userPanel/profile-edit" className="flex flex-col items-center justify-center gap-1">
+                    <IoSettingsOutline className={`text-light-gray dark:text-white text-2xl ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-sm ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>ویرایش</span>
                 </a>
 
                 <a href="/my-account/userPanel/messages" className="relative flex flex-col items-center justify-center gap-1">
-                    <BiMessageAltDetail className={`text-light-gray dark:text-white text-2xl ${dashboardLocation.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${dashboardLocation.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>پیام ها</span>
+                    <BiMessageAltDetail className={`text-light-gray dark:text-white text-2xl ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-sm ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>پیام ها</span>
                     <span className="absolute -top-1 right-0 w-4 h-4 rounded-full bg-sky-500 flex items-center justify-center text-xs text-white">0</span>
                 </a>
 
