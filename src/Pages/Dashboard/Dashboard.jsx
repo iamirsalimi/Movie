@@ -10,10 +10,10 @@ import { PiUserFocusFill } from "react-icons/pi";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 let userActivity = [
-  { title: "مطالب درخواستی", value: "20", children: <IoIosAddCircleOutline className="text-white text-2xl" />, color: 'from-orange-400 to-orange-600' },
-  { title: "لیست تماشا", value: "0", children: <FaBookmark className="text-white text-2xl" />, color: 'from-purple-600 to-purple-800' },
-  { title: "عضویت", value: "20/12/2023", children: <PiUserFocusFill className="text-white text-2xl" />, color: 'from-sky-400 to-sky-700' },
-  { title: "دیدگاه ها", value: "12", children: <FaRegCommentDots className="text-white text-2xl" />, color: 'from-green-400 to-green-600' },
+  { title: "مطالب درخواستی", value: "20", children: <IoIosAddCircleOutline className="text-white text-xl xl:text-2xl" />, color: 'from-orange-400 to-orange-600' },
+  { title: "لیست تماشا", value: "0", children: <FaBookmark className="text-white text-xl xl:text-2xl" />, color: 'from-purple-600 to-purple-800' },
+  { title: "عضویت", value: "20/12/2023", children: <PiUserFocusFill className="text-white text-xl xl:text-2xl" />, color: 'from-sky-400 to-sky-700' },
+  { title: "دیدگاه ها", value: "12", children: <FaRegCommentDots className="text-white text-xl xl:text-2xl" />, color: 'from-green-400 to-green-600' },
 
 ]
 
@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="w-full grid grid-cols-4 gap-6">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {userActivity.map(user => (
           <UserActivityInfo color={user.color} title={user.title} value={user.value}>
             {user.children}
@@ -47,9 +47,9 @@ export default function Dashboard() {
         </span>
       </div>
 
-      <div className="w-full flex gap-5 mb-12">
+      <div className="w-full flex flex-col lg:flex-row gap-5 mb-20 lg:mb-12">
         {/* tables */}
-        <div className="w-3/4 flex flex-col items-center gap-5">
+        <div className="w-full lg:w-3/4 flex flex-col items-center gap-5">
           <div className="py-3 px-4 flex flex-col gap-4 panel-box">
             <div className="inline-flex items-center gap-2">
               <div className="flex items-center gap-0.5">
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
         </div>
 
-        <div className="w-1/4 flex flex-col gap-5">
+        <div className="w-full lg:w-1/4 flex flex-col gap-5">
 
           <div className="p-4 flex flex-col gap-4 panel-box">
 
@@ -119,12 +119,11 @@ export default function Dashboard() {
                 <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.city}</span>
               </li>
             </ul>
+          
           </div>
+
         </div>
-
-
       </div>
-
     </>
   )
 }
