@@ -39,7 +39,7 @@ export default function VipPlanModal({ showModal, setShowModal }) {
     }
 
     return (
-        <div className={`absolute w-full top-0 left-0 h-full max-h-screen overflow-y-scroll z-50 flex items-center justify-center transition-all ${showModal ? 'visible' : 'invisible'} overflow-y-auto`}>
+        <div className={`absolute w-full top-0 left-0 h-full max-h-screen overflow-y-scroll z-50 pb-10 flex items-center justify-center transition-all ${showModal ? 'visible' : 'invisible'} overflow-y-auto`}>
             <div className={`fixed w-full top-0 left-0 bg-black/65 glass-effect min-h-screen transition-all duration-200 ${showModal ? 'opacity-100 visible' : 'opacity-0 invisible'}`} onClick={hideMenu}></div>
 
             <div className={`w-[90%] sm:w-4/5 lg:w-1/3 absolute top-5 h-fit bg-white py-4 px-5 rounded-xl dark:bg-primary flex flex-col items-center gap-4 transition-all duration-300 ${showModal ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
@@ -78,7 +78,7 @@ export default function VipPlanModal({ showModal, setShowModal }) {
                     <input id="policy-checkbox" type="checkbox" value="" className="peer" hidden checked={agreeWebsitePolicy} onChange={e => setAgreeWebsitePolicy(e.target.checked)} />
                     <label htmlFor="policy-checkbox" className="flex items-center w-fit">
                         <span className={`inline-block cursor-pointer w-5 h-5 rounded-md border transition-colors ${agreeWebsitePolicy ? '!border-sky-500 bg-sky-500' : 'border-light-gray dark:border-gray-600'} `}></span>
-                        <a href="#" className="ms-2 text-sm font-vazir underline text-light-gray dark:text-sky-300 cursor-pointer">قوانین و ظوابط سایت را مطالعه کردم</a>
+                        <a href="#" className="ms-2 text-sm font-vazir underline text-light-gray dark:text-sky-300 cursor-pointer select-none">قوانین و ظوابط سایت را مطالعه کردم</a>
                     </label>
                 </div>
 
