@@ -17,15 +17,15 @@ export default function NotifAccordian({ title, content }) {
                         <IoNotificationsOutline className="text-white dark:text-primary text-2xl" />
                     </div>
                     <div className="flex flex-col gap-1">
-                        <h2 className="text-light-gray dark:text-gray-200 font-vazir">{title}</h2>
-                        <span className="text-gray-400 dark:text-gray-400 text-sm font-shabnam-light">10 ماه قبل</span>
+                        <h2 className="text-light-gray dark:text-gray-200 font-vazir text-sm md:text-base">{title}</h2>
+                        <span className="text-gray-400 dark:text-gray-400 font-shabnam-light text-xs md:text-sm">10 ماه قبل</span>
                     </div>
                 </div>
 
                 <IoChevronDown className={`text-gray-500 dark:text-gray-400 text-xl transition-all ${isOpen ? 'rotate-0' : 'rotate-180'}`} />
             </div>
 
-            <p className={`overflow-hidden px-4 py-2 rounded-md bg-gray-100 dark:bg-primary text-light-gray dark:text-white font-vazir-light ${isOpen ? 'hidden' : 'block'}`}>{content}</p>
+            <p className={`overflow-hidden px-4 py-2 rounded-md bg-gray-100 dark:bg-primary text-light-gray dark:text-white font-vazir-light text-sm md:text-base ${isOpen ? 'hidden' : 'block'}`}>{content}</p>
         </div>
     )
 }
