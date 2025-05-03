@@ -1,5 +1,8 @@
 import React from 'react'
+
 import { MdKeyboardArrowRight } from "react-icons/md";
+
+
 
 export default function AddNewTicket() {
   return (
@@ -22,7 +25,6 @@ export default function AddNewTicket() {
         </div>
 
         <div className="w-full relative select-none">
-          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">دپارتمان</span>
           <select name="" id="" className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value="">
             <option value="">مشکل پرداخت</option>
             <option value="">مشکل در پخبش فیلم</option>
@@ -32,6 +34,7 @@ export default function AddNewTicket() {
             <option value="">پیشنهاد یا انتقاد</option>
             <option value="">مشکل ورود/اکانت</option>
           </select>
+          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">دپارتمان</span>
         </div>
 
         <div className="col-start-1 col-end-3 w-full relative select-none">

@@ -9,14 +9,14 @@ export default function AllTickets() {
       </div>
       <div className="w-full flex flex-col items-center gap-2">
         
-        <div className="w-full flex items-center justify-between gap-4">
-          <div className="flex items-center justify-center gap-1">
-            <span className="text-light-gray dark:text-gray-400 font-vazir text-nowrap text-sm">جستجو بر اساس</span>
-            <select name="" id="" className="p-2 bg-gray-100 text-light-gray dark:bg-primary dark:text-white rounded-md" value="">
+        <div className="w-full  flex items-center justify-between gap-4">
+          <div className="relative  flex items-center justify-center gap-1">
+            <select name="" id="" className="w-full min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value="">
               <option value="">ID</option>
               <option value="">عنوان</option>
               <option value="">دپارتمان</option>
             </select>
+            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
           </div>
 
           <div className="w-full relative select-none">

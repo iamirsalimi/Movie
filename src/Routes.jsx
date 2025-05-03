@@ -25,6 +25,7 @@ import AllRequests from './Pages/AllRequests/AllRequests'
 import AddRequest from './Pages/AddRequest/AddRequest'
 import AllTickets from './Pages/AllTickets/AllTickets'
 import AddNewTicket from './Pages/AddNewTicket/AddNewTicket'
+import TicketDetails from './Pages/TicketDetails/TicketDetails'
 
 let Routes = [
     {
@@ -61,6 +62,7 @@ let Routes = [
                     { path: 'messages', element: <Messages /> , children : [
                         {index : true , element : <AllTickets /> },
                         {path : 'add-new-ticket' , element : <AddNewTicket /> },
+                        {path : 'ticket-details/:ticketId' , element : <TicketDetails /> },
                     ]},
                 ]
             }
