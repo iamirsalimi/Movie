@@ -117,7 +117,7 @@ export default function UserPanel() {
                 </div>
             </div>
 
-            <div className="w-full h-fit flex items-center justify-between fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-5 py-4 lg:hidden">
+            <div className="w-full h-fit flex items-center justify-between z-10  fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-5 py-4 lg:hidden">
 
                 <a href="/my-account/userPanel/" className="flex flex-col items-center justify-center gap-1">
                     <LuLayoutDashboard className={`text-light-gray dark:text-white text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
