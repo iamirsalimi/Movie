@@ -10,12 +10,12 @@ export default function TicketDetails() {
         <>
             <div className="w-full flex items-center justify-between">
                 <div className="flex items-center justify-center gap-2">
-                    <h2 className="text-gray-700 dark:text-white font-vazir text-base md:text-xl">اطلاعات تیکت</h2>
+                    <h2 className="text-gray-700 dark:text-white font-vazir text-sm sm:text-base md:text-xl">اطلاعات تیکت</h2>
                     <span className="text-gray-400 dark:text-gray-500 font-vazir hidden sm:inline text-sm">#82136</span>
                 </div>
                 <a href="/my-account/userPanel/messages" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
                     <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-2xl" />
-                    <span className="text-light-gray dark:text-gray-400 text-sm md:text-base">بازگشت به لیست درخواست ها</span>
+                    <span className="text-light-gray dark:text-gray-400 text-xs xs:text-sm md:text-base">بازگشت به لیست درخواست ها</span>
                 </a>
             </div>
 

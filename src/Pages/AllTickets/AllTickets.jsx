@@ -5,7 +5,7 @@ export default function AllTickets() {
     <>
       <div className="w-full flex items-center justify-between">
         <h2 className="text-gray-700 dark:text-white font-vazir text-xl">Messages</h2>
-        <a href="/my-account/userPanel/messages/add-new-ticket" className="inline-block px-2 py-1 rounded-md cursor-pointer font-vazir text-white dark:text-primary bg-sky-500 hover:bg-sky-600  transition-colors">تیکت جدید</a>
+        <a href="/my-account/userPanel/messages/add-new-ticket" className="inline-block px-2 py-1 rounded-md cursor-pointer font-vazir text-white dark:text-primary bg-sky-500 hover:bg-sky-600 transition-colors">تیکت جدید</a>
       </div>
       <div className="w-full flex flex-col items-center gap-7 sm:gap-5 lg:gap-4">
         
@@ -28,8 +28,8 @@ export default function AllTickets() {
           </div>
         </div>
 
-        <div className="w-full py-3 px-2 rounded-lg border border-gray-200 dark:border-white/5">
-          <table className="w-full overflow-scroll lg:overflow-clip">
+        <div className="w-full py-3 px-2 rounded-lg border border-gray-200 dark:border-white/5 overflow-scroll lg:overflow-clip">
+          <table className="w-full">
             <thead className="min-w-full">
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>

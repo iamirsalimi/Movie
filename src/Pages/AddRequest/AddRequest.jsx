@@ -6,10 +6,10 @@ export default function AddRequest() {
   return (
     <>
       <div className="w-full flex items-center justify-between">
-        <h2 className="text-gray-700 dark:text-white font-vazir text-xl">درخواست جدید</h2>
+        <h2 className="text-gray-700 dark:text-white font-vazir text-sm xs:text-base md:text-lg lg:text-xl">درخواست جدید</h2>
         <a href="/my-account/userPanel/requests" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
           <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-xs sm:text-base md:text-xl lg:text-2xl" />
-          <span className="text-light-gray dark:text-gray-400 text-xs md:text-sm lg:text-base">بازگشت به لیست درخواست ها</span>
+          <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs md:text-sm lg:text-base">بازگشت به لیست درخواست ها</span>
         </a>
       </div>
 

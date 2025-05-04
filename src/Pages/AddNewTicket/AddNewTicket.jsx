@@ -11,7 +11,7 @@ export default function AddNewTicket() {
         <h2 className="text-gray-700 dark:text-white font-vazir text-lg sm:text-xl lg:text-2xl">تیکت جدید</h2>
         <a href="/my-account/userPanel/messages" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
           <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400" />
-          <span className="text-light-gray dark:text-gray-400 text-sm md:text-base">بازگشت به لیست درخواست ها</span>
+          <span className="text-light-gray dark:text-gray-400 text-xs md:text-base">بازگشت به لیست درخواست ها</span>
         </a>
       </div>
       

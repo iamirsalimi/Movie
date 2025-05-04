@@ -16,8 +16,8 @@ export default function VipPlan() {
             </div>
             <div className="flex flex-col gap-5 py-5 px-4 panel-box">
                 <h2 className="text-gray-700 dark:text-white font-vazir">لیست تراکنش ها</h2>
-                <div className="py-2 px-3 w-full border border-gray-200 dark:border-white/5 rounded-xl">
-                    <table className="w-full overflow-scroll lg:overflow-hidden">
+                <div className="py-2 px-3 w-full border border-gray-200 dark:border-white/5 rounded-xl overflow-scroll lg:overflow-hidden">
+                    <table className="w-full">
                         <thead className="min-w-full">
                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
                                 <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">ID</th>

@@ -93,16 +93,26 @@ export default function UserPanel() {
 
                     {/* panel links */}
                     <div className="grid grid-cols-2 gap-2 w-full">
-                        {links.map(link => (
-                            <a href={link.href} className={`bg-gray-100 dark:bg-primary hover:bg-orange-500/10 transition-colors duration-250 py-3 px-2 rounded-lg cursor-pointer flex flex-col items-center gap-1 ${link.href == dashboardLocation ? 'activePanelLink' : ''}`}>
-                                {link.icon}
-                                <span className="text-light-gray dark:text-white text-xs font-vazir text-center">{link.title}</span>
-                            </a>
-                        ))}
+                        {links.map(link => {
+                            const isExactMatch = link.href === dashboardLocation
+                            const isSubRoute = link.href !== '/my-account/userPanel/' && location.includes(link.href)
+                            const isActive = isExactMatch || isSubRoute
+                            
+                            return (
+                                <a
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`bg-gray-100 dark:bg-primary hover:bg-orange-500/10 transition-colors duration-250 py-3 px-2 rounded-lg cursor-pointer flex flex-col items-center gap-1 ${isActive ? 'activePanelLink' : ''}`}
+                                >
+                                    {link.icon}
+                                    <span className="text-light-gray dark:text-white text-xs font-vazir text-center">{link.title}</span>
+                                </a>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
-            <div className="w-full lg:w-3/4 min-h-screen mr-auto bg-light dark:bg-primary px-5 py-7">
+            <div className="w-full lg:w-3/4 min-h-screen mr-auto bg-light dark:bg-primary px-2 xs:px-5 py-7">
                 <div className="w-full h-full flex flex-col items-center gap-7 mb-10">
 
                     <div className="w-full flex items-center justify-between">
@@ -117,27 +127,27 @@ export default function UserPanel() {
                 </div>
             </div>
 
-            <div className="w-full h-fit flex items-center justify-between z-10  fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-5 py-4 lg:hidden">
+            <div className="w-full h-fit flex items-center justify-between z-10 fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-1 xs:px-5 py-4 lg:hidden">
 
                 <a href="/my-account/userPanel/" className="flex flex-col items-center justify-center gap-1">
-                    <LuLayoutDashboard className={`text-light-gray dark:text-white text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>داشبورد</span>
+                    <LuLayoutDashboard className={`text-light-gray dark:text-white text-xl xs:text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-xs xs:text-sm ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>داشبورد</span>
                 </a>
 
                 <a href="/my-account/userPanel/profile-edit" className="flex flex-col items-center justify-center gap-1">
-                    <IoSettingsOutline className={`text-light-gray dark:text-white text-2xl ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>ویرایش</span>
+                    <IoSettingsOutline className={`text-light-gray dark:text-white text-xl xs:text-2xl ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-xs xs:text-sm ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>ویرایش</span>
                 </a>
 
                 <a href="/my-account/userPanel/messages" className="relative flex flex-col items-center justify-center gap-1">
-                    <BiMessageAltDetail className={`text-light-gray dark:text-white text-2xl ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
-                    <span className={`font-vazir text-sm ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>پیام ها</span>
+                    <BiMessageAltDetail className={`text-light-gray dark:text-white text-xl xs:text-2xl ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
+                    <span className={`font-vazir text-xs xs:text-sm ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>پیام ها</span>
                     <span className="absolute -top-1 right-0 w-4 h-4 rounded-full bg-sky-500 flex items-center justify-center text-xs text-white">0</span>
                 </a>
 
                 <div className="my-account/userPanel/flex flex-col items-center justify-center gap-1 cursor-pointer">
-                    <TbLogout2 className='text-red-500 text-2xl' />
-                    <span className="text-light-gray dark:text-white font-vazir text-sm">خروج</span>
+                    <TbLogout2 className='text-red-500 text-xl xs:text-2xl' />
+                    <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">خروج</span>
                 </div>
 
 
@@ -147,7 +157,7 @@ export default function UserPanel() {
                     onClick={() => setShowMenu(true)}
                 >
                     <HiMenu className='text-light-gray dark:text-white text-3xl' />
-                    <span className="text-light-gray dark:text-white font-vazir text-sm">منو</span>
+                    <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">منو</span>
                 </button>
             </div>
         </>
