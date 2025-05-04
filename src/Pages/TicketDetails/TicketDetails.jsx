@@ -10,33 +10,33 @@ export default function TicketDetails() {
         <>
             <div className="w-full flex items-center justify-between">
                 <div className="flex items-center justify-center gap-2">
-                    <h2 className="text-gray-700 dark:text-white font-vazir text-xl">اطلاعات تیکت</h2>
-                    <span className="text-gray-400 dark:text-gray-500 font-vazir text-sm">#82136</span>
+                    <h2 className="text-gray-700 dark:text-white font-vazir text-base md:text-xl">اطلاعات تیکت</h2>
+                    <span className="text-gray-400 dark:text-gray-500 font-vazir hidden sm:inline text-sm">#82136</span>
                 </div>
                 <a href="/my-account/userPanel/messages" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
                     <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-2xl" />
-                    <span className="text-light-gray dark:text-gray-400">بازگشت به لیست درخواست ها</span>
+                    <span className="text-light-gray dark:text-gray-400 text-sm md:text-base">بازگشت به لیست درخواست ها</span>
                 </a>
             </div>
 
             <ul className="w-full flex flex-col items-center justify-between gap-2 bg-gray-100 dark:bg-primary rounded-lg divide-y divide-gray-200 dark:divide-secondary">
-                <li className="flex items-center justify-between w-full font-vazir p-2">
+                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                     <h3 className="text-light-gray dark:text-gray-500">موضوع</h3>
                     <p className="text-primary dark:text-gray-300">خرابی لینک</p>
                 </li>
-                <li className="flex items-center justify-between w-full font-vazir p-2">
+                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                     <h3 className="text-light-gray dark:text-gray-500">وضعیت تیکت</h3>
                     <p className="text-primary dark:text-gray-300">باز</p>
                 </li>
-                <li className="flex items-center justify-between w-full font-vazir p-2">
+                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                     <h3 className="text-light-gray dark:text-gray-500">شماره تیکت</h3>
                     <p className="text-primary dark:text-gray-300">#82136</p>
                 </li>
-                <li className="flex items-center justify-between w-full font-vazir p-2">
+                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                     <h3 className="text-light-gray dark:text-gray-500">تاریخ ایجاد</h3>
                     <p className="text-primary dark:text-gray-300">20/01/1404</p>
                 </li>
-                <li className="flex items-center justify-between w-full font-vazir p-2">
+                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                     <h3 className="text-light-gray dark:text-gray-500">شماره تیکت</h3>
                     <p className="text-primary dark:text-gray-300">pasdkjgfsa21</p>
                 </li>
@@ -44,9 +44,9 @@ export default function TicketDetails() {
 
             <div className="w-full flex flex-col justify-between gap-2 bg-gray-100 dark:bg-primary rounded-lg px-2 py-4">
                 <h2 className="text-gray-700 dark:text-white font-vazir text-xl">پیام های تیکت</h2>
-                <div className="py-5 px-2 border border-gray-300 dark:border-secondary rounded-lg flex flex-col items-center gap-2">
+                <div className="py-5 px-2 border border-gray-300 dark:border-secondary rounded-lg flex flex-col items-center gap-7 sm:gap-5 lg:gap-2">
                     
-                    <div className="flex flex-col items-center gap-5">
+                    <div className="flex flex-col items-center gap-7 sm:gap-5">
                         <TicketMessage />
                         <TicketMessage adminFlag />
                         <TicketMessage />
