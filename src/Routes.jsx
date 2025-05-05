@@ -12,6 +12,7 @@ import Dmca from './Pages/Dmca/Dmca'
 import ImdbTop from './Pages/ImdbTop/ImdbTop'
 import Register from './Pages/Register/Register'
 import Login from './Pages/Login/Login'
+// userPanel
 import UserPanel from './Pages/UserPanel/UserPanel'
 import Dashboard from './Pages/Dashboard/Dashboard'
 import ProfileEdit from './Pages/ProfileEdit/ProfileEdit'
@@ -26,6 +27,12 @@ import AddRequest from './Pages/AddRequest/AddRequest'
 import AllTickets from './Pages/AllTickets/AllTickets'
 import AddNewTicket from './Pages/AddNewTicket/AddNewTicket'
 import TicketDetails from './Pages/TicketDetails/TicketDetails'
+
+// AdminPanel
+import AdminPanel from './Pages/AdminPanel/AdminPanel'
+import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
+import Movies from './Pages/Movies/Movies'
+
 
 let Routes = [
     {
@@ -65,7 +72,14 @@ let Routes = [
                         {path : 'ticket-details/:ticketId' , element : <TicketDetails /> },
                     ]},
                 ]
-            }
+            },
+            {
+                path: 'adminPanel', element: <AdminPanel />, children: [
+                    { index: true, element: <AdminDashboard /> },
+                    { path: 'profile-edit', element: <ProfileEdit /> },
+                    { path: 'movies', element: <Movies /> },
+                ]
+            },
         ]
     },
     { path: '*', element: <NotFound /> },
