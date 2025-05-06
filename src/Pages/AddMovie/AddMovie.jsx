@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { casts } from './../../moviesData'
+import { casts, movies } from './../../moviesData'
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -30,7 +30,8 @@ export default function AddMovie() {
     const [showGenres, setShowGenres] = useState(false)
     const [movieGenres, setMovieGenres] = useState([])
 
-    const [similarMovieId, setSimilarMovieId] = useState()
+    const [similarMovieId, setSimilarMovieId] = useState('')
+    const [showSimilarMovies, setShowSimilarMovies] = useState(false)
     const [similarMovies, setSimilarMovies] = useState([])
 
 
@@ -73,16 +74,16 @@ export default function AddMovie() {
 
     // add similar Movies
     const addSimilarMovie = e => {
-        e.preventDefault()
         if (similarMovieId) {
-            let newSimilarMovieObj = { id: Math.floor(Math.random() * 999) }
+            let movieObj = movies.find(movie => movie.id == similarMovieId)
+            let newSimilarMovieObj = { id: Math.floor(Math.random() * 999), movieId: similarMovieId, title: movieObj.title, src: movieObj.src }
             setSimilarMovies(prev => [...prev, newSimilarMovieObj])
-            setLinkTitle('')
+            setSimilarMovieId('')
         }
     }
 
-    const deleteSimilarMovie = id => {
-        let newSimilarMovies = similarMovies.filter(movie => movie.id !== id)
+    const deleteSimilarMovie = movieId => {
+        let newSimilarMovies = similarMovies.filter(movie => movie.id !== movieId)
         setSimilarMovies(newSimilarMovies)
     }
 
@@ -126,6 +127,11 @@ export default function AddMovie() {
     useEffect(() => {
         setShowCasts(castName.trim().length != 0 ? true : false)
     }, [castName])
+
+    // to suggest similar movies
+    useEffect(() => {
+        setShowSimilarMovies(+similarMovieId != 0 ? true : false)
+    }, [similarMovieId])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden">
@@ -430,7 +436,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     {tags.map(tag => (
                                         <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
-                                                <h3 className="text-light-gray dark:text-white font-shabnam">{tag}</h3>
+                                            <h3 className="text-light-gray dark:text-white font-shabnam">{tag}</h3>
                                             <button
                                                 className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
                                                 onClick={e => deleteTag(tag)}
@@ -458,6 +464,27 @@ export default function AddMovie() {
                                     onChange={e => setSimilarMovieId(e.target.value)}
                                 />
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">Id فيلم مورد نظر</span>
+
+                                {/* to suggest movies by their Id */}
+                                <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showSimilarMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-2 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
+                                    {movies.filter(movie => movie.id == similarMovieId).length !== 0 ? movies.filter(movie => movie.id == similarMovieId).map(movie => (
+                                        <li
+                                            className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
+                                            onClick={e => {
+                                                setShowSimilarMovies(false)
+                                                setSimilarMovieId(movie.id)
+                                            }}
+                                        >
+                                            <div className="w-15 h-15 overflow-hidden rounded-md">
+                                                <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
+                                            </div>
+
+                                            <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
+                                        </li>
+                                    )) :
+                                        <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">فیلم "{similarMovieId}" وجود ندارد</div>
+                                    }
+                                </ul>
                             </div>
 
                             <button
@@ -466,19 +493,22 @@ export default function AddMovie() {
                             >افزودن</button>
                         </div>
 
-                        {links.length !== 0 && (
+                        {similarMovies.length !== 0 && (
                             <div className="w-full flex flex-col items-center gap-2">
                                 <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">لینک های فیلم</h3>
                                 <div className="w-full flex flex-col items-center gap-2">
-                                    {links.map(link => (
+                                    {similarMovies.map(movie => (
                                         <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
-                                            <div className="flex items-end justify-center gap-1">
-                                                <h3 className="text-light-gray dark:text-white font-shabnam">{link.title}</h3>
-                                                <span className="text-gray-400 text-sm dark:text-blue-500 font-shabnam-light">{link.type}</span>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-15 h-15 overflow-hidden rounded-md">
+                                                    <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
+                                                </div>
+                                                <h3 className="text-light-gray dark:text-white font-shabnam">{movie.title}</h3>
                                             </div>
+
                                             <button
                                                 className="p-1 bg-red-500 hover:bg-red-600 transition-colors rounded-sm cursor-pointer"
-                                                onClick={e => deleteSimilarMovie(link.id)}
+                                                onClick={e => deleteSimilarMovie(movie.id)}
                                             >
                                                 <RxCross2 className="text-white dark:text-secondary" />
                                             </button>
