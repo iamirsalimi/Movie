@@ -32,6 +32,8 @@ import TicketDetails from './Pages/TicketDetails/TicketDetails'
 import AdminPanel from './Pages/AdminPanel/AdminPanel'
 import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import Movies from './Pages/Movies/Movies'
+import AllMovies from './Pages/AllMovies/AllMovies'
+import AddMovie from './Pages/AddMovie/AddMovie'
 
 
 let Routes = [
@@ -77,7 +79,11 @@ let Routes = [
                 path: 'adminPanel', element: <AdminPanel />, children: [
                     { index: true, element: <AdminDashboard /> },
                     { path: 'profile-edit', element: <ProfileEdit /> },
-                    { path: 'movies', element: <Movies /> },
+                    { path: 'movies', element: <Movies />  , children : [
+                        { index : true , element: <AllMovies /> },
+                        { path: 'add-movie', element: <AddMovie /> },
+                        { path: 'edit-movie/:movieId', element: <AddMovie /> },
+                    ]},
                 ]
             },
         ]

@@ -112,7 +112,7 @@ export default function UserPanel() {
                     </div>
                 </div>
             </div>
-            <div className="w-full lg:w-3/4 min-h-screen mr-auto bg-light dark:bg-primary px-2 xs:px-5 py-7">
+            <div className="w-full lg:w-3/4 min-h-screen max-h-fit mr-auto bg-light dark:bg-primary px-2 xs:px-5 py-7">
                 <div className="w-full h-full flex flex-col items-center gap-7 mb-10">
 
                     <div className="w-full flex items-center justify-between">
