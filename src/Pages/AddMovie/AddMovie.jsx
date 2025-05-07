@@ -41,6 +41,9 @@ export default function AddMovie() {
     const [showCasts, setShowCasts] = useState(false)
     const [movieCasts, setMovieCasts] = useState([])
 
+    const [notifTitle, setNotifTitle] = useState('')
+    const [notifs, setNotifs] = useState([])
+
     // add Link
     const addLink = e => {
         e.preventDefault()
@@ -70,6 +73,22 @@ export default function AddMovie() {
         let newTags = new Set(tags)
         newTags.delete(tagTitle)
         setTags([...newTags])
+    }
+
+    // add Notif
+    const addNotif = e => {
+        if (notifTitle) {
+            let newNotifs = new Set(notifs)
+            newNotifs.add(notifTitle)
+            setNotifs([...newNotifs])
+            setNotifTitle('')
+        }
+    }
+
+    const deleteNotif = notifTitle => {
+        let newNotifs = new Set(notifs)
+        newNotifs.delete(notifTitle)
+        setNotifs([...newNotifs])
     }
 
     // add similar Movies
@@ -283,7 +302,7 @@ export default function AddMovie() {
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                     />
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">کیفیت</span>
+                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">زبان</span>
                 </div>
 
                 <div className="w-full relative select-none">
@@ -291,7 +310,31 @@ export default function AddMovie() {
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                     />
+                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">کیفیت</span>
+                </div>
+
+                <div className="w-full relative select-none">
+                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" >
+                        <option value="">در حال پخش</option>
+                        <option value="">اتمام</option>
+                        <option value="">کنسل شده</option>
+                    </select>
+
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">وضعیت پخش</span>
+                </div>
+
+                <div className="w-full relative select-none">
+                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" >
+                        <option value="saturday">شنبه</option>
+                        <option value="sunday">یکشنبه</option>
+                        <option value="monday">دوشنبه</option>
+                        <option value="tuesday">سه شنبه</option>
+                        <option value="wednsday">چهارشنبه</option>
+                        <option value="thursday">پنجشنبه</option>
+                        <option value="friday">جمعه</option>
+                    </select>
+
+                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">روز پخش</span>
                 </div>
 
                 <div className="w-full relative select-none">
@@ -590,6 +633,48 @@ export default function AddMovie() {
                                         </button>
                                     </li>
                                 ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Notifs */}
+                <div className="col-start-1 col-end-3 flex flex-col gap-5 rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">افزودن اعلان ها</h3>
+                    <div className="w-full flex flex-col items-center gap-4">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-3 gap-5">
+                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                                <input
+                                    type="text"
+                                    className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                    value={notifTitle}
+                                    onChange={e => setNotifTitle(e.target.value)}
+                                />
+                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">عنوان اعلان</span>
+                            </div>
+
+                            <button
+                                className="py-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
+                                onClick={addNotif}
+                            >افزودن</button>
+                        </div>
+
+                        {notifs.length !== 0 && (
+                            <div className="w-full flex flex-col items-center gap-2">
+                                <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">اعلان های فیلم</h3>
+                                <div className="w-full flex flex-col items-center gap-2">
+                                    {notifs.map(notif => (
+                                        <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                            <h3 className="text-light-gray dark:text-white font-shabnam">{notif}</h3>
+                                            <button
+                                                className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
+                                                onClick={e => deleteNotif(notif)}
+                                            >
+                                                <RxCross2 className="text-white dark:text-primary" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
