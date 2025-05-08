@@ -13,143 +13,16 @@ const genres = {
 }
 
 export default function EditUser() {
+    const [vipTab, setVipTab] = useState('increase-vipPlan')
+
     const { userId } = useParams()
 
     const [userRule, setUserRule] = useState('user') // user or admin
     const [accountStatus, setAccountStatus] = useState('active')
 
-    const [linkTitle, setLinkTitle] = useState()
-    const [linkType, setLinkType] = useState('dubbed')
-    const [links, setLinks] = useState([])
-
-    const [tagTitle, setTagTitle] = useState('')
-    const [tags, setTags] = useState([])
-
-    const [genre, setGenre] = useState('')
-    const [showGenres, setShowGenres] = useState(false)
-    const [movieGenres, setMovieGenres] = useState([])
-
-    const [similarMovieId, setSimilarMovieId] = useState('')
-    const [showSimilarMovies, setShowSimilarMovies] = useState(false)
-    const [similarMovies, setSimilarMovies] = useState([])
-
-
-    const [castId, setCastId] = useState()
-    const [castName, setCastName] = useState('')
-    const [castRule, setCastRule] = useState('actor')
-    const [showCasts, setShowCasts] = useState(false)
-    const [movieCasts, setMovieCasts] = useState([])
-
-    const [notifTitle, setNotifTitle] = useState('')
-    const [notifs, setNotifs] = useState([])
-
-    // add Link
-    const addLink = e => {
-        e.preventDefault()
-        if (linkTitle && linkType) {
-            let newLinkObj = { id: Math.floor(Math.random() * 999), title: linkTitle, type: linkType, links: [] }
-            setLinks(prev => [...prev, newLinkObj])
-            setLinkTitle('')
-        }
+    const changeVipTab = e => {
+        setVipTab(e.target.dataset.viptab)
     }
-
-    const deleteLink = id => {
-        let newLinks = links.filter(link => link.id !== id)
-        setLinks(newLinks)
-    }
-
-    // add Tag
-    const addTag = e => {
-        if (tagTitle) {
-            let newTags = new Set(tags)
-            newTags.add(tagTitle)
-            setTags([...newTags])
-            setTagTitle('')
-        }
-    }
-
-    const deleteTag = tagTitle => {
-        let newTags = new Set(tags)
-        newTags.delete(tagTitle)
-        setTags([...newTags])
-    }
-
-    // add Notif
-    const addNotif = e => {
-        if (notifTitle) {
-            let newNotifs = new Set(notifs)
-            newNotifs.add(notifTitle)
-            setNotifs([...newNotifs])
-            setNotifTitle('')
-        }
-    }
-
-    const deleteNotif = notifTitle => {
-        let newNotifs = new Set(notifs)
-        newNotifs.delete(notifTitle)
-        setNotifs([...newNotifs])
-    }
-
-    // add similar Movies
-    const addSimilarMovie = e => {
-        if (similarMovieId) {
-            let movieObj = movies.find(movie => movie.id == similarMovieId)
-            let newSimilarMovieObj = { id: Math.floor(Math.random() * 999), movieId: similarMovieId, title: movieObj.title, src: movieObj.src }
-            setSimilarMovies(prev => [...prev, newSimilarMovieObj])
-            setSimilarMovieId('')
-        }
-    }
-
-    const deleteSimilarMovie = movieId => {
-        let newSimilarMovies = similarMovies.filter(movie => movie.id !== movieId)
-        setSimilarMovies(newSimilarMovies)
-    }
-
-    // add genres
-    const addGenre = genre => {
-        let newGenres = new Set(movieGenres)
-        newGenres.add(genre)
-        setMovieGenres([...newGenres])
-        setGenre('')
-    }
-
-    const deleteGenre = genre => {
-        let newGenres = new Set(movieGenres)
-        newGenres.delete(genre)
-        setMovieGenres([...newGenres])
-    }
-
-    // add genres
-    const addCast = e => {
-        if (castId && castName && castRule) {
-            let newCast = { id: castId, name: castName, rule: castRule }
-            setMovieCasts(prev => [...prev, newCast])
-            console.log(newCast)
-            setCastName('')
-            setCastRule('actor')
-            setCastId('')
-        }
-    }
-
-    const deleteCast = castId => {
-        let newCasts = movieCasts.filter(cast => cast.id !== castId)
-        setMovieCasts(newCasts)
-    }
-
-    // to suggest genres
-    useEffect(() => {
-        setShowGenres(genre.trim().length != 0 ? true : false)
-    }, [genre])
-
-    // to suggest casts
-    useEffect(() => {
-        setShowCasts(castName.trim().length != 0 ? true : false)
-    }, [castName])
-
-    // to suggest similar movies
-    useEffect(() => {
-        setShowSimilarMovies(+similarMovieId != 0 ? true : false)
-    }, [similarMovieId])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden">
@@ -207,7 +80,7 @@ export default function EditUser() {
                             </select>
                             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">وضعیت حساب کاربر</span>
                         </div>
-                        
+
                         {accountStatus == 'temporary-ban' && (
                             <div className="w-full relative flex items-center justify-center gap-1">
                                 <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors">
@@ -219,6 +92,16 @@ export default function EditUser() {
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">مدت زمان بن</span>
                             </div>
                         )}
+
+                        {(accountStatus == 'temporary-ban' || accountStatus == 'permanent-ban') && (
+                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                                <textarea className="w-full rounded-md p-3 min-h-28 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                ></textarea>
+                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">علت بن</span>
+                            </div>
+                        )}
+
+                        <button className="col-start-1 col-end-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition-colors text-white cursor-pointer font-vazir">ذخیره</button>
                     </div>
                 </div>
 
@@ -242,16 +125,69 @@ export default function EditUser() {
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ منقضي شدن اشتراك :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">20/5/1404</span>
                             </li>
+                            <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">هزینه پرداخت شده :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">200000 تومان</span>
+                            </li>
                         </ul>
 
                         <div className="w-full flex flex-col items-center">
                             <div className="flex items-center justify-center gap-2">
-                                <button className="bg-gray-400 hover:bg-black/20 dark:bg-secondary transition-colors cursor-pointer transition-colors text-white font-shabnam px-2 py-1 rounded-t-md">کنسل کردن اشتراک</button>
-                                <button className="bg-gray-400 hover:bg-black/20 dark:bg-secondary transition-colors cursor-pointer transition-colors text-white font-shabnam px-2 py-1 rounded-t-md">افزایش اشتراک</button>
-                                <button className="bg-gray-400 hover:bg-black/20 dark:bg-secondary transition-colors cursor-pointer transition-colors text-white font-shabnam px-2 py-1 rounded-t-md">کنسل کردن اشتراک</button>
+                                <button
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'activate-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    onClick={changeVipTab}
+                                    data-vipTab='activate-vipPlan'
+                                >فعالسازی اشتراک</button>
+                                <button
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'increase-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    onClick={changeVipTab}
+                                    data-vipTab='increase-vipPlan'
+                                >افزایش اشتراک(کاستوم)</button>
+                                <button
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'decrease-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    onClick={changeVipTab}
+                                    data-vipTab='decrease-vipPlan'
+                                >کاهش اشتراک(کاستوم)</button>
                             </div>
-                            <div className="w-full border border-gray-400 dark:border-secondary rounded-lg h-screen">
-                            
+                            <div className="w-full border border-gray-400 dark:border-secondary rounded-lg py-5 px-7 flex flex-col gap-5">
+                                {vipTab !== 'activate-vipPlan' ? (
+                                    <>
+                                        {vipTab == 'increase-vipPlan' ? (
+                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">افزایش اشتراک</h2>
+                                        ) : (
+                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">کاهش اشتراک</h2>
+                                        )}
+
+                                        <div className="grid grid-cols-3 gap-5">
+                                            <div className="col-start-1 col-end-3 relative select-none">
+                                                <input
+                                                    type="number"
+                                                    className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                                    min={1}
+                                                />
+                                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">تعداد روز</span>
+                                            </div>
+                                            <button className="py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
+                                        </div>
+
+                                    </>
+                                ) : (
+                                    <>
+                                        <h2 className="text-gray-700 dark:text-white font-vazir text-lg">فعال سازی اشتراک</h2>
+                                        <div className="grid grid-cols-3 gap-5">
+                                            <div className="col-start-1 col-end-3 relative select-none">
+                                                <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors">
+                                                    <option value="month-1">1 ماهه</option>
+                                                    <option value="month-3">3 ماهه</option>
+                                                    <option value="month-6">6 ماهه</option>
+                                                    <option value="month-12">1 ساله</option>
+                                                </select>
+                                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">نوع اشتراک</span>
+                                            </div>
+                                            <button className="py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

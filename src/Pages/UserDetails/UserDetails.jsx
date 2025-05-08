@@ -35,6 +35,10 @@ export default function UserDetails() {
                         <span className="text-vazir-light text-primary dark:text-white">Alex</span>
                     </li>
                     <li className="w-full py-1 flex items-center justify-between">
+                        <h3 className="text-vazir text-light-gray dark:text-gray-500">نام نمایشی :</h3>
+                        <span className="text-vazir-light text-primary dark:text-white">Alex</span>
+                    </li>
+                    <li className="w-full py-1 flex items-center justify-between">
                         <h3 className="text-vazir text-light-gray dark:text-gray-500">نام کاربري :</h3>
                         <span className="text-vazir-light text-primary dark:text-white">Alex1234</span>
                     </li>
