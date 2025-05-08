@@ -50,6 +50,10 @@
   .ticket-message-admin span{
     @apply text-white;
   }
+
+  .adminPanel .ticket-message-user{
+    @apply  w-3/4 md:w-1/2 bg-white dark:bg-secondary text-light-gray dark:text-gray-300 rounded-md p-2 relative z-10 after:block after:w-5 after:h-5 after:bg-white dark:after:bg-secondary after:absolute after:-right-2.5 after:bottom-0 after:-z-10 before:block before:w-5 before:h-5 before:bg-gray-100 dark:before:bg-primary before:rounded-bl-full before:absolute before:-right-5 before:bottom-0 before:z-10;
+  }
 }
 
 @layer utilities {
