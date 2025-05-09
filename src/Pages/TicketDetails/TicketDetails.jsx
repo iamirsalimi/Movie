@@ -48,9 +48,9 @@ export default function TicketDetails() {
                     
                     <div className="flex flex-col items-center gap-7 sm:gap-5">
                         <TicketMessage />
-                        <TicketMessage adminFlag />
+                        <TicketMessage receiveFlag adminReceiver />
                         <TicketMessage />
-                        <TicketMessage adminFlag />
+                        <TicketMessage receiveFlag adminReceiver />
                     </div>
 
                     <div className="w-full flex flex-col items-center justify-between gap-2">

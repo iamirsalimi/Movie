@@ -20,13 +20,14 @@ import { RxCross2 } from "react-icons/rx";
 import { HiMenu } from "react-icons/hi";
 import { BiMoviePlay } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
+import { LuTickets } from "react-icons/lu";
 
 let links = [
     { title: 'داشبورد', href: '/my-account/adminPanel/', icon: <LuLayoutDashboard className="text-light-gray dark:text-white text-xl" /> },
     { title: 'ویرایش پروفایل', href: '/my-account/adminPanel/profile-edit', icon: <IoSettingsOutline className="text-light-gray dark:text-white text-xl" /> },
     { title: 'کاربر ها', href: '/my-account/adminPanel/users', icon: <FaUsers className="text-light-gray dark:text-white text-xl" /> },
     { title: 'فیلم ها', href: '/my-account/adminPanel/movies', icon: <BiMoviePlay className="text-light-gray dark:text-white text-xl" /> },
-    { title: 'اعلان ها', href: '/my-account/adminPanel/notifications', icon: <IoNotificationsOutline className="text-light-gray dark:text-white text-xl" /> },
+    { title: 'تیکت ها', href: '/my-account/adminPanel/tickets', icon: <LuTickets className="text-light-gray dark:text-white text-xl" /> },
     { title: 'مطالب درخواستی', href: '/my-account/adminPanel/requests', icon: <IoMdAddCircleOutline className="text-light-gray dark:text-white text-xl" /> },
     { title: 'دیدگاه ها', href: '/my-account/adminPanel/comments', icon: <FaCommentDots className="text-light-gray dark:text-white text-xl" /> },
     { title: 'پیام ها', href: '/my-account/adminPanel/messages', icon: <BiMessageAltDetail className="text-light-gray dark:text-white text-xl" /> },

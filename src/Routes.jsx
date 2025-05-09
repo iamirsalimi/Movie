@@ -38,6 +38,9 @@ import Users from './Pages/Users/Users'
 import AllUsers from './Pages/AllUsers/AllUsers'
 import UserDetails from './Pages/UserDetails/UserDetails'
 import EditUser from './Pages/EditUser/EditUser'
+import Tickets from './Pages/Tickets/Tickets'
+import AdminAllTickets from './Pages/AdminAllTickets/AdminAllTickets'
+import EditTicket from './Pages/EditTicket/EditTicket'
 
 let Routes = [
     {
@@ -91,7 +94,12 @@ let Routes = [
                         { index : true , element: <AllUsers /> },
                         { path: 'user-details/:userId', element: <UserDetails /> },
                         { path: 'edit-user/:userId', element: <EditUser /> },
-                    ]}
+                    ]},
+                    { path: 'tickets', element: <Tickets />  , children : [
+                        { index : true , element: <AdminAllTickets /> },
+                        { path: 'edit-ticket/:ticketId', element: <EditTicket /> },
+                    ]},
+
                 ]
             },
         ]
