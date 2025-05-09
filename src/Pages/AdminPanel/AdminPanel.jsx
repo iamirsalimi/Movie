@@ -9,9 +9,9 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaCrown } from "react-icons/fa6";
 import { CiBookmark } from "react-icons/ci";
+import { FaCommentDots } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaCommentDots } from "react-icons/fa";
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -21,6 +21,7 @@ import { HiMenu } from "react-icons/hi";
 import { BiMoviePlay } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { LuTickets } from "react-icons/lu";
+import { AiOutlineComment } from "react-icons/ai";
 
 let links = [
     { title: 'داشبورد', href: '/my-account/adminPanel/', icon: <LuLayoutDashboard className="text-light-gray dark:text-white text-xl" /> },
@@ -28,8 +29,8 @@ let links = [
     { title: 'کاربر ها', href: '/my-account/adminPanel/users', icon: <FaUsers className="text-light-gray dark:text-white text-xl" /> },
     { title: 'فیلم ها', href: '/my-account/adminPanel/movies', icon: <BiMoviePlay className="text-light-gray dark:text-white text-xl" /> },
     { title: 'تیکت ها', href: '/my-account/adminPanel/tickets', icon: <LuTickets className="text-light-gray dark:text-white text-xl" /> },
+    { title: 'دیدگاه ها', href: '/my-account/adminPanel/comments', icon: <AiOutlineComment className="text-light-gray dark:text-white text-xl" /> },
     { title: 'مطالب درخواستی', href: '/my-account/adminPanel/requests', icon: <IoMdAddCircleOutline className="text-light-gray dark:text-white text-xl" /> },
-    { title: 'دیدگاه ها', href: '/my-account/adminPanel/comments', icon: <FaCommentDots className="text-light-gray dark:text-white text-xl" /> },
     { title: 'پیام ها', href: '/my-account/adminPanel/messages', icon: <BiMessageAltDetail className="text-light-gray dark:text-white text-xl" /> },
 ]
 

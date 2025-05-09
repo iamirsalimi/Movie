@@ -41,6 +41,7 @@ import EditUser from './Pages/EditUser/EditUser'
 import Tickets from './Pages/Tickets/Tickets'
 import AdminAllTickets from './Pages/AdminAllTickets/AdminAllTickets'
 import EditTicket from './Pages/EditTicket/EditTicket'
+import AdminComments from './Pages/AdminComments/AdminComments'
 
 let Routes = [
     {
@@ -99,6 +100,7 @@ let Routes = [
                         { index : true , element: <AdminAllTickets /> },
                         { path: 'edit-ticket/:ticketId', element: <EditTicket /> },
                     ]},
+                    { path: 'comments', element: <AdminComments /> },
 
                 ]
             },

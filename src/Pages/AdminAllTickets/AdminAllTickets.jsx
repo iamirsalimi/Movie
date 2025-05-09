@@ -54,7 +54,7 @@ export default function AdminAllTickets() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-secondary text-center" >
+                            <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">123</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex123</td>
