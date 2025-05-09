@@ -45,6 +45,7 @@ import AdminComments from './Pages/AdminComments/AdminComments'
 import AdminNotifs from './Pages/AdminNotifs/AdminNotifs'
 import AdminAllNotifs from './Pages/AdminAllNotifs/AdminAllNotifs'
 import AdminAddNotifs from './Pages/AdminAddNotifs/AdminAddNotifs'
+import AdminRequests from './Pages/AdminRequests/AdminRequests'
 
 let Routes = [
     {
@@ -109,7 +110,8 @@ let Routes = [
                         { path: 'add-notification', element: <AdminAddNotifs /> },
                         { path: 'edit-notification/:notifId', element: <AdminAddNotifs /> },
                     ]},
-
+                    { path: 'requests', element: <AdminRequests /> },
+                    
                 ]
             },
         ]

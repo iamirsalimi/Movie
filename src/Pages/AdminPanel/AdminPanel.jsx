@@ -8,8 +8,6 @@ import { TbLogout2 } from "react-icons/tb";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaCrown } from "react-icons/fa6";
-import { CiBookmark } from "react-icons/ci";
-import { FaCommentDots } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BsFillMoonStarsFill } from "react-icons/bs";
@@ -79,13 +77,11 @@ export default function UserPanel() {
                         <a href='notifications' className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
                             <IoNotificationsOutline className='text-light-gray dark:text-white text-2xl' />
                             <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">اعلان ها</span>
-                            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center text-sm text-white">0</span>
                         </a>
 
                         <a href="messages" className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
-                            <BiMessageAltDetail className='text-light-gray dark:text-white text-2xl' />
-                            <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">پیام ها</span>
-                            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center text-sm text-white">0</span>
+                            <AiOutlineComment className='text-light-gray dark:text-white text-2xl' />
+                            <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">کامنت ها</span>
                         </a>
 
                         <button className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
@@ -100,7 +96,7 @@ export default function UserPanel() {
                             const isExactMatch = link.href === dashboardLocation
                             const isSubRoute = link.href !== '/my-account/adminPanel/' && location.includes(link.href)
                             const isActive = isExactMatch || isSubRoute
-                            
+
                             return (
                                 <a
                                     key={link.href}
