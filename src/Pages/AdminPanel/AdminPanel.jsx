@@ -30,8 +30,8 @@ let links = [
     { title: 'فیلم ها', href: '/my-account/adminPanel/movies', icon: <BiMoviePlay className="text-light-gray dark:text-white text-xl" /> },
     { title: 'تیکت ها', href: '/my-account/adminPanel/tickets', icon: <LuTickets className="text-light-gray dark:text-white text-xl" /> },
     { title: 'دیدگاه ها', href: '/my-account/adminPanel/comments', icon: <AiOutlineComment className="text-light-gray dark:text-white text-xl" /> },
+    { title: 'اعلان ها', href: '/my-account/adminPanel/notifications', icon: <IoNotificationsOutline className="text-light-gray dark:text-white text-xl" /> },
     { title: 'مطالب درخواستی', href: '/my-account/adminPanel/requests', icon: <IoMdAddCircleOutline className="text-light-gray dark:text-white text-xl" /> },
-    { title: 'پیام ها', href: '/my-account/adminPanel/messages', icon: <BiMessageAltDetail className="text-light-gray dark:text-white text-xl" /> },
 ]
 
 export default function UserPanel() {

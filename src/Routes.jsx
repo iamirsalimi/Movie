@@ -42,6 +42,9 @@ import Tickets from './Pages/Tickets/Tickets'
 import AdminAllTickets from './Pages/AdminAllTickets/AdminAllTickets'
 import EditTicket from './Pages/EditTicket/EditTicket'
 import AdminComments from './Pages/AdminComments/AdminComments'
+import AdminNotifs from './Pages/AdminNotifs/AdminNotifs'
+import AdminAllNotifs from './Pages/AdminAllNotifs/AdminAllNotifs'
+import AdminAddNotifs from './Pages/AdminAddNotifs/AdminAddNotifs'
 
 let Routes = [
     {
@@ -101,6 +104,11 @@ let Routes = [
                         { path: 'edit-ticket/:ticketId', element: <EditTicket /> },
                     ]},
                     { path: 'comments', element: <AdminComments /> },
+                    { path: 'notifications', element: <AdminNotifs />  , children : [
+                        { index : true , element: <AdminAllNotifs /> },
+                        { path: 'add-notification', element: <AdminAddNotifs /> },
+                        { path: 'edit-notification/:notifId', element: <AdminAddNotifs /> },
+                    ]},
 
                 ]
             },

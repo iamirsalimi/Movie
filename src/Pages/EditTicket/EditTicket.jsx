@@ -76,6 +76,7 @@ export default function EditTicket() {
                     <h3 className="text-light-gray dark:text-gray-500">شماره تیکت</h3>
                     <p className="text-primary dark:text-gray-300">pasdkjgfsa21</p>
                 </li>
+                <button className="py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg">آپدیت</button>
             </ul>
 
             <div className="w-full flex flex-col justify-between gap-2 bg-gray-100 dark:bg-primary rounded-lg px-2 py-4">

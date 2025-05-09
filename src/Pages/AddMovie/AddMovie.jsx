@@ -158,7 +158,7 @@ export default function AddMovie() {
                 <h2 className="w-full font-vazir text-gray-800 dark:text-white text-xl">افزودن فیلم جدید</h2>
                 <a href="/my-account/adminPanel/movies" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
                     <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-2xl" />
-                    <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست درخواست ها</span>
+                    <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست فیلم ها</span>
                 </a>
             </div>
             <div className="w-full grid grid-cols-2 gap-5">
