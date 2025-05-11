@@ -12,8 +12,10 @@ export default function AllMovies() {
                 <div className="w-full flex flex-col-reverse md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                     <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                         <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value="">
-                            <option value="">ID</option>
-                            <option value="">نام فیلم</option>
+                            <option value="ID">ID</option>
+                            <option value="movieName">نام فیلم</option>
+                            <option value="movieType">نوع فیلم</option>
+                            <option value="movieStatus">وضعیت پخش</option>
                         </select>
                         <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
                     </div>
@@ -35,7 +37,8 @@ export default function AllMovies() {
                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">سال انتشار</th>
                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نمرات سایت</th>
-                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تعداد دیدگاه ها</th>
+                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نوع فیلم</th>
+                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت پخش</th>
                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                             </tr>
                         </thead>
