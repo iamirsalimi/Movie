@@ -100,7 +100,7 @@ export default function AddRelease() {
     }, [newSeasonEpisodesCount, broadcastDay, broadCastGap, broadCastEpisodePerPart, newSeasonNumber, allEpisodesReleasedInADayCheckBox , newSeasonStartEpisode])
 
     return (
-        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7">
+        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-20">
             <div className="flex items-center justify-center">
                 <h2 className="w-full font-vazir text-gray-800 dark:text-white text-xl">افزودن پخش جدید</h2>
                 <a href="/my-account/adminPanel/weekly-release" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
@@ -108,7 +108,7 @@ export default function AddRelease() {
                     <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست پخش ها</span>
                 </a>
             </div>
-            <div className="w-full grid grid-cols-2 gap-5">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="w-full relative select-none">
                     <input
                         type="text"
@@ -137,7 +137,7 @@ export default function AddRelease() {
                 )}
 
                 <div className="w-full relative select-none">
-                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={broadcastDay} onChange={e => setBroadcastDay(e.target.value)} readonly={true} >
+                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={broadcastDay} disabled={true} >
                         <option value="saturday">شنبه</option>
                         <option value="sunday">یکشنبه</option>
                         <option value="monday">دوشنبه</option>
@@ -202,7 +202,7 @@ export default function AddRelease() {
                 )}
 
                 {movieType == 'series' && (
-                    <div className="flex flex-col gap-2 items-center">
+                    <div className="flex flex-col gap-5 md:gap-2 items-center">
                         <div className="w-full relative select-none">
                             <input
                                 type="number"
@@ -227,7 +227,7 @@ export default function AddRelease() {
                 )}
 
                 {movieType == 'series' && (
-                    <div className="w-full relative select-none">
+                    <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                         <input
                             type="number"
                             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -242,10 +242,10 @@ export default function AddRelease() {
                 )}
 
                 {(movieType == 'series' && newSeasonEpisodesTable.length != 0) && (
-                    <ul className="col-start-1 col-end-3 py-3 px-2 bg-gray-100 dark:bg-primary rounded-lg grid grid-cols-4 gap-2">
+                    <ul className="md:col-start-1 md:col-end-3 py-3 px-2 bg-gray-100 dark:bg-primary rounded-lg grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2">
                         {/* means all op the episodes will be released in a day */}
                         {newSeasonEpisodesTable.length == 1 ? (
-                            <li className="flex flex-col justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
+                            <li className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
                                 <h3 className="text-light-gray dark:text-white font-vazir text-sm">تمام قسمت هاي فصل {newSeasonNumber}</h3>
                                 <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
                                     <span>پخش در :</span>
@@ -253,7 +253,7 @@ export default function AddRelease() {
                                 </div>
                             </li>
                         ) : newSeasonEpisodesTable.map(newEpisode => (
-                            <li className="flex flex-col justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
+                            <li className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
                                 <h3 className="text-light-gray dark:text-white font-vazir text-sm">
                                     فصل {newSeasonNumber} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode.episode?.episodes?.join(' و ') : newEpisode.episode?.startEpisode}</h3>
                                 <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
@@ -265,7 +265,7 @@ export default function AddRelease() {
                     </ul>
                 )}
 
-                <div className="col-start-1 col-end-3 w-full flex items-center gap-2">
+                <div className="md:col-start-1 md:col-end-3 w-full flex items-center gap-2">
                     <button className="w-full bg-green-600 hover:bg-green-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">افزودن</button>
                     <button className="w-full bg-red-600 hover:bg-red-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">ريست</button>
                 </div>
