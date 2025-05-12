@@ -20,6 +20,7 @@ import { BiMoviePlay } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { LuTickets } from "react-icons/lu";
 import { AiOutlineComment } from "react-icons/ai";
+import { BsCalendarDate } from "react-icons/bs";
 
 let links = [
     { title: 'داشبورد', href: '/my-account/adminPanel/', icon: <LuLayoutDashboard className="text-light-gray dark:text-white text-xl" /> },
@@ -30,6 +31,7 @@ let links = [
     { title: 'دیدگاه ها', href: '/my-account/adminPanel/comments', icon: <AiOutlineComment className="text-light-gray dark:text-white text-xl" /> },
     { title: 'اعلان ها', href: '/my-account/adminPanel/notifications', icon: <IoNotificationsOutline className="text-light-gray dark:text-white text-xl" /> },
     { title: 'مطالب درخواستی', href: '/my-account/adminPanel/requests', icon: <IoMdAddCircleOutline className="text-light-gray dark:text-white text-xl" /> },
+    { title: 'جدول هفتگی', href: '/my-account/adminPanel/weekly-release', icon: <BsCalendarDate className="text-light-gray dark:text-white text-xl" /> },
 ]
 
 export default function UserPanel() {
@@ -52,7 +54,7 @@ export default function UserPanel() {
     return (
         <>
             <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
-                <div className="px-5 py-9 flex flex-col justify-start items-center gap-10 overflow-y-scroll lg:overflow-hidden">
+                <div className="px-5 py-9 flex flex-col justify-start items-center gap-7 overflow-y-auto pb-12">
                     <button className="block lg:hidden w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 dark:bg-primary dark:text-white cursor-pointer" onClick={hideMenu}>
                         <RxCross2 className="text-xl" />
                     </button>

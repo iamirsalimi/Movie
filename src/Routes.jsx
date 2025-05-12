@@ -46,6 +46,9 @@ import AdminNotifs from './Pages/AdminNotifs/AdminNotifs'
 import AdminAllNotifs from './Pages/AdminAllNotifs/AdminAllNotifs'
 import AdminAddNotifs from './Pages/AdminAddNotifs/AdminAddNotifs'
 import AdminRequests from './Pages/AdminRequests/AdminRequests'
+import WeeklyRelease from './Pages/WeeklyRelease/WeeklyRelease'
+import AllWeeklyReleases from './Pages/AllWeeklyReleases/AllWeeklyReleases'
+import AddRelease from './Pages/AddRelease/AddRelease'
 
 let Routes = [
     {
@@ -111,7 +114,11 @@ let Routes = [
                         { path: 'edit-notification/:notifId', element: <AdminAddNotifs /> },
                     ]},
                     { path: 'requests', element: <AdminRequests /> },
-                    
+                    { path: 'weekly-release', element: <WeeklyRelease />  , children : [
+                        { index : true , element: <AllWeeklyReleases /> },
+                        { path: 'add-release', element: <AddRelease /> },
+                        { path: 'edit-release/:releaseId', element: <AddRelease /> },
+                    ]}
                 ]
             },
         ]
