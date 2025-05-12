@@ -18,39 +18,39 @@ export default function AdminComments() {
             <div className="w-full flex flex-col items-center gap-12">
                 {showCommentDetails && (
                     <ul ref={commentDetailsRef} className="w-full flex flex-col items-center justify-between gap-2 bg-gray-100 dark:bg-primary rounded-lg divide-y divide-gray-200 dark:divide-secondary p-2">
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">ID</h3>
                             <p className="text-primary dark:text-gray-300">#21342134</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">ID کاربر</h3>
                             <p className="text-primary dark:text-gray-300">21342134</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">نام نمایشی کاربر</h3>
                             <p className="text-primary dark:text-gray-300">Alex</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">نام فیلم</h3>
                             <p className="text-primary dark:text-gray-300">Openheimer</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">ریپلی شده</h3>
                             <p className="text-primary dark:text-gray-300">بله</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">Id کامنت پدر</h3>
                             <p className="text-primary dark:text-gray-300">#12341</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">زمان ثبت کامنت</h3>
                             <p className="text-primary dark:text-gray-300">20:23 20/01/1404</p>
                         </li>
-                        <li className="flex flex-col gap-2 w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col items-center md:items-start gap-2 w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">متن کامنت</h3>
-                            <p className="text-primary dark:text-gray-300 font-vazir">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem at dolore, ab ea optio iusto debitis. Sunt, ea deserunt. Omnis.</p>
+                            <p className="text-primary dark:text-gray-300 font-vazir text-center md:text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem at dolore, ab ea optio iusto debitis. Sunt, ea deserunt. Omnis.</p>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">دارای اسپویل هست؟</h3>
                             <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                                 <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-primary dark:border-gray-600 dark:bg-primary bg-gray-100 text-primary dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" >
@@ -60,7 +60,7 @@ export default function AdminComments() {
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-primary dark:text-gray-600 bg-gray-100 dark:bg-primary">دارای اسپویل</span>
                             </div>
                         </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                        <li className="flex flex-col md:flew-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">وضعیت تیکت</h3>
                             <div className="w-full md:w-fit relative flex items-center justify-center">
                                 {/* pending */}
@@ -92,16 +92,14 @@ export default function AdminComments() {
                                             </span> */}
                             </div>
                         </li>
-                        <div className="w-full grid grid-cols-3 gap-2">
-                            <button className="mt-5 w-full bg-sky-500 hover:bg-sky-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg">آپدیت</button>
-                            <button className="mt-5 w-full bg-green-500 hover:bg-green-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg">مشاهده کامنت</button>
-                            <button className="mt-5 w-full bg-red-500 hover:bg-red-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg">ری ست</button>
-
+                        <div className="w-full mt-5 grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <button className="w-full bg-sky-500 hover:bg-sky-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg">آپدیت</button>
+                            <button className="w-full bg-green-500 hover:bg-green-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg">مشاهده کامنت</button>
                         </div>
                     </ul>
                 )}
                 <div className="w-full flex flex-col items-center gap-5">
-                    <div className="w-full flex flex-col-reverse md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                         <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                             <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-red-500 focus:text-sky-500 transition-colors" value={searchType} onChange={e => setSearchType(e.target.value)} >
                                 <option value="ID">ID</option>
@@ -142,7 +140,7 @@ export default function AdminComments() {
                                 <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
                                     <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">123</td>
                                     <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex</td>
-                                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 max-w-32">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque perspiciatis minima sit cumque cupiditate. Magnam dolore accusantium possimus facilis debitis!</td>
+                                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 min-w-52 md:max-w-32">Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque perspiciatis minima sit cumque cupiditate. Magnam dolore accusantium possimus facilis debitis!</td>
                                     <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
 
                                         {/* <span className="bg-green-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">
@@ -182,15 +180,15 @@ export default function AdminComments() {
                                             <FaEye className="text-sky-500 group-hover:text-white transition-all" />
                                             <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
                                         </button>
-                                        <div className="flex items-center justify-center gap-2">
+                                        <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
                                             <button className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group flex items-center justify-center gap-0.5">
                                                 <FiCheck className="text-green-500 group-hover:text-white transition-all" />
-                                                <span className="text-green-500 font-vazir group-hover:text-white transition-all">قبول کردن</span>
+                                                <span className="text-green-500 font-vazir group-hover:text-white transition-all text-nowrap">قبول کردن</span>
                                             </button>
 
                                             <button className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group flex items-center justify-center gap-0.5">
                                                 <RxCross1 className="text-red-500 group-hover:text-white transition-all" />
-                                                <span className="text-red-500 font-vazir group-hover:text-white transition-all">رد کردن</span>
+                                                <span className="text-red-500 font-vazir group-hover:text-white transition-all text-nowrap">رد کردن</span>
                                             </button>
                                         </div>
                                     </td>
