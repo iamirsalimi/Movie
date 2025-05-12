@@ -11,7 +11,7 @@ export default function AdminComments() {
     const commentDetailsRef = useRef()
 
     return (
-        <div className="panel-box py-4 px-5 flex flex-col gap-7">
+        <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-12">
             <div className="w-full flex items-center justify-between">
                 <h2 className="text-gray-700 dark:text-white font-vazir text-xl">دیدگاه ها</h2>
             </div>
