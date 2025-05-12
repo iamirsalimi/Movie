@@ -177,7 +177,7 @@ export default function AddMovie() {
     }, [similarMovieId])
 
     return (
-        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden">
+        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
             <div className="flex items-center justify-center">
                 <h2 className="w-full font-vazir text-gray-800 dark:text-white text-xl">افزودن فیلم جدید</h2>
                 <a href="/my-account/adminPanel/movies" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
@@ -185,7 +185,7 @@ export default function AddMovie() {
                     <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست فیلم ها</span>
                 </a>
             </div>
-            <div className="w-full grid grid-cols-2 gap-5">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
 
                 <div className="w-full relative select-none">
                     <input
@@ -219,7 +219,7 @@ export default function AddMovie() {
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">banner</span>
                 </div>
 
-                <div className="col-start-1 col-end-3  w-full relative flex items-center justify-center gap-1">
+                <div className="md:col-start-1 md:col-end-3 w-full relative flex items-center justify-center gap-1">
                     <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={movieStatus} onChange={e => setMovieStatus(e.target.value)}>
                         <option value="released">منتشر شده</option>
                         <option value="premiere">پیش نمایش</option>
@@ -260,7 +260,7 @@ export default function AddMovie() {
                 </div>
 
                 {/* genre */}
-                <div className="col-start-1 col-end-3 w-full relative select-none flex flex-col items-center gap-2">
+                <div className="md:col-start-1 md:col-end-3 w-full relative select-none flex flex-col items-center gap-2">
                     <input
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -391,14 +391,14 @@ export default function AddMovie() {
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">سال {movieType == 'series' ? 'های' : ''} پخش</span>
                 </div>
 
-                <div className="col-start-1 col-end-3 w-full relative select-none">
+                <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                     <textarea className="w-full rounded-md p-3 min-h-28 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                     ></textarea>
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">توضیحات</span>
                 </div>
 
                 {/* checkboxes */}
-                <div className="col-start-1 col-end-3 w-full relative grid grid-cols-2 gap-y-5">
+                <div className="md:col-start-1 md:col-end-3 w-full relative grid grid-cols-2 gap-y-5">
                     <div className="w-full flex items-center justify-center gap-2">
                         <input id="subtitle-checkbox" type="checkbox" value="" className="peer" hidden checked={subtitleCheckbox} onChange={e => setSubtitleCheckbox(e.target.checked)} />
                         <label htmlFor="subtitle-checkbox" className="flex items-center gap-2">
@@ -437,10 +437,10 @@ export default function AddMovie() {
                 </div>
 
                 {/* links */}
-                <div className="col-start-1 col-end-3 flex flex-col gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
-                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">ساخت لینک جدید</h3>
+                <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">ساخت لینک جدید</h3>
                     <div className="w-full flex flex-col items-center gap-4">
-                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-2 gap-5">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="w-full relative select-none">
                                 <input
                                     type="text"
@@ -461,7 +461,7 @@ export default function AddMovie() {
                             </div>
 
                             <button
-                                className="col-start-1 col-end-3 py-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
+                                className="md:col-start-1 md:col-end-3 py-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
                                 onClick={addLink}
                             >افزودن</button>
                         </div>
@@ -491,11 +491,11 @@ export default function AddMovie() {
                 </div>
 
                 {/* Tags */}
-                <div className="col-start-1 col-end-3 flex flex-col gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
-                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">ساخت تگ جدید</h3>
+                <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">ساخت تگ جدید</h3>
                     <div className="w-full flex flex-col items-center gap-4">
-                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-3 gap-5">
-                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                 <input
                                     type="text"
                                     className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -533,11 +533,11 @@ export default function AddMovie() {
                 </div>
 
                 {/* similar Movies */}
-                <div className="col-start-1 col-end-3 flex flex-col gap-5 rounded-lg py-2 px-3">
-                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">افزودن فيلم هاي مشابه</h3>
+                <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">افزودن فيلم هاي مشابه</h3>
                     <div className="w-full flex flex-col items-center gap-4">
-                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-3 gap-5">
-                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                 <input
                                     type="text"
                                     className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -547,7 +547,7 @@ export default function AddMovie() {
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">Id فيلم مورد نظر</span>
 
                                 {/* to suggest movies by their Id */}
-                                <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showSimilarMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-2 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
+                                <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showSimilarMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
                                     {movies.filter(movie => movie.id == similarMovieId).length !== 0 ? movies.filter(movie => movie.id == similarMovieId).map(movie => (
                                         <li
                                             className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
@@ -576,7 +576,7 @@ export default function AddMovie() {
 
                         {similarMovies.length !== 0 && (
                             <div className="w-full flex flex-col items-center gap-2">
-                                <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">لینک های فیلم</h3>
+                                <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">فیلم مشابه</h3>
                                 <div className="w-full flex flex-col items-center gap-2">
                                     {similarMovies.map(movie => (
                                         <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
@@ -602,10 +602,10 @@ export default function AddMovie() {
                 </div>
 
                 {/* Cast */}
-                <div className="col-start-1 col-end-3 flex flex-col gap-5 rounded-lg py-2 px-3">
-                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">افزودن عوامل و بازیگر</h3>
+                <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">افزودن عوامل و بازیگر</h3>
                     <div className="w-full flex flex-col items-center gap-4">
-                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-2 gap-5">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="w-full relative select-none">
                                 <input
                                     type="text"
@@ -616,7 +616,7 @@ export default function AddMovie() {
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نام بازیگر</span>
 
                                 {/* to suggest casts by their name */}
-                                <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showCasts ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-2 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
+                                <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showCasts ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
                                     {casts.filter(cast => cast.name.toLowerCase().startsWith(castName.toLowerCase())).length !== 0 ? casts.filter(cast => cast.name.toLowerCase().startsWith(castName.toLowerCase())).map(cast => (
                                         <li
                                             className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
@@ -650,19 +650,21 @@ export default function AddMovie() {
                             </div>
 
                             <button
-                                className="py-2 col-start-1 col-end-3 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
+                                className="py-2 md:col-start-1 md:col-end-3 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
                                 onClick={addCast}
                             >افزودن</button>
                         </div>
 
                         {movieCasts.length !== 0 && (
-                            <div className="w-full bg-gray-100 dark:bg-primary rounded-lg py-2 px-4 grid grid-cols-4 gap-2">
+                            <div className="w-full bg-gray-100 dark:bg-primary rounded-lg py-2 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                 {movieCasts.map(cast => (
                                     <li
-                                        className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-center gap-4"
+                                        className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-between gap-4"
                                     >
-                                        <span className="text-sm font-vazir text-light-gray dark:text-white">{cast.name}</span>
-                                        <span className="text-xs font-vazir text-gray-400 dark:text-gray-500">{cast.rule}</span>
+                                        <div className="flex items-center justify-center gap-1">
+                                            <span className="text-sm font-vazir text-light-gray dark:text-white">{cast.name}</span>
+                                            <span className="text-xs font-vazir text-gray-400 dark:text-gray-500">{cast.rule}</span>
+                                        </div>
                                         <button
                                             className="p-1 bg-red-500 hover:bg-red-600 transition-colors rounded-sm cursor-pointer"
                                             onClick={e => deleteCast(cast.id)}
@@ -677,11 +679,11 @@ export default function AddMovie() {
                 </div>
 
                 {/* Notifs */}
-                <div className="col-start-1 col-end-3 flex flex-col gap-5 rounded-lg py-2 px-3">
-                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-lg">افزودن اعلان ها</h3>
+                <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 rounded-lg py-2 px-3">
+                    <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">افزودن اعلان ها</h3>
                     <div className="w-full flex flex-col items-center gap-4">
-                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-3 gap-5">
-                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                        <div className="w-full py-5 px-4 border border-gray-200 dark:border-primary rounded-md grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                 <input
                                     type="text"
                                     className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -702,7 +704,7 @@ export default function AddMovie() {
                                 <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">اعلان های فیلم</h3>
                                 <div className="w-full flex flex-col items-center gap-2">
                                     {notifs.map(notif => (
-                                        <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
                                             <h3 className="text-light-gray dark:text-white font-shabnam">{notif}</h3>
                                             <button
                                                 className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
@@ -718,7 +720,7 @@ export default function AddMovie() {
                     </div>
                 </div>
 
-                <div className="col-start-1 col-end-3 w-full flex items-center gap-2">
+                <div className="md:col-start-1 md:col-end-3 w-full flex items-center gap-2">
                     <button className="w-full bg-green-600 hover:bg-green-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">افزودن</button>
                     <button className="w-full bg-red-600 hover:bg-red-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">ريست</button>
                 </div>
