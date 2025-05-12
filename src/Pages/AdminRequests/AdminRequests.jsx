@@ -10,10 +10,10 @@ export default function AdminRequests() {
     const [searchValue, setSearchValue] = useState('')
 
     return (
-        <div className="panel-box py-4 px-5 flex flex-col gap-7">
+        <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
             <h2 className="text-gray-700 dark:text-white font-vazir text-xl">درخواست ها</h2>
             <div className="w-full flex flex-col items-center gap-7 sm:gap-5 lg:gap-4">
-                <div className="w-full flex flex-col-reverse md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
+                <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                     <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                         <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={searchType} onChange={e => setSearchType(e.target.value)} >
                             <option value="ID">ID</option>
@@ -55,31 +55,24 @@ export default function AdminRequests() {
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">sklhdfsdjf</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">23/12/1403 17:12</td>
-                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir max-w-36">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum libero fugit est? Autem qui non tempore, ut dolorem voluptates! Nisi!</td>
-                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">در حال بررسی</td>
+                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir min-w-36 max-w-36">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum libero fugit est? Autem qui non tempore, ut dolorem voluptates! Nisi!</td>
+                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir text-nowrap">در حال بررسی</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex flex-col items-center justify-center gap-5">
                                     <div className="flex items-center justify-center gap-2">
-                                        <a
-                                            href="/my-account/adminPanel/notifications/edit-notification/1234"
-                                            className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                        >
-                                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                        </a>
-
                                         <button className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group">
                                             <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
                                         </button>
                                     </div>
 
-                                    <div className="flex items-center justify-center gap-2">
+                                    <div className="flex flex-col sm:flew-row items-center justify-center gap-2">
                                         <button className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group flex items-center justify-center gap-0.5">
                                             <FiCheck className="text-green-500 group-hover:text-white transition-all" />
-                                            <span className="text-green-500 font-vazir group-hover:text-white transition-all">ثبت کردن</span>
+                                            <span className="text-green-500 font-vazir group-hover:text-white transition-all text-nowrap">ثبت کردن</span>
                                         </button>
 
                                         <button className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group flex items-center justify-center gap-0.5">
                                             <RxCross1 className="text-red-500 group-hover:text-white transition-all" />
-                                            <span className="text-red-500 font-vazir group-hover:text-white transition-all">رد کردن</span>
+                                            <span className="text-red-500 font-vazir group-hover:text-white transition-all text-nowrap">رد کردن</span>
                                         </button>
                                     </div>
                                 </td>

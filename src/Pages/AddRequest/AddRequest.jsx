@@ -5,7 +5,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 export default function AddRequest() {
   return (
     <>
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between mb-10">
         <h2 className="text-gray-700 dark:text-white font-vazir text-sm xs:text-base md:text-lg lg:text-xl">درخواست جدید</h2>
         <a href="/my-account/userPanel/requests" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
           <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-xs sm:text-base md:text-xl lg:text-2xl" />
