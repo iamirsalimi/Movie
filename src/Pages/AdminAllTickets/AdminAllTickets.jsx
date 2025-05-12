@@ -7,12 +7,12 @@ export default function AdminAllTickets() {
     const [searchType, setSearchType] = useState("ID")
 
     return (
-        <div className="panel-box py-4 px-5 flex flex-col gap-7">
+        <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-12">
             <div className="w-full flex items-center justify-between">
                 <h2 className="text-gray-700 dark:text-white font-vazir text-xl">تیکت ها</h2>
             </div>
             <div className="flex flex-col items-center gap-5">
-                <div className="w-full flex flex-col-reverse md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
+                <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                     <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                         <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={searchType} onChange={e => setSearchType(e.target.value)} >
                             <option value="ID">ID</option>
@@ -60,7 +60,7 @@ export default function AdminAllTickets() {
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex123</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">8234</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">20/5/1403</td>
-                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">در حال بررسی</td>
+                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">در حال بررسی</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عادی</td>
                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                     <a href="/my-account/adminPanel/tickets/edit-ticket/1234" className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group">
