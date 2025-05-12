@@ -20,7 +20,7 @@ export default function AllUsers() {
                 </div>
                 <div className="w-full flex flex-col items-center gap-7 sm:gap-5 lg:gap-4">
 
-                    <div className="w-full flex flex-col-reverse md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                         <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
                             <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={searchType} onChange={e => setSearchType(e.target.value)} >
                                 <option value="ID">ID</option>

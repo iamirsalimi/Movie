@@ -17,18 +17,18 @@ export default function EditUser() {
     }
 
     return (
-        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden">
+        <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
             <div className="flex items-center justify-center">
                 <div className=" w-full flex items-center gap-2">
                     <h2 className="text-gray-700 dark:text-white font-vazir text-xl">آپدیت کاربر</h2>
-                    <span className="text-sm text-gray-300 dark:text-gray-500">#{userId}</span>
+                    <span className="text-sm text-gray-300 dark:text-gray-500 hidden md:inline">#{userId}</span>
                 </div>
                 <a href="/my-account/adminPanel/users" className="inline-flex items-center justify-center gap-0.5 px-2 py-1 rounded-md cursor-pointer font-vazir bg-gray-100 hover:bg-gray-200 dark:bg-primary dark:hover:bg-black/10  transition-colors">
                     <MdKeyboardArrowRight className="text-light-gray dark:text-gray-400 text-2xl" />
-                    <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست درخواست ها</span>
+                    <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست کاربرها</span>
                 </a>
             </div>
-            <div className="w-full grid grid-cols-2 gap-5">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="w-full relative select-none">
                     <input
                         type="text"
@@ -61,10 +61,10 @@ export default function EditUser() {
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ایمیل</span>
                 </div>
 
-                <div className="col-start-1 col-end-3 bg-gray-100 dark:bg-primary rounded-lg py-4 px-5 flex flex-col gap-7">
+                <div className="md:col-start-1 md:col-end-3 bg-gray-100 dark:bg-primary rounded-lg py-4 px-5 flex flex-col gap-7">
                     <h2 className="text-gray-700 dark:text-white font-vazir text-xl">حساب کاربر</h2>
-                    <div className="grid grid-cols-2 gap-5">
-                        <div className={`${accountStatus == 'temporary-ban' ? '' : 'col-start-1 col-end-3'} relative flex items-center justify-center gap-1`}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className={`${accountStatus == 'temporary-ban' ? '' : 'md:col-start-1 md:col-end-3'} relative flex items-center justify-center gap-1`}>
                             <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={accountStatus} onChange={e => setAccountStatus(e.target.value)}>
                                 <option value="active">فعال</option>
                                 <option value="temporary-ban">بن موقت</option>
@@ -86,57 +86,57 @@ export default function EditUser() {
                         )}
 
                         {(accountStatus == 'temporary-ban' || accountStatus == 'permanent-ban') && (
-                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                            <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                 <textarea className="w-full rounded-md p-3 min-h-28 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                 ></textarea>
                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">علت بن</span>
                             </div>
                         )}
 
-                        <button className="col-start-1 col-end-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition-colors text-white cursor-pointer font-vazir">ذخیره</button>
+                        <button className="md:col-start-1 md:col-end-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition-colors text-white cursor-pointer font-vazir">ذخیره</button>
                     </div>
                 </div>
 
-                <div className="col-start-1 col-end-3 bg-gray-100 dark:bg-primary rounded-lg py-4 px-5 flex flex-col gap-7">
+                <div className="md:col-start-1 md:col-end-3 bg-gray-100 dark:bg-primary rounded-lg py-4 px-5 flex flex-col gap-7">
                     <h2 className="text-gray-700 dark:text-white font-vazir text-xl">اشتراک</h2>
                     <div className="w-full flex flex-col items-center gap-5">
                         <ul className="w-full flex flex-col items-center gap-4 font-vazir text-light-gray dark:text-white py-2 px-4 border border-gray-300 dark:border-secondary divide-y divide-gray-300 dark:divide-secondary rounded-md">
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">اشتراك :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">دارد</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">اشتراك :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">دارد</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">نوع اشتراك فعال :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">3 ماهه</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">نوع اشتراك فعال :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">3 ماهه</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ فعال شدن اشتراك :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">20/2/1404</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">تاريخ فعال شدن اشتراك :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">20/2/1404</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ منقضي شدن اشتراك :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">20/5/1404</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">تاريخ منقضي شدن اشتراك :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">20/5/1404</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">هزینه پرداخت شده :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">200000 تومان</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">هزینه پرداخت شده :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">200000 تومان</span>
                             </li>
                         </ul>
 
                         <div className="w-full flex flex-col items-center">
-                            <div className="flex items-center justify-center gap-2">
+                            <div className="flex items-center justify-center gap-1 md:gap-2">
                                 <button
-                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'activate-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'activate-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                     onClick={changeVipTab}
                                     data-vipTab='activate-vipPlan'
                                 >فعالسازی اشتراک</button>
                                 <button
-                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'increase-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'increase-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                     onClick={changeVipTab}
                                     data-vipTab='increase-vipPlan'
                                 >افزایش اشتراک(کاستوم)</button>
                                 <button
-                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md ${vipTab == 'decrease-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
+                                    className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'decrease-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                     onClick={changeVipTab}
                                     data-vipTab='decrease-vipPlan'
                                 >کاهش اشتراک(کاستوم)</button>
@@ -145,13 +145,13 @@ export default function EditUser() {
                                 {vipTab !== 'activate-vipPlan' ? (
                                     <>
                                         {vipTab == 'increase-vipPlan' ? (
-                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">افزایش اشتراک</h2>
+                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg text-center md:text-justify">افزایش اشتراک</h2>
                                         ) : (
-                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">کاهش اشتراک</h2>
+                                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg text-center md:text-justify">کاهش اشتراک</h2>
                                         )}
 
-                                        <div className="grid grid-cols-3 gap-5">
-                                            <div className="col-start-1 col-end-3 relative select-none">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                            <div className="md:col-start-1 md:col-end-3 relative select-none">
                                                 <input
                                                     type="number"
                                                     className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -159,15 +159,15 @@ export default function EditUser() {
                                                 />
                                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">تعداد روز</span>
                                             </div>
-                                            <button className="py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
+                                            <button className="w-full py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
                                         </div>
 
                                     </>
                                 ) : (
                                     <>
                                         <h2 className="text-gray-700 dark:text-white font-vazir text-lg">فعال سازی اشتراک</h2>
-                                        <div className="grid grid-cols-3 gap-5">
-                                            <div className="col-start-1 col-end-3 relative select-none">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                            <div className="md:col-start-1 md:col-end-3 relative select-none">
                                                 <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors">
                                                     <option value="month-1">1 ماهه</option>
                                                     <option value="month-3">3 ماهه</option>
@@ -176,7 +176,7 @@ export default function EditUser() {
                                                 </select>
                                                 <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">نوع اشتراک</span>
                                             </div>
-                                            <button className="py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
+                                            <button className="w-full py-2 rounded-lg bg-sky-500 hover:bg-sky-600 transition-colors text-white cursor-pointer font-vazir">محاسبه روز انقضا</button>
                                         </div>
                                     </>
                                 )}
@@ -525,7 +525,7 @@ export default function EditUser() {
                     </div>
                 </div> */}
 
-                <button className="col-start-1 col-end-3 w-full bg-green-600 hover:bg-green-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">آپدیت کاربر</button>
+                <button className="md:col-start-1 md:col-end-3 w-full bg-green-600 hover:bg-green-500 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer">آپدیت کاربر</button>
             </div>
         </div >
     )
