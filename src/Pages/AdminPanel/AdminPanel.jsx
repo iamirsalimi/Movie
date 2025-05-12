@@ -3,6 +3,8 @@ import { useLocation, Outlet } from 'react-router-dom';
 
 import ThemeContext from '../../Contexts/ThemeContext';
 
+import LogoutModal from './../../Components/LogoutModal/LogoutaModal'
+
 import { FaUser } from "react-icons/fa";
 import { TbLogout2 } from "react-icons/tb";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -34,8 +36,9 @@ let links = [
     { title: 'جدول هفتگی', href: '/my-account/adminPanel/weekly-release', icon: <BsCalendarDate className="text-light-gray dark:text-white text-xl" /> },
 ]
 
-export default function UserPanel() {
+export default function AdminPanel() {
     const [showMenu, setShowMenu] = useState(false)
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     let location = useLocation().pathname
 
@@ -86,7 +89,10 @@ export default function UserPanel() {
                             <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">کامنت ها</span>
                         </a>
 
-                        <button className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
+                        <button
+                            className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group"
+                            onClick={e => setShowLogoutModal(true)}
+                        >
                             <TbLogout2 className='text-red-500 text-2xl' />
                             <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">خروج از حساب کاربری</span>
                         </button>
@@ -128,7 +134,7 @@ export default function UserPanel() {
                 </div>
             </div>
 
-            <div className="w-full h-fit flex items-center justify-between z-10 fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-1 xs:px-5 py-4 lg:hidden">
+            <div className="w-full h-fit flex items-center justify-between z-10 fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-3 xs:px-5 py-4 lg:hidden">
 
                 <a href="/my-account/userPanel/" className="flex flex-col items-center justify-center gap-1">
                     <LuLayoutDashboard className={`text-light-gray dark:text-white text-xl xs:text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
@@ -146,10 +152,13 @@ export default function UserPanel() {
                     <span className="absolute -top-1 right-0 w-4 h-4 rounded-full bg-sky-500 flex items-center justify-center text-xs text-white">0</span>
                 </a>
 
-                <div className="my-account/userPanel/flex flex-col items-center justify-center gap-1 cursor-pointer">
+                <button
+                    className="my-account/userPanel/flex flex-col items-center justify-center gap-1 cursor-pointer"
+                    onClick={e => setShowLogoutModal(true)}
+                >
                     <TbLogout2 className='text-red-500 text-xl xs:text-2xl' />
                     <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">خروج</span>
-                </div>
+                </button>
 
 
                 <button
@@ -161,6 +170,7 @@ export default function UserPanel() {
                     <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">منو</span>
                 </button>
             </div>
+            <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} />
         </>
     )
 }

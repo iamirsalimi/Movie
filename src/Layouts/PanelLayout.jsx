@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 export default function PanelLayout() {
     return (
-        <div className="w-full flex">
+        <div className="w-full flex relative">
             <Outlet />
         </div>
     )
