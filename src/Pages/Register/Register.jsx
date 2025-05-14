@@ -10,6 +10,45 @@ import { IoIosArrowForward } from "react-icons/io";
 import FormContext from '../../Contexts/FormContext'
 
 import useInput from '../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
+import { Await } from 'react-router-dom';
+
+const generateToken = () => Math.random().toString(36).substring(2) + Date.now();
+
+
+class User {
+    constructor(firstName, lastName, email, userName, password) {
+        this.firstName = firstName
+        this.lastName = lastName
+        this.email = email
+        this.userName = userName.toLowerCase()
+        this.password = password
+        this.nickName = ''
+        this.role = 'user' //user or admin
+        this.accountStatus = "" //active or temporary-ban or permanent-ban 
+        this.isBanned = false
+        this.banReason = ""
+        this.created_At = new Date()
+        this.last_login_at = new Date()
+        this.isVerified = false
+        this.subscriptionStatus = false // false means don't hove and true means have   
+        this.subscriptionExpiresAt = ''
+        this.subscriptionPlan = ''
+        this.read_notifications = []
+        this.watchList = []
+        this.requests = []
+        this.has_unread_tickets = false
+        this.unread_tickets = []
+        this.last_purchases = []
+        this.userToken = generateToken()
+    }
+}
+
+let apiData = {
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userName=eq.',
+    api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
 export default function Register() {
     const [firstNameValue, firstNameBinding, firstNameReset] = useInput()
@@ -18,6 +57,9 @@ export default function Register() {
     const [userNameValue, userNameBinding, userNameReset] = useInput()
     const [passwordValue, passwordBinding, passwordReset] = useInput()
     const [repeatPasswordValue, repeatPasswordBinding, repeatPasswordReset] = useInput()
+
+    const [userNameTestingFlag, setUserNameTestingFlag] = useState(false)
+    const [userNameValidFlag, setUserNameValidFlag] = useState(null)
 
     let validationObj = { email: false, userName: false, password: { equality: false, valid: false } } // when we want to submit the form all inputs must be validate
 
@@ -33,6 +75,15 @@ export default function Register() {
     let symbolRegex = /[@#_.]/
 
     let { setShowModal } = useContext(FormContext)
+
+    const setCookie = (cookieName, cookieValue, cookieDay) => {
+        const date = new Date()
+        date.setTime(date.getTime() + (cookieDay * 24 * 60 * 60 * 1000))
+        const expires = date.toUTCString()
+
+        document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=${expires}; SameSite=Strict; Secure`;
+    }
+
 
     const errorNotify = text => {
         toast.error(text)
@@ -50,9 +101,9 @@ export default function Register() {
     const isAllInputsValid = () => {
         let isValid = false
 
-        let {email , userName , password} = validationObj
-
-        if(email && userName && password.equality && password.valid){
+        let { email, userName, password } = validationObj
+        console.log('email -> ', email, 'userName -> ', userName, 'password equality -> ', password.equality, 'password valid -> ', password.valid, validationObj)
+        if (email && userName && password.equality && password.valid) {
             isValid = true
         }
 
@@ -70,14 +121,42 @@ export default function Register() {
         }
     }
 
-    const testUserName = () => {
+    const checkUserNameExist = async () => {
+        console.log('before fetch', validationObj.userName)
+
+        await fetch(`${apiData.getApi}${userNameValue.toLowerCase()}`, {
+            headers: {
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            }
+        }).then(res => res.json())
+            .then(data => {
+                if (data.length > 0) {
+                    validationObj.userName = false
+                    setUserNameValidFlag(false)
+                    errorNotify('نام کاربری از قبل موجود هست')
+                } else {
+                    validationObj.userName = true
+                    console.log('after fetch not exist', validationObj.userName)
+                    setUserNameValidFlag(true)
+                }
+
+                setUserNameTestingFlag(false)
+            })
+            .catch(err => errorNotify('خطا هنگام بررسی نام کاربری'))
+    }
+
+    const testUserName = async () => {
         let userNameFlag = userNameRegex.test(userNameValue)
 
         if (!userNameFlag && userNameValue) {
             errorNotify('نام کاربری درست نيست')
             validationObj.userName = false
+            console.log('userNameFlag is false')
+            console.log('notValid')
         } else {
-            validationObj.userName = true
+            setUserNameTestingFlag(true)
+            await checkUserNameExist()
         }
     }
 
@@ -115,19 +194,39 @@ export default function Register() {
         checkPassEquality()
     }
 
-    const registerUser = e => {
+    const registerUser = async e => {
         e.preventDefault()
         testEmail()
-        testUserName()
+        await testUserName()
         testPassword(passwordValue)
 
         let isAllValid = isAllInputsValid()
+        console.log(isAllValid, validationObj)
+        if (isAllValid) {
+            let newUserObj = new User(firstNameValue, lastNameValue, emailValue, userNameValue, passwordValue)
 
-        if(isAllValid){
-            let newUserObj = {firstName : firstNameValue, lastName : lastNameValue, email:emailValue , userName : userNameValue , password:passwordValue }
+            await fetch(apiData.api, {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                    'apikey': apiData.apikey,
+                    'Authorization': apiData.authorization
+                },
+                body: JSON.stringify(newUserObj)
+            }).then(res => {
+                toast.success('ثبت نام با موفقیت انجام شد')
+                setCookie('userToken' , newUserObj.userToken , 10)
+                firstNameReset()
+                lastNameReset()
+                emailReset()
+                userNameReset()
+                passwordReset()
+                repeatPasswordReset()
+                location.href = "/"
+            })
+                .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
 
-            console.log('registered')
-            toast.success('ثبت نام با موفقیت انجام شد')
+            // console.log('registered', newUserObj)
         }
     }
 
@@ -181,6 +280,19 @@ export default function Register() {
                         onBlur={testUserName}
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-light dark:bg-primary">نام کاربری</span>
+                    {userNameTestingFlag && (
+                        <div className="flex items-center justify-start gap-2 mt-2 text-sm">
+                            <span className="font-vazir text-sky-500">در حال بررسی  وجود نام کاربری</span>
+                            <span className="inline-block w-4 h-4 rounded-full border-2 border-gray-200 dark:border-secondary !border-t-sky-500 animate-spin"></span>
+                        </div>
+                    )}
+
+                    {!userNameTestingFlag && userNameValidFlag != null && (
+                        <span className={`mt-2 font-vazir text-sm ${userNameValidFlag ? 'text-green-500' : 'text-red-500'}`}>
+                            {userNameValidFlag ? 'نام کاربری معتبر است' : 'نام کاربری معتبر نیست'}
+                        </span>
+                    )}
+
                 </div>
 
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-7">

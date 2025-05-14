@@ -50,7 +50,6 @@ export default function UserPanel() {
 
     const hideMenu = () => setShowMenu(false)
 
-
     return (
         <>
             <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
