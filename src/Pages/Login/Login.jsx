@@ -54,7 +54,7 @@ export default function Login() {
                         setErrors({ userName: '', password: '' })
                        
                         if (rememberMe) {
-                            setCookie('userToken', newUserObj.userToken, 10)
+                            setCookie('userToken', data[0].userToken, 10)
                         }
                        
                         toast.success('ورود با موفقیت انجام شد')
@@ -70,6 +70,7 @@ export default function Login() {
                 }
             })
             .catch(err => {
+                console.log(err)
                 errorNotify('خطا هنگام بررسی نام کاربری')
                 setIsPending(false)
             })
@@ -94,7 +95,7 @@ export default function Login() {
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-light dark:bg-primary">نام کاربری</span>
 
                     {errors.userName && (
-                        <span className="text-sm font-vazir text-red-500 mt-2">نام کاربری وجود ندارد</span>
+                        <span className="text-sm font-vazir text-red-500 mt-2">{errors.userName}</span>
                     )}
                 </div>
 
@@ -115,7 +116,7 @@ export default function Login() {
 
                 </div>
                 {errors.password && (
-                    <span className="text-sm font-vazir text-red-500 -mt-5">رمز عبور اشتباه است</span>
+                    <span className="text-sm font-vazir text-red-500 -mt-5">{errors.password}</span>
                 )}
 
                 <div className="w-full">
