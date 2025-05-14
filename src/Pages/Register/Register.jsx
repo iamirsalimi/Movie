@@ -2,18 +2,16 @@ import React, { useContext, useState } from 'react'
 
 import toast, { Toaster } from 'react-hot-toast';
 
+import { setCookie } from '../../utils';
+import useInput from '../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
+import FormContext from '../../Contexts/FormContext'
+
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { IoIosArrowForward } from "react-icons/io";
 
-import FormContext from '../../Contexts/FormContext'
-
-import useInput from '../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
-import { Await } from 'react-router-dom';
-
-const generateToken = () => Math.random().toString(36).substring(2) + Date.now();
-
+const generateToken = () => Math.random().toString(36).substring(2) + Date.now()
 
 class User {
     constructor(firstName, lastName, email, userName, password) {
@@ -75,15 +73,6 @@ export default function Register() {
     let symbolRegex = /[@#_.]/
 
     let { setShowModal } = useContext(FormContext)
-
-    const setCookie = (cookieName, cookieValue, cookieDay) => {
-        const date = new Date()
-        date.setTime(date.getTime() + (cookieDay * 24 * 60 * 60 * 1000))
-        const expires = date.toUTCString()
-
-        document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=${expires}; SameSite=Strict; Secure`;
-    }
-
 
     const errorNotify = text => {
         toast.error(text)

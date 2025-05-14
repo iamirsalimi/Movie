@@ -41,4 +41,13 @@ const findArrayByIds = (idsArray, mainArray, castsFlag) => {
     return extractedArray
 }
 
-export { addCommentHandler, findArrayByIds }
+
+const setCookie = (cookieName, cookieValue, cookieDay) => {
+    const date = new Date()
+    date.setTime(date.getTime() + (cookieDay * 24 * 60 * 60 * 1000))
+    const expires = date.toUTCString()
+
+    document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=${expires}; SameSite=Strict; Secure`;
+}
+
+export { addCommentHandler, findArrayByIds , setCookie }

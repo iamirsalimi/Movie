@@ -1,9 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
+
+import toast, { Toaster } from 'react-hot-toast';
+
+import { setCookie } from '../../utils';
+import useInput from '../../Hooks/useInput'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { IoIosArrowForward } from "react-icons/io";
-import useInput from '../../Hooks/useInput' 
+
+let apiData = {
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userName=eq.',
+    api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
 export default function Login() {
     const [showPass, setShowPass] = useState(false)
@@ -11,9 +22,57 @@ export default function Login() {
     const [userNameValue, userNameBinding, userNameReset] = useInput()
     const [passwordValue, passwordBinding, passwordReset] = useInput()
 
+    const [errors, setErrors] = useState({ userName: '', password: '' })
+    const [isPending, setIsPending] = useState(false)
+
+    const errorNotify = text => {
+        toast.error(text)
+    }
 
     const toggleShowingPassHandler = () => {
         setShowPass(prev => !prev)
+    }
+
+    const loginUser = async e => {
+        e.preventDefault()
+
+        if (!userNameValue || !passwordValue) {
+            toast.error("نام کاربری و رمز عبور را وارد کنید");
+            return
+        }
+
+        setIsPending(true)
+        await fetch(`${apiData.getApi}${userNameValue.toLowerCase()}`, {
+            headers: {
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            }
+        }).then(res => res.json())
+            .then(data => {
+                if (data.length > 0) {
+                    if (data[0].password == passwordValue) {
+                        setErrors({ userName: '', password: '' })
+                       
+                        if (rememberMe) {
+                            setCookie('userToken', newUserObj.userToken, 10)
+                        }
+                       
+                        toast.success('ورود با موفقیت انجام شد')
+                        location.href = "/"
+                    } else {
+                        setErrors({ userName: '', password: 'رمز عبور درست نمی باشد' })
+                        setIsPending(false)
+                    }
+                } else {
+                    setIsPending(false)
+                    errorNotify('نام کاربری وجود ندارد')
+                    setErrors({ userName: 'نام کاربری موجود نمی باشد', password: '' })
+                }
+            })
+            .catch(err => {
+                errorNotify('خطا هنگام بررسی نام کاربری')
+                setIsPending(false)
+            })
     }
 
     return (
@@ -25,7 +84,7 @@ export default function Login() {
 
             <h2 className="font-vazir text-2xl text-gray-700 dark:text-gray-200">ورود به Movie Website</h2>
 
-            <form action="" className="w-full flex flex-col justify-center items-center lg:items-start gap-7">
+            <form action="" className="w-full flex flex-col justify-center items-center lg:items-start gap-7" onSubmit={loginUser}>
                 <div className="w-full relative select-none">
                     <input
                         type="text"
@@ -33,6 +92,10 @@ export default function Login() {
                         {...userNameBinding}
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-light dark:bg-primary">نام کاربری</span>
+
+                    {errors.userName && (
+                        <span className="text-sm font-vazir text-red-500 mt-2">نام کاربری وجود ندارد</span>
+                    )}
                 </div>
 
                 <div className="w-full relative select-none">
@@ -49,7 +112,11 @@ export default function Login() {
                             <PiEyeBold className="text-2xl" />
                         )}
                     </div>
+
                 </div>
+                {errors.password && (
+                    <span className="text-sm font-vazir text-red-500 -mt-5">رمز عبور اشتباه است</span>
+                )}
 
                 <div className="w-full">
                     <input id="default-checkbox" type="checkbox" value="" className="peer" hidden checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />
@@ -59,12 +126,19 @@ export default function Login() {
                     </label>
                 </div>
 
-                <button className="w-full py-4 rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-colors font-vazir text-white font-bold">ورود</button>
+                <button className="w-full py-4 rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-colors font-vazir text-white font-bold disabled:!bg-sky-300" disabled={isPending}>
+                    {isPending ? 'در حال بررسی ...' : 'ورود' }
+                </button>
                 <div className="w-full flex items-center justify-between -mt-4">
                     <a href="/account/register" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">ثبت نام</a>
                     <a href="#" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">فراموشی رمز عبور</a>
                 </div>
             </form>
+
+            <Toaster
+                position="top-left"
+                reverseOrder={false}
+            />
         </>
     )
 }
