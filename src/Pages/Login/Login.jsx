@@ -10,6 +10,7 @@ import { PiEyeClosedBold } from "react-icons/pi";
 import { IoIosArrowForward } from "react-icons/io";
 
 let apiData = {
+    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userName=eq.',
     api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
@@ -33,6 +34,25 @@ export default function Login() {
         setShowPass(prev => !prev)
     }
 
+    const updateUser = async (userToken, userObj) => {
+        console.log(userObj , userToken)
+        await fetch(`${apiData.updateApi}${userToken}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(userObj)
+        }).then(res => {
+            console.log(res)
+            location.href = "/"
+        })
+            .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
+
+    }
+
+
     const loginUser = async e => {
         e.preventDefault()
 
@@ -51,14 +71,20 @@ export default function Login() {
             .then(data => {
                 if (data.length > 0) {
                     if (data[0].password == passwordValue) {
+                        let newUser = { ...data[0] }
+                        newUser.last_login_at = new Date()
+                        // to update user login
+                        updateUser(data[0].userToken, newUser);
+
                         setErrors({ userName: '', password: '' })
-                       
+
                         if (rememberMe) {
                             setCookie('userToken', data[0].userToken, 10)
+                        } else {
+                            setCookie('userToken', data[0].userToken, -1)
                         }
-                       
+
                         toast.success('ورود با موفقیت انجام شد')
-                        location.href = "/"
                     } else {
                         setErrors({ userName: '', password: 'رمز عبور درست نمی باشد' })
                         setIsPending(false)
@@ -128,7 +154,7 @@ export default function Login() {
                 </div>
 
                 <button className="w-full py-4 rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-colors font-vazir text-white font-bold disabled:!bg-sky-300" disabled={isPending}>
-                    {isPending ? 'در حال بررسی ...' : 'ورود' }
+                    {isPending ? 'در حال بررسی ...' : 'ورود'}
                 </button>
                 <div className="w-full flex items-center justify-between -mt-4">
                     <a href="/account/register" className="w-fit text-sm px-2 py-1 rounded-md cursor-pointer font-vazir font-light bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-white">ثبت نام</a>

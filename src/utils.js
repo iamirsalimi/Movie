@@ -43,6 +43,11 @@ const findArrayByIds = (idsArray, mainArray, castsFlag) => {
 
 
 const setCookie = (cookieName, cookieValue, cookieDay) => {
+    if(cookieDay == -1){
+        document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=sesstion; SameSite=Strict; Secure`;
+        return ;
+    }
+
     const date = new Date()
     date.setTime(date.getTime() + (cookieDay * 24 * 60 * 60 * 1000))
     const expires = date.toUTCString()
