@@ -50,4 +50,19 @@ const setCookie = (cookieName, cookieValue, cookieDay) => {
     document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=${expires}; SameSite=Strict; Secure`;
 }
 
-export { addCommentHandler, findArrayByIds , setCookie }
+
+const getCookie = (cookieName) => {
+  const cookies = document.cookie.split('; ');
+  
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split('=');
+    if (name === cookieName) {
+      return value;
+    }
+  }
+
+  return null
+}
+
+
+export { addCommentHandler, findArrayByIds , setCookie , getCookie}
