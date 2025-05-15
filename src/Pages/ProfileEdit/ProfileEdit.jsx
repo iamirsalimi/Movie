@@ -12,6 +12,14 @@ import { PiEyeClosedBold } from "react-icons/pi";
 let userNameRegex = /^[0-9A-Za-z_.]+$/
 let passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#@_.])(?!.* ).{8,16}$/
 
+let apiData = {
+  updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
+  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userName=eq.',
+  api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
+  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
+
 export default function ProfileEdit() {
   const [showCurrentPass, setShowCurrentPass] = useState(false)
   const [showPass, setShowPass] = useState(false)
@@ -27,7 +35,7 @@ export default function ProfileEdit() {
     userName: yup
       .string()
       .required('وارد كردن نام کاربری اجباری است')
-      .min(6, '')
+      .min(6, 'رمز عبور باید حداقل 6 کاراکتر باشد')
       .matches(userNameRegex, 'نام کاربری نامعتبر است')
     ,
     recentPassword: yup
@@ -37,7 +45,7 @@ export default function ProfileEdit() {
       .matches(passwordRegex, 'رمز عبور نامعتبر است'),
     newPassword: yup.string().notRequired(),
     confirmNewPassword: yup.string().notRequired(),
-  });
+  })
 
   let {
     register,
@@ -54,26 +62,23 @@ export default function ProfileEdit() {
   let newPassword = watch('newPassword')
   let confirmNewPassword = watch('confirmNewPassword')
 
-  const updateUserHandler = (data) => {
-    validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
-
-    if (Object.keys(errors).length == 0) {
-      let newUserObj = {...user}
-
-      newUserObj.firstName = data.firstName
-      newUserObj.lastName = data.lastName
-      newUserObj.nickName = data.nickName
-      newUserObj.userName = data.userName
-      newUserObj.email = data.email
-      if(data.newPassword){
-        newUserObj.password = data.newPassword
-      }
-
-      console.log(newUserObj)
-    }
+  const updateUser = async (userToken, userObj) => {
+    await fetch(`${apiData.updateApi}${userToken}`, {
+      method: "PATCH",
+      headers: {
+        'Content-type': 'application/json',
+        'apikey': apiData.apikey,
+        'Authorization': apiData.authorization
+      },
+      body: JSON.stringify(userObj)
+    }).then(res => {
+      location.reload()
+    })
+      .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
   }
-
-  const validatePasswords = (recentPassword , newPassword , confirmNewPassword) => {
+  
+  // yup can't validate matching two password inputs and also recognize them as a not required fields 
+  const validatePasswords = (recentPassword, newPassword, confirmNewPassword) => {
     if (newPassword && !passwordRegex.test(newPassword)) {
       setError('newPassword', { type: 'validation', message: 'رمز عبور معتبر نیست' });
     }
@@ -95,6 +100,25 @@ export default function ProfileEdit() {
     }
   }
 
+  const updateUserHandler = async (data) => {
+    validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
+
+    if (Object.keys(errors).length == 0) {
+      let newUserObj = { ...user }
+
+      newUserObj.firstName = data.firstName
+      newUserObj.lastName = data.lastName
+      newUserObj.nickName = data.nickName
+      newUserObj.userName = data.userName
+      newUserObj.email = data.email
+      if (data.newPassword) {
+        newUserObj.password = data.newPassword
+      }
+
+      await updateUser(newUserObj.userToken, newUserObj)
+    }
+  }
+
   const toggleShowingPassHandler = (setShowPass) => {
     setShowPass(prev => !prev)
   }
@@ -107,9 +131,9 @@ export default function ProfileEdit() {
     setValue('email', user?.email, { shouldValidate: true })
     setValue('recentPassword', user?.password, { shouldValidate: true })
   }, [user])
+
   useEffect(() => {
-    console.log(errors)
-    if(newPassword || confirmNewPassword){
+    if (newPassword || confirmNewPassword) {
       validatePasswords(recentPassword, newPassword, confirmNewPassword)
     }
   }, [recentPassword, newPassword, confirmNewPassword])
