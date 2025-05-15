@@ -76,7 +76,9 @@ export default function UserPanel() {
 
 
     useEffect(() => {
-        console.log(userObj)
+        if(userObj && userObj?.role == 'admin'){
+            window.location.href = '/my-account/adminPanel'
+        }
     }, [userObj])
 
     return (

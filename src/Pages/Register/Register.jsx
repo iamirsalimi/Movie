@@ -65,7 +65,7 @@ export default function Register() {
     const [repeatShowPass, setRepeatShowPass] = useState(false)
 
     let emailRegex = /^\S+@\S+\.\S+$/
-    let userNameRegex = /^[0-9A-Za-z]{5,16}$/
+    let userNameRegex = /^[0-9A-Za-z_.]+$/
     let passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#@_.])(?!.* ).{8,16}$/
     let numberRegex = /[0-9]/
     let lowerCaseLetterRegex = /[a-z]/

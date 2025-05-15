@@ -1,21 +1,121 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup'
+
+import UserContext from '../../Contexts/UserContext'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
+
+let userNameRegex = /^[0-9A-Za-z_.]+$/
+let passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#@_.])(?!.* ).{8,16}$/
 
 export default function ProfileEdit() {
   const [showCurrentPass, setShowCurrentPass] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showRepeatPass, setRepeatShowPass] = useState(false)
 
+  const user = useContext(UserContext)
+
+  const schema = yup.object().shape({
+    firstName: yup.string().required('وارد كردن نام اجباري است'),
+    lastName: yup.string().required('وارد كردن نام خانوادگي اجباري است'),
+    nickName: yup.string(),
+    email: yup.string().email('ایمیل نامعتبر است').required('وارد كردن ايميل اجباري است'),
+    userName: yup
+      .string()
+      .required('وارد كردن نام کاربری اجباری است')
+      .min(6, '')
+      .matches(userNameRegex, 'نام کاربری نامعتبر است')
+    ,
+    recentPassword: yup
+      .string()
+      .min(6, 'رمز عبور حداقل باید 6 کاراکتر باشد')
+      .max(16, 'رمز عبور حداکثر باید 16 کاراکتر باشد')
+      .matches(passwordRegex, 'رمز عبور نامعتبر است'),
+    newPassword: yup.string().notRequired(),
+    confirmNewPassword: yup.string().notRequired(),
+  });
+
+  let {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  let recentPassword = watch('recentPassword')
+  let newPassword = watch('newPassword')
+  let confirmNewPassword = watch('confirmNewPassword')
+
+  const updateUserHandler = (data) => {
+    validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
+
+    if (Object.keys(errors).length == 0) {
+      let newUserObj = {...user}
+
+      newUserObj.firstName = data.firstName
+      newUserObj.lastName = data.lastName
+      newUserObj.nickName = data.nickName
+      newUserObj.userName = data.userName
+      newUserObj.email = data.email
+      if(data.newPassword){
+        newUserObj.password = data.newPassword
+      }
+
+      console.log(newUserObj)
+    }
+  }
+
+  const validatePasswords = (recentPassword , newPassword , confirmNewPassword) => {
+    if (newPassword && !passwordRegex.test(newPassword)) {
+      setError('newPassword', { type: 'validation', message: 'رمز عبور معتبر نیست' });
+    }
+
+    if (confirmNewPassword && !passwordRegex.test(confirmNewPassword)) {
+      setError('confirmNewPassword', { type: 'validation', message: 'رمز عبور معتبر نیست' });
+    }
+
+    if (newPassword != confirmNewPassword) {
+      setError('confirmNewPassword', { type: 'match', message: 'مقدار رمز عبور جدید با تکرار آن برابر نیست' });
+      setError('newPassword', { type: 'match', message: 'مقدار رمز عبور جدید با تکرار آن برابر نیست' });
+      return;
+    }
+
+    if (newPassword === recentPassword) {
+      setError('newPassword', { type: 'same', message: 'رمز عبور جدید نباید با رمز عبور فعلی یکسان باشد.' });
+      setError('confirmNewPassword', { type: 'same', message: 'رمز عبور جدید نباید با رمز عبور فعلی یکسان باشد.' });
+      return;
+    }
+  }
 
   const toggleShowingPassHandler = (setShowPass) => {
     setShowPass(prev => !prev)
   }
 
+  useEffect(() => {
+    setValue('firstName', user?.firstName, { shouldValidate: true })
+    setValue('lastName', user?.lastName, { shouldValidate: true })
+    setValue('nickName', user?.nickName, { shouldValidate: true })
+    setValue('userName', user?.userName, { shouldValidate: true })
+    setValue('email', user?.email, { shouldValidate: true })
+    setValue('recentPassword', user?.password, { shouldValidate: true })
+  }, [user])
+  useEffect(() => {
+    console.log(errors)
+    if(newPassword || confirmNewPassword){
+      validatePasswords(recentPassword, newPassword, confirmNewPassword)
+    }
+  }, [recentPassword, newPassword, confirmNewPassword])
 
   return (
-    <form className="p-4 flex flex-col gap-7 panel-box rounded-2xl mb-16">
+    <form className="p-4 flex flex-col gap-7 panel-box rounded-2xl mb-16" onSubmit={handleSubmit(updateUserHandler)}>
 
       {/* Update Profile Informations */}
       <ul className="col-start-1 col-end-4 bg-red-500 rounded-xl py-5 px-2 flex flex-col items-center gap-2 font-vazir text-white text-sm lg:text-base">
@@ -31,7 +131,7 @@ export default function ProfileEdit() {
           <input
             type="text"
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-          // {...userNameBinding}
+            {...register('firstName')}
           />
           <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">نام</span>
         </div>
@@ -41,85 +141,123 @@ export default function ProfileEdit() {
           <input
             type="text"
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-          // {...userNameBinding}
+            {...register('lastName')}
+
           />
           <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">نام خانوادگی</span>
         </div>
 
-        {/* Shown Name */}
+        {/* nick Name */}
         <div className="w-full relative select-none">
           <input
             type="text"
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-          // {...userNameBinding}
+            {...register('nickName')}
+
           />
           <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">نام نمایشی</span>
           <span className="font-shabnam text-sm text-sky-400 ">با این نام در سایت شناخته خواهید شد</span>
         </div>
 
-        {/* Email */}
+        {/* userName */}
         <div className="w-full relative select-none">
           <input
             type="text"
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-          // {...userNameBinding}
+            {...register('userName')}
           />
-          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">ایمیل</span>
+          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">نام کاربری</span>
+          {errors.userName && (
+            <span className="text-sm text-red-500 font-vazir">{errors.userName.message}</span>
+          )}
         </div>
+      </div>
+
+      {/* Email */}
+      <div className="col-start-1 w-full relative select-none">
+        <input
+          type="text"
+          className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+          {...register('email')}
+        />
+        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">ایمیل</span>
+        {errors.email && (
+          <span className="text-sm text-red-500 font-vazir">{errors.email.message}</span>
+        )}
       </div>
 
       <div className="grid grid-cols-3 gap-5">
         <h2 className="col-start-1 col-end-4 font-vazir text-gray-800 dark:text-white text-lg">تغییر رمز عبور</h2>
         {/* Current Password */}
-        <div className="col-start-1 col-end-4 lg:col-start-1 lg:col-end-2 w-full relative select-none">
-          <input
-            type={`${showCurrentPass ? 'text' : 'password'}`}
-            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
-          // {...passwordBinding}
-          />
-          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">رمز عبور فعلی</span>
-          <div onClick={() => toggleShowingPassHandler(setShowCurrentPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
-            {showCurrentPass ? (
-              <PiEyeClosedBold className="text-2xl" />
-            ) : (
-              <PiEyeBold className="text-2xl" />
-            )}
+
+        <div className="col-start-1 col-end-4 lg:col-start-1 lg:col-end-2 w-full flex flex-col gap-1">
+          <div className="col-start-1 col-end-4 lg:col-start-1 lg:col-end-2 w-full relative select-none">
+            <input
+              type={`${showCurrentPass ? 'text' : 'password'}`}
+              className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
+              {...register('recentPassword')}
+
+            />
+            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">رمز عبور فعلی</span>
+            <div onClick={() => toggleShowingPassHandler(setShowCurrentPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
+              {showCurrentPass ? (
+                <PiEyeClosedBold className="text-2xl" />
+              ) : (
+                <PiEyeBold className="text-2xl" />
+              )}
+            </div>
           </div>
+          {errors.recentPassword && (
+            <span className="text-sm text-red-500 font-vazir">{errors.recentPassword.message}</span>
+          )}
         </div>
 
+
         {/* New Password */}
-        <div className="col-start-1 col-end-4 lg:col-start-2 lg:col-end-3 w-full relative select-none">
-          <input
-            type={`${showPass ? 'text' : 'password'}`}
-            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
-          // {...passwordBinding}
-          />
-          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">رمز عبور جدید</span>
-          <div onClick={() => toggleShowingPassHandler(setShowPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
-            {showPass ? (
-              <PiEyeClosedBold className="text-2xl" />
-            ) : (
-              <PiEyeBold className="text-2xl" />
-            )}
+        <div className="col-start-1 col-end-4 lg:col-start-2 lg:col-end-3 w-full flex flex-col gap-1">
+          <div className="relative select-none">
+            <input
+              type={`${showPass ? 'text' : 'password'}`}
+              className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
+              {...register('newPassword')}
+            />
+            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">رمز عبور جدید</span>
+            <div onClick={() => toggleShowingPassHandler(setShowPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
+              {showPass ? (
+                <PiEyeClosedBold className="text-2xl" />
+              ) : (
+                <PiEyeBold className="text-2xl" />
+              )}
+            </div>
           </div>
+          {errors.newPassword && (
+            <span className="text-sm text-red-500 font-vazir">{errors.newPassword.message}</span>
+          )}
         </div>
 
         {/* Repeat New Password */}
-        <div className="col-start-1 col-end-4 lg:col-start-3 lg:col-end-4 w-full relative select-none">
-          <input
-            type={`${showRepeatPass ? 'text' : 'password'}`}
-            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
-          // {...passwordBinding}
-          />
-          <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary"> تکرار رمز عبور جدید</span>
-          <div onClick={() => toggleShowingPassHandler(setRepeatShowPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
-            {showRepeatPass ? (
-              <PiEyeClosedBold className="text-2xl" />
-            ) : (
-              <PiEyeBold className="text-2xl" />
-            )}
+
+        <div className="col-start-1 col-end-4 lg:col-start-3 lg:col-end-4 w-full flex flex-col gap-1">
+          <div className="relative select-none">
+            <input
+              type={`${showRepeatPass ? 'text' : 'password'}`}
+              className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" minLength={8} maxLength={16}
+              {...register('confirmNewPassword')}
+            />
+            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary"> تکرار رمز عبور جدید</span>
+            <div onClick={() => toggleShowingPassHandler(setRepeatShowPass)} className="absolute left-1 bottom-1/2 translate-1/2 cursor-pointer select-none text-light-gray dark:text-gray-500 transition-all peer-focus:!text-sky-500">
+              {showRepeatPass ? (
+                <PiEyeClosedBold className="text-2xl" />
+              ) : (
+                <PiEyeBold className="text-2xl" />
+              )}
+            </div>
           </div>
+          {errors.confirmNewPassword && (
+            <span className="text-sm text-red-500 font-vazir">{errors.confirmNewPassword.message}</span>
+          )}
         </div>
+
       </div>
       <button className="py-2 rounded-sm bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer">به روزرسانی پروفایل</button>
     </form>
