@@ -1,4 +1,3 @@
-
 // random number for id
 function getRandom(length) {
     return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
@@ -43,9 +42,9 @@ const findArrayByIds = (idsArray, mainArray, castsFlag) => {
 
 
 const setCookie = (cookieName, cookieValue, cookieDay) => {
-    if(cookieDay == -1){
+    if (cookieDay == -1) {
         document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=sesstion; SameSite=Strict; Secure`;
-        return ;
+        return;
     }
 
     const date = new Date()
@@ -57,17 +56,69 @@ const setCookie = (cookieName, cookieValue, cookieDay) => {
 
 
 const getCookie = (cookieName) => {
-  const cookies = document.cookie.split('; ');
-  
-  for (const cookie of cookies) {
-    const [name, value] = cookie.split('=');
-    if (name === cookieName) {
-      return value;
-    }
-  }
+    const cookies = document.cookie.split('; ');
 
-  return null
+    for (const cookie of cookies) {
+        const [name, value] = cookie.split('=');
+        if (name === cookieName) {
+            return value;
+        }
+    }
+
+    return null
 }
 
+let apiData = {
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
+    api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
-export { addCommentHandler, findArrayByIds , setCookie , getCookie}
+// const getUserInfo = async (token) => {
+//     let userObj = null
+//     await fetch(`${apiData.getApi}${token}`, {
+//         headers: {
+//             'apikey': apiData.apikey,
+//             'Authorization': apiData.authorization
+//         }
+//     }).then(res => res.json())
+//         .then(data => {
+//             if (data.length > 0) {
+//                 userObj = data[0]
+//             }
+//         })
+//         .catch(err => {
+//             userObj = null
+//             console.log(err)
+//         })
+
+//     return userObj
+// }
+
+const getUserInfo = async (token) => {
+  try {
+    const res = await fetch(`${apiData.getApi}${token}`, {
+      headers: {
+        'apikey': apiData.apikey,
+        'Authorization': apiData.authorization
+      }
+    })
+
+    const data = await res.json();
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    return data[0]
+  } catch (err) {
+    console.log('fetch error')
+    return null
+  }
+};
+
+
+
+
+export { addCommentHandler, findArrayByIds, setCookie, getCookie ,getUserInfo }

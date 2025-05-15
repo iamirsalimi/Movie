@@ -7,14 +7,7 @@ import SearchModal from '../Components/SearchModal/SearchModal'
 import Footer from '../Components/Footer/Footer'
 import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton.'
 
-import { getCookie } from '../utils'
-
-let apiData = {
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
-    api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getCookie, getUserInfo } from '../utils'
 
 export default function MainLayout() {
     const [showMenu, setShowMenu] = useState(false)
@@ -23,39 +16,30 @@ export default function MainLayout() {
 
     const [userObj, setUserObj] = useState(null)
 
-
     useEffect(() => {
-        let token = getCookie('userToken')
+        const token = getCookie('userToken');
 
         if (!token) {
-            return;
+            return ;
         }
 
-        const getUserInfo = async token => {
-            await fetch(`${apiData.getApi}${token}`, {
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            }).then(res => res.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        setUserObj(data[0])
-                        setHasUserLoggedIn(true)
-                    }
-                })
-                .catch(err => {
-                    setHasUserLoggedIn(false)
-                    console.log(err)
-                })
+        const fetchUser = async () => {
+            const user = await getUserInfo(token)
+            if (user) {
+                setUserObj(user)
+            } else {
+                setUserObj(null)
+            }
+            setHasUserLoggedIn(user ? true : false)
         }
 
-        getUserInfo(token)
+        fetchUser()
     }, [])
 
     useEffect(() => {
         console.log(userObj)
     }, [userObj])
+
 
     return (
         <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
