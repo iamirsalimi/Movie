@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, Outlet } from 'react-router-dom';
 
+import { getCookie, getUserInfo, deleteCookie } from '../../utils';
 import ThemeContext from '../../Contexts/ThemeContext';
-
+import UserContext from '../../Contexts/UserContext';
 import LogoutModal from './../../Components/LogoutModal/LogoutaModal'
 
 import { FaUser } from "react-icons/fa";
@@ -39,23 +40,53 @@ let links = [
 export default function AdminPanel() {
     const [showMenu, setShowMenu] = useState(false)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
+    const [userObj, setUserObj] = useState(null)
 
     let location = useLocation().pathname
-
+    
     let mainLocationObj = links.find(link => link.href.includes(location))
     if (!mainLocationObj) {
         // it means we are in one of subroutes , Route of Dashboard is in every other route's link so we don't need that 
         mainLocationObj = links.slice(1).find(link => location.includes(link.href))
     }
-
+    
     let dashboardLocation = location.split('/').length == 3 ? location + '/' : location
 
     let { theme, changeTheme } = useContext(ThemeContext)
 
     const hideMenu = () => setShowMenu(false)
 
+
+    useEffect(() => {
+        const token = getCookie('userToken');
+
+        if (!token) {
+            window.location.href = '/'
+
+            return;
+        }
+
+        const fetchUser = async () => {
+            const user = await getUserInfo(token)
+            if (user) {
+                setUserObj(user)
+            } else {
+                window.location.href = '/'
+            }
+        }
+
+        fetchUser()
+    }, [])
+
+    useEffect(() => {
+        if (userObj && userObj?.role == 'user') {
+            window.location.href = '/my-account/userPanel'
+        }
+    }, [userObj])
+
+
     return (
-        <>
+        <UserContext.Provider value={userObj}>
             <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
                 <div className="px-5 py-9 flex flex-col justify-start items-center gap-7 overflow-y-auto pb-12">
                     <button className="block lg:hidden w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 dark:bg-primary dark:text-white cursor-pointer" onClick={hideMenu}>
@@ -66,7 +97,7 @@ export default function AdminPanel() {
                         <div className="relative w-24 h-24 rounded-full bg-gray-400 overflow-hidden ring-8 ring-gray-300/25 dark:ring-gray-700/25">
                             <FaUser className="text-white absolute -bottom-10 left-1/2 -translate-1/2 w-20 h-20" />
                         </div>
-                        <h2 className="text-light-gray dark:text-white font-vazir">سلام User خوش آمدید</h2>
+                        <h2 className="text-light-gray dark:text-white font-vazir">سلام {userObj?.firstName} {userObj?.lastName} خوش آمدید</h2>
                     </div>
                     <div className="w-full flex items-center justify-center gap-4">
 
@@ -170,7 +201,7 @@ export default function AdminPanel() {
                     <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">منو</span>
                 </button>
             </div>
-            <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} />
-        </>
+            <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} deleteCookie={deleteCookie} token={userObj?.userToken} />
+        </UserContext.Provider>
     )
 }
