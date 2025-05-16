@@ -43,7 +43,7 @@ export default function MainLayout() {
 
     return (
         <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
-            <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} />
+            <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} />
 
             <main className="w-full h-full" >
                 <Outlet />

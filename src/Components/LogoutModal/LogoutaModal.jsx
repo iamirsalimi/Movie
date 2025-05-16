@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function LogoutModal({showModal, setShowModal}) {
+export default function LogoutModal({showModal, setShowModal , deleteCookie , token}) {
     const hideModal = () => {
         setShowModal(false)
     }
@@ -19,7 +19,7 @@ export default function LogoutModal({showModal, setShowModal}) {
                     >خیر</button>
                     <button 
                         className="w-full py-2 rounded-md cursor-pointer font-vazir bg-red-500 hover:bg-red-600 transition-all text-white"
-                        onClick={e => setShowModal(false)}    
+                        onClick={e => deleteCookie('userToken' , token)}    
                     >بله</button>
                 </div>
             </div>

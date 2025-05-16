@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, Outlet } from 'react-router-dom';
 
-import { getCookie, getUserInfo } from '../../utils';
+import { getCookie, getUserInfo , deleteCookie } from '../../utils';
 import ThemeContext from '../../Contexts/ThemeContext';
 import UserContext from '../../Contexts/UserContext';
 import LogoutModal from './../../Components/LogoutModal/LogoutaModal'
@@ -199,7 +199,7 @@ export default function UserPanel() {
                     <span className="text-light-gray dark:text-white font-vazir text-xs xs:text-sm">منو</span>
                 </button>
             </div>
-            <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} />
+            <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} deleteCookie={deleteCookie} token={userObj?.userToken} />
 
         </UserContext.Provider>
     )

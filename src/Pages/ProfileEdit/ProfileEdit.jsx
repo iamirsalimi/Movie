@@ -76,7 +76,7 @@ export default function ProfileEdit() {
     })
       .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
   }
-  
+
   // yup can't validate matching two password inputs and also recognize them as a not required fields 
   const validatePasswords = (recentPassword, newPassword, confirmNewPassword) => {
     if (newPassword && !passwordRegex.test(newPassword)) {
@@ -104,18 +104,20 @@ export default function ProfileEdit() {
     validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
 
     if (Object.keys(errors).length == 0) {
-      let newUserObj = { ...user }
+      if (user.firstName != data.firstName || user.lastName != data.lastName || user.nickName != data.nickName || user.userName != data.userName || user.email != data.email) {
+        let newUserObj = { ...user }
+        newUserObj.firstName = data.firstName
+        newUserObj.lastName = data.lastName
+        newUserObj.nickName = data.nickName
+        newUserObj.userName = data.userName
+        newUserObj.email = data.email
 
-      newUserObj.firstName = data.firstName
-      newUserObj.lastName = data.lastName
-      newUserObj.nickName = data.nickName
-      newUserObj.userName = data.userName
-      newUserObj.email = data.email
-      if (data.newPassword) {
-        newUserObj.password = data.newPassword
+        if (data.newPassword) {
+          newUserObj.password = data.newPassword
+        }
+
+        await updateUser(newUserObj.userToken, newUserObj)
       }
-
-      await updateUser(newUserObj.userToken, newUserObj)
     }
   }
 

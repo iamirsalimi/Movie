@@ -68,6 +68,15 @@ const getCookie = (cookieName) => {
     return null
 }
 
+const deleteCookie = (cookieName, cookieValue) => {
+    const date = new Date()
+    date.setTime(date.getTime() - (10 * 24 * 60 * 60 * 1000))
+    const expires = date.toUTCString()
+
+    document.cookie = `${cookieName}=${cookieValue}; path=/; Expires=${expires}; SameSite=Strict; Secure`;
+    location.reload()
+}
+
 let apiData = {
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
     api: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users',
@@ -121,4 +130,4 @@ const getUserInfo = async (token) => {
 
 
 
-export { addCommentHandler, findArrayByIds, setCookie, getCookie ,getUserInfo }
+export { addCommentHandler, findArrayByIds, setCookie, getCookie ,getUserInfo , deleteCookie }

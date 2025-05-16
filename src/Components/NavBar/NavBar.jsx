@@ -8,7 +8,7 @@ import { IoSunnyOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 
-export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn }) {
+export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, user }) {
     let { theme, changeTheme, navFlag } = useContext(ThemeContext)
 
     const location = useLocation()
@@ -79,13 +79,13 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn }) {
                         </svg>
                     </button>
                     {hasUserLoggedIn && (
-                        <a href="/my-account/userPanel" className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
+                        <a href={user?.role == 'admin' ? '/my-account/adminPanel' : '/my-account/userPanel'} className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
                             <IoNotificationsOutline className="text-2xl" />
                             <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">0</span>
                         </a>
                     )}
                     <div className="flex items-center justify-center gap-2">
-                        <a href={hasUserLoggedIn ? '/my-account/userPanel' : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>
+                        <a href={hasUserLoggedIn ? `/my-account/${ user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>
                         <a href="/account/login" className={`md:hidden  relative w-10 h-10 rounded-full bg-gray-100 overflow-hidden`}>
                             <FaUser className="text-gray-400 absolute -bottom-5 left-1/2 -translate-1/2 w-8 h-8" />
                         </a>
