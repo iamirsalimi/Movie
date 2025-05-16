@@ -22,13 +22,14 @@ class User {
         this.password = password
         this.nickName = ''
         this.role = 'user' //user or admin
-        this.accountStatus = "" //active or temporary-ban or permanent-ban 
+        this.accountStatus = "" //active or temporary-banned or permanent-banned 
         this.isBanned = false
         this.banReason = ""
+        this.ban_expiration_date = null;
         this.created_At = new Date()
         this.last_login_at = new Date()
         this.isVerified = false
-        this.subscriptionStatus = false // false means don't hove and true means have   
+        this.subscriptionStatus = false // active or expired or null
         this.subscriptionExpiresAt = ''
         this.subscriptionPlan = ''
         this.read_notifications = []

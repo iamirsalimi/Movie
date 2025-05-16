@@ -35,7 +35,6 @@ export default function Login() {
     }
 
     const updateUser = async (userToken, userObj) => {
-        console.log(userObj , userToken)
         await fetch(`${apiData.updateApi}${userToken}`, {
             method: "PATCH",
             headers: {
