@@ -219,7 +219,6 @@ export default function UserDetails() {
                                                         <span className="text-vazir-light text-primary dark:text-white font-vazir">{getDate(plan.isBought.price)} تومان</span>
                                                     </li>
                                                 )}
-                                                {console.log(plan)}
                                                 <li className="w-full py-1 flex flex-col justify-center gap-1">
                                                     <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تغییر داده شده توسط  :</h3>
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

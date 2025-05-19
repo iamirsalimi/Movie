@@ -6,7 +6,7 @@ import PanelLayout from './Layouts/PanelLayout'
 //pages
 import Home from './Pages/Home/Home'
 import Movie from './Pages/Movie/Movie'
-import Actors from './Pages/Actors/Actors'
+import Actor from './Pages/Actor/Actor'
 import NotFound from './Pages/NotFound/NotFound'
 import Dmca from './Pages/Dmca/Dmca'
 import ImdbTop from './Pages/ImdbTop/ImdbTop'
@@ -34,6 +34,10 @@ import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import Movies from './Pages/Movies/Movies'
 import AllMovies from './Pages/AllMovies/AllMovies'
 import AddMovie from './Pages/AddMovie/AddMovie'
+import Actors from './Pages/Actors/Actors'
+import AllActors from './Pages/AllActors/AllActors'
+import AddActor from './Pages/AddActor/AddActor'
+import actorDetails from './Pages/actorDetails/actorDetails'
 import Users from './Pages/Users/Users'
 import AllUsers from './Pages/AllUsers/AllUsers'
 import UserDetails from './Pages/UserDetails/UserDetails'
@@ -56,7 +60,7 @@ let Routes = [
             { path: '/', element: <Home /> },
             { path: '/page/:pageId', element: <Home /> },
             { path: '/:movieType/:movieId', element: <Movie /> },
-            { path: '/actors/:actorsId', element: <Actors /> },
+            { path: '/actors/:actorId', element: <Actor /> },
             { path: '/dmca', element: <Dmca /> },
             { path: '/imdb-top/:movieType', element: <ImdbTop /> },
             { path: '/imdb-top/:movieType/page/:pageId', element: <ImdbTop /> }
@@ -93,15 +97,22 @@ let Routes = [
                 path: 'adminPanel', element: <AdminPanel />, children: [
                     { index: true, element: <AdminDashboard /> },
                     { path: 'profile-edit', element: <ProfileEdit /> },
+                    { path: 'users', element: <Users />  , children : [
+                        { index : true , element: <AllUsers /> },
+                        { path: 'user-details/:userId', element: <UserDetails /> },
+                        { path: 'edit-user/:userId', element: <EditUser /> },
+                    ]},
                     { path: 'movies', element: <Movies />  , children : [
                         { index : true , element: <AllMovies /> },
                         { path: 'add-movie', element: <AddMovie /> },
                         { path: 'edit-movie/:movieId', element: <AddMovie /> },
                     ]},
-                    { path: 'users', element: <Users />  , children : [
-                        { index : true , element: <AllUsers /> },
-                        { path: 'user-details/:userId', element: <UserDetails /> },
-                        { path: 'edit-user/:userId', element: <EditUser /> },
+
+                    { path: 'actors', element: <Actors />  , children : [
+                        { index : true , element: <AllActors /> },
+                        { path: 'actor-details/:actorId', element: <actorDetails /> },
+                        { path: 'add-actor', element: <AddActor /> },
+                        { path: 'edit-actor/:actorId', element: <AddActor /> },
                     ]},
                     { path: 'tickets', element: <Tickets />  , children : [
                         { index : true , element: <AdminAllTickets /> },
