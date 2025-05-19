@@ -63,8 +63,8 @@ export default function UserDetails() {
 
 
     const getDate = date => {
-        let registerDate = new Date(date)
-        let persianDate = dayjs(registerDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
+        let newDate = new Date(date)
+        let persianDate = dayjs(newDate).calendar('jalali').locale('fa').format('YYYY/MM/DD - HH:mm')
         return persianDate
     }
 
@@ -99,7 +99,7 @@ export default function UserDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نام نمایشی :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.nickName}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{userObj.nickName || 'ندارد'}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نام کاربري :</h3>
@@ -115,7 +115,11 @@ export default function UserDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ عضويت :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.created_At}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.created_At)}</span>
+                            </li>
+                            <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تاریخ آخرین ورود به حساب :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.last_login_at)}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">وضعيت حساب :</h3>
@@ -131,14 +135,22 @@ export default function UserDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نوع اشتراك فعال :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionPlan}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionPlan.duration} روز</span>
                             </li>
-                            <li className="w-full py-1 flex items-center justify-between">
+                            {userObj.subscriptionStatus == 'active' && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ فعال شدن اشتراك :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.subscriptionPlan.activateDate)}</span>
+                            </li>
+                        )}
+                            {userObj.subscriptionStatus == 'active' && (
+                                <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ منقضي شدن اشتراك :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionExpiresAt}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.subscriptionExpiresAt)}</span>
                             </li>
+                        )}
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تعدا لیست علاقه مندی ها :</h3>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تعداد لیست علاقه مندی ها :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.watchList.length}</span>
                             </li>
                             {userObj.watchList.length !== 0 && (
@@ -172,6 +184,62 @@ export default function UserDetails() {
 
                             </li>
                         </ul>
+                        <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
+                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">تمام اشتراک های کاربر</h2>
+                            <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
+                                {userObj.all_subscription_plans.length > 0 ? userObj.all_subscription_plans.map(plan => (
+                                            <div className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
+                                                <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID :</h3>
+                                                    <span className="text-vazir-light text-primary dark:text-white">{plan.id}</span>
+                                                </li>
+
+                                                <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نوع اشتراك فعال  :</h3>
+                                                    <span className="text-vazir-light text-primary dark:text-white">{plan.duration}</span>
+                                                </li>
+
+                                                <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تاريخ فعال شدن اشتراك :</h3>
+                                                    <span className="text-vazir-light text-primary dark:text-white">{getDate(plan.activateDate)} روزه</span>
+                                                </li>
+
+                                                <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تاريخ منقضي شدن اشتراك :</h3>
+                                                    <span className="text-vazir-light text-primary dark:text-white">{getDate(plan.expiration)}</span>
+                                                </li>
+
+                                                <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">آیا اشتراک خریداری شده؟</h3>
+                                                    <span className="text-vazir-light text-primary dark:text-white">{plan.isBought.value ? 'بله' : 'خیر'}</span>
+                                                </li>
+                                                {plan.isBought.value && (
+                                                    <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
+                                                        <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">قیمت خریداری شده : </h3>
+                                                        <span className="text-vazir-light text-primary dark:text-white font-vazir">{getDate(plan.isBought.price)} تومان</span>
+                                                    </li>
+                                                )}
+                                                {console.log(plan)}
+                                                <li className="w-full py-1 flex flex-col justify-center gap-1">
+                                                    <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تغییر داده شده توسط  :</h3>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                        {plan.changedBy.map(user => (
+                                                            <div className="flex flex-col items-center justify-between gap-1 text-sm bg-white dark:bg-secondary p-1 rounded-md">
+                                                                <span className="text-vazir-light text-primary dark:text-white rounded-lg">{user.userName}</span>
+                                                                <span className="text-vazir-light text-primary dark:text-white rounded-lg">{getDate(user.date)}</span>
+                                                            </div>
+                                                        ))}
+
+                                                    </div>
+                                                </li>
+
+                                            </div>
+                                        )) : (
+                                    <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">کاربر تا کنون اشتراکی نداشته </h2>
+                                )}
+                            </ul>
+                        </div>
+
                         <div ref={userTicketsRef} className="w-full flex flex-col gap-7 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">تيكت هاي كاربر</h2>
                             <div className="flex flex-col items-center gap-2">

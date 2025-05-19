@@ -26,8 +26,8 @@ const filterSearchObj = {
     'name': { hasValue: false, property: ['firstName', 'lastName'] },
     'username': { hasValue: false, property: 'userName' },
     'email': { hasValue: false, property: 'email' },
-    'with-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: true },
-    'without-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: false },
+    'with-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: 'active' },
+    'without-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: ['expired' , null] },
     'temporary-banned-users': { hasValue: true, property: 'accountStatus', value: 'temporary-banned' },
     'permanent-banned-users': { hasValue: true, property: 'accountStatus', value: 'permanent-banned' },
     'unbanned-users': { hasValue: true, property: 'accountStatus', value: 'active' },
@@ -85,10 +85,11 @@ export default function AllUsers() {
         let filterObj = filterSearchObj[searchType]
         let filteredUsersArray = []
 
+        // when we search something or we change the searchType we should filter the users Array again  
         if (filterObj) {
-            console.log(filterObj.hasValue)
+            // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
-                filteredUsersArray = users.filter(user => user[filterObj.property] == filterObj.value)
+                filteredUsersArray = users.filter(user => typeof filterObj.value == 'object' ? filterObj.value.some(value => value == user[filterObj.property]) : user[filterObj.property] == filterObj.value  )
             } else {
                 if (searchValue) {
                     if (filterObj.property == 'id') {
@@ -136,7 +137,7 @@ export default function AllUsers() {
                             </select>
                             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
                         </div>
-                        {(searchType != 'with-vip-plan' && searchType != 'without-vip-plan' && searchType != 'banned-users' && searchType != 'unbanned-users') && (
+                        {(searchType != 'with-vip-plan' && searchType != 'without-vip-plan' && searchType != 'temporary-banned-users' && 'permanent-banned-users' && searchType != 'unbanned-users') && (
                             <div className="w-full relative select-none">
                                 <input
                                     type="text"
