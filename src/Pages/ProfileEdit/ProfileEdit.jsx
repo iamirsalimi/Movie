@@ -104,7 +104,7 @@ export default function ProfileEdit() {
     validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
 
     if (Object.keys(errors).length == 0) {
-      if (user.firstName != data.firstName || user.lastName != data.lastName || user.nickName != data.nickName || user.userName != data.userName || user.email != data.email) {
+      if (user.firstName != data.firstName || user.lastName != data.lastName || user.nickName != data.nickName || user.userName != data.userName || user.email != data.email || user.password != data.newPassword) {
         let newUserObj = { ...user }
         newUserObj.firstName = data.firstName
         newUserObj.lastName = data.lastName

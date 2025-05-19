@@ -25,13 +25,15 @@ class User {
         this.accountStatus = "" //active or temporary-banned or permanent-banned 
         this.isBanned = false
         this.banReason = ""
+        this.banDuration = ''; // days which user is banned
         this.ban_expiration_date = null;
         this.created_At = new Date()
         this.last_login_at = new Date()
         this.isVerified = false
         this.subscriptionStatus = false // active or expired or null
         this.subscriptionExpiresAt = ''
-        this.subscriptionPlan = ''
+        this.subscriptionPlan = null
+        this.all_subscription_plans = []
         this.read_notifications = []
         this.watchList = []
         this.requests = []
@@ -222,7 +224,6 @@ export default function Register() {
 
     return (
         <>
-
             <div className="w-full flex items-center gap-2 sm:gap-5 justify-between">
                 <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-200 dark:bg-gray-800" >
                     <IoIosArrowForward className="text-sm text-gray-500 dark:text-white" />
