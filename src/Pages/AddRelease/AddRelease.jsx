@@ -151,7 +151,7 @@ export default function AddRelease() {
                 </div>
 
                 <div className="w-full relative select-none">
-                    <DatePicker selected={releaseDate} onChange={(date) => setReleaseDate(date)} wrapperClassName="w-full" className="block w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" />
+                    <DatePicker selected={releaseDate} showYearDropdown showMonthDropdown dateFormat="yyyy-MM-dd" onChange={(date) => setReleaseDate(date)} wrapperClassName="w-full" className="block w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" />
 
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">{movieType == 'movie' ? 'تاریخ' : 'شروع'} پخش</span>
                     <p className="mt-2 font-vazir text-light-gray dark:text-white">تاریخ شمسی: {formattedJalaliDate}</p>

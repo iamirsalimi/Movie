@@ -1,30 +1,100 @@
 import React, { useEffect, useState } from 'react'
 
+import DatePicker from 'react-datepicker';
+import dayjs from 'dayjs';
+import jalali from 'jalaliday';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup'
 
 import { movies } from '../../moviesData'
 
+dayjs.extend(jalali)
+
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
+
+let apiData = {
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
+    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
 export default function AddActor() {
     const [actorMovieId, setActorMovieId] = useState('')
     const [showMovies, setShowMovies] = useState(false)
     const [userRole, setUserRole] = useState('actor')
     const [actorMovies, setActorMovies] = useState([])
+    const [isAdding, setIsAdding] = useState(false)
 
     let { actorId } = useParams()
 
-    console.log(actorId)
+    const schema = yup.object().shape({
+        fullName: yup.string().required('وارد كردن نام اجباري است'),
+        originalName: yup.string(),
+        birthDate: yup
+            .string(),
+        nationality: yup
+            .string(),
+        biography: yup
+            .string()
+            .required('وارد کردن بيوگرافي اجباری است'),
+        src: yup
+            .string()
+            .required('وارد كردن URL تصوير اجباری است')
+    })
 
-    const addActor = () => {
-        let newDate = new Date()
-        let newActorOBj = { id: Math.floor(Math.random() * 999), title: notifTitle, message: notifMessage, createdAt: newDate }
-        console.log(newActorOBj)
+    let {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+        watch
+    } = useForm({
+        defaultValues: {
+            dateBirth: null
+        },
+        resolver: yupResolver(schema)
+    })
+
+    // console.log(actorId)
+
+    const addActorHandler = async newActorObj => {
+        await fetch(apiData.postApi, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newActorObj)
+        }).then(res => {
+            console.log(res)
+            location.href = "/my-account/adminPanel/actors/add-actor"
+        })
+            .catch(err => {
+                setIsAdding(false)
+                console.log('مشکلی در افزودن هنرپیشه پیش آمده')
+            })
+
+    }
+
+    const addActor = async data => {
+        setIsAdding(true)
+        let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: data.birthDate, nationality: data.nationality, biography: data.biography, src : data.src ,movies: [...actorMovies]}
+
+        console.log(newActorObj , Object.keys(newActorObj))
+
+        await addActorHandler(newActorObj)
     }
 
     // add similar Movies
     const addActorMovie = e => {
+        e.preventDefault()
         if (actorMovieId) {
             let movieObj = movies.find(movie => movie.id == actorMovieId)
             let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: actorMovieId, src: movieObj.src, title: movieObj.title, role: userRole }
@@ -55,36 +125,43 @@ export default function AddActor() {
             </div>
             <ul className="w-full border border-gray-200 dark:border-primary rounded-lg flex flex-col items-center gap-2 py-5 px-4">
                 <li className="text-center font-vazir text-red-500 text-sm md:text-base">در صورت ارسال نکردن مقدار نام هنری کاربر نام اصلی هنرپیشه نمایش داده می شود</li>
+                <li className="text-center font-vazir text-red-500 text-sm md:text-base">وارد کردن ملیت اختیاری است</li>
             </ul>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-5" onSubmit={handleSubmit(addActor)}>
                 <div className="w-full relative select-none">
                     <input
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-
+                        {...register('fullName')}
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نام کامل</span>
+                    {errors?.fullName && (
+                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.fullName?.message}</span>
+                    )}
                 </div>
                 <div className="w-full relative select-none">
                     <input
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                        {...register('originalName')}
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نام هنری</span>
                 </div>
 
                 <div className="w-full relative select-none">
-                    <input
-                        type="text"
-                        className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                    <DatePicker value={watch('dateBirth')?.toISOString().slice(0, 10)} onChange={date => setValue('dateBirth', date)} showYearDropdown showMonthDropdown dateFormat="yyyy-MM-dd" readonly wrapperClassName="w-full" className="block w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" />
 
-                    />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">تاریخ تولد</span>
+                    {errors?.birthDate && (
+                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.birthDate?.message}</span>
+                    )}
                 </div>
+
                 <div className="w-full relative select-none">
                     <input
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                        {...register('nationality')}
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ملیت</span>
                 </div>
@@ -169,24 +246,34 @@ export default function AddActor() {
                     <input
                         type="text"
                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                        {...register('src')}
+
                     />
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">URL تصویر</span>
+                    {errors?.src && (
+                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.src?.message}</span>
+                    )}
                 </div>
                 <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                     <textarea
                         className="w-full rounded-md p-3 min-h-36 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                        {...register('biography')}
                     ></textarea>
                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">بیوگرافی</span>
+                    {errors?.biography && (
+                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.biography?.message}</span>
+                    )}
                 </div>
 
                 <button
-                    className="md:col-start-1 md:col-end-3 py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg"
-                    onClick={addActor}
+                    type="submit"
+                    className="md:col-start-1 md:col-end-3 py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg"
+                    disabled={isAdding}
                 >
-                    {actorId ? 'آپدیت هنرپیشه' : 'ایجاد هنرپیشه'}
+                    {isAdding ? 'در حال افزودن هنرپیشه ...' : actorId ? 'آپدیت هنرپیشه' : 'ایجاد هنرپیشه'}
 
                 </button>
-            </div>
+            </form>
         </div>
     )
 }
