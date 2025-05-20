@@ -110,7 +110,7 @@ let Routes = [
 
                     { path: 'actors', element: <Actors />  , children : [
                         { index : true , element: <AllActors /> },
-                        { path: 'actor-details/:actorId', element: <actorDetails /> },
+                        { path: 'actor-details/:actorId', element: <ActorDetails /> },
                         { path: 'add-actor', element: <AddActor /> },
                         { path: 'edit-actor/:actorId', element: <AddActor /> },
                     ]},

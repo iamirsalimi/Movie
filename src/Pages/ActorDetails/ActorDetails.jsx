@@ -41,7 +41,7 @@ export default function ActorDetails() {
                     setActorObj(data[0])
                     setIsPending(false)
                 } else {
-                    window.location.href = '/my-account/adminPanel/users'
+                    window.location.href = '/my-account/adminPanel/actors'
                 }
 
                 setError(false)
@@ -85,14 +85,17 @@ export default function ActorDetails() {
 
                 {(!isPending && actorObj) && (
                     <>
-                        <ul className="w-full flex flex-col items-center gap-4 font-vazir text-light-gray dark:text-white py-2 px-4 border border-gray-200 dark:border-primary divide-y divide-gray-200 dark:divide-primary rounded-md">
+                        <ul className="w-full flex flex-col items-center gap-4 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary divide-y divide-gray-200 dark:divide-primary rounded-md">
+                            <li className="w-full h-80 rounded-md overflow-hidden">
+                                <img src={actorObj.src} alt="" className="w-full h-full object-center object-cover" />
+                            </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">ID :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.userName}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.id}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نام کامل هنرپیشه :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.firstName}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.fullName}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نام هنری :</h3>
@@ -100,68 +103,45 @@ export default function ActorDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">تاریخ تولد :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.role}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.birthDate || 'نامضخص'}</span>
                             </li>
+                            {actorObj.birthDate && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">سن :</h3>
+                                    <span className="text-vazir-light text-primary dark:text-white">{actorObj.birthDate}</span>
+                                </li>
+                            )}
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">ملیت :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.email}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.nationality}</span>
                             </li>
-                            <li className="w-full py-1 flex items-center justify-between">
+                            <li className="w-full py-1 flex flex-col justify-center gap-1">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">بیوگرافی :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.accountStatus}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.biography}</span>
                             </li>
                         </ul>
                         <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">مجموعه آثار هنرپیشه</h2>
                             <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
-                                {actorObj.movies.length > 0 ? actorObj.movies.map(plan => (
+                                {actorObj.movies.length > 0 ? actorObj.movies.map(movie => (
                                     <div className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{plan.id}</span>
+                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID فیلم :</h3>
+                                            <span className="text-vazir-light text-primary dark:text-white">{movie.movieId}</span>
                                         </li>
 
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نوع اشتراك فعال  :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{plan.duration}</span>
+                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نام فیلم  :</h3>
+                                            <span className="text-vazir-light text-primary dark:text-white">{movie.title}</span>
                                         </li>
 
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تاريخ فعال شدن اشتراك :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{getDate(plan.activateDate)} روزه</span>
+                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نقش هنرپیشه :</h3>
+                                            <span className="text-vazir-light text-primary dark:text-white">{movie.role}</span>
                                         </li>
-
-                                        <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تاريخ منقضي شدن اشتراك :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{getDate(plan.expiration)}</span>
-                                        </li>
-
-                                        <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">آیا اشتراک خریداری شده؟</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{plan.isBought.value ? 'بله' : 'خیر'}</span>
-                                        </li>
-                                        {plan.isBought.value && (
-                                            <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">قیمت خریداری شده : </h3>
-                                                <span className="text-vazir-light text-primary dark:text-white font-vazir">{getDate(plan.isBought.price)} تومان</span>
-                                            </li>
-                                        )}
-                                        <li className="w-full py-1 flex flex-col justify-center gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تغییر داده شده توسط  :</h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                {plan.changedBy.map(user => (
-                                                    <div className="flex flex-col items-center justify-between gap-1 text-sm bg-white dark:bg-secondary p-1 rounded-md">
-                                                        <span className="text-vazir-light text-primary dark:text-white rounded-lg">{user.userName}</span>
-                                                        <span className="text-vazir-light text-primary dark:text-white rounded-lg">{getDate(user.date)}</span>
-                                                    </div>
-                                                ))}
-
-                                            </div>
-                                        </li>
-
                                     </div>
                                 )) : (
-                                    <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">کاربر تا کنون اشتراکی نداشته </h2>
+                                    <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">اثری برای هنرپیشه ثبت نشده</h2>
                                 )}
                             </ul>
                         </div>
