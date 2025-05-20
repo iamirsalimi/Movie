@@ -99,7 +99,7 @@ export default function ActorDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نام هنری :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.nickName || 'ندارد'}</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{actorObj.originalName || 'ندارد'}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">تاریخ تولد :</h3>
