@@ -1,6 +1,67 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { MdEdit } from "react-icons/md";
+import { FaEye } from "react-icons/fa";
+import { LuTrash2 } from "react-icons/lu";
+
+let apiData = {
+  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*.',
+  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
 export default function AllActors() {
+  const [actors, setActors] = useState(null)
+  const [filteredActors, setFilteredActors] = useState(null)
+  const [isPending, setIsPending] = useState(true)
+  const [error, setError] = useState(true)
+  const [searchValue, setSearchValue] = useState('')
+  const [searchType, setSearchType] = useState('ID')
+
+  useEffect(() => {
+    const getActorInfo = async () => {
+      try {
+        const res = await fetch(apiData.getApi, {
+          headers: {
+            'apikey': apiData.apikey,
+            'Authorization': apiData.authorization
+          }
+        })
+
+        const data = await res.json()
+
+        if (data) {
+          setActors(data)
+          setFilteredActors(data)
+          setIsPending(false)
+        } else {
+          setIsPending(true)
+        }
+        setError(false)
+      } catch (err) {
+        console.log('fetch error')
+        setError(err)
+        setIsPending(false)
+        setActors(null)
+        setFilteredActors(null)
+      }
+    }
+    getActorInfo()
+  }, [])
+
+  useEffect(() => {
+    if (searchValue && actors) {
+      let filteredActorsArray = actors.filter(actor => searchType == 'ID' ? actor.id == searchValue : actor.fullName.toLowerCase().includes(searchValue.toLowerCase()))
+      setFilteredActors(filteredActorsArray)
+    } else {
+      setFilteredActors(actors)
+    }
+  }, [searchValue, searchType])
+
+  useEffect(() => {
+    console.log(filteredActors)
+  }, [filteredActors])
+
   return (
     <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-12">
       <div className="w-full flex items-center justify-between">
@@ -11,10 +72,15 @@ export default function AllActors() {
 
         <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
           <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
-            <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value="">
+            <select
+              name=""
+              id=""
+              className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+              value={searchType}
+              onChange={e => setSearchType(e.target.value)}
+            >
               <option value="ID">ID</option>
-              <option value="castName">نام هنر پیشه</option>
-              <option value="cast-movies-ID">ID فیلم های بازیگر</option>
+              <option value="fullName">نام هنر پیشه</option>
             </select>
             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
           </div>
@@ -23,6 +89,8 @@ export default function AllActors() {
             <input
               type="text"
               className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+              value={searchValue}
+              onChange={e => setSearchValue(e.target.value)}
             />
             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو</span>
           </div>
@@ -34,11 +102,57 @@ export default function AllActors() {
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام هنرپیشه</th>
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">مجموعه آثار</th>
+                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ملیت</th>
+                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ تولد</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
               </tr>
             </thead>
+            {(!isPending && filteredActors) && (
+              <tbody>
+                {filteredActors?.map(actor => (
+                  <tr className="py-1 px-2 border-b last:border-none border-gray-200 dark:border-white/5" >
+                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.id}</td>
+                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.fullName}</td>
+                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.nationality}</td>
+                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.birthDate || 'نامشخص'}</td>
+                    <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">
+                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex items-center justify-center gap-2">
+                        <a
+                          href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
+                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                        >
+                          <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                        </a>
+
+                        <a
+                          href={`/my-account/adminPanel/actors/edit-actor/${actor.id}`}
+                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                        >
+                          <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                        </a>
+
+                        <button className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group">
+                          <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                        </button>
+                      </td>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
           </table>
+
+          {(!isPending && filteredActors.length == 0) && (
+            <h2 className="text-center w-full font-vazir text-red-500 text-sm mt-5">کاربری با {searchType == 'ID' ? searchType : 'نام'} {searchValue} پیدا نشد</h2>
+          )}
+
+          {isPending && (
+            <h2 className="text-center w-full font-vazir text-red-500 text-sm mt-5">در حال دریافت اطلاعات ... </h2>
+          )}
+
+          {error && (
+            <h2 className="text-center w-full font-vazir text-red-500 text-sm">{error.message}</h2>
+          )}
         </div>
 
       </div>

@@ -85,9 +85,9 @@ export default function AddActor() {
 
     const addActor = async data => {
         setIsAdding(true)
-        let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: data.birthDate, nationality: data.nationality, biography: data.biography, src : data.src ,movies: [...actorMovies]}
+        let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: data.birthDate, nationality: data.nationality, biography: data.biography, src: data.src, movies: [...actorMovies] }
 
-        console.log(newActorObj , Object.keys(newActorObj))
+        console.log(newActorObj, Object.keys(newActorObj))
 
         await addActorHandler(newActorObj)
     }
