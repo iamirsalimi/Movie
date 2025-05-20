@@ -8,9 +8,6 @@ import { useParams } from 'react-router-dom'
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
-import { FaEye } from "react-icons/fa";
-
 
 let apiData = {
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',

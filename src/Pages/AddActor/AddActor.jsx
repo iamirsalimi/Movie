@@ -71,6 +71,7 @@ export default function AddActor() {
 
     // console.log(actorId)
 
+    // add actor
     const addActorHandler = async newActorObj => {
         await fetch(apiData.postApi, {
             method: "POST",
@@ -91,7 +92,6 @@ export default function AddActor() {
 
     }
 
-
     const addActor = async data => {
         setIsAdding(true)
         let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: actorBirthDate, nationality: data.nationality, biography: data.biography, src: data.src, movies: [...actorMovies] }
@@ -99,6 +99,7 @@ export default function AddActor() {
         await addActorHandler(newActorObj)
     }
 
+    // update actor
     const updateActorHandler = async newActorObj => {
         await fetch(`${apiData.updateApi}${actorId}`, {
             method: "PATCH",
@@ -192,7 +193,6 @@ export default function AddActor() {
             setActorBirthDate(actorObj.birthDate)
         }
     }, [actorObj])
-
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
