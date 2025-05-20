@@ -52,7 +52,6 @@ export default function ActorDetails() {
         getActorInfo(actorId)
     }, [])
 
-
     const getDate = date => {
         let newDate = new Date(date)
         let persianDate = dayjs(newDate).calendar('jalali').locale('fa').format('YYYY/MM/DD - HH:mm')
