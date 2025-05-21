@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
+import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
-
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
 
 let apiData = {
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
@@ -42,6 +42,8 @@ export default function AllMovies() {
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(null)
     const [movieObj, setMovieObj] = useState(null)
+
+    const { movieId } = useParams()
 
     const DeleteMovieHandler = async () => {
         try {
