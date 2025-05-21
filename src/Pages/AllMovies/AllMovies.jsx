@@ -43,8 +43,6 @@ export default function AllMovies() {
     const [error, setError] = useState(null)
     const [movieObj, setMovieObj] = useState(null)
 
-    const { movieId } = useParams()
-
     const DeleteMovieHandler = async () => {
         try {
             const res = await fetch(`${apiData.deleteApi}${movieObj.id}`, {

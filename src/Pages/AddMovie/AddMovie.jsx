@@ -25,6 +25,7 @@ const genres = {
 const days = ['sunday', 'monday', 'tuesday', 'wednsday', 'thursday', 'friday', 'saturday']
 
 let apiData = {
+    getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
@@ -71,9 +72,12 @@ export default function AddMovie() {
 
     const [castId, setCastId] = useState()
     const [castName, setCastName] = useState('')
-    const [castRule, setCastRule] = useState('actor')
+    const [castRole, setCastRole] = useState('actor')
     const [showCasts, setShowCasts] = useState(false)
     const [movieCasts, setMovieCasts] = useState([])
+    const [castsArray, setCastsArray] = useState([])
+    const [castIsPending, setCastIsPending] = useState(false)
+    const [castError, setCastError] = useState(false)
 
     const [notifTitle, setNotifTitle] = useState('')
     const [notifs, setNotifs] = useState([])
@@ -202,7 +206,7 @@ export default function AddMovie() {
             },
             body: JSON.stringify(newMovieObj)
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 console.log(res)
                 location.href = "/my-account/adminPanel/movies/add-movie"
             }
@@ -215,8 +219,8 @@ export default function AddMovie() {
 
     const updateMovie = async data => {
         let newMovieObj = { ...data }
-        
-        if(data.title != movieObj.title || data.mainTitle != movieObj.mainTitle || data.cover != movieObj.cover || data.banner != movieObj.banner || data.imdb_score != movieObj.imdb_score || data.rotten_score != movieObj.rotten_score || data.metacritic_score != movieObj.metacritic_score || data.movieType != movieObj.movieType || data.broadcastStatus != movieObj.broadcastStatus || data.age != movieObj.age || data.company != movieObj.company || data.quality != movieObj.quality || data.duration != movieObj.duration || data.description != movieObj.description ||  subtitleCheckbox != movieObj.has_subtitle || dubbedCheckbox  != movieObj.is_dubbed || isInHeaderSliderCheckbox  != movieObj.is_in_header_slider || isInNewMoviesCheckbox  != movieObj.is_in_new_movies || suggestedCheckbox  != movieObj.is_suggested ||  data.year != movieObj.year || data.totalSeasons != movieObj.totalSeasons){
+
+        if (data.title != movieObj.title || data.mainTitle != movieObj.mainTitle || data.cover != movieObj.cover || data.banner != movieObj.banner || data.imdb_score != movieObj.imdb_score || data.rotten_score != movieObj.rotten_score || data.metacritic_score != movieObj.metacritic_score || data.movieType != movieObj.movieType || data.broadcastStatus != movieObj.broadcastStatus || data.age != movieObj.age || data.company != movieObj.company || data.quality != movieObj.quality || data.duration != movieObj.duration || data.description != movieObj.description || subtitleCheckbox != movieObj.has_subtitle || dubbedCheckbox != movieObj.is_dubbed || isInHeaderSliderCheckbox != movieObj.is_in_header_slider || isInNewMoviesCheckbox != movieObj.is_in_new_movies || suggestedCheckbox != movieObj.is_suggested || data.year != movieObj.year || data.totalSeasons != movieObj.totalSeasons) {
             setIsAdding(true)
             newMovieObj.created_at = movieObj.created_at
             newMovieObj.updated_at = new Date()
@@ -227,15 +231,15 @@ export default function AddMovie() {
             newMovieObj.is_suggested = suggestedCheckbox
             newMovieObj.site_scores = movieObj.site_scores
             newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
-    
+
             // for (let key in newMovieObj) {
             //     console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
             // }
-    
+
             // console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
             await updateMovieHandler(newMovieObj)
         }
-            
+
     }
 
     // add new movie
@@ -402,15 +406,23 @@ export default function AddMovie() {
         setMovieGenres([...newGenres])
     }
 
-    // add genres
+    // add cast
     const addCast = e => {
         e.preventDefault()
-        if (castId && castName && castRule) {
-            let newCast = { id: castId, name: castName, rule: castRule }
+        if (castId && castName && castRole) {
+            let sameActorsArray = movieCasts.filter(cast => cast.castId == castId)
+            // means cast already exist with that role
+            let isUserAlreadyExist = sameActorsArray.length != 0 ? sameActorsArray.length > 1 ? sameActorsArray.some(cast => cast.role == castRole) : (sameActorsArray[0].role == castRole) : null
+
+            if (isUserAlreadyExist) {
+                return false;
+            }
+
+            let newCast = { id: Math.floor(Math.random() * 99999), castId: castId, fullName: castName, role: castRole }
             setMovieCasts(prev => [...prev, newCast])
             setValue('casts', [...movieCasts, newCast])
             setCastName('')
-            setCastRule('actor')
+            setCastRole('actor')
             setCastId('')
         }
     }
@@ -466,6 +478,38 @@ export default function AddMovie() {
         setValue('casts', movieCasts)
     }, [movieCasts])
 
+    // getting casts array
+    useEffect(() => {
+        if (castsArray.length == 0 && castName) {
+            const getAllActors = async () => {
+                try {
+                    const res = await fetch(apiData.getActorsApi, {
+                        headers: {
+                            'apikey': apiData.apikey,
+                            'Authorization': apiData.authorization
+                        }
+                    })
+
+                    const data = await res.json()
+
+                    if (data) {
+                        setCastsArray(data)
+                        setCastIsPending(false)
+                    }
+
+                    setError(false)
+                } catch (err) {
+                    console.log('fetch error')
+                    setCastError(err)
+                    setCastIsPending(false)
+                    setCastsArray([])
+                }
+            }
+
+            setCastIsPending(true)
+            getAllActors()
+        }
+    }, [castName])
 
     // for editing movie
     useEffect(() => {
@@ -497,7 +541,7 @@ export default function AddMovie() {
         }
         if (movieId) {
             setIsPending(true)
-            getActorInfo(movieId)
+            setMovieObj(movieId)
         }
     }, [])
 
@@ -543,6 +587,8 @@ export default function AddMovie() {
             setValue('year', movieObj.year)
         }
     }, [movieObj])
+
+
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
@@ -1141,29 +1187,42 @@ export default function AddMovie() {
 
                                     {/* to suggest casts by their name */}
                                     <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showCasts ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
-                                        {casts.filter(cast => cast.name.toLowerCase().startsWith(castName.toLowerCase())).length !== 0 ? casts.filter(cast => cast.name.toLowerCase().startsWith(castName.toLowerCase())).map(cast => (
-                                            <li
-                                                className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
-                                                onClick={e => {
-                                                    setShowCasts(false)
-                                                    setCastName(cast.name)
-                                                    setCastId(cast.id)
-                                                }}
-                                            >
-                                                <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                    <img src={cast.src} alt="" className="w-full h-full object-center object-cover" />
-                                                </div>
+                                        {castIsPending && (
+                                            <h2 className="md:col-start-1 md:col-end-3 text-center font-vazir text-red-500 text-sm md:text-base mt-2">در حال دریافت اطلاعات هنرپيشه ها ... </h2>
+                                        )}
 
-                                                <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{cast.name}</span>
-                                            </li>
-                                        )) :
-                                            <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">بازیگر/عوامل  "{castName}" وجود ندارد ابتدا آن را به لیست عوامل و بازیگران در تب آن اضافه کنید</div>
-                                        }
+                                        {castError && (
+                                            <h2 className="md:col-start-1 md:col-end-3 text-center font-vazir text-red-500 text-sm md:text-base mt-2">{castError?.message} </h2>
+                                        )}
+
+                                        {!castIsPending && (
+                                            <>
+                                                {castsArray.length != 0 &&
+                                                    castsArray?.filter(cast => cast.fullName.toLowerCase().startsWith(castName.toLowerCase())).length !== 0 ? castsArray?.filter(cast => cast.fullName.toLowerCase().startsWith(castName.toLowerCase())).map(cast => (
+                                                        <li
+                                                            className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
+                                                            onClick={e => {
+                                                                setShowCasts(false)
+                                                                setCastName(cast.fullName)
+                                                                setCastId(cast.id)
+                                                            }}
+                                                        >
+                                                            <div className="w-15 h-15 overflow-hidden rounded-md">
+                                                                <img src={cast.src} alt="" className="w-full h-full object-center object-cover" />
+                                                            </div>
+
+                                                            <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{cast.fullName}</span>
+                                                        </li>
+                                                    )) : (
+                                                    <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">بازیگر/عوامل  "{castName}" وجود ندارد ابتدا آن را به لیست عوامل و بازیگران در تب آن اضافه کنید</div>
+                                                )}
+                                            </>
+                                        )}
                                     </ul>
                                 </div>
 
                                 <div className="w-full relative select-none">
-                                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={castRule} onChange={e => setCastRule(e.target.value)} >
+                                    <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={castRole} onChange={e => setCastRole(e.target.value)} >
                                         <option value="actor">بازیگر</option>
                                         <option value="writer">نویسنده</option>
                                         <option value="director">کارگردان</option>
@@ -1186,8 +1245,8 @@ export default function AddMovie() {
                                             className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-between gap-4"
                                         >
                                             <div className="flex items-center justify-center gap-1">
-                                                <span className="text-sm font-vazir text-light-gray dark:text-white">{cast.name}</span>
-                                                <span className="text-xs font-vazir text-gray-400 dark:text-gray-500">{cast.rule}</span>
+                                                <span className="text-sm font-vazir text-light-gray dark:text-white">{cast.fullName}</span>
+                                                <span className="text-xs font-vazir text-gray-400 dark:text-gray-500">{cast.role}</span>
                                             </div>
                                             <button
                                                 className="p-1 bg-red-500 hover:bg-red-600 transition-colors rounded-sm cursor-pointer"
