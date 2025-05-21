@@ -28,6 +28,7 @@ let apiData = {
     getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies',
+    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
@@ -69,6 +70,9 @@ export default function AddMovie() {
     const [similarMovieId, setSimilarMovieId] = useState('')
     const [showSimilarMovies, setShowSimilarMovies] = useState(false)
     const [similarMovies, setSimilarMovies] = useState([])
+    const [moviesArray, setMoviesArray] = useState([])
+    const [movieIsPending, setmovieIsPending] = useState(false)
+    const [movieError, setMovieError] = useState(false)
 
     const [castId, setCastId] = useState()
     const [castName, setCastName] = useState('')
@@ -378,8 +382,8 @@ export default function AddMovie() {
     const addSimilarMovie = e => {
         e.preventDefault()
         if (similarMovieId) {
-            let movieObj = movies.find(movie => movie.id == similarMovieId)
-            let newSimilarMovieObj = { id: Math.floor(Math.random() * 999), movieId: similarMovieId, title: movieObj.title, src: movieObj.src }
+            let movieObj = moviesArray.find(movie => movie.id == similarMovieId)
+            let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: similarMovieId, title: movieObj.title, cover: movieObj.cover }
             setSimilarMovies(prev => [...prev, newSimilarMovieObj])
             setSimilarMovieId('')
         }
@@ -478,7 +482,7 @@ export default function AddMovie() {
         setValue('casts', movieCasts)
     }, [movieCasts])
 
-    // getting casts array
+    // getting casts array when user typing cast Name
     useEffect(() => {
         if (castsArray.length == 0 && castName) {
             const getAllActors = async () => {
@@ -511,9 +515,51 @@ export default function AddMovie() {
         }
     }, [castName])
 
+    // getting movies array when user typing movie Id
+    useEffect(() => {
+        if (!similarMovieId) {
+            setShowSimilarMovies(false)
+        }
+
+        if (moviesArray.length == 0 && similarMovieId) {
+            const getAllMovies = async () => {
+                try {
+                    const res = await fetch(apiData.getAllApi, {
+                        headers: {
+                            'apikey': apiData.apikey,
+                            'Authorization': apiData.authorization
+                        }
+                    })
+
+                    const data = await res.json()
+
+                    if (data) {
+                        // means we are in update a movie so we shouldn't have our movie in movies array
+                        let filteredMovies = [...data];
+                        if (movieId) {
+                            filteredMovies = data.filter(movie => movie.id != movieId)
+                        }
+                        setMoviesArray(filteredMovies)
+                        setmovieIsPending(false)
+                    }
+
+                    setError(false)
+                } catch (err) {
+                    console.log('fetch error')
+                    setCastError(err)
+                    setmovieIsPending(false)
+                    setMoviesArray([])
+                }
+            }
+
+            setmovieIsPending(true)
+            getAllMovies()
+        }
+    }, [similarMovieId])
+
     // for editing movie
     useEffect(() => {
-        const getActorInfo = async (movieId) => {
+        const getMovieInfo = async (movieId) => {
             try {
                 const res = await fetch(`${apiData.getApi}${movieId}`, {
                     headers: {
@@ -541,7 +587,7 @@ export default function AddMovie() {
         }
         if (movieId) {
             setIsPending(true)
-            setMovieObj(movieId)
+            getMovieInfo(movieId)
         }
     }, [])
 
@@ -594,7 +640,7 @@ export default function AddMovie() {
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <h2 className="w-full font-vazir text-gray-800 dark:text-white text-xl">افزودن فیلم جدید</h2>
+                    <h2 className="w-full font-vazir text-gray-800 dark:text-white text-xl">{movieId ? 'آپدیت فیلم' : 'افزودن فیلم جدید'}</h2>
                     {movieId && (
                         <span className="text-sm text-gray-300 dark:text-gray-500 hidden md:inline">#{movieId}</span>
                     )}
@@ -919,8 +965,8 @@ export default function AddMovie() {
                     <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
                         <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">کشور ها</h3>
                         <div className="w-full flex flex-col items-center gap-4">
-                            <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div className="w-full relative select-none">
+                            <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                     <input
                                         type="text"
                                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -965,8 +1011,8 @@ export default function AddMovie() {
                     <div className="md:col-start-1 md:col-end-3 flex flex-col gap-2 md:gap-5 bg-gray-100 dark:bg-primary rounded-lg py-2 px-3">
                         <h3 className="w-full font-vazir text-gray-800 dark:text-white text-base md:text-lg">زبان ها</h3>
                         <div className="w-full flex flex-col items-center gap-4">
-                            <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div className="w-full relative select-none">
+                            <div className="w-full py-5 px-4 border border-gray-200 dark:border-secondary rounded-md grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                     <input
                                         type="text"
                                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
@@ -1112,29 +1158,46 @@ export default function AddMovie() {
                                         type="text"
                                         className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                         value={similarMovieId}
-                                        onChange={e => setSimilarMovieId(e.target.value)}
+                                        onChange={e => {
+                                            setSimilarMovieId(e.target.value)
+                                            setShowSimilarMovies(true)
+
+                                        }}
                                     />
                                     <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">Id فيلم مورد نظر</span>
 
                                     {/* to suggest movies by their Id */}
                                     <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showSimilarMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
-                                        {movies.filter(movie => movie.id == similarMovieId).length !== 0 ? movies.filter(movie => movie.id == similarMovieId).map(movie => (
-                                            <li
-                                                className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
-                                                onClick={e => {
-                                                    setShowSimilarMovies(false)
-                                                    setSimilarMovieId(movie.id)
-                                                }}
-                                            >
-                                                <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                    <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
-                                                </div>
+                                        {movieIsPending && (
+                                            <h2 className="md:col-start-1 md:col-end-4 text-center font-vazir text-red-500 text-sm md:text-base mt-2">در حال دریافت اطلاعات فیلم ها ... </h2>
+                                        )}
 
-                                                <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
-                                            </li>
-                                        )) :
-                                            <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">فیلم "{similarMovieId}" وجود ندارد</div>
-                                        }
+                                        {movieError && (
+                                            <h2 className="md:col-start-1 md:col-end-4 text-center font-vazir text-red-500 text-sm md:text-base mt-2">{movieError?.message} </h2>
+                                        )}
+
+                                        {!movieIsPending && (
+                                            <>
+                                                {moviesArray.filter(movie => movie.id == similarMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == similarMovieId).map(movie => (
+                                                    <li
+                                                        className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
+                                                        onClick={e => {
+                                                            setShowSimilarMovies(false)
+                                                            setSimilarMovieId(movie.id)
+                                                        }}
+                                                    >
+                                                        <div className="w-15 h-15 overflow-hidden rounded-md">
+                                                            <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
+                                                        </div>
+
+                                                        <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
+                                                    </li>
+                                                )) :
+                                                    <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">فیلمی با ID برابر "{similarMovieId}" وجود ندارد</div>
+                                                }
+
+                                            </>
+                                        )}
                                     </ul>
                                 </div>
 
@@ -1152,7 +1215,7 @@ export default function AddMovie() {
                                             <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                        <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
+                                                        <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
                                                     </div>
                                                     <h3 className="text-light-gray dark:text-white font-shabnam">{movie.title}</h3>
                                                 </div>
