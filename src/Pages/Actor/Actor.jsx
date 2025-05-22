@@ -11,6 +11,7 @@ import { findArrayByIds } from '../../utils'
 dayjs.extend(jalali)
 
 let apiData = {
+    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
@@ -20,6 +21,9 @@ export default function Actors() {
     const [actorObj, setActorObj] = useState(null)
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(true)
+    const [actorMovies, setActorMovies] = useState(null)
+    const [actorMovieIsPending, setActorMovieIsPending] = useState(null)
+    const [actorMovieError, setActorMovieError] = useState(null)
 
     let { actorId } = useParams()
 
@@ -58,6 +62,42 @@ export default function Actors() {
         }
         getActorInfo(actorId)
     }, [])
+
+    useEffect(() => {
+        const getAllMovies = async () => {
+            try {
+                const res = await fetch(apiData.getAllApi, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    // find the exact obj of movies
+                    let actorMoviesArray = actorObj.movies?.map(actorMovie => {
+                        return data.find(movie => movie.id === actorMovie.movieId);
+                    })
+                    setActorMovies(actorMoviesArray)
+                    setActorMovieIsPending(false)
+                } else {
+                    window.location.href = '/'
+                }
+
+                setActorMovieError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setActorMovieError(err)
+                setActorMovieIsPending(false)
+                setActorMovies(null)
+            }
+        }
+        if (actorObj && actorMovies == null) {
+            getAllMovies(actorId)
+        }
+    }, [actorObj])
 
     return (
         <>
@@ -108,9 +148,25 @@ export default function Actors() {
                     <div className="container mx-auto py-5 space-y-9 px-5">
                         <h2 className="text-center lg:text-justify text-gray-700 dark:text-white text-2xl font-vazir">مجموعه آثار</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
-                            {/* {findArrayByIds(actorObj.movies, movies).map(movie => (
-                                <ActorMovieCard {...movie} />
-                            ))} */}
+                            {actorMovieIsPending && (
+                                <h2 className="text-center md:col-start-1 md:col-end-3 xl:col-end-4 font-vazir text-red-500 text-sm">در حال دریافت اطلاعات ... </h2>
+                            )}
+
+                            {actorMovieError && (
+                                <h2 className="text-center md:col-start-1 md:col-end-3 xl:col-end-4 font-vazir text-red-500 text-sm">{error.message} </h2>
+                            )}
+
+
+                            {!actorMovieIsPending && (
+                                <>
+                                    {actorMovies?.length != 0 ? actorMovies?.map(movie => (
+                                        <ActorMovieCard {...movie} />
+                                    )) : (
+                                        <h2 className="text-center md:col-start-1 md:col-end-3 xl:col-end-4 font-vazir text-red-500 text-sm">اثری برای {actorObj.fullName} ثبت نشده</h2>
+
+                                    )}
+                                </>
+                            )}
                         </div>
                     </div>
 

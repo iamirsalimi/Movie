@@ -126,11 +126,11 @@ export default function AddActor() {
 
     const updateActor = async data => {
         setIsAdding(true)
-        if (actorObj.fullName != data.fullName || actorObj.originalName != data.originalName || actorObj.birthDate != actorBirthDate || actorObj.nationality != data.nationality || actorObj.biography != data.biography || actorObj.src != data.src) {
+        // if (actorObj.fullName != data.fullName || actorObj.originalName != data.originalName || actorObj.birthDate != actorBirthDate || actorObj.nationality != data.nationality || actorObj.biography != data.biography || actorObj.src != data.src) {
             let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: actorBirthDate, nationality: data.nationality, biography: data.biography, src: data.src, movies: [...actorMovies] }
             console.log(newActorObj)
             await updateActorHandler(newActorObj)
-        }
+        // }
     }
 
     // add actor Movies
@@ -138,13 +138,13 @@ export default function AddActor() {
         e.preventDefault()
         if (actorMovieId) {
             let isMovieAlreadyExist = actorMovies.some(movie => movie.movieId == actorMovieId)
-            
-            if(isMovieAlreadyExist){
+
+            if (isMovieAlreadyExist) {
                 toast.error('این فیلم از قبل اضافه شده است')
                 setActorMovieId('')
                 return false;
             }
-            
+
             let movieObj = moviesArray.find(movie => movie.id == actorMovieId)
             let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: actorMovieId, cover: movieObj.cover, title: movieObj.title, role: userRole }
             setActorMovies(prev => [...prev, newSimilarMovieObj])
@@ -237,7 +237,7 @@ export default function AddActor() {
             setMovieIsPending(true)
             getAllMovies()
         }
-    } , [actorMovieId])
+    }, [actorMovieId])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -324,23 +324,36 @@ export default function AddActor() {
 
                                         {/* to suggest movies by their Id */}
                                         <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
-                                            {moviesArray.filter(movie => movie.id == actorMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == actorMovieId).map(movie => (
-                                                <li
-                                                    className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
-                                                    onClick={e => {
-                                                        setShowMovies(false)
-                                                        setActorMovieId(movie.id)
-                                                    }}
-                                                >
-                                                    <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                        <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
-                                                    </div>
+                                            {movieIsPending && (
+                                                <h2 className="md:col-start-1 md:col-end-4 text-center font-vazir text-red-500 text-sm md:text-base mt-2">در حال دریافت اطلاعات فیلم ها ... </h2>
+                                            )}
 
-                                                    <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
-                                                </li>
-                                            )) :
-                                                <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">فیلم "{actorMovieId}" وجود ندارد</div>
-                                            }
+                                            {movieError && (
+                                                <h2 className="md:col-start-1 md:col-end-4 text-center font-vazir text-red-500 text-sm md:text-base mt-2">{movieError?.message} </h2>
+                                            )}
+
+                                            {!movieIsPending && (
+                                                <>
+                                                    {moviesArray.filter(movie => movie.id == actorMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == actorMovieId).map(movie => (
+                                                        <li
+                                                            className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
+                                                            onClick={e => {
+                                                                setShowMovies(false)
+                                                                setActorMovieId(movie.id)
+                                                            }}
+                                                        >
+                                                            <div className="w-15 h-15 overflow-hidden rounded-md">
+                                                                <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
+                                                            </div>
+
+                                                            <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
+                                                        </li>
+                                                    )) :
+                                                        <div className="col-start-1 col-end-5 text-center font-vazir text-red-500">فیلم "{actorMovieId}" وجود ندارد</div>
+                                                    }
+
+                                                </>
+                                            )}
                                         </ul>
                                     </div>
 
@@ -404,7 +417,7 @@ export default function AddActor() {
                             className="md:col-start-1 md:col-end-3 py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg"
                             disabled={isAdding}
                         >
-                            {isAdding ? 'در حال افزودن هنرپیشه ...' : actorId ? 'آپدیت هنرپیشه' : 'ایجاد هنرپیشه'}
+                            {isAdding ? `در حال ${actorId ? 'آپدیت' : 'افزودن'} هنرپیشه ...` : actorId ? 'آپدیت هنرپیشه' : 'ایجاد هنرپیشه'}
 
                         </button>
                     </form>

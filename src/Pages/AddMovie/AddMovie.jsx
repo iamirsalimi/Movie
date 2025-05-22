@@ -595,7 +595,7 @@ export default function AddMovie() {
                 console.log('fetch error')
                 setError(err)
                 setIsPending(false)
-                setActorObj(null)
+                setMovieObj(null)
             }
         }
         if (movieId) {
