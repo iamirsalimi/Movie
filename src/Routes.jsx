@@ -34,6 +34,7 @@ import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import Movies from './Pages/Movies/Movies'
 import AllMovies from './Pages/AllMovies/AllMovies'
 import AddMovie from './Pages/AddMovie/AddMovie'
+import MovieDetails from './Pages/MovieDetails/MovieDetails'
 import Actors from './Pages/Actors/Actors'
 import AllActors from './Pages/AllActors/AllActors'
 import AddActor from './Pages/AddActor/AddActor'
@@ -106,6 +107,7 @@ let Routes = [
                         { index : true , element: <AllMovies /> },
                         { path: 'add-movie', element: <AddMovie /> },
                         { path: 'edit-movie/:movieId', element: <AddMovie /> },
+                        { path: 'movie-details/:movieId', element: <MovieDetails /> },
                     ]},
 
                     { path: 'actors', element: <Actors />  , children : [

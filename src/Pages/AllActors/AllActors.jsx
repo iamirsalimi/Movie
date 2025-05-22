@@ -189,7 +189,7 @@ export default function AllActors() {
         </div>
       </div>
 
-      <DeleteModal deleteHandler={DeleteActorHandler} showModal={showDeleteModal} setShowModal={setShowDeleteModal} name={actorObj.fullName} tableName="هنرپیشه" />
+      <DeleteModal deleteHandler={DeleteActorHandler} showModal={showDeleteModal} setShowModal={setShowDeleteModal} name={actorObj?.fullName} tableName="هنرپیشه" />
     </>
   )
 }

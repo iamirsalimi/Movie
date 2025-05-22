@@ -76,9 +76,14 @@ export default function AllMovies() {
                 const data = await res.json();
 
                 if (data) {
-                    setMovies(data)
-                    setFilteredMovies(data)
-                    console.log(data)
+                    let sortedMoviesArray = data.sort((a , b) =>{
+                        let aDate = new Date(a.created_at).getTime()
+                        let bDate = new Date(b.created_at).getTime()
+                        return aDate - bDate
+                    } )
+                    setMovies(sortedMoviesArray)
+                    setFilteredMovies(sortedMoviesArray)
+                    console.log(sortedMoviesArray)
                     setIsPending(false)
                     setError(false)
                 }

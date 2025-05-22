@@ -224,7 +224,7 @@ export default function AddMovie() {
     const updateMovie = async data => {
         let newMovieObj = { ...data }
 
-        if (data.title != movieObj.title || data.mainTitle != movieObj.mainTitle || data.cover != movieObj.cover || data.banner != movieObj.banner || data.imdb_score != movieObj.imdb_score || data.rotten_score != movieObj.rotten_score || data.metacritic_score != movieObj.metacritic_score || data.movieType != movieObj.movieType || data.broadcastStatus != movieObj.broadcastStatus || data.age != movieObj.age || data.company != movieObj.company || data.quality != movieObj.quality || data.duration != movieObj.duration || data.description != movieObj.description || subtitleCheckbox != movieObj.has_subtitle || dubbedCheckbox != movieObj.is_dubbed || isInHeaderSliderCheckbox != movieObj.is_in_header_slider || isInNewMoviesCheckbox != movieObj.is_in_new_movies || suggestedCheckbox != movieObj.is_suggested || data.year != movieObj.year || data.totalSeasons != movieObj.totalSeasons) {
+        // if (data.title != movieObj.title || data.mainTitle != movieObj.mainTitle || data.cover != movieObj.cover || data.banner != movieObj.banner || data.imdb_score != movieObj.imdb_score || data.rotten_score != movieObj.rotten_score || data.metacritic_score != movieObj.metacritic_score || data.movieType != movieObj.movieType || data.broadcastStatus != movieObj.broadcastStatus || data.age != movieObj.age || data.company != movieObj.company || data.quality != movieObj.quality || data.duration != movieObj.duration || data.description != movieObj.description || subtitleCheckbox != movieObj.has_subtitle || dubbedCheckbox != movieObj.is_dubbed || isInHeaderSliderCheckbox != movieObj.is_in_header_slider || isInNewMoviesCheckbox != movieObj.is_in_new_movies || suggestedCheckbox != movieObj.is_suggested || data.year != movieObj.year || data.totalSeasons != movieObj.totalSeasons) {
             setIsAdding(true)
             newMovieObj.created_at = movieObj.created_at
             newMovieObj.updated_at = new Date()
@@ -242,7 +242,7 @@ export default function AddMovie() {
 
             // console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
             await updateMovieHandler(newMovieObj)
-        }
+        // }
 
     }
 
@@ -417,12 +417,14 @@ export default function AddMovie() {
             let sameActorsArray = movieCasts.filter(cast => cast.castId == castId)
             // means cast already exist with that role
             let isUserAlreadyExist = sameActorsArray.length != 0 ? sameActorsArray.length > 1 ? sameActorsArray.some(cast => cast.role == castRole) : (sameActorsArray[0].role == castRole) : null
-
+            
             if (isUserAlreadyExist) {
                 return false;
             }
 
-            let newCast = { id: Math.floor(Math.random() * 99999), castId: castId, fullName: castName, role: castRole }
+            let actorObj = castsArray.find(cast => cast.id == castId)
+            let newCast = { id: Math.floor(Math.random() * 99999), castId: castId, fullName: castName, role: castRole , src : actorObj.src}
+            
             setMovieCasts(prev => [...prev, newCast])
             setValue('casts', [...movieCasts, newCast])
             setCastName('')
