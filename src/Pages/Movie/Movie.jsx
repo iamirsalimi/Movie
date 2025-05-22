@@ -40,8 +40,18 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { GrUpdate } from "react-icons/gr";
 import { RiMedalFill } from "react-icons/ri";
 
+let apiData = {
+    getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
+    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
+
 function Movie() {
-    const [mainMovie, setMainMovie] = useState(-1)
+    const [mainMovie, setMainMovie] = useState(null)
+    const [isPending, setIsPending] = useState(true)
+    const [error, setError] = useState(false)
     const [movieTab, setMovieTab] = useState("download")
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
     // const [showReply, setShowReply] = useState(false)
@@ -55,18 +65,41 @@ function Movie() {
     let navigate = useNavigate()
     hasRoute == false && navigate('/', { replace: true })
 
-
     useEffect(() => {
-        let mainMovieObj = movies.filter(movie => movie.type == movieType).find(movie => movie.id == movieId)
-        !mainMovieObj && navigate('/', { replace: true })
-        setMainMovie(mainMovieObj)
+        const getMovieInfo = async (movieId) => {
+            try {
+                const res = await fetch(`${apiData.getApi}${movieId}`, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                console.log(data)
+                if (data.length > 0) {
+                    setMainMovie(data[0])
+                    setIsPending(false)
+                } else {
+                    window.location.href = '/'
+                }
+
+                setError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setError(err)
+                setIsPending(false)
+                setMainMovie(null)
+            }
+        }
+        getMovieInfo(movieId)
     }, [])
 
     // console.log(mainMovie)    
     const calcRates = rating => {
-        if (rating) {
-            let rates = rating.rates
-            let likedRates = rates.filter(rate => rate.liked).length
+        if (rating.length > 0) {
+            let likedRates = rating.filter(rate => rate.liked).length
             let totalRate = Math.round(likedRates / rates.length * 100)
 
             return totalRate
@@ -107,7 +140,7 @@ function Movie() {
 
     return (
         <>
-            {mainMovie == -1 ? (
+            {mainMovie == null ? (
                 // loader until the object of mainPage found
                 <></>
             ) : (
@@ -115,14 +148,14 @@ function Movie() {
                     <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit">
                         <div className="relative p-4 pb-3 h-max">
                             <div className="absolute top-0 left-0 w-full h-full object-cover rounded-t-xl overflow-hidden">
-                                <img src={mainMovie?.src} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
+                                <img src={mainMovie?.banner} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
                                 <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-t lg:bg-gradient-to-l from-black from-25% lg:from-35% to-black/30"></span>
                             </div>
-                            
+
                             <div className="relative flex flex-col gap-4 h-fit">
                                 <div className="w-full flex flex-col lg:flex-row gap-5 h-max lg:h-[315px]">
                                     <div className="w-full lg:w-1/4 overflow-hidden rounded-lg h-[400px] lg:h-[315px]">
-                                        <img src={mainMovie?.src} alt="" className="w-full h-[400px] lg:h-full object-cover object-center" />
+                                        <img src={mainMovie?.cover} alt="" className="w-full h-[400px] lg:h-full object-cover object-center" />
                                     </div>
                                     <div className="w-full lg:w-3/4 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-4">
                                         <div className="w-full flex flex-col md:flex-row gap-5 items-center justify-between pl-2">
@@ -139,22 +172,22 @@ function Movie() {
                                         <div className="w-full flex items-center justify-center lg:justify-start gap-10">
                                             <div className="flex items-center justify-center gap-1">
                                                 <FaImdb className="text-2xl sm:text-3xl fill-yellow-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-yellow-500">{mainMovie.rating[0].rate}</span><span className="text-white">/10</span></span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-yellow-500">{mainMovie.imdb_score}</span><span className="text-white">/10</span></span>
                                             </div>
 
                                             <div className="flex items-center justify-center gap-1">
                                                 <SiRottentomatoes className="text-2xl sm:text-3xl fill-red-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{mainMovie.rating[1].rate}</span><span className="text-red-500">%</span></span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{mainMovie.rotten_score}</span><span className="text-red-500">%</span></span>
                                             </div>
 
                                             <div className="flex items-center justify-center gap-1">
                                                 <SiMetacritic className="text-2xl sm:text-3xl fill-blue-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{mainMovie.rating[2].rate}</span><span className="text-blue-500">%</span></span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{mainMovie.metacritic_score}</span><span className="text-blue-500">%</span></span>
                                             </div>
 
                                             <div className="hidden sm:flex items-center justify-center gap-1">
                                                 <BiLike className="text-2xl sm:text-3xl fill-green-500" />
-                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.rating[3])}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir hidden md:inline lg:hidden xl:inline">({mainMovie?.rating[3].rates.length} رای)</span> </span>
+                                                <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.site_scores)}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir hidden md:inline lg:hidden xl:inline">({mainMovie?.site_scores.length} رای)</span> </span>
                                             </div>
                                         </div>
 
@@ -164,7 +197,7 @@ function Movie() {
                                                     <FaTheaterMasks className="text-xl" />
                                                     <span>ژانر</span>
                                                 </span>
-                                                <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genre.map(genreItem => (
+                                                <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genres.map(genreItem => (
                                                     <span className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                 ))}</span>
                                             </li>
@@ -190,14 +223,14 @@ function Movie() {
 
                                         <div className="flex flex-col items-center lg:items-start justify-center gap-2">
                                             <div className="flex items-center gap-2">
-                                                {mainMovie.subtitle && (
+                                                {mainMovie.has_subtitle && (
                                                     <div className="w-fit h-fit flex items-center justify-center gap-1">
                                                         <BsFillCcSquareFill className="text-sm fill-sky-500" />
                                                         <span className="text-sm text-sky-500 font-vazir">زیرنویس فارسی</span>
                                                     </div>
                                                 )}
 
-                                                {mainMovie.dubed && (
+                                                {mainMovie.is_dubbed && (
                                                     <div className="w-fit h-fit flex items-center justify-center gap-1">
                                                         <FaMicrophoneAlt className="text-sm md:text-xl fill-red-500" />
                                                         <span className="text-sm text-red-500  font-vazir">دوبله فارسی</span>
@@ -205,16 +238,16 @@ function Movie() {
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                {mainMovie.notifs.episodes.length != 0 && (
+                                                {mainMovie.notifications.length != 0 && (
                                                     <div className="w-fit h-fit flex items-center justify-center gap-2 bg-black/70 px-2 py-1 rounded-lg">
                                                         <div className="p-1 rounded-full w-7 h-7 bg-red-500 flex items-center justify-center">
                                                             <GrUpdate className="text-md text-primary" />
                                                         </div>
-                                                        <span className="text-sm font-light text-gray-200 font-vazir">{mainMovie.notifs.episodes[mainMovie.notifs.episodes.length - 1]}</span>
+                                                        <span className="text-sm font-light text-gray-200 font-vazir">{mainMovie.notifications.episodes[mainMovie.notifications.length - 1]}</span>
                                                     </div>
                                                 )}
 
-                                                {mainMovie.notifs.suggested && (
+                                                {mainMovie.is_suggested && (
                                                     <div className="w-fit h-fit flex items-center justify-center gap-1 bg-yellow-500 px-2 py-1 rounded-lg">
                                                         <div className="p-1 rounded-full w-7 h-7 bg-primary flex items-center justify-center">
                                                             <RiMedalFill className="text-xl text-yellow-500" />
@@ -232,17 +265,17 @@ function Movie() {
                                             </button>
 
                                             <button className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-green-500 transition-all duration-200 rounded-sm cursor-pointer ">
-                                                <span className="text-white group-hover:text-green-500 transition-all duration-200 text-lg">{mainMovie.rating[3].rates.filter(rate => rate.liked).length}</span>
+                                                <span className="text-white group-hover:text-green-500 transition-all duration-200 text-lg">{mainMovie.site_scores.filter(rate => rate.liked).length}</span>
                                                 <AiFillLike className="text-white group-hover:text-green-500 transition-all duration-200 text-xl" />
                                             </button>
                                             <button className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-orange-500 transition-all duration-200 rounded-sm cursor-pointer ">
-                                                <span className="text-white group-hover:text-orange-500 transition-all duration-200 text-lg">{mainMovie.rating[3].rates.filter(rate => !rate.liked).length}</span>
+                                                <span className="text-white group-hover:text-orange-500 transition-all duration-200 text-lg">{mainMovie.site_scores.filter(rate => !rate.liked).length}</span>
                                                 <AiFillDislike className="text-white group-hover:text-orange-500 transition-all duration-200 text-xl" />
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <p className="font-shabnam-light text-gray-200 text-sm text-center lg:text-justify space-x-1">{mainMovie.desc}</p>
+                                <p className="font-shabnam-light text-gray-200 text-sm text-center lg:text-justify space-x-1">{mainMovie.description}</p>
                             </div>
                         </div>
 
@@ -252,14 +285,16 @@ function Movie() {
                             </MovieInfos>
 
                             {mainMovie.type == 'series' && (
-                                <MovieInfos infoTitle="وضعیت پخش" infoValue={mainMovie.status}>
+                                <MovieInfos infoTitle="وضعیت پخش" infoValue={mainMovie.broadcastStatus}>
                                     <FiEye className="text-gray-400 text-xs md:text-base" />
                                 </MovieInfos>
                             )}
 
-                            <MovieInfos infoTitle="شبکه" infoValue="Netflix">
-                                <BsTv className="text-gray-400 text-xs md:text-base" />
-                            </MovieInfos>
+                            {mainMovie.company && (
+                                <MovieInfos infoTitle="شبکه" infoValue={mainMovie.company}>
+                                    <BsTv className="text-gray-400 text-xs md:text-base" />
+                                </MovieInfos>
+                            )}
 
                             <MovieInfos infoTitle="سال های پخش" infoValue={mainMovie.year}>
                                 <MdOutlineDateRange className="text-gray-400 text-xs md:text-base" />
@@ -269,7 +304,7 @@ function Movie() {
                                 <IoLanguageSharp className="text-gray-400 text-xs md:text-base" />
                             </MovieInfos>
 
-                            <MovieInfos infoTitle="مدت زمان" infoValue={mainMovie.time}>
+                            <MovieInfos infoTitle="مدت زمان" infoValue={mainMovie.duration}>
                                 <RiTimer2Line className="text-gray-400 text-xs md:text-base" />
                             </MovieInfos>
 
@@ -316,7 +351,7 @@ function Movie() {
                             >
                                 <FaRegCommentDots className="text-base" />
                                 <span className="font-shabnam">دیدگاه ها</span>
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{calcLength(mainMovie?.comments)}</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">0</span>
                             </li>
                         </ul>
                         <div className="pt-5">
@@ -331,9 +366,9 @@ function Movie() {
                                 {movieTab == 'similar' && (
                                     <>
                                         {
-                                            mainMovie.similar.length > 0 ? (
-                                                <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-7">
-                                                    {findArrayByIds(mainMovie.similar, movies).map(movie => (
+                                            mainMovie.similarMovies.length > 0 ? (
+                                                <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-9">
+                                                    {mainMovie.similarMovies.map(movie => (
                                                         <NewMovieCard {...movie} showTitle />
                                                     ))}
                                                 </ul>
@@ -347,11 +382,21 @@ function Movie() {
                                 )}
 
                                 {movieTab == 'casts' && (
-                                    <div className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
-                                        {findArrayByIds(mainMovie?.casts, casts, true).map(actor => (
-                                            <ActorsCard {...actor} />
-                                        ))}
-                                    </div>
+                                    <>
+                                        {
+                                            mainMovie?.casts.length != 0 ? (
+                                                <div className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+                                                    {mainMovie?.casts.map(actor => (
+                                                        <ActorsCard {...actor} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                                    <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">هنرپیشه ای وجود ندارد</h2>
+                                                </div>
+                                            )
+                                        }
+                                    </>
                                 )}
 
                                 {movieTab == 'comments' && (
@@ -386,7 +431,6 @@ function Movie() {
                                                 </div>
                                             )}
                                         </div>
-
                                     </div>
                                 )}
 
