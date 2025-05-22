@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -9,8 +10,6 @@ import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
-
-import { casts, movies } from './../../moviesData'
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -71,7 +70,7 @@ export default function AddMovie() {
     const [showSimilarMovies, setShowSimilarMovies] = useState(false)
     const [similarMovies, setSimilarMovies] = useState([])
     const [moviesArray, setMoviesArray] = useState([])
-    const [movieIsPending, setmovieIsPending] = useState(false)
+    const [movieIsPending, setMovieIsPending] = useState(false)
     const [movieError, setMovieError] = useState(false)
 
     const [castId, setCastId] = useState()
@@ -225,23 +224,23 @@ export default function AddMovie() {
         let newMovieObj = { ...data }
 
         // if (data.title != movieObj.title || data.mainTitle != movieObj.mainTitle || data.cover != movieObj.cover || data.banner != movieObj.banner || data.imdb_score != movieObj.imdb_score || data.rotten_score != movieObj.rotten_score || data.metacritic_score != movieObj.metacritic_score || data.movieType != movieObj.movieType || data.broadcastStatus != movieObj.broadcastStatus || data.age != movieObj.age || data.company != movieObj.company || data.quality != movieObj.quality || data.duration != movieObj.duration || data.description != movieObj.description || subtitleCheckbox != movieObj.has_subtitle || dubbedCheckbox != movieObj.is_dubbed || isInHeaderSliderCheckbox != movieObj.is_in_header_slider || isInNewMoviesCheckbox != movieObj.is_in_new_movies || suggestedCheckbox != movieObj.is_suggested || data.year != movieObj.year || data.totalSeasons != movieObj.totalSeasons) {
-            setIsAdding(true)
-            newMovieObj.created_at = movieObj.created_at
-            newMovieObj.updated_at = new Date()
-            newMovieObj.has_subtitle = subtitleCheckbox
-            newMovieObj.is_dubbed = dubbedCheckbox
-            newMovieObj.is_in_header_slider = isInHeaderSliderCheckbox
-            newMovieObj.is_in_new_movies = isInNewMoviesCheckbox
-            newMovieObj.is_suggested = suggestedCheckbox
-            newMovieObj.site_scores = movieObj.site_scores
-            newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
+        setIsAdding(true)
+        newMovieObj.created_at = movieObj.created_at
+        newMovieObj.updated_at = new Date()
+        newMovieObj.has_subtitle = subtitleCheckbox
+        newMovieObj.is_dubbed = dubbedCheckbox
+        newMovieObj.is_in_header_slider = isInHeaderSliderCheckbox
+        newMovieObj.is_in_new_movies = isInNewMoviesCheckbox
+        newMovieObj.is_suggested = suggestedCheckbox
+        newMovieObj.site_scores = movieObj.site_scores
+        newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
 
-            // for (let key in newMovieObj) {
-            //     console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
-            // }
+        // for (let key in newMovieObj) {
+        //     console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
+        // }
 
-            // console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
-            await updateMovieHandler(newMovieObj)
+        // console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
+        await updateMovieHandler(newMovieObj)
         // }
 
     }
@@ -382,6 +381,14 @@ export default function AddMovie() {
     const addSimilarMovie = e => {
         e.preventDefault()
         if (similarMovieId) {
+            let isMovieAlreadyExist = similarMovies.some(movie => movie.movieId == similarMovieId)
+
+            if(isMovieAlreadyExist){
+                toast.error('این فیلم از قبل اضافه شده است')
+                setSimilarMovieId('')
+                return false;
+            }
+            
             let movieObj = moviesArray.find(movie => movie.id == similarMovieId)
             let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: similarMovieId, title: movieObj.title, cover: movieObj.cover }
             setSimilarMovies(prev => [...prev, newSimilarMovieObj])
@@ -417,14 +424,18 @@ export default function AddMovie() {
             let sameActorsArray = movieCasts.filter(cast => cast.castId == castId)
             // means cast already exist with that role
             let isUserAlreadyExist = sameActorsArray.length != 0 ? sameActorsArray.length > 1 ? sameActorsArray.some(cast => cast.role == castRole) : (sameActorsArray[0].role == castRole) : null
-            
+
             if (isUserAlreadyExist) {
+                toast.error('این هنرپیشه با این نقش از قبل اضافه شده است')
+                setCastName('')
+                setCastRole('actor')
+                setCastId('')
                 return false;
             }
 
             let actorObj = castsArray.find(cast => cast.id == castId)
-            let newCast = { id: Math.floor(Math.random() * 99999), castId: castId, fullName: castName, role: castRole , src : actorObj.src}
-            
+            let newCast = { id: Math.floor(Math.random() * 99999), castId: castId, fullName: castName, role: castRole, src: actorObj.src }
+
             setMovieCasts(prev => [...prev, newCast])
             setValue('casts', [...movieCasts, newCast])
             setCastName('')
@@ -542,19 +553,19 @@ export default function AddMovie() {
                             filteredMovies = data.filter(movie => movie.id != movieId)
                         }
                         setMoviesArray(filteredMovies)
-                        setmovieIsPending(false)
+                        setMovieIsPending(false)
                     }
 
                     setError(false)
                 } catch (err) {
                     console.log('fetch error')
                     setCastError(err)
-                    setmovieIsPending(false)
+                    setMovieIsPending(false)
                     setMoviesArray([])
                 }
             }
 
-            setmovieIsPending(true)
+            setMovieIsPending(true)
             getAllMovies()
         }
     }, [similarMovieId])

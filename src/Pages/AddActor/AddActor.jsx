@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -10,14 +11,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
-import { movies } from '../../moviesData'
-
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 
 let apiData = {
+    getMoviesApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
     postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts',
@@ -39,6 +39,11 @@ export default function AddActor() {
     const [actorObj, setActorObj] = useState(null)
     const [isPending, setIsPending] = useState(actorId ? true : false)
     const [error, setError] = useState(true)
+
+    // for adding movies to cast
+    const [moviesArray, setMoviesArray] = useState([])
+    const [movieIsPending, setMovieIsPending] = useState(false)
+    const [movieError, setMovieError] = useState(false)
 
 
     const schema = yup.object().shape({
@@ -132,8 +137,16 @@ export default function AddActor() {
     const addActorMovie = e => {
         e.preventDefault()
         if (actorMovieId) {
-            let movieObj = movies.find(movie => movie.id == actorMovieId)
-            let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: actorMovieId, src: movieObj.src, title: movieObj.title, role: userRole }
+            let isMovieAlreadyExist = actorMovies.some(movie => movie.movieId == actorMovieId)
+            
+            if(isMovieAlreadyExist){
+                toast.error('این فیلم از قبل اضافه شده است')
+                setActorMovieId('')
+                return false;
+            }
+            
+            let movieObj = moviesArray.find(movie => movie.id == actorMovieId)
+            let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: actorMovieId, cover: movieObj.cover, title: movieObj.title, role: userRole }
             setActorMovies(prev => [...prev, newSimilarMovieObj])
             setActorMovieId('')
         }
@@ -193,6 +206,38 @@ export default function AddActor() {
             setActorBirthDate(actorObj.birthDate)
         }
     }, [actorObj])
+
+    useEffect(() => {
+        if (moviesArray.length == 0 && actorMovieId) {
+            const getAllMovies = async () => {
+                try {
+                    const res = await fetch(apiData.getMoviesApi, {
+                        headers: {
+                            'apikey': apiData.apikey,
+                            'Authorization': apiData.authorization
+                        }
+                    })
+
+                    const data = await res.json()
+
+                    if (data) {
+                        setMoviesArray(data)
+                        setMovieIsPending(false)
+                    }
+
+                    setError(false)
+                } catch (err) {
+                    console.log('fetch error')
+                    setMovieError(err)
+                    setMovieIsPending(false)
+                    setMoviesArray([])
+                }
+            }
+
+            setMovieIsPending(true)
+            getAllMovies()
+        }
+    } , [actorMovieId])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -279,7 +324,7 @@ export default function AddActor() {
 
                                         {/* to suggest movies by their Id */}
                                         <ul className={`absolute top-15 z-30 max-h-36 overflow-y-auto ${showMovies ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
-                                            {movies.filter(movie => movie.id == actorMovieId).length !== 0 ? movies.filter(movie => movie.id == actorMovieId).map(movie => (
+                                            {moviesArray.filter(movie => movie.id == actorMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == actorMovieId).map(movie => (
                                                 <li
                                                     className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
                                                     onClick={e => {
@@ -288,7 +333,7 @@ export default function AddActor() {
                                                     }}
                                                 >
                                                     <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                        <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
+                                                        <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
                                                     </div>
 
                                                     <span className="text-sm font-vazir text-light-gray dark:text-white group-hover:text-white transition-colors">{movie.title}</span>
@@ -299,18 +344,8 @@ export default function AddActor() {
                                         </ul>
                                     </div>
 
-                                    <div className="w-full relative flex items-center justify-center gap-1">
-                                        <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={userRole} onChange={e => setUserRole(e.target.value)}>
-                                            <option value="actor">بازیگر</option>
-                                            <option value="director">کارگردان</option>
-                                            <option value="voiceActor">صداپیشه</option>
-                                            <option value="writer">نویسنده</option>
-                                        </select>
-                                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نقش هنرپیشه</span>
-                                    </div>
-
                                     <button
-                                        className="md:col-start-1 md:col-end-4 py-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
+                                        className="py-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors text-white font-vazir cursor-pointer"
                                         onClick={addActorMovie}
                                     >افزودن</button>
                                 </div>
@@ -323,7 +358,7 @@ export default function AddActor() {
                                                 <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-1 py-1 rounded-lg">
                                                     <div className="flex items-center gap-2">
                                                         <div className="w-15 h-15 overflow-hidden rounded-md">
-                                                            <img src={movie.src} alt="" className="w-full h-full object-center object-cover" />
+                                                            <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
                                                         </div>
                                                         <h3 className="text-light-gray dark:text-white font-shabnam">{movie.title}</h3>
                                                     </div>

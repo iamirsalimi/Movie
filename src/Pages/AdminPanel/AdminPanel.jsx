@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
+
 import { useLocation, Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 import { getCookie, getUserInfo, deleteCookie } from '../../utils';
 import ThemeContext from '../../Contexts/ThemeContext';
@@ -45,13 +47,13 @@ export default function AdminPanel() {
     const [userObj, setUserObj] = useState(null)
 
     let location = useLocation().pathname
-    
+
     let mainLocationObj = links.find(link => link.href.includes(location))
     if (!mainLocationObj) {
         // it means we are in one of subroutes , Route of Dashboard is in every other route's link so we don't need that 
         mainLocationObj = links.slice(1).find(link => location.includes(link.href))
     }
-    
+
     let dashboardLocation = location.split('/').length == 3 ? location + '/' : location
 
     let { theme, changeTheme } = useContext(ThemeContext)
@@ -204,6 +206,10 @@ export default function AdminPanel() {
                 </button>
             </div>
             <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} deleteCookie={deleteCookie} token={userObj?.userToken} />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </UserContext.Provider>
     )
 }
