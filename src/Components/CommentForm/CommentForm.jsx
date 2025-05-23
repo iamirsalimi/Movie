@@ -1,14 +1,31 @@
 import React, { useId, useState } from 'react'
 
-import { addCommentHandler } from './../../utils'; //arguments userId , userName, commentText, hasSpoil, replied, repliedTo
+// class for making new comment Object for reply or adding 
+class CommentObj {
+    constructor(movieId, userId, userName, userRole, parentId, replied_to, commentText, hasSpoil) {
+        this.movieId = +movieId
+        this.userId = +userId
+        this.user_name = userName
+        this.userRole = userRole
+        this.parentId = parentId
+        this.replied_to = replied_to
+        this.created_at = new Date()
+        this.text = commentText
+        this.has_spoiler = hasSpoil
+        this.status = 'pending'
+        this.likes = []
+        this.disLikes = []
+    }
+}
 
+export default function CommentForm({ showReply = false, movieId, userId, userName, userRole, parentId = null, repliedTo = null, setReplyId, setShowAddCommentForm, addCommentHandler, isAdding, setIsAdding }) {
+    const [hasSpoil, setHasSpoil] = useState(false)
+    const [commentText, setCommentText] = useState('')
 
-export default function CommentForm({ showReply = false , userId , userName, repliedTo = '' , setReplyId, setShowAddCommentForm }) {
-    const [hasSpoil , setHasSpoil] = useState(false) 
-    const [commentText , setCommentText] = useState('') 
-    
     let toggleId = useId()
-    
+
+    // console.log(movieId , userId , userName, userRole, parentId , repliedTo)
+
     // when we close the ComponentForm we should reset inputs value too
     const closeReplyForm = () => {
         setShowAddCommentForm(true)
@@ -19,9 +36,13 @@ export default function CommentForm({ showReply = false , userId , userName, rep
 
     // will make an Object for Comments
     const addComment = () => {
-        let comment = addCommentHandler(userId , userName , "user" , commentText , hasSpoil , showReply , repliedTo )
-        console.log(comment)
-        closeReplyForm()
+        if (commentText.trim()) {
+            setIsAdding(true)
+            let comment = new CommentObj(movieId, userId, userName, userRole, parentId, repliedTo, commentText.trim(), hasSpoil)
+            console.log(comment)
+            addCommentHandler(comment)
+            closeReplyForm()
+        }
     }
 
     return (
@@ -32,7 +53,7 @@ export default function CommentForm({ showReply = false , userId , userName, rep
                     <span className="text-gray-400 dark:text-gray-600 text-xs font-vazir">در پاسخ به @{repliedTo}</span>
                 )}
             </label>
-            <textarea id={toggleId} value={commentText} onChange={e => setCommentText(e.target.value.trim())} className="h-32 font-vazir-light rounded-lg border border-gray-300 text-gray-700 dark:border-primary dark:bg-primary dark:text-white resize-none px-2 py-1 outline-none focus:border-2 transition-all focus:border-sky-500" placeholder="دیدگاه شما ..." maxLength={500}></textarea>
+            <textarea id={toggleId} value={commentText} onChange={e => setCommentText(e.target.value)} className="h-32 font-vazir-light rounded-lg border border-gray-300 text-gray-700 dark:border-primary dark:bg-primary dark:text-white resize-none px-2 py-1 outline-none focus:border-2 transition-all focus:border-sky-500" placeholder="دیدگاه شما ..." maxLength={500}></textarea>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start gap-3 sm:gap-5">
                 <div className="filter-lang flex items-center">
                     <input type="checkbox" className="hidden" id="dubed" checked={hasSpoil} onChange={e => setHasSpoil(e.target.checked)} />
@@ -45,9 +66,13 @@ export default function CommentForm({ showReply = false , userId , userName, rep
                 </div>
                 <div className="flex items-center justify-center gap-2">
                     <button
-                        className="px-5 py-1 w-fit rounded-full cursor-pointer bg-yellow-500 hover:bg-yellow-600 transition-colors text-white font-vazir"
-                        onClick={addComment}    
-                    >ارسال</button>
+
+                        className="px-5 py-1 w-fit rounded-full cursor-pointer bg-yellow-500 hover:bg-yellow-600 disabled:bg-yellow-300 transition-colors text-white font-vazir"
+                        onClick={addComment}
+                        disabled={isAdding}
+                    >
+                        {isAdding ? 'در حال ارسال کامنت ...' : 'ارسال'}
+                    </button>
                     {showReply && (
                         <button
                             className="px-5 py-1 w-fit rounded-full cursor-pointer border border-light-gray text-light-gray transition-colors hover:bg-gray-100 dark:border-gray-400 dark:text-gray-400 dark:hover:border-white dark:hover:text-white dark:hover:bg-secondary font-vazir text-sm"

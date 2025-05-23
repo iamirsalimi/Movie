@@ -6,6 +6,7 @@ import Menu from '../Components/Menu/Menu'
 import SearchModal from '../Components/SearchModal/SearchModal'
 import Footer from '../Components/Footer/Footer'
 import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton.'
+import UserContext from '../Contexts/UserContext'
 
 import { getCookie, getUserInfo } from '../utils'
 
@@ -42,21 +43,23 @@ export default function MainLayout() {
 
 
     return (
-        <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
-            <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} />
+        <UserContext.Provider value={userObj}>
+            <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
+                <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} />
 
-            <main className="w-full h-full" >
-                <Outlet />
-            </main>
+                <main className="w-full h-full" >
+                    <Outlet />
+                </main>
 
-            <Footer />
+                <Footer />
 
-            {/* Modals */}
-            <Menu showMenu={showMenu} setShowMenu={setShowMenu} />
-            <SearchModal showModal={showSearchModal} setShowModal={setShowSearchModal} />
+                {/* Modals */}
+                <Menu showMenu={showMenu} setShowMenu={setShowMenu} />
+                <SearchModal showModal={showSearchModal} setShowModal={setShowSearchModal} />
 
-            {/* scroll to top btn */}
-            <ScrollToTopButton />
-        </div>
+                {/* scroll to top btn */}
+                <ScrollToTopButton />
+            </div>
+        </UserContext.Provider>
     )
 }

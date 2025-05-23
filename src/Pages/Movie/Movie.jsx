@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import { useParams, useNavigate } from 'react-router-dom'
 
@@ -8,6 +8,7 @@ import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
+import UserContext from '../../Contexts/UserContext'
 
 import { findArrayByIds } from './../../utils'
 import { movies, casts } from '../../moviesData'
@@ -41,6 +42,9 @@ import { GrUpdate } from "react-icons/gr";
 import { RiMedalFill } from "react-icons/ri";
 
 let apiData = {
+    updateCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.",
+    postCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments",
+    getCommentsApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*",
     getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
     getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
@@ -56,6 +60,14 @@ function Movie() {
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
     // const [showReply, setShowReply] = useState(false)
     const [replyId, setReplyId] = useState(null)
+    const [comments, setComments] = useState([])
+    const [commentsIsPending, setCommentsIsPending] = useState(false)
+    const [commentsError, setCommentsError] = useState(null)
+    const [getComments, setGetComments] = useState(false)
+    const [isAdding, setIsAdding] = useState(false)
+
+    const userObj = useContext(UserContext)
+    // console.log('User ->', userObj)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
     let { movieType, movieId = -1 } = useParams()
@@ -137,6 +149,116 @@ function Movie() {
     // useEffect(() => {
     //     console.log(mainMovie)
     // }, [mainMovie])
+
+    const addCommentHandler = async newComment => {
+        await fetch(apiData.postCommentApi, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newComment)
+        }).then(res => {
+            if (res.ok) {
+                setIsAdding(false)
+                setGetComments(prev => !prev)
+            }
+        })
+            .catch(err => {
+                setIsAdding(false)
+                console.log('مشکلی در افزودن فیلم پیش آمده')
+            })
+    }
+
+    const getCommentsInfo = async () => {
+        try {
+            const res = await fetch(apiData.getCommentsApi, {
+                headers: {
+                    'apikey': apiData.apikey,
+                    'Authorization': apiData.authorization
+                }
+            })
+
+            const data = await res.json()
+
+            if (data.length > 0) {
+                const sortedComments = data.sort((a , b) => {
+                    let aDate = new Date(a.created_at).getTime()
+                    let bDate = new Date(b.created_at).getTime()
+
+                    return aDate - bDate
+                })
+                setComments(sortedComments)
+                setIsAdding(false)
+            }
+
+            setCommentsIsPending(false)
+            setCommentsError(false)
+        } catch (err) {
+            console.log('fetch error')
+            setCommentsError(err)
+            setCommentsIsPending(false)
+            setComments(null)
+        }
+    }
+
+    const updateCommentHandler = async (commentId, commentObj) => {
+        await fetch(`${apiData.updateCommentApi}${commentId}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(commentObj)
+        }).then(res => {
+            if (res.ok) {
+                setCommentsIsPending(false)
+                console.log('comment Updated')
+            }
+        })
+        .catch(err => {
+                setCommentsIsPending(false)
+                setIsAdding(false)
+                console.log('مشکلی در افزودن فیلم پیش آمده')
+            })
+    }
+
+    const updateCommentsLikesHandler = (commentId, likesKey , likes , updateOtherLikeKey , otherLikes) => {
+        let mainComment = comments.find(comment => comment.id == commentId)
+
+        mainComment[likesKey] = [...likes]
+        if(updateOtherLikeKey){
+            if(likesKey == 'likes'){
+                mainComment.disLikes = [...otherLikes]
+            } else {
+                mainComment.likes = [...otherLikes]
+            }
+        }
+
+        // console.log(mainComment.likes , mainComment.disLikes)
+        setCommentsIsPending(true)
+        updateCommentHandler(commentId , mainComment)
+
+    }
+
+    useEffect(() => {
+        // when we've already fetched datas and our comments we set errors false so that we can understand we have fetched that once  
+        if (mainMovie && comments?.length == 0 && commentsError != false) {
+            console.log('get Comments 0')
+            setCommentsIsPending(true)
+            getCommentsInfo()
+        }
+    }, [mainMovie])
+
+    useEffect(() => {
+        if (movieTab == 'comments' && comments?.length > 0) {
+            console.log('get Comments')
+            setCommentsIsPending(true)
+            getCommentsInfo()
+        }
+    }, [getComments])
 
     return (
         <>
@@ -351,7 +473,7 @@ function Movie() {
                             >
                                 <FaRegCommentDots className="text-base" />
                                 <span className="font-shabnam">دیدگاه ها</span>
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">0</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{comments.length}</span>
                             </li>
                         </ul>
                         <div className="pt-5">
@@ -400,38 +522,51 @@ function Movie() {
                                 )}
 
                                 {movieTab == 'comments' && (
-                                    <div className="py-2 px-1 sm:px-5 flex flex-col items-center justify-center gap-7">
-                                        <div className="flex flex-col gap-4">
-                                            <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
-                                                <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
-                                                <ul className="flex flex-col gap-1 text-sm md:text-base">
-                                                    <li className="text-red-500 font-vazir">ادب را رعایت کنید</li>
-                                                    <li className="text-red-500 font-vazir">پرهیز از دیدگاه های بی ربط</li>
-                                                    <li className="text-red-500 font-vazir">در صورتي كه دیدگاه شما داراي اسپویل می باشد ، حتما مطمین شوید که مقدار "دیدگاه دارای اسپویل است" را فعال می کنید</li>
-                                                    <li className="text-red-500 font-vazir">دیدگاه شما ابتدا توسط ادمین تایید سپس نمایش داده می شود ، در نتیجه مطمین شوید قوانین را رعایت می کنید</li>
-                                                </ul>
-                                            </div>
-                                            {/* leaving Comment */}
-                                            {showAddCommentForm && (
-                                                <CommentForm userId={5} userName="Sarah" setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
-                                            )}
-                                        </div>
+                                    <>
+                                        {commentsIsPending && (
+                                            <h2 className="text-center font-vazir text-red-500 text-sm">در حال دریافت کامنت ها ... </h2>
+                                        )}
 
-                                        {/* Movie's Comments */}
-                                        <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
-                                            {mainMovie.comments.length ? (
-                                                <div className="flex flex-col items-center justify-center gap-7">
-                                                    {mainMovie.comments.map(comment => (
-                                                        <Comment replyId={replyId} key={comment.id} {...comment} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} />
-                                                    ))}
+                                        {commentsError && (
+                                            <h2 className="text-center font-vazir text-red-500 text-sm">{commentsError.message} </h2>
+                                        )}
+
+                                        {(!commentsIsPending) && (
+                                            <div className="py-2 px-1 sm:px-5 flex flex-col items-center justify-center gap-7">
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
+                                                        <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
+                                                        <ul className="flex flex-col gap-1 text-sm md:text-base">
+                                                            <li className="text-red-500 font-vazir">ادب را رعایت کنید</li>
+                                                            <li className="text-red-500 font-vazir">پرهیز از دیدگاه های بی ربط</li>
+                                                            <li className="text-red-500 font-vazir">در صورتي كه دیدگاه شما داراي اسپویل می باشد ، حتما مطمین شوید که مقدار "دیدگاه دارای اسپویل است" را فعال می کنید</li>
+                                                            <li className="text-red-500 font-vazir">دیدگاه شما ابتدا توسط ادمین تایید سپس نمایش داده می شود ، در نتیجه مطمین شوید قوانین را رعایت می کنید</li>
+                                                        </ul>
+                                                    </div>
+                                                    {/* leaving Comment */}
+                                                    {showAddCommentForm && (
+                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                                                    )}
                                                 </div>
-                                            ) : (
-                                                <div className="bg-red-100 dark:bg-primary text-center py-4 w-full rounded-md">
-                                                    <h2 className="text-red-500 font-semibold font-vazir text-sm">هیچ ديدگاهي ثبت نشده :(</h2>
+
+                                                {/* Movie's Comments */}
+                                                <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
+                                                    {comments?.length ? (
+                                                        <div className="flex flex-col items-center justify-center gap-7">
+                                                            {comments?.filter(comment => !comment.parentId).map(comment => (
+                                                                <Comment comments={comments} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} />
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="bg-red-100 dark:bg-primary text-center py-4 w-full rounded-md">
+                                                            <h2 className="text-red-500 font-semibold font-vazir text-sm">هیچ ديدگاهي ثبت نشده :(</h2>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
+                                            </div>
+                                        )}
+
+                                    </>
                                 )}
 
                             </div>
