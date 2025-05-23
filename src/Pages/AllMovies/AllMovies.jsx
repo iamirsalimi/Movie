@@ -241,7 +241,7 @@ export default function AllMovies() {
                         )}
 
                         {error && (
-                            <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در دریافت اطلاعات از سرور مشکل بر خوردیم لطفا صقحه را رفرش کنید</h2>
+                            <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در دریافت اطلاعات از سرور مشکل بر خوردیم لطفا صفحه را رفرش کنید</h2>
                         )}
 
                     </div>

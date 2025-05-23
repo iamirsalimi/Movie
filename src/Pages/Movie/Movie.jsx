@@ -545,7 +545,7 @@ function Movie() {
                                                     </div>
                                                     {/* leaving Comment */}
                                                     {showAddCommentForm && (
-                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} movieType={mainMovie?.movieType} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
                                                     )}
                                                 </div>
 
@@ -554,7 +554,7 @@ function Movie() {
                                                     {comments?.length ? (
                                                         <div className="flex flex-col items-center justify-center gap-7">
                                                             {comments?.filter(comment => !comment.parentId).map(comment => (
-                                                                <Comment comments={comments} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} />
+                                                                <Comment comments={comments} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} />
                                                             ))}
                                                         </div>
                                                     ) : (
