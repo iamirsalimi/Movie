@@ -473,7 +473,7 @@ function Movie() {
                             >
                                 <FaRegCommentDots className="text-base" />
                                 <span className="font-shabnam">دیدگاه ها</span>
-                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{comments.length}</span>
+                                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{comments.filter(comment => comment.status == 'approved').length}</span>
                             </li>
                         </ul>
                         <div className="pt-5">
@@ -553,7 +553,7 @@ function Movie() {
                                                 <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
                                                     {comments?.length ? (
                                                         <div className="flex flex-col items-center justify-center gap-7">
-                                                            {comments?.filter(comment => !comment.parentId).map(comment => (
+                                                            {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
                                                                 <Comment comments={comments} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} />
                                                             ))}
                                                         </div>

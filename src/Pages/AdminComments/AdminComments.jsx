@@ -245,17 +245,19 @@ export default function AdminComments() {
                         </li>
                         <div className="w-full mt-5 grid grid-cols-1 md:grid-cols-2 gap-2">
                             <button
-                                className="w-full bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg"
+                                className={`${commentObj.status !== 'approved' ? 'md:col-start-1 md:col-end-3' : ''} w-full bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg`}
                                 onClick={updateComment}
                                 disabled={commentsIsPending}
                             >
                                 {commentsIsPending ? 'در حال آپدیت کامنت' : 'آپدیت'}
 
                             </button>
-                            <a
-                                href={`/${commentObj.movieType}/${commentObj.movieId}#${commentObj.id}`}
-                                className="inline-block w-full text-center bg-green-500 hover:bg-green-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg"
-                            >مشاهده کامنت</a>
+                            {commentObj.status == 'approved' && (
+                                <a
+                                    href={`/${commentObj.movieType}/${commentObj.movieId}#${commentObj.id}`}
+                                    className="inline-block w-full text-center bg-green-500 hover:bg-green-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg"
+                                >مشاهده کامنت</a>
+                            )}
                         </div>
                     </ul>
                 )}
@@ -324,7 +326,9 @@ export default function AdminComments() {
                                                     )}
                                                 </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</td>
+                                                <td className="py-1 pb-3 px-2 text-sm text-center max-w-20">
+                                                    <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
+                                                </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
                                                     <button
                                                         className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
