@@ -10,9 +10,6 @@ import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
 import UserContext from '../../Contexts/UserContext'
 
-import { findArrayByIds } from './../../utils'
-import { movies, casts } from '../../moviesData'
-
 // icons
 import { FaTheaterMasks } from "react-icons/fa";
 import { MdOutlineDateRange } from "react-icons/md";
@@ -567,7 +564,7 @@ function Movie() {
                                                     </div>
                                                     {/* leaving Comment */}
                                                     {showAddCommentForm && (
-                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} movieType={mainMovie?.movieType} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} movieType={mainMovie?.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
                                                     )}
                                                 </div>
 
@@ -576,7 +573,7 @@ function Movie() {
                                                     {comments?.length ? (
                                                         <div className="flex flex-col items-center justify-center gap-7">
                                                             {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
-                                                                <Comment comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
+                                                                <Comment comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                             ))}
                                                         </div>
                                                     ) : (

@@ -13,7 +13,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 
-const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId,movieType , userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler , addCommentHandler , comments } , ref) => {
+const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, movieType , movieTitle ,movieSrc , userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler , addCommentHandler , comments } , ref) => {
     // the comments that they have spoil we shouldn't show them at first and give people choice to choose they wanna see comment or not regarded to spoil 
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
     // finding comments replied to this comments
@@ -165,13 +165,13 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId,mo
             </div>
 
             {replyId === id && (
-                <CommentForm userId={mainUserId} userName={mainUserName} userRole={mainUserRole} movieId={movieId} movieType={movieType} parentId={id} repliedTo={user_name} showReply={true} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                <CommentForm userId={mainUserId} userName={mainUserName} userRole={mainUserRole} movieId={movieId} movieTitle={movieTitle} movieSrc={movieSrc} movieType={movieType} parentId={id} repliedTo={user_name} showReply={true} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
             )}
 
             <div className="w-full flex flex-col gap-5">
                 {replies?.length > 0 && replies?.map(reply => (
                     <div key={reply.id} className="w-full pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
-                        <Comment isReplied {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding}  mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType}  addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
+                        <Comment isReplied {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding}  mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType} movieTitle={movieTitle} movieSrc={movieSrc} addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
                     </div>
                 ))
                 }

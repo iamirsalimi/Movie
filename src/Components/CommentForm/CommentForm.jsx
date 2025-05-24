@@ -2,9 +2,11 @@ import React, { useId, useState } from 'react'
 
 // class for making new comment Object for reply or adding 
 class CommentObj {
-    constructor(movieId , movieType, userId, userName, userRole, parentId, replied_to, commentText, hasSpoil) {
+    constructor(movieId , movieType,movieTitle,movieSrc, userId, userName, userRole, parentId, replied_to, commentText, hasSpoil) {
         this.movieId = +movieId
         this.movieType = movieType
+        this.movieTitle = movieTitle
+        this.movieSrc = movieSrc
         this.userId = +userId
         this.user_name = userName
         this.userRole = userRole
@@ -19,7 +21,7 @@ class CommentObj {
     }
 }
 
-export default function CommentForm({ showReply = false, movieId,movieType, userId, userName, userRole, parentId = null, repliedTo = null, setReplyId, setShowAddCommentForm, addCommentHandler, isAdding, setIsAdding }) {
+export default function CommentForm({ showReply = false, movieId,movieType, movieTitle,movieSrc, userId, userName, userRole, parentId = null, repliedTo = null, setReplyId, setShowAddCommentForm, addCommentHandler, isAdding, setIsAdding }) {
     const [hasSpoil, setHasSpoil] = useState(false)
     const [commentText, setCommentText] = useState('')
 
@@ -39,7 +41,7 @@ export default function CommentForm({ showReply = false, movieId,movieType, user
     const addComment = () => {
         if (commentText.trim()) {
             setIsAdding(true)
-            let comment = new CommentObj(movieId,movieType, userId, userName, userRole, parentId, repliedTo, commentText.trim(), hasSpoil)
+            let comment = new CommentObj(movieId,movieType,movieTitle,movieSrc, userId, userName, userRole, parentId, repliedTo, commentText.trim(), hasSpoil)
             console.log(comment)
             addCommentHandler(comment)
             closeReplyForm()

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { useLocation } from 'react-router-dom'
+
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import toast from 'react-hot-toast'
@@ -32,8 +34,6 @@ const filterSearchObj = {
 
 export default function AdminComments() {
     const [showCommentDetails, setShowCommentDetails] = useState(false)
-    const [searchValue, setSearchValue] = useState('')
-    const [searchType, setSearchType] = useState('ID')
     const [commentObj, setCommentObj] = useState(null)
     const [comments, setComments] = useState([])
     const [filteredComments, setFilteredComments] = useState([])
@@ -45,7 +45,14 @@ export default function AdminComments() {
     const [commentHasSpoil, setCommentHasSpoil] = useState(true)
     const [commentStatus, setCommentStatus] = useState('pending')
     const commentDetailsRef = useRef(null)
+    
+    let location = useLocation().search?.slice(1).split('=')
+    
+    // console.log(location[0])
 
+    const [searchType, setSearchType] = useState('ID')
+    const [searchValue, setSearchValue] = useState(location[1] || '')
+    
     const updateCommentHandler = async (id, newCommentObj) => {
         await fetch(`${apiData.updateCommentApi}${id}`, {
             method: "PATCH",
@@ -146,9 +153,8 @@ export default function AdminComments() {
     useEffect(() => {
         let filterObj = filterSearchObj[searchType]
         let filteredCommentsArray = []
-
         // when we search something or we change the searchType we should filter the comments Array again  
-        if (filterObj) {
+        if (filterObj && comments.length > 0) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
                 filteredCommentsArray = comments.filter(user => user[filterObj.property] == filterObj.value)
@@ -166,7 +172,7 @@ export default function AdminComments() {
         }
 
         setFilteredComments(filteredCommentsArray)
-    }, [searchValue, searchType])
+    }, [searchValue, searchType , comments])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-12">
@@ -276,7 +282,7 @@ export default function AdminComments() {
                             </select>
                             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
                         </div>
-                        {searchType == 'approved' && searchType == 'pending' && searchType == 'rejected' && searchType == 'hasSpoil' && searchType == 'has_not_spoil' && (
+                        {searchType !== 'approved' && searchType !== 'pending' && searchType !== 'rejected' && searchType !== 'hasSpoil' && searchType !== 'has_not_spoil' && (
                             <div className="w-full relative select-none">
                                 <input
                                     type="text"
