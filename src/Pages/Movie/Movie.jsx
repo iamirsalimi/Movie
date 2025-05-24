@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
 import MovieInfos from '../../Components/MovieInfos/MovieInfos'
@@ -56,7 +56,6 @@ function Movie() {
     const [mainMovie, setMainMovie] = useState(null)
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(false)
-    const [movieTab, setMovieTab] = useState("download")
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
     // const [showReply, setShowReply] = useState(false)
     const [replyId, setReplyId] = useState(null)
@@ -65,6 +64,11 @@ function Movie() {
     const [commentsError, setCommentsError] = useState(null)
     const [getComments, setGetComments] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
+
+    const location = useLocation();
+
+    const [movieTab, setMovieTab] = useState(location.hash ? "comments" : "download")
+    const commentRefs = useRef({})
 
     const userObj = useContext(UserContext)
     // console.log('User ->', userObj)
@@ -183,7 +187,7 @@ function Movie() {
             const data = await res.json()
 
             if (data.length > 0) {
-                const sortedComments = data.sort((a , b) => {
+                const sortedComments = data.sort((a, b) => {
                     let aDate = new Date(a.created_at).getTime()
                     let bDate = new Date(b.created_at).getTime()
 
@@ -218,19 +222,19 @@ function Movie() {
                 console.log('comment Updated')
             }
         })
-        .catch(err => {
+            .catch(err => {
                 setCommentsIsPending(false)
                 setIsAdding(false)
                 console.log('مشکلی در افزودن فیلم پیش آمده')
             })
     }
 
-    const updateCommentsLikesHandler = (commentId, likesKey , likes , updateOtherLikeKey , otherLikes) => {
+    const updateCommentsLikesHandler = (commentId, likesKey, likes, updateOtherLikeKey, otherLikes) => {
         let mainComment = comments.find(comment => comment.id == commentId)
 
         mainComment[likesKey] = [...likes]
-        if(updateOtherLikeKey){
-            if(likesKey == 'likes'){
+        if (updateOtherLikeKey) {
+            if (likesKey == 'likes') {
                 mainComment.disLikes = [...otherLikes]
             } else {
                 mainComment.likes = [...otherLikes]
@@ -239,14 +243,14 @@ function Movie() {
 
         // console.log(mainComment.likes , mainComment.disLikes)
         setCommentsIsPending(true)
-        updateCommentHandler(commentId , mainComment)
+        updateCommentHandler(commentId, mainComment)
 
     }
 
     useEffect(() => {
         // when we've already fetched datas and our comments we set errors false so that we can understand we have fetched that once  
         if (mainMovie && comments?.length == 0 && commentsError != false) {
-            console.log('get Comments 0')
+            // console.log('get Comments 0')
             setCommentsIsPending(true)
             getCommentsInfo()
         }
@@ -259,6 +263,24 @@ function Movie() {
             getCommentsInfo()
         }
     }, [getComments])
+
+
+    useEffect(() => {
+        const hash = location.hash;
+        const commentId = hash?.replace('#comment-', '');
+
+        if (comments.length > 0 && commentId && commentRefs.current[commentId]) {
+            commentRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            commentRefs.current[commentId].classList.add('!bg-sky-100')
+            commentRefs.current[commentId].classList.add('dark:!bg-sky-900')
+            commentRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white')
+            setTimeout(() => {
+                commentRefs.current[commentId].classList.remove('!bg-sky-100')
+                commentRefs.current[commentId].classList.remove('dark:!bg-sky-900')
+                commentRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
+            }, 3000)
+        }
+    }, [comments]);
 
     return (
         <>
@@ -554,7 +576,7 @@ function Movie() {
                                                     {comments?.length ? (
                                                         <div className="flex flex-col items-center justify-center gap-7">
                                                             {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
-                                                                <Comment comments={comments} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} />
+                                                                <Comment comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                             ))}
                                                         </div>
                                                     ) : (

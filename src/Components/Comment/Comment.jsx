@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect , forwardRef, useRef } from 'react'
+
+import { useLocation } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -11,7 +13,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 
-export default function Comment({ mainUserId, mainUserName, mainUserRole, movieId,movieType , userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler , addCommentHandler , comments }) {
+const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId,movieType , userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler , addCommentHandler , comments } , ref) => {
     // the comments that they have spoil we shouldn't show them at first and give people choice to choose they wanna see comment or not regarded to spoil 
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
     // finding comments replied to this comments
@@ -19,6 +21,8 @@ export default function Comment({ mainUserId, mainUserName, mainUserRole, movieI
         let repliesArray = comments?.filter(comment => comment.parentId == id)
         return repliesArray
     })
+
+    let replyRefs = useRef({})
 
     // return the easy readable time and date with Iran timezone
     const getDate = date => {
@@ -74,6 +78,24 @@ export default function Comment({ mainUserId, mainUserName, mainUserRole, movieI
         updateCommentsLikesHandler(id, 'disLikes', newDisLikes, false)
     }
 
+    useEffect(() => {
+            const hash = location.hash;
+            const commentId = hash?.replace('#comment-', '');
+            if (replies?.length > 0 && commentId && replyRefs.current[commentId]) {
+                replyRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                replyRefs.current[commentId].classList.add('!bg-sky-100')
+                replyRefs.current[commentId].classList.add('dark:!bg-sky-900')
+                replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white')
+                setTimeout(() => {
+                    replyRefs.current[commentId].classList.remove('!bg-sky-100')
+                    replyRefs.current[commentId].classList.remove('dark:!bg-sky-900')
+                    replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
+                } , 3000)
+            }
+        }, [replies])
+
+
+
     // check if user liked comment or not
     const checkLike = () => likes.includes(+userId)
     const checkDisLike = () => disLikes.includes(+userId)
@@ -81,7 +103,7 @@ export default function Comment({ mainUserId, mainUserName, mainUserRole, movieI
     return (
         <>
 
-            <div className={`w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none flex flex-col gap-5 ${parentId ? 'replied' : ''}`}>
+            <div id={`comment-${id}`} ref={ref} className={`w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none transition-all !text-white flex flex-col gap-5 ${parentId ? 'replied' : ''}`}>
                 <div className="flex items-center justify-start gap-2">
                     <div className="w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
                         <FaUser className="translate-y-2 text-white text-4xl" />
@@ -149,7 +171,7 @@ export default function Comment({ mainUserId, mainUserName, mainUserRole, movieI
             <div className="w-full flex flex-col gap-5">
                 {replies?.length > 0 && replies?.map(reply => (
                     <div key={reply.id} className="w-full pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
-                        <Comment isReplied {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding}  mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType}  addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} />
+                        <Comment isReplied {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding}  mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType}  addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
                     </div>
                 ))
                 }
@@ -158,4 +180,6 @@ export default function Comment({ mainUserId, mainUserName, mainUserRole, movieI
         </>
 
     )
-}
+})
+
+export default Comment

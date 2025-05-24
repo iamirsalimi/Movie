@@ -254,7 +254,7 @@ export default function AdminComments() {
                             </button>
                             {commentObj.status == 'approved' && (
                                 <a
-                                    href={`/${commentObj.movieType}/${commentObj.movieId}#${commentObj.id}`}
+                                    href={`/${commentObj.movieType}/${commentObj.movieId}#comment-${commentObj.id}`}
                                     className="inline-block w-full text-center bg-green-500 hover:bg-green-600 transition-colors text-white py-2 font-vazir text-xl cursor-pointer rounded-lg"
                                 >مشاهده کامنت</a>
                             )}
@@ -327,7 +327,7 @@ export default function AdminComments() {
                                                 </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center max-w-20">
-                                                    <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
+                                                    <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-sm text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                 </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
                                                     <button
