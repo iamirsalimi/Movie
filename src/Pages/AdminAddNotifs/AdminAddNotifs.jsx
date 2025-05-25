@@ -156,6 +156,7 @@ export default function AdminAddNotifs() {
             getMovieInfo(notifId)
         }
     }, [])
+
     useEffect(() => {
         if(notifObj){
             setValue('title' , notifObj.title)
