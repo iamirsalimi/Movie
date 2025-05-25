@@ -22,7 +22,7 @@ class User {
         this.password = password
         this.nickName = ''
         this.role = 'user' //user or admin
-        this.accountStatus = "" //active or temporary-banned or permanent-banned 
+        this.accountStatus = "active" //active or temporary-banned or permanent-banned 
         this.isBanned = false
         this.banReason = ""
         this.banDuration = ''; // days which user is banned
@@ -30,9 +30,9 @@ class User {
         this.created_At = new Date()
         this.last_login_at = new Date()
         this.isVerified = false
-        this.subscriptionStatus = false // active or expired or null
+        this.subscriptionStatus = null // active or expired or null
         this.subscriptionExpiresAt = ''
-        this.subscriptionPlan = null
+        this.subscriptionPlan = {}
         this.all_subscription_plans = []
         this.read_notifications = []
         this.watchList = []

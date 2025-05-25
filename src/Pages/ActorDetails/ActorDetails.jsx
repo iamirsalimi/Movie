@@ -5,6 +5,8 @@ import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
 
+import { calculateAge } from '../../utils'; 
+
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -104,7 +106,7 @@ export default function ActorDetails() {
                             {actorObj.birthDate && (
                                 <li className="w-full py-1 flex items-center justify-between">
                                     <h3 className="text-vazir text-light-gray dark:text-gray-500">سن :</h3>
-                                    <span className="text-vazir-light text-primary dark:text-white">{actorObj.birthDate}</span>
+                                    <span className="text-vazir-light font-vazir text-primary dark:text-white">{calculateAge(actorObj.birthDate)} سال</span>
                                 </li>
                             )}
                             <li className="w-full py-1 flex items-center justify-between">

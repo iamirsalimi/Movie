@@ -35,7 +35,7 @@ export default function EditUser() {
     const [decreaseMax, setDecreaseMax] = useState(1)
 
     const { userId } = useParams()
-    
+
     // admin infos
     const mainUserObj = useContext(UserContext)
 
@@ -68,8 +68,8 @@ export default function EditUser() {
             otherwise: () => yup.string().notRequired(), // یا yup.string().nullable()
         }),
         vipPlan: yup.string().notRequired().oneOf(['0', '30', '90', '180', '365'], 'مدت زمان اشتراک نامعتبر است'),
-        customIncreaseVipPlan: yup.number().typeError('مقدار کاهش اشتراک باید عدد باشد').notRequired().min(0, 'مقدار اشتراک باید بزرگتر از 0 باشد').max(365, "مقدار افزایش اشتراک نمی تواند از 365 بیشتر باشد"),
-        customDecreaseVipPlan: yup.number().typeError('مقدار کاهش اشتراک باید عدد باشد').notRequired().min(0, 'مقدار اشتراک باید بزرگتر از 0 باشد').max(decreaseMax, `مقدار کاهش اشتراک نمی تواند از ${decreaseMax} بیشتر باشد `)
+        customIncreaseVipPlan: yup.number().typeError('مقدار کاهش اشتراک باید عدد باشد').min(0, 'مقدار اشتراک باید بزرگتر از 0 باشد').max(365, "مقدار افزایش اشتراک نمی تواند از 365 بیشتر باشد").notRequired(),
+        customDecreaseVipPlan: yup.number().typeError('مقدار کاهش اشتراک باید عدد باشد').min(0, 'مقدار اشتراک باید بزرگتر از 0 باشد').max(decreaseMax, `مقدار کاهش اشتراک نمی تواند از ${decreaseMax} بیشتر باشد `).notRequired()
 
     })
 
@@ -94,9 +94,34 @@ export default function EditUser() {
         e.preventDefault()
         setVipTab(e.target.dataset.viptab)
         setVipPlanExpiresDate(null)
-        setValue('vipPlan' , 0)
-        setValue('customIncreaseVipPlan' , 0)
-        setValue('customDecreaseVipPlan' , 0)
+        setValue('vipPlan', 0)
+        setValue('customIncreaseVipPlan', 0)
+        setValue('customDecreaseVipPlan', 0)
+    }
+
+    // this method first accord what we send to it realizes what should add new vipPlan or not (newUserObj is the newObject of user , data is all inputs values , day is the amount of days we should add , increase or decrease , minus flag is to understand when we should decrease days) , and after that it'll give us a newUserObject that vipPLan has changed in it  
+    const getVipPlanChanging = (newUserObj, data, day, minusFlag) => {
+        newUserObj.subscriptionStatus = 'active'
+
+        let newExpirationDate = getExpirationDate(day, minusFlag)
+
+        newUserObj.subscriptionExpiresAt = newExpirationDate
+
+        // it means user has already had a vipPlan so either we can increase it or decrease it  
+        if (Object.keys(newUserObj.subscriptionPlan).length > 0) {
+            newUserObj.subscriptionPlan.expiration = newExpirationDate
+
+            newUserObj.all_subscription_plans[newUserObj.all_subscription_plans.length - 1].expiration = newExpirationDate
+
+            // adding admin details to check who changed user vip plan details 
+            newUserObj.all_subscription_plans[newUserObj.all_subscription_plans.length - 1].changedBy.push({ userName: mainUserObj.userName, date: new Date() })
+        } else {
+            let newPlanObj = { id: Math.floor(Math.random() * 99999), duration: data.vipPlan, activateDate: new Date(), expiration: newExpirationDate, isBought: { value: false, price: 0 }, changedBy: [{ userName: mainUserObj.userName, date: new Date() }] }
+            newUserObj.subscriptionPlan = newPlanObj
+            newUserObj.all_subscription_plans = [...newUserObj?.all_subscription_plans, newPlanObj]
+        }
+
+        return newUserObj
     }
 
     const updateUserHandler = async userObj => {
@@ -117,33 +142,8 @@ export default function EditUser() {
             })
     }
 
-    // this method first accord what we send to it realizes what should add new vipPlan or not (newUserObj is the newObject of user , data is all inputs values , day is the amount of days we should add , increase or decrease , minus flag is to understand when we should decrease days) , and after that it'll give us a newUserObject that vipPLan has changed in it  
-    const getVipPlanChanging = (newUserObj , data , day , minusFlag) => {
-        newUserObj.subscriptionStatus = 'active'
-        
-        let newExpirationDate = getExpirationDate(day , minusFlag)
-        
-        newUserObj.subscriptionExpiresAt = newExpirationDate
-        
-        // it means user has already had a vipPlan so either we can increase it or decrease it  
-        if(Object.keys(newUserObj.subscriptionPlan).length > 0){
-            newUserObj.subscriptionPlan.expiration = newExpirationDate
-
-            newUserObj.all_subscription_plans[newUserObj.all_subscription_plans.length - 1].expiration = newExpirationDate  
-            
-            // adding admin details to check who changed user vip plan details 
-            newUserObj.all_subscription_plans[newUserObj.all_subscription_plans.length - 1].changedBy.push({userName : mainUserObj.userName ,  date : new Date()})
-        } else {
-            let newPlanObj = { id: Math.floor(Math.random() * 99999), duration: data.vipPlan, activateDate: new Date(), expiration: newExpirationDate, isBought: { value: false, price: 0} , changedBy : [{userName : mainUserObj.userName ,  date : new Date()}]}
-            newUserObj.subscriptionPlan = newPlanObj
-            newUserObj.all_subscription_plans = [...newUserObj?.all_subscription_plans, newPlanObj]
-        }
-
-        return newUserObj
-    }
-
-
     const updateUser = async data => {
+        console.log(data)
         setIsUpdating(true)
 
         let newUserObj = { ...userObj }
@@ -156,21 +156,21 @@ export default function EditUser() {
         newUserObj.role = data.role
         newUserObj.accountStatus = data.accountStatus
 
-        let planChangedUserObj = {...newUserObj}
+        let planChangedUserObj = { ...newUserObj }
 
         if (data.vipPlan != 0 && Object.keys(userObj.subscriptionPlan).length == 0) {
-            planChangedUserObj = getVipPlanChanging(newUserObj , data , data.vipPlan , false)
-        }
-        
-        if (data.customIncreaseVipPlan != 0) {
-            planChangedUserObj = getVipPlanChanging(newUserObj , data , data.customIncreaseVipPlan , false)
-        }
-        
-        if (data.customDecreaseVipPlan != 0) {
-            planChangedUserObj = getVipPlanChanging(newUserObj , data , data.customDecreaseVipPlan , true)
+            planChangedUserObj = getVipPlanChanging(newUserObj, data, data.vipPlan, false)
         }
 
-        newUserObj = {...planChangedUserObj}
+        if (data.customIncreaseVipPlan != 0) {
+            planChangedUserObj = getVipPlanChanging(newUserObj, data, data.customIncreaseVipPlan, false)
+        }
+
+        if (data.customDecreaseVipPlan != 0) {
+            planChangedUserObj = getVipPlanChanging(newUserObj, data, data.customDecreaseVipPlan, true)
+        }
+
+        newUserObj = { ...planChangedUserObj }
 
         if (data.accountStatus.includes('banned')) {
             newUserObj.accountStatus = data.accountStatus
@@ -196,9 +196,9 @@ export default function EditUser() {
     }
 
     // for some users we need to decrease their vip plan so we should know when we have to do plus and when we have to do minus
-    const getExpirationDate = (daysToAdd, minusFlag) => {
+    const getExpirationDate = (daysToAdd, minusFlag = false) => {
         // maybe user has an vip plan already and we want to add couple of days to they vip Plan so we should make sure user doesn't have an vip Plan 
-        let date = minusFlag ? new Date(userObj?.subscriptionPlan.expiration) : Object.keys(userObj?.subscriptionPlan).length > 0 ? new Date(userObj?.subscriptionPlan.expiration) : new Date()
+        let date = minusFlag ? new Date(userObj.subscriptionPlan?.expiration) : Object.keys(userObj?.subscriptionPlan).length > 0 ? new Date(userObj?.subscriptionPlan.expiration) : new Date()
 
         if (+daysToAdd > 0) {
             // when minus flag is true it means we should decrease days
@@ -233,7 +233,7 @@ export default function EditUser() {
     }
 
     const getMaxDecreaseVipPlanLimit = () => {
-        let expireDate = new Date(userObj?.subscriptionPlan.expiration)
+        let expireDate = new Date(userObj.subscriptionPlan?.expiration)
         let now = new Date()
 
         const diffInMs = expireDate.getTime() - now.getTime() // difference days between now and expiration Date in ms
@@ -275,6 +275,11 @@ export default function EditUser() {
                 setError(err)
             }
         }
+
+        if (userId == 2) {
+            location.href = '/'
+        }
+
         getUserInfo(userId)
     }, [])
 

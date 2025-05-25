@@ -39,11 +39,17 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">
-                        {links.map(link => (
-                            <a href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
-                                <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
-                            </a>
-                        ))}
+                        {links.map(link => {
+                            if(link.title == 'خرید اشتراک' && user?.role == 'admin'){
+                                return false
+                            }
+
+                            return (
+                                   <a href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
+                                       <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
+                                   </a>
+                               )
+                        })}
 
                         {/* <a href="#">
                             <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">خرید اشتراک</li>
@@ -85,7 +91,7 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
                         </a>
                     )}
                     <div className="flex items-center justify-center gap-2">
-                        <a href={hasUserLoggedIn ? `/my-account/${ user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>
+                        <a href={hasUserLoggedIn ? `/my-account/${user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>
                         <a href="/account/login" className={`md:hidden  relative w-10 h-10 rounded-full bg-gray-100 overflow-hidden`}>
                             <FaUser className="text-gray-400 absolute -bottom-5 left-1/2 -translate-1/2 w-8 h-8" />
                         </a>

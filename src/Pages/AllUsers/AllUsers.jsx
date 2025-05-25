@@ -3,7 +3,8 @@ import React, { useEffect, useState, useContext } from 'react'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import UserInfoModal from '../../Components/UserInfoModal/UserModalInfo'
+import UserInfoModal from '../../Components/UserInfoModal/userModalInfo'
+import BanUserModal from '../../Components/BanUserModal/BanUserModal'
 import UserContext from '../../Contexts/UserContext';
 
 dayjs.extend(jalali)
@@ -14,6 +15,7 @@ import { FaBan } from "react-icons/fa";
 import { TbTicket } from "react-icons/tb";
 
 let apiData = {
+    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     getAllUsersApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
@@ -27,24 +29,49 @@ const filterSearchObj = {
     'username': { hasValue: false, property: 'userName' },
     'email': { hasValue: false, property: 'email' },
     'with-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: 'active' },
-    'without-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: ['expired' , null] },
+    'without-vip-plan': { hasValue: true, property: 'subscriptionStatus', value: ['expired', null] },
     'temporary-banned-users': { hasValue: true, property: 'accountStatus', value: 'temporary-banned' },
     'permanent-banned-users': { hasValue: true, property: 'accountStatus', value: 'permanent-banned' },
     'unbanned-users': { hasValue: true, property: 'accountStatus', value: 'active' },
 }
 
-
 export default function AllUsers() {
     const [showModal, setShowModal] = useState(false)
+    const [showBanModal, setShowBanModal] = useState(false)
+    const [mainUserObj, setMainUserObj] = useState(null)
     const [searchType, setSearchType] = useState('ID')
     const [searchValue, setSearchValue] = useState('')
 
     const [users, setUsers] = useState([])
     const [filteredUsers, setFilteredUsers] = useState([])
+    const [getUsers, setGetUsers] = useState(false)
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(null)
+    const [isUpdating, setIsUpdating] = useState(false)
 
     let userObj = useContext(UserContext)
+
+    const updateUserHandler = async newUserObj => {
+        setIsUpdating(true)
+
+        await fetch(`${apiData.updateApi}${mainUserObj.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newUserObj)
+        }).then(res => {
+            setGetUsers(prev => !prev)
+            setShowBanModal(false)
+            setIsUpdating(false)
+        })
+            .catch(err => {
+                console.log('مشکلی در ثبت نام پیش آمده')
+                setIsUpdating(false)
+            })
+    }
 
     useEffect(() => {
         const getAllUsers = async () => {
@@ -74,13 +101,13 @@ export default function AllUsers() {
         }
 
         getAllUsers()
-    }, [])
+    }, [getUsers])
 
     useEffect(() => {
         console.log(users)
     }, [users])
 
-    
+
     useEffect(() => {
         let filterObj = filterSearchObj[searchType]
         let filteredUsersArray = []
@@ -89,7 +116,7 @@ export default function AllUsers() {
         if (filterObj) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
-                filteredUsersArray = users.filter(user => typeof filterObj.value == 'object' ? filterObj.value.some(value => value == user[filterObj.property]) : user[filterObj.property] == filterObj.value  )
+                filteredUsersArray = users.filter(user => typeof filterObj.value == 'object' ? filterObj.value.some(value => value == user[filterObj.property]) : user[filterObj.property] == filterObj.value)
             } else {
                 if (searchValue) {
                     if (filterObj.property == 'id') {
@@ -195,7 +222,13 @@ export default function AllUsers() {
                                                         <TbTicket className="text-orange-500 group-hover:text-white transition-all" />
                                                     </button>
 
-                                                    <button className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group">
+                                                    <button
+                                                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                                                        onClick={e => {
+                                                            setMainUserObj(user)
+                                                            setShowBanModal(true)
+                                                        }}
+                                                    >
                                                         <FaBan className="text-red-500 group-hover:text-white transition-all" />
                                                     </button>
                                                 </td>
@@ -255,6 +288,7 @@ export default function AllUsers() {
                 </div>
             </div>
 
+            <BanUserModal showModal={showBanModal} setShowModal={setShowBanModal} userObj={mainUserObj} updateUser={updateUserHandler} isUpdating={isUpdating} />
             <UserInfoModal showModal={showModal} setShowModal={setShowModal} />
         </>
     )

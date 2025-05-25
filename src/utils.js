@@ -103,7 +103,19 @@ const getUserInfo = async (token) => {
   }
 }
 
+const calculateAge = actorBirthDate => {
+  const today = new Date()
+  const birthDate = new Date(actorBirthDate)
+
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDifference = today.getMonth() - birthDate.getMonth()
+ 
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  return age
+}
 
 
-
-export { findArrayByIds, setCookie, getCookie ,getUserInfo , deleteCookie }
+export { findArrayByIds, setCookie, getCookie ,getUserInfo , deleteCookie , calculateAge}

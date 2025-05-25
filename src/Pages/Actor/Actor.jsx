@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import ActorMovieCard from '../../Components/ActorMovieCard/ActorMovieCard'
-import { findArrayByIds } from '../../utils'
+import { calculateAge } from '../../utils'
 
 dayjs.extend(jalali)
 
@@ -133,7 +133,7 @@ export default function Actors() {
                                 {actorObj.birthDate && (
                                     <div className="flex items-center justify-center gap-1 font-vazir">
                                         <span className="text-light-gray dark:text-gray-500">سن :</span>
-                                        <span className="text-light-gray dark:text-gray-500">{getDate(actorObj.birthDate)}</span>
+                                        <span className="text-light-gray dark:text-gray-500">{calculateAge(actorObj.birthDate)} سال</span>
                                     </div>
                                 )}
 
