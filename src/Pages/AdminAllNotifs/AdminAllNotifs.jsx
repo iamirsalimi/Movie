@@ -82,7 +82,7 @@ export default function AdminAllNotifs() {
 
             } catch (err) {
                 console.log('fetch error', err)
-                isPending(false)
+                setIsPending(false)
                 setError(err)
             }
         }
@@ -105,7 +105,6 @@ export default function AdminAllNotifs() {
                     if (filterObj.property == 'id' || filterObj.property == 'userId') {
                         filteredNotificationsArray = notifications.filter(notif => notif[filterObj.property] == searchValue)
                     } else if (typeof filterObj.property == 'string') {
-                        console.log('name')
                         filteredNotificationsArray = notifications.filter(notif => notif[filterObj.property].toLowerCase().startsWith(searchValue))
                     }
                 } else {
