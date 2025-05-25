@@ -124,7 +124,7 @@ export default function EditUser() {
         return newUserObj
     }
 
-    const updateUserHandler = async userObj => {
+    const updateUserHandler = async newUserObj => {
         await fetch(`${apiData.updateApi}${userObj.id}`, {
             method: "PATCH",
             headers: {
@@ -132,7 +132,7 @@ export default function EditUser() {
                 'apikey': apiData.apikey,
                 'Authorization': apiData.authorization
             },
-            body: JSON.stringify(userObj)
+            body: JSON.stringify(newUserObj)
         }).then(res => {
             location.reload()
         })
