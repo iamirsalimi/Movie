@@ -339,9 +339,11 @@ export default function AdminComments() {
                                                     <button
                                                         className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
                                                         onClick={e => {
-                                                            setCommentObj(comment)
-                                                            setShowCommentDetails(true)
-                                                            commentDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
+                                                            if(!commentsIsPending){
+                                                                setCommentObj(comment)
+                                                                setShowCommentDetails(true)
+                                                                commentDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
+                                                            }
                                                         }}
                                                     >
                                                         <FaEye className="text-sky-500 group-hover:text-white transition-all" />

@@ -111,7 +111,6 @@ export default function AllRequests() {
               />
               <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو</span>
             </div>
-
           )}
         </div>
 
