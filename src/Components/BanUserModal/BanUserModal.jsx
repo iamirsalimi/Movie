@@ -31,7 +31,7 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
     }
 
     const updateUserHandler = () => {
-        if (userObj.accountStatus !== accountStatus || userObj.banDuration != banDuration || userObj.banReason != banReason) {
+        if (userObj && userObj.accountStatus !== accountStatus || userObj.banDuration != banDuration || userObj.banReason != banReason) {
             let newUserObj = { ...userObj }
 
             if (accountStatus.includes('banned')) {

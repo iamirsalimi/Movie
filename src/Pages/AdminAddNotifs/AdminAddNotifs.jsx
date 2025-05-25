@@ -1,21 +1,171 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useParams } from 'react-router-dom'
 
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+import { MdKeyboardArrowRight } from "react-icons/md"
+
+let apiData = {
+    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?id=eq.',
+    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications',
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?id=eq.',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
 
 export default function AdminAddNotifs() {
-    const [notifTitle, setNotifTitle] = useState('')
-    const [userId, setUserId] = useState('')
-    const [notifMessage, setNotifMessage] = useState('')
+    const [notifObj, setNotifObj] = useState(null)
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(null)
+    const [isAdding, setIsAdding] = useState(false)
+
+    const schema = yup.object().shape({
+        title: yup.string().required('وارد كردن عنوان اعلان است'),
+        text: yup.string().required('وارد كردن متن اعلان است'),
+        userId: yup.string().notRequired(),
+        link: yup.string().notRequired(),
+        type: yup
+            .string().oneOf(['success', 'danger', 'warning', 'info', 'system'])
+    })
+
+    let {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+        watch
+    } = useForm({
+        defaultValues: {
+            userId: null,
+            link: null,
+            type: 'info',
+        },
+        resolver: yupResolver(schema)
+    })
 
     let { notifId } = useParams()
-    console.log(notifId)
-    const addNotification = () => {
-        let newDate = new Date()
-        let newNotifObj = { id: Math.floor(Math.random() * 999), title: notifTitle, message: notifMessage, createdAt: newDate }
-        console.log(newNotifObj)
+
+    // update movie
+    const updateNotificationHandler = async newNotificationObj => {
+        await fetch(`${apiData.updateApi}${notifObj?.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newNotificationObj)
+        }).then(res => {
+            if (res.ok) {
+                console.log(res)
+                setIsAdding(false)
+                location.href = "/my-account/adminPanel/notifications/"
+            }
+        })
+            .catch(err => {
+                setIsAdding(false)
+                console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
+            })
     }
+
+    const updateNotification = async data => {
+        let newNotificationObj = { ...data }
+
+        if (data.title != notifObj?.title || data.link != notifObj?.link || data.text != notifObj?.text || data.type != notifObj?.type || data.userId != notifObj?.userId) {
+            setIsAdding(true)
+            newNotificationObj.title = data.title
+            newNotificationObj.text = data.text
+            newNotificationObj.link = data.link
+            newNotificationObj.text = data.text
+            newNotificationObj.type = data.type
+            newNotificationObj.updated_at = new Date()
+
+            await updateNotificationHandler(newNotificationObj)
+        }
+
+    }
+
+    // add new notification
+    const addNotificationHandler = async newNotificationObj => {
+        await fetch(apiData.postApi, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newNotificationObj)
+        }).then(res => {
+            console.log(res)
+            if (res.ok) {
+                setIsAdding(false)
+                location.href = "/my-account/adminPanel/notifications"
+            }
+        })
+            .catch(err => {
+                setIsAdding(false)
+                console.log('مشکلی در افزودن فیلم پیش آمده')
+            })
+    }
+
+    const addNotification = async data => {
+        setIsAdding(true)
+
+        let newNotificationObj = { ...data }
+
+        newNotificationObj.created_at = new Date()
+        newNotificationObj.updated_at = new Date()
+
+        // console.log(newNotificationObj)
+        await addNotificationHandler(newNotificationObj)
+    }
+
+    useEffect(() => {
+        const getMovieInfo = async notifId => {
+            try {
+                const res = await fetch(`${apiData.getApi}${notifId}`, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    setNotifObj(data[0])
+                    setIsPending(false)
+                } else {
+                    window.location.href = '/my-account/adminPanel/notifications'
+                }
+
+                setError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setError(err)
+                setIsPending(false)
+                setNotifObj(null)
+            }
+        }
+
+        if (notifId) {
+            setIsPending(true)
+            getMovieInfo(notifId)
+        }
+    }, [])
+    useEffect(() => {
+        if(notifObj){
+            setValue('title' , notifObj.title)
+            setValue('text' , notifObj.text)
+            setValue('userId' , notifObj.userId)
+            setValue('link' , notifObj.link)
+            setValue('type' , notifObj.type)
+        }
+    }, [notifObj])
+
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -26,47 +176,96 @@ export default function AdminAddNotifs() {
                     <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست اعلان ها</span>
                 </a>
             </div>
-            <ul className="w-full border border-gray-200 dark:border-primary rounded-lg flex flex-col items-center gap-2 py-5 px-4">
-                <li className="text-center font-vazir text-red-500 text-sm md:text-base">مقدار ID کاربر تنها در صورتی ضروری است که بخواهیم اعلان به کاربر خاصی ارسال شود</li>
-                <li className="text-center font-vazir text-red-500 text-sm md:text-base">در صورت ارسال نکردن مقدار ID کاربر اعلان برای تمامی کاربر ها ارسال می شود</li>
-            </ul>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="w-full relative select-none">
-                    <input
-                        type="text"
-                        className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        value={notifTitle}
-                        onChange={e => setNotifTitle(e.target.value)}
 
-                    />
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">عنوان</span>
-                </div>
-                <div className="w-full relative select-none">
-                    <input
-                        type="text"
-                        className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        value={userId}
-                        onChange={e => setUserId(e.target.value)}
-                    />
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ID کاربر</span>
-                </div>
-                <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
-                    <textarea
-                        className="w-full rounded-md p-3 min-h-36 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        value={notifMessage}
-                        onChange={e => setNotifMessage(e.target.value)}
-                    ></textarea>
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">توضیحات</span>
-                </div>
+            {isPending && (
+                <h2 className="text-center font-vazir text-red-500 text-sm">در حال دریافت اطلاعات اعلان ... </h2>
+            )}
 
-                <button
-                    className="md:col-start-1 md:col-end-3 py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg"
-                    onClick={addNotification}
-                >
-                    {notifId ? 'آپدیت اعلان' : 'ایجاد اعلان'}
+            {error && (
+                <h2 className="text-center font-vazir text-red-500 text-sm">{error.message} </h2>
+            )}
 
-                </button>
-            </div>
+            {!isPending && (
+                <>
+                    <ul className="w-full border border-gray-200 dark:border-primary rounded-lg flex flex-col items-center gap-2 py-5 px-4">
+                        <li className="text-center font-vazir text-red-500 text-sm md:text-base">مقدار ID کاربر تنها در صورتی ضروری است که بخواهیم اعلان به کاربر خاصی ارسال شود</li>
+                        <li className="text-center font-vazir text-red-500 text-sm md:text-base">در صورت ارسال نکردن مقدار ID کاربر اعلان برای تمامی کاربر ها ارسال می شود</li>
+                        <li className="text-center font-vazir text-red-500 text-sm md:text-base">وارد کردن لینک اختیاری است</li>
+                    </ul>
+                    <form className="grid grid-cols-1 md:grid-cols-2 gap-5" onSubmit={notifId ? handleSubmit(updateNotification) : handleSubmit(addNotification)}>
+                        <div className="w-full relative select-none">
+                            <input
+                                type="text"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('title')}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">عنوان</span>
+                            {errors?.title && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.title?.message}</span>
+                            )}
+                        </div>
+                        <div className="w-full relative select-none">
+                            <input
+                                type="text"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('userId')}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ID کاربر</span>
+                            {errors?.userId && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.userId?.message}</span>
+                            )}
+                        </div>
+                        <div className="w-full relative select-none">
+                            <input
+                                type="text"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('link')}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">لینک</span>
+                            {errors?.link && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.link?.message}</span>
+                            )}
+                        </div>
+                        <div className="w-full relative select-none">
+                            <select
+                                name=""
+                                id=""
+                                className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('type')}
+                            >
+                                <option value="success">success</option>
+                                <option value="danger">danger</option>
+                                <option value="warning">warning</option>
+                                <option value="info">info</option>
+                                <option value="system">system</option>
+                            </select>
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نوع اعلان</span>
+                            {errors?.type && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.type?.message}</span>
+                            )}
+                        </div>
+                        <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
+                            <textarea
+                                className="w-full rounded-md p-3 min-h-36 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('text')}
+                            ></textarea>
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">توضیحات</span>
+                            {errors?.text && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.text?.message}</span>
+                            )}
+                        </div>
+
+                        <button
+                            className="md:col-start-1 md:col-end-3 py-1 w-full rounded-md cursor-pointer bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1 text-white font-shabnam text-lg"
+                            disabled={isAdding}
+                        >
+                            {isAdding ? `در حال ${notifId ? 'آپدیت' : 'ایجاد'} اعلان ...` : `${notifId ? 'آپدیت' : 'ایجاد'} اعلان`}
+
+                        </button>
+                    </form>
+                </>
+            )}
+
         </div>
     )
 }
