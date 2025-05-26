@@ -194,6 +194,7 @@ export default function AddRelease() {
             const data = await res.json()
 
             if (data.length > 0) {
+                console.log(data)
                 setMovieObj(data[0])
             } else {
                 setMovieObj(null)
@@ -280,9 +281,8 @@ export default function AddRelease() {
     }
 
     const AddRelease = data => {
-        // setIsAdding(true)
-        console.log(data)
-        if (releaseObj) {
+        setIsAdding(true)
+        if (movieObj) {
             let newReleaseObj = {
                 movieType: data.movieType,
                 movieId: movieObj.id,
@@ -378,7 +378,7 @@ export default function AddRelease() {
 
     // filling inputs with release we want to edit details
     useEffect(() => {
-        if (releaseObj) {
+        if (releaseObj && releaseId) {
             setValue('movieId', releaseObj.movieId)
             getMovieInfo(releaseObj.movieId)
             setValue('movieType', releaseObj.movieType)
@@ -424,6 +424,10 @@ export default function AddRelease() {
             getReleaseInfo(releaseId)
         }
     }, [])
+
+    useEffect(() => {
+        console.log(movieObj)
+    } , [movieObj])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-20">
