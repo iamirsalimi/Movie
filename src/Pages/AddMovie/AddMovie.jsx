@@ -647,8 +647,6 @@ export default function AddMovie() {
         }
     }, [movieObj])
 
-
-
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
             <div className="flex items-center justify-between">

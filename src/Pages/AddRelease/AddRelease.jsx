@@ -20,6 +20,7 @@ let apiData = {
     getMovieApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases?id=eq.',
     postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases',
+    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
@@ -34,6 +35,9 @@ const days = ['sunday', 'monday', 'tuesday', 'wednsday', 'thursday', 'friday', '
 export default function AddRelease() {
     const [allEpisodesReleasedInADayCheckBox, setAllEpisodesReleasedInADayCheckBox] = useState(false)
     const [movieObj, setMovieObj] = useState(null)
+    const [releaseObj, setReleaseObj] = useState(null)
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(false)
     const [movieIsPending, setMovieIsPending] = useState(false)
     const [movieError, setMovieError] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
@@ -212,7 +216,48 @@ export default function AddRelease() {
         return persianDate
     }
 
+    // update release
+    const updateReleaseHandler = async newReleaseObj => {
+        await fetch(`${apiData.updateApi}${releaseObj.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newReleaseObj)
+        }).then(res => {
+            if (res.ok) {
+                console.log(res)
+                location.href = "/my-account/adminPanel/movies/add-movie"
+            }
+        })
+            .catch(err => {
+                setIsAdding(false)
+                console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
+            })
+    }
 
+    const updateRelease = async data => {
+        let newReleaseObj = { ...releaseObj }
+
+        setIsAdding(true)
+        newReleaseObj.movieType = data.movieType
+        newReleaseObj.movieId = data.movieId
+        newReleaseObj.movie_cover = data.cover
+        newReleaseObj.is_released = false
+        newReleaseObj.season_number = data.movieType == 'series' ? data.newSeasonNumber : null
+        newReleaseObj.release_schedules = data.movieType == 'series' ? [...newSeasonEpisodesTable] : [{
+            episode: null,
+            date: data.releaseDate,
+            persianDate: getDate(data?.releaseDate)
+        }]
+
+        // console.log(newReleaseObj)
+        await updateReleaseHandler(newReleaseObj)
+    }
+
+    // add release
     const addReleaseHandler = async newrelease => {
         await fetch(apiData.postApi, {
             method: "POST",
@@ -237,7 +282,7 @@ export default function AddRelease() {
     const AddRelease = data => {
         // setIsAdding(true)
         console.log(data)
-        if (movieObj) {
+        if (releaseObj) {
             let newReleaseObj = {
                 movieType: data.movieType,
                 movieId: movieObj.id,
@@ -253,7 +298,7 @@ export default function AddRelease() {
                 created_at: new Date()
             }
 
-            console.log(newReleaseObj , Object.keys(newReleaseObj))
+            console.log(newReleaseObj, Object.keys(newReleaseObj))
             addReleaseHandler(newReleaseObj)
         } else {
             toast.error('ID فیلم درست نمی باشد')
@@ -331,6 +376,55 @@ export default function AddRelease() {
         }
     }, [movieObj])
 
+    // filling inputs with release we want to edit details
+    useEffect(() => {
+        if (releaseObj) {
+            setValue('movieId', releaseObj.movieId)
+            getMovieInfo(releaseObj.movieId)
+            setValue('movieType', releaseObj.movieType)
+            setValue('movieTitle', releaseObj.movieTitle)
+            setValue('cover', releaseObj.movie_cover)
+            setValue('newSeasonNumber', releaseObj.season_numeber)
+            setValue('releaseDate', new Date(releaseObj.release_schedules[0]?.date))
+            setReleaseDate(new Date(releaseObj.release_schedules[0]?.date))
+            setNewSeasonEpisodesTable(releaseObj.release_schedules)
+        }
+    }, [releaseObj])
+
+    // for editing release
+    useEffect(() => {
+        const getReleaseInfo = async releaseId => {
+            try {
+                const res = await fetch(`${apiData.getApi}${releaseId}`, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    setReleaseObj(data[0])
+                    setIsPending(false)
+                } else {
+                    window.location.href = '/my-account/adminPanel/weekly-release'
+                }
+
+                setError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setError(err)
+                setIsPending(false)
+                setReleaseObj(null)
+            }
+        }
+        if (releaseId) {
+            setIsPending(true)
+            getReleaseInfo(releaseId)
+        }
+    }, [])
+
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-20">
             <div className="flex items-center justify-center">
@@ -340,231 +434,242 @@ export default function AddRelease() {
                     <span className="text-light-gray dark:text-gray-400 text-nowrap text-xs xs:text-sm md:text-base">بازگشت به لیست پخش ها</span>
                 </a>
             </div>
-            <form className="w-full grid grid-cols-1 md:grid-cols-2 gap-5" onSubmit={handleSubmit(AddRelease)}>
-                <div className="w-full relative select-none">
-                    <input
-                        type="text"
-                        className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        {...register('movieId')}
-                        onBlur={e => {
-                            if (e.target.value.trim()) {
-                                setMovieIsPending(true)
-                                getMovieInfo(e.target.value)
-                            } else {
-                                setMovieObj(null)
-                                setMovieIsPending(false)
-                            }
-                        }}
-                    />
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ID فیلم</span>
-                    {errors?.movieId && (
-                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.movieId?.message}</span>
-                    )}
 
-                    {movieIsPending == null && (
-                        <>
-                            {movieObj ? (
-                                <span className="text-light-gray dark:text-white text-xs mt-2 font-vazir">{movieObj?.title}</span>
-                            ) : (
-                                <span className="text-red-500 text-xs mt-2 font-vazir">فیلم با همجین ID ای وجود ندارد</span>
-                            )}
-                        </>
-                    )}
+            {isPending && (
+                <h2 className="text-center font-vazir text-red-500 text-sm">در حال دریافت اطلاعات ... </h2>
+            )}
 
-                    {movieIsPending && (
-                        <span className="mt-2 font-vazir flex items-center gap-2">
-                            <h2 className="text-gray-500 text-xs font-vazir">در حال بررسی id فیلم</h2>
-                            <span className="inline-block w-4 h-4 rounded-full border-2 border-gray-500 border-t-sky-500 animate-spin"></span>
-                        </span>
-                    )}
-                </div>
+            {error && (
+                <h2 className="text-center font-vazir text-red-500 text-sm">{error.message} </h2>
+            )}
 
-                <div className="w-full relative flex items-center justify-center gap-1">
-                    <select
-                        name=""
-                        id=""
-                        className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        {...register('movieType')}
-                        disabled={movieObj ? true : false}
-                    >
-                        <option value="movie">فیلم</option>
-                        <option value="series">سریال</option>
-                    </select>
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نوع فیلم</span>
-                    {errors?.movieType && (
-                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.movieType?.message}</span>
-                    )}
-                </div>
-
-                <div className="w-full relative select-none">
-                    <select
-                        name=""
-                        id=""
-                        className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                        {...register('broadcastDay')}
-                        disabled={true}
-                    >
-                        <option value="saturday">شنبه</option>
-                        <option value="sunday">یکشنبه</option>
-                        <option value="monday">دوشنبه</option>
-                        <option value="tuesday">سه شنبه</option>
-                        <option value="wednsday">چهارشنبه</option>
-                        <option value="thursday">پنجشنبه</option>
-                        <option value="friday">جمعه</option>
-                    </select>
-
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">روز پخش</span>
-                    {errors?.broadcastDay && (
-                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadcastDay?.message}</span>
-                    )}
-                </div>
-
-                <div className="w-full relative select-none">
-                    <DatePicker
-                        selected={releaseDate}
-                        showYearDropdown
-                        showMonthDropdown
-                        dateFormat="yyyy-MM-dd"
-                        minDate={new Date(new Date().setHours(0, 0, 0, 0))}
-                        onChange={(date) => {
-                            setValue('releaseDate', date)
-                            setReleaseDate(date)
-                        }}
-                        wrapperClassName="w-full"
-                        className="block w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                    />
-                    <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">{movieType == 'movie' ? 'تاریخ' : 'شروع'} پخش</span>
-                    <p className="mt-2 font-vazir text-light-gray dark:text-white">تاریخ شمسی: {formattedJalaliDate}</p>
-                    {errors?.releaseDate && (
-                        <span className="text-red-500 text-sm mt-2 font-vazir">{errors.releaseDate?.message}</span>
-                    )}
-                </div>
-
-                {movieType == 'series' && (
+            {!isPending && (
+                <form className="w-full grid grid-cols-1 md:grid-cols-2 gap-5" onSubmit={releaseId ? handleSubmit(updateRelease) : handleSubmit(AddRelease)}>
                     <div className="w-full relative select-none">
                         <input
-                            type="number"
+                            type="text"
                             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                            min={1}
-                            {...register('newSeasonNumber')}
+                            {...register('movieId')}
+                            onBlur={e => {
+                                if (e.target.value.trim()) {
+                                    setMovieIsPending(true)
+                                    getMovieInfo(e.target.value)
+                                } else {
+                                    setMovieObj(null)
+                                    setMovieIsPending(false)
+                                }
+                            }}
                         />
-                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">شماره فصل جدید</span>
-                        {errors?.newSeasonNumber && (
-                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonNumber?.message}</span>
+                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">ID فیلم</span>
+                        {errors?.movieId && (
+                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.movieId?.message}</span>
+                        )}
+
+                        {movieIsPending == null && (
+                            <>
+                                {movieObj ? (
+                                    <span className="text-light-gray dark:text-white text-xs mt-2 font-vazir">{movieObj?.title}</span>
+                                ) : (
+                                    <span className="text-red-500 text-xs mt-2 font-vazir">فیلم با همجین ID ای وجود ندارد</span>
+                                )}
+                            </>
+                        )}
+
+                        {movieIsPending && (
+                            <span className="mt-2 font-vazir flex items-center gap-2">
+                                <h2 className="text-gray-500 text-xs font-vazir">در حال بررسی id فیلم</h2>
+                                <span className="inline-block w-4 h-4 rounded-full border-2 border-gray-500 border-t-sky-500 animate-spin"></span>
+                            </span>
                         )}
                     </div>
-                )}
 
-                {movieType == 'series' && (
+                    <div className="w-full relative flex items-center justify-center gap-1">
+                        <select
+                            name=""
+                            id=""
+                            className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                            {...register('movieType')}
+                            disabled={movieObj ? true : false}
+                        >
+                            <option value="movie">فیلم</option>
+                            <option value="series">سریال</option>
+                        </select>
+                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">نوع فیلم</span>
+                        {errors?.movieType && (
+                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.movieType?.message}</span>
+                        )}
+                    </div>
+
                     <div className="w-full relative select-none">
-                        <input
-                            type="number"
-                            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                            {...register('newSeasonStartEpisode')}
-                        />
-                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">شروع قسمت فصل جدید</span>
-                        {errors?.newSeasonStartEpisode && (
-                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonStartEpisode?.message}</span>
+                        <select
+                            name=""
+                            id=""
+                            className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                            {...register('broadcastDay')}
+                            disabled={true}
+                        >
+                            <option value="saturday">شنبه</option>
+                            <option value="sunday">یکشنبه</option>
+                            <option value="monday">دوشنبه</option>
+                            <option value="tuesday">سه شنبه</option>
+                            <option value="wednsday">چهارشنبه</option>
+                            <option value="thursday">پنجشنبه</option>
+                            <option value="friday">جمعه</option>
+                        </select>
+
+                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">روز پخش</span>
+                        {errors?.broadcastDay && (
+                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadcastDay?.message}</span>
                         )}
                     </div>
-                )}
 
-                {movieType == 'series' && (
                     <div className="w-full relative select-none">
-                        <input
-                            type="number"
-                            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                            // min={1}
-                            // value={newSeasonEpisodesCount}
-                            // onChange={e => {
-                            //     setNewSeasonEpisodesCount(e.target.value)
-                            //     if (e.target.value == 0) {
-                            //         setAllEpisodesReleasedInADayCheckBox(true)
-                            //     }
-                            // }}
-                            {...register('newSeasonEpisodesCount')}
+                        <DatePicker
+                            selected={releaseDate}
+                            showYearDropdown
+                            showMonthDropdown
+                            dateFormat="yyyy-MM-dd"
+                            minDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                            onChange={(date) => {
+                                setValue('releaseDate', date)
+                                setReleaseDate(date)
+                            }}
+                            wrapperClassName="w-full"
+                            className="block w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                         />
-                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">تعداد قسمت  فصل جدید</span>
-                        {errors?.newSeasonEpisodesCount && (
-                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonEpisodesCount?.message}</span>
+                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">{movieType == 'movie' ? 'تاریخ' : 'شروع'} پخش</span>
+                        <p className="mt-2 font-vazir text-light-gray dark:text-white">تاریخ شمسی: {formattedJalaliDate}</p>
+                        {errors?.releaseDate && (
+                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.releaseDate?.message}</span>
                         )}
                     </div>
-                )}
 
-                {movieType == 'series' && (
-                    <div className="flex flex-col gap-5 md:gap-2 items-center">
+                    {movieType == 'series' && (
                         <div className="w-full relative select-none">
                             <input
                                 type="number"
                                 className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                                {...register('broadCastGap')}
-                                readOnly={allEpisodesReleasedInADayCheckBox}
-
+                                min={1}
+                                {...register('newSeasonNumber')}
                             />
-                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">فاصله پخش هر قسمت (روز)</span>
-                            {errors?.broadCastGap && (
-                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadCastGap?.message}</span>
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">شماره فصل جدید</span>
+                            {errors?.newSeasonNumber && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonNumber?.message}</span>
                             )}
                         </div>
+                    )}
 
-                        <div className="w-full flex items-center justify-center gap-2">
-                            <input id="subtitle-checkbox" type="checkbox" value="" className="peer" hidden checked={allEpisodesReleasedInADayCheckBox} onChange={e => setAllEpisodesReleasedInADayCheckBox(e.target.checked)} />
-                            <label htmlFor="subtitle-checkbox" className="flex items-center gap-2">
-                                <span className="text-light-gray dark:text-white text-sm text-nowrap font-vazir">تمامي قسمت ها در يك روز مي آيند</span>
-                                <span className={`inline-block cursor-pointer w-5 h-5 rounded-md border transition-colors ${allEpisodesReleasedInADayCheckBox ? '!border-sky-500 bg-sky-500' : 'border-light-gray dark:border-gray-600'}`}></span>
-                            </label>
+                    {movieType == 'series' && (
+                        <div className="w-full relative select-none">
+                            <input
+                                type="number"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                {...register('newSeasonStartEpisode')}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">شروع قسمت فصل جدید</span>
+                            {errors?.newSeasonStartEpisode && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonStartEpisode?.message}</span>
+                            )}
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {movieType == 'series' && (
-                    <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
-                        <input
-                            type="number"
-                            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                            min={1}
-                            {...register('broadCastEpisodePerPart')}
-                            readOnly={allEpisodesReleasedInADayCheckBox}
-                        />
-                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">تعداد قسمت ها در هر پارت</span>
-                        {errors?.broadCastEpisodePerPart && (
-                            <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadCastEpisodePerPart?.message}</span>
-                        )}
-                    </div>
-                )}
+                    {movieType == 'series' && (
+                        <div className="w-full relative select-none">
+                            <input
+                                type="number"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                // min={1}
+                                // value={newSeasonEpisodesCount}
+                                // onChange={e => {
+                                //     setNewSeasonEpisodesCount(e.target.value)
+                                //     if (e.target.value == 0) {
+                                //         setAllEpisodesReleasedInADayCheckBox(true)
+                                //     }
+                                // }}
+                                {...register('newSeasonEpisodesCount')}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">تعداد قسمت  فصل جدید</span>
+                            {errors?.newSeasonEpisodesCount && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.newSeasonEpisodesCount?.message}</span>
+                            )}
+                        </div>
+                    )}
 
-                {(movieType == 'series' && newSeasonEpisodesTable.length != 0) && (
-                    <ul className="md:col-start-1 md:col-end-3 py-3 px-2 bg-gray-100 dark:bg-primary rounded-lg grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2">
-                        {/* means all op the episodes will be released in a day */}
-                        {newSeasonEpisodesTable.length == 1 ? (
-                            <li className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
-                                <h3 className="text-light-gray dark:text-white font-vazir text-sm">تمام قسمت هاي فصل {newSeasonNumber}</h3>
-                                <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
-                                    <span>پخش در :</span>
-                                    <span>{newSeasonEpisodesTable[0].persianDate}</span>
-                                </div>
-                            </li>
-                        ) : newSeasonEpisodesTable.map((newEpisode, index) => (
+                    {movieType == 'series' && (
+                        <div className="flex flex-col gap-5 md:gap-2 items-center">
+                            <div className="w-full relative select-none">
+                                <input
+                                    type="number"
+                                    className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                    {...register('broadCastGap')}
+                                    readOnly={allEpisodesReleasedInADayCheckBox}
 
-                            <li key={index} className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
-                                <h3 className="text-light-gray dark:text-white font-vazir text-sm">
-                                    فصل {newSeasonNumber} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode?.episode?.episodes.join(' و ') : newEpisode.episode?.startEpisode}</h3>
-                                <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
-                                    <span>پخش در :</span>
-                                    <span>{newEpisode.persianDate}</span>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                                />
+                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">فاصله پخش هر قسمت (روز)</span>
+                                {errors?.broadCastGap && (
+                                    <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadCastGap?.message}</span>
+                                )}
+                            </div>
 
-                <button
-                    className="md:col-start-1 md:col-end-3 w-full bg-green-600 hover:bg-green-500 disabled:bg-green-300 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer"
-                    disabled={isAdding}
-                >
-                    {isAdding ? `در حال ${releaseId ? 'آپدیت' : 'اضافه'} کردن ...` : releaseId ? 'آپدیت' : 'اضافه کردن'}
-                </button>
-            </form>
+                            <div className="w-full flex items-center justify-center gap-2">
+                                <input id="subtitle-checkbox" type="checkbox" value="" className="peer" hidden checked={allEpisodesReleasedInADayCheckBox} onChange={e => setAllEpisodesReleasedInADayCheckBox(e.target.checked)} />
+                                <label htmlFor="subtitle-checkbox" className="flex items-center gap-2">
+                                    <span className="text-light-gray dark:text-white text-sm text-nowrap font-vazir">تمامي قسمت ها در يك روز مي آيند</span>
+                                    <span className={`inline-block cursor-pointer w-5 h-5 rounded-md border transition-colors ${allEpisodesReleasedInADayCheckBox ? '!border-sky-500 bg-sky-500' : 'border-light-gray dark:border-gray-600'}`}></span>
+                                </label>
+                            </div>
+                        </div>
+                    )}
+
+                    {movieType == 'series' && (
+                        <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
+                            <input
+                                type="number"
+                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                min={1}
+                                {...register('broadCastEpisodePerPart')}
+                                readOnly={allEpisodesReleasedInADayCheckBox}
+                            />
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">تعداد قسمت ها در هر پارت</span>
+                            {errors?.broadCastEpisodePerPart && (
+                                <span className="text-red-500 text-sm mt-2 font-vazir">{errors.broadCastEpisodePerPart?.message}</span>
+                            )}
+                        </div>
+                    )}
+
+                    {(movieType == 'series' && newSeasonEpisodesTable.length != 0) && (
+                        <ul className="md:col-start-1 md:col-end-3 py-3 px-2 bg-gray-100 dark:bg-primary rounded-lg grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2">
+                            {/* means all op the episodes will be released in a day */}
+                            {newSeasonEpisodesTable.length == 1 ? (
+                                <li className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
+                                    <h3 className="text-light-gray dark:text-white font-vazir text-sm">تمام قسمت هاي فصل {newSeasonNumber}</h3>
+                                    <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
+                                        <span>پخش در :</span>
+                                        <span>{newSeasonEpisodesTable[0].persianDate}</span>
+                                    </div>
+                                </li>
+                            ) : newSeasonEpisodesTable.map((newEpisode, index) => (
+
+                                <li key={index} className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
+                                    <h3 className="text-light-gray dark:text-white font-vazir text-sm">
+                                        فصل {newSeasonNumber} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode?.episode?.episodes.join(' و ') : newEpisode.episode?.startEpisode}</h3>
+                                    <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
+                                        <span>پخش در :</span>
+                                        <span>{newEpisode.persianDate}</span>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
+                    <button
+                        className="md:col-start-1 md:col-end-3 w-full bg-green-600 hover:bg-green-500 disabled:bg-green-300 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer"
+                        disabled={isAdding}
+                    >
+                        {isAdding ? `در حال ${releaseId ? 'آپدیت' : 'اضافه'} کردن ...` : releaseId ? 'آپدیت' : 'اضافه کردن'}
+                    </button>
+                </form>
+            )}
         </div >
     )
 }
