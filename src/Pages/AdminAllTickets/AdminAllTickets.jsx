@@ -126,9 +126,9 @@ export default function AdminAllTickets() {
                             <option value="ID">ID</option>
                             <option value="userId">ID کاربر</option>
                             <option value="subject">عنوان تیکت</option>
-                            <option value="open">باز</option>
-                            <option value="pending">در حال بررسی</option>
                             <option value="answered">پاسخ داده شده</option>
+                            <option value="pending">در حال بررسی</option>
+                            <option value="closed">بسته شده</option>
                             <option value="account">دپارتمان : اکانت</option>
                             <option value="payment">دپارتمان : پرداخت و اشتراک</option>
                             <option value="bug">دپارتمان : خطا در سایت یا فیلم</option>
@@ -136,7 +136,6 @@ export default function AdminAllTickets() {
                             <option value="links">دپارتمان :  خرابی یا مشکل لینک فیلم/سریال</option>
                             <option value="content">دپارتمان : محتوای سایت</option>
                             <option value="other">دپارتمان : سایر موارد</option>
-                            <option value="closed">بسته شده</option>
                             <option value="high-priority">اولویت بالا</option>
                             <option value="middle-priority">اولویت متوسط</option>
                             <option value="low-priority">اولویت کم</option>
@@ -182,14 +181,14 @@ export default function AdminAllTickets() {
                                                     <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
                                                 )}
                                             </td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.id}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.userId}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
-                                            <td className={`py-1 pb-3 px-2 text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
-                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.id}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.userId}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
+                                            <td className={`py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
+                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">
                                                 <a
                                                     href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
                                                     className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"

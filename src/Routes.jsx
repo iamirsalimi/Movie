@@ -45,7 +45,7 @@ import UserDetails from './Pages/UserDetails/UserDetails'
 import EditUser from './Pages/EditUser/EditUser'
 import Tickets from './Pages/Tickets/Tickets'
 import AdminAllTickets from './Pages/AdminAllTickets/AdminAllTickets'
-import EditTicket from './Pages/EditTicket/EditTicket'
+import EditTicket from './Pages/AdminTicketDetails/AdminTicketDetails'
 import AdminComments from './Pages/AdminComments/AdminComments'
 import AdminNotifs from './Pages/AdminNotifs/AdminNotifs'
 import AdminAllNotifs from './Pages/AdminAllNotifs/AdminAllNotifs'
@@ -118,7 +118,7 @@ let Routes = [
                     ]},
                     { path: 'tickets', element: <Tickets />  , children : [
                         { index : true , element: <AdminAllTickets /> },
-                        { path: 'edit-ticket/:ticketId', element: <EditTicket /> },
+                        { path: 'ticket-details/:ticketId', element: <EditTicket /> },
                     ]},
                     { path: 'comments', element: <AdminComments /> },
                     { path: 'notifications', element: <AdminNotifs />  , children : [
