@@ -15,6 +15,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { TbSend2 } from "react-icons/tb";
 
 let apiData = {
+    updateTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
     getMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages?ticket_id=eq.',
     postMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages',
     getTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
@@ -38,6 +39,46 @@ export default function TicketDetails() {
     let { ticketId } = useParams()
     const userObj = useContext(UserContext)
 
+    // update ticket
+    const updateTicketHandler = async newTicketObj => {
+        await fetch(`${apiData.updateTicketApi}${ticketId}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newTicketObj)
+        }).then(res => {
+            if (res.ok) {
+                console.log(res)
+            }
+        })
+            .catch(err => {
+                console.log('مشکلی در آپدیت تیکت پیش آمده')
+            })
+    }
+
+    // updating ticket obj when user checks the ticket details so we can understand user has red that ot not , and also when user sends a new message we should update the seen by admin flag to show admin has new message
+    const updateTicket = userFlag => {
+        let newTicketObj = { ...ticketObj }
+        if (userFlag) {
+            newTicketObj.is_read_by_user = true
+            newTicketObj.is_read_by_admin = false
+            newTicketObj.last_message_by = 'user'
+        } else {
+            // user already saw the messages and ticket details so we don't have to update that 
+            if(newTicketObj.is_read_by_user){
+                return false
+            }
+            newTicketObj.is_read_by_user = true
+        }
+        updateTicketHandler(newTicketObj)
+
+        // console.log(newTicketObj)
+    }
+
+    // add new message
     const addMessageHandler = async newMessageObj => {
         await fetch(apiData.postMessageApi, {
             method: "POST",
@@ -52,6 +93,7 @@ export default function TicketDetails() {
             if (res.ok) {
                 setGetMessages(prev => !prev)
                 setMessageText('')
+                updateTicket(true)
                 toast.success('پیام شما ارسال شد')
             }
         })
@@ -92,6 +134,7 @@ export default function TicketDetails() {
                 if (data.length > 0) {
                     setTicketObj(data[0])
                     setIsPending(false)
+                    updateTicket(false)
                 } else {
                     window.location.href = '/my-account/adminPanel/messages'
                 }
@@ -172,7 +215,7 @@ export default function TicketDetails() {
                         </li>
                         <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">وضعیت تیکت</h3>
-                            <p className="text-primary dark:text-gray-300">{ticketObj?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</p>
+                            <p className="text-primary dark:text-gray-300">{ticketObj?.status == 'pending' ? 'در حال بررسی' : ticketObj?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</p>
                         </li>
                         <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">دپارتمان تيكت</h3>
@@ -213,30 +256,36 @@ export default function TicketDetails() {
                                         {/* <TicketMessage userRole="admin" receiveFlag adminReceiver /> */}
                                     </div>
 
-                                    <div className="w-full flex flex-col items-center justify-between mt-2 gap-2">
-                                        <div className="col-start-1 col-end-3 w-full relative select-none">
-                                            <textarea
-                                                className="w-full resize-none rounded-md p-3 h-36 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                                                value={messageText}
-                                                onChange={e => setMessageText(e.target.value)}
-                                            ></textarea>
-                                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">توضیحات</span>
+                                    {ticketObj.status !== 'closed' ? (
+                                        <div className="w-full flex flex-col items-center justify-between mt-2 gap-2">
+                                            <div className="col-start-1 col-end-3 w-full relative select-none">
+                                                <textarea
+                                                    className="w-full resize-none rounded-md p-3 h-36 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                                    value={messageText}
+                                                    onChange={e => setMessageText(e.target.value)}
+                                                ></textarea>
+                                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">توضیحات</span>
+                                            </div>
+                                            <button
+                                                className="py-1 w-full rounded-md cursor-pointer bg-blue-500 hover:bg-blue-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1"
+                                                disabled={isSending}
+                                                onClick={addMessage}
+                                            >
+                                                <TbSend2 className="text-white text-lg" />
+                                                <h2 className="text-white font-shabnam text-lg">
+                                                    {isSending ? 'در حال ارسال ...' : 'ارسال'}
+                                                </h2>
+                                            </button>
                                         </div>
-                                        <button
-                                            className="py-1 w-full rounded-md cursor-pointer bg-blue-500 hover:bg-blue-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1"
-                                            disabled={isSending}
-                                            onClick={addMessage}
-                                        >
-                                            <TbSend2 className="text-white text-lg" />
-                                            <h2 className="text-white font-shabnam text-lg">
-                                                {isSending ? 'در حال ارسال ...' : 'ارسال'}
-                                            </h2>
-                                        </button>
-                                    </div>
+                                    ) : (
+                                        <h2 className="w-full bg-red-500 text-white py-2 text-center font-vazir rounded-lg">
+                                            تیکت به صورت یک طرفه توسط ادمین بسته شده
+                                        </h2>
+                                    )}
                                 </>
                             )}
                         </div>
-                        
+
                         {/* just to show latest messages first */}
                         <span className="" ref={chatEndingRef}></span>
                     </div>

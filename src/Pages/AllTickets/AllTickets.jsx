@@ -160,7 +160,7 @@ export default function AllTickets() {
           )}
         </div>
 
-        <div className="w-full py-3 px-2 rounded-lg border border-gray-200 dark:border-white/5 overflow-scroll lg:overflow-clip">
+        <div className="w-full p-3 rounded-lg border border-gray-200 dark:border-white/5 overflow-scroll lg:overflow-clip">
           <table className="w-full">
             <thead className="min-w-full">
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
@@ -175,8 +175,8 @@ export default function AllTickets() {
               {!isPending && !error &&
                 filteredTickets.length > 0 && (
                   filteredTickets.map(ticket => (
-                    <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
-                      <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.subject}</td>
+                    <tr className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                      <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
@@ -188,6 +188,9 @@ export default function AllTickets() {
                           <FaEye className="text-green-500 group-hover:text-white transition-all" />
                         </a>
                       </td>
+                      {ticket.is_read_by_user && (
+                        <div className="absolute top-1/2 -right-2.5 md:right-5 -translate-y-1/2 w-2 h-2 rounded-full bg-green-500"></div>
+                      )}
                     </tr>
                   ))
                 )
