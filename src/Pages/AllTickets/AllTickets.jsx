@@ -34,8 +34,6 @@ let apiData = {
 }
 
 export default function AllTickets() {
-  const [showMovieReleaseDetails, setShowMovieReleaseDetails] = useState(false)
-
   const [searchType, setSearchType] = useState('ID')
   const [searchValue, setSearchValue] = useState('')
 
@@ -133,6 +131,9 @@ export default function AllTickets() {
             >
               <option value="ID">ID</option>
               <option value="subject">عنوان</option>
+              <option value="pending">در حال بررسی</option>
+              <option value="answered">پاسخ داده شده</option>
+              <option value="closed">بسته شده</option>
               <option value="account">دپارتمان : اکانت</option>
               <option value="payment">دپارتمان : پرداخت و اشتراک</option>
               <option value="bug">دپارتمان : خطا در سایت یا فیلم</option>
@@ -140,9 +141,6 @@ export default function AllTickets() {
               <option value="links">دپارتمان :  خرابی یا مشکل لینک فیلم/سریال</option>
               <option value="content">دپارتمان : محتوای سایت</option>
               <option value="other">دپارتمان : سایر موارد</option>
-              <option value="pending">در حال بررسی</option>
-              <option value="answered">پاسخ داده شده</option>
-              <option value="closed">بسته شده</option>
             </select>
             <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">جستجو بر اساس</span>
           </div>
@@ -164,6 +162,7 @@ export default function AllTickets() {
           <table className="w-full">
             <thead className="min-w-full">
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
+                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">پیام جدید</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان تیکت</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">دپارتمان</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ ثبت</th>
@@ -175,7 +174,12 @@ export default function AllTickets() {
               {!isPending && !error &&
                 filteredTickets.length > 0 && (
                   filteredTickets.map(ticket => (
-                    <tr className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                    <tr r className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                      <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">
+                        {!ticket.is_read_by_user && (
+                          <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
+                        )}
+                      </td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
@@ -188,9 +192,6 @@ export default function AllTickets() {
                           <FaEye className="text-green-500 group-hover:text-white transition-all" />
                         </a>
                       </td>
-                      {ticket.is_read_by_user && (
-                        <div className="absolute top-1/2 -right-2.5 md:right-5 -translate-y-1/2 w-2 h-2 rounded-full bg-green-500"></div>
-                      )}
                     </tr>
                   ))
                 )

@@ -264,7 +264,7 @@ export default function TicketDetails() {
                                                     value={messageText}
                                                     onChange={e => setMessageText(e.target.value)}
                                                 ></textarea>
-                                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">توضیحات</span>
+                                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">متن پیام</span>
                                             </div>
                                             <button
                                                 className="py-1 w-full rounded-md cursor-pointer bg-blue-500 hover:bg-blue-600 disabled:bg-sky-300 transition-all inline-flex items-center justify-center gap-1"
