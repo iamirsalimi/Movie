@@ -164,7 +164,6 @@ export default function AllTickets() {
           <table className="w-full">
             <thead className="min-w-full">
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان تیکت</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">دپارتمان</th>
                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ ثبت</th>
@@ -177,14 +176,13 @@ export default function AllTickets() {
                 filteredTickets.length > 0 && (
                   filteredTickets.map(ticket => (
                     <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
-                      <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.id}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.subject}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
                         <a
-                          href={`/my-account/userPanel/message/ticket-details/${ticket.id}`}
+                          href={`/my-account/userPanel/messages/ticket-details/${ticket.id}`}
                           className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
                         >
                           <FaEye className="text-green-500 group-hover:text-white transition-all" />
