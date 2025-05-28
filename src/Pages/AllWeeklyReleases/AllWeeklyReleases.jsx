@@ -24,8 +24,8 @@ const filterSearchObj = {
     'ID': { hasValue: false, property: 'id' },
     'movieId': { hasValue: false, property: 'movieId' },
     'movieTitle': { hasValue: false, property: 'movieTitle' },
-    'series': { hasValue: true, property: 'movieType', value: 'movie' },
-    'movie': { hasValue: true, property: 'movieType', value: 'series' },
+    'series': { hasValue: true, property: 'movieType', value: 'series' },
+    'movie': { hasValue: true, property: 'movieType', value: 'movie' },
 }
 
 
@@ -104,7 +104,7 @@ export default function AllWeeklyReleases() {
         let filterObj = filterSearchObj[searchType]
         let filteredReleasesArray = []
 
-        // when we search something or we change the searchType we should filter the users Array again  
+        // when we search something or we change the searchType we should filter the releases Array again  
         if (filterObj) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {

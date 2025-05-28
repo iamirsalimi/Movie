@@ -27,7 +27,7 @@ export default function AddNewTicket() {
 
   const schema = yup.object().shape({
     subject: yup.string().required('عنوان تیکت الزامی است.'),
-    category: yup.string().oneOf(['account', 'payment', 'bug', 'links', 'content', 'other'], 'ظ نامعتبر است.').required('نوع دپارتمان تیکت الزامی است.'),
+    category: yup.string().oneOf(['account', 'payment', 'bug', 'requests' , 'links', 'content', 'other'], 'نوع دچارتمان تیکت نامعتبر است.').required('نوع دپارتمان تیکت الزامی است.'),
     description: yup
       .string()
       .required('توضیحات تیکت الزامی است.')
@@ -71,7 +71,7 @@ export default function AddNewTicket() {
 
   const addTicket = data => {
     if (userObj) {
-      // setIsAdding(true)
+      setIsAdding(true)
       let newUserObj = {
         userId: userObj.id,
         fullName: `${userObj.firstName} ${userObj.lastName}`,
@@ -126,8 +126,9 @@ export default function AddNewTicket() {
             <option value="account">اکانت</option>
             <option value="payment">پرداخت و اشتراک</option>
             <option value="bug">خطا در سایت یا فیلم</option>
-            <option value="links">درخواست یا مشکل با فیلم/سریال</option>
-            <option value="content">اکانت</option>
+            <option value="requests">درخواست فیلم/سریال</option>
+            <option value="links"> خرابی یا مشکل لینک فیلم/سریال</option>
+            <option value="content">محتوای سایت</option>
             <option value="other">سایر موارد</option>
           </select>
           <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-secondary">دپارتمان</span>
