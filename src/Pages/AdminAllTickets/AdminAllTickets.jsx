@@ -88,7 +88,7 @@ export default function AdminAllTickets() {
     }, [userObj])
 
     useEffect(() => {
-        if (tickets.length > 0) {
+        if (tickets.length > 0 && location.search) {
             setSearchValue(searchParams[1])
             setSearchType(searchParams[0])
         }

@@ -86,8 +86,13 @@ export default function AllUsers() {
                 const data = await res.json();
 
                 if (data) {
-                    setUsers(data)
-                    setFilteredUsers(data)
+                    let sortedUsers = data.sort((a , b) => {
+                        let aDate = new Date(a.created_At).getTime()
+                        let bDate = new Date(b.created_At).getTime()
+                        return bDate - aDate
+                    })
+                    setUsers(sortedUsers)
+                    setFilteredUsers(sortedUsers)
                     setIsPending(false)
                     setError(false)
                 }

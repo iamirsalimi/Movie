@@ -187,13 +187,13 @@ export default function UserDetails() {
         if (filterObj && comments.length > 0) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
-                filteredCommentsArray = comments?.filter(user => user[filterObj.property] == filterObj.value)
+                filteredCommentsArray = comments?.filter(comment => comment[filterObj.property] == filterObj.value)
             } else {
                 if (commentSearchValue) {
                     if (filterObj.property == 'id' || filterObj.property == 'movieId') {
-                        filteredCommentsArray = comments?.filter(user => user[filterObj.property] == commentSearchValue)
+                        filteredCommentsArray = comments?.filter(comment => comment[filterObj.property] == commentSearchValue)
                     } else if (typeof filterObj.property == 'string') {
-                        filteredCommentsArray = comments?.filter(user => user[filterObj.property].toLowerCase().startsWith(commentSearchValue))
+                        filteredCommentsArray = comments?.filter(comment => comment[filterObj.property].toLowerCase().startsWith(commentSearchValue))
                     }
                 } else {
                     filteredCommentsArray = [...comments]
