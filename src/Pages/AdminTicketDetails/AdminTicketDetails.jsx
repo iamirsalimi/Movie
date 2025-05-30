@@ -42,7 +42,7 @@ export default function AdminTicketDetails() {
     const chatEndingRef = useRef(null)
 
     let { ticketId } = useParams()
-    const userObj = useContext(UserContext)
+     let {userObj} = useContext(UserContext)
 
     // add new notification
     const addNotificationHandler = async newNotificationObj => {

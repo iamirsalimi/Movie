@@ -46,7 +46,7 @@ export default function AdminAllTickets() {
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(null)
 
-    const userObj = useContext(UserContext)
+     let {userObj} = useContext(UserContext)
 
     let location = useLocation().search
     let searchParams = location.slice(1).split('=')

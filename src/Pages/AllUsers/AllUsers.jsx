@@ -49,7 +49,7 @@ export default function AllUsers() {
     const [error, setError] = useState(null)
     const [isUpdating, setIsUpdating] = useState(false)
 
-    let userObj = useContext(UserContext)
+     let {userObj , setUserObj} = useContext(UserContext)
 
     const updateUserHandler = async newUserObj => {
         setIsUpdating(true)

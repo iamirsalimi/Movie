@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, Outlet } from 'react-router-dom';
 
-import { getCookie, getUserInfo , deleteCookie } from '../../utils';
+import { Toaster } from 'react-hot-toast';
+
+import { getCookie, getUserInfo, deleteCookie } from '../../utils';
 import ThemeContext from '../../Contexts/ThemeContext';
 import UserContext from '../../Contexts/UserContext';
 import LogoutModal from './../../Components/LogoutModal/LogoutaModal'
@@ -55,10 +57,10 @@ export default function UserPanel() {
 
     useEffect(() => {
         const token = getCookie('userToken');
-        
+
         if (!token) {
             window.location.href = '/'
-            
+
             return;
         }
 
@@ -76,13 +78,13 @@ export default function UserPanel() {
 
 
     useEffect(() => {
-        if(userObj && userObj?.role == 'admin'){
+        if (userObj && userObj?.role == 'admin') {
             window.location.href = '/my-account/adminPanel'
         }
     }, [userObj])
 
     return (
-        <UserContext.Provider value={userObj}>
+        <UserContext.Provider value={{userObj , setUserObj}}>
             <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
                 <div className="px-5 py-9 flex flex-col justify-start items-center gap-10 overflow-y-scroll lg:overflow-hidden">
                     <button className="block lg:hidden w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 dark:bg-primary dark:text-white cursor-pointer" onClick={hideMenu}>
@@ -201,6 +203,10 @@ export default function UserPanel() {
             </div>
             <LogoutModal showModal={showLogoutModal} setShowModal={setShowLogoutModal} deleteCookie={deleteCookie} token={userObj?.userToken} />
 
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </UserContext.Provider>
     )
 }

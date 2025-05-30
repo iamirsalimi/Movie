@@ -310,7 +310,7 @@ function Movie() {
         newUserObj.watchList = [...newWatchList]
 
         if (!toastId) {
-            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
+            toastId = toast.loading('در حال حذف فیلم از لیست تماشا')
             updateUserHandler(newUserObj)
         }
     }

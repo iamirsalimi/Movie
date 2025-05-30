@@ -15,7 +15,7 @@ export default function Notifs() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(false)
 
-  let userObj = useContext(UserContext)
+   let {userObj} = useContext(UserContext)
 
   const updateUserHandler = async newUserObj => {
     await fetch(`${apiData.updateUserApi}${userObj?.id}`, {
@@ -85,9 +85,11 @@ export default function Notifs() {
       }
     }
 
-    setIsPending(true)
-    getAllNotifications()
-  }, [])
+    if(userObj){
+      setIsPending(true)
+      getAllNotifications()
+    }
+  }, [userObj])
 
   useEffect(() => {
     if (userObj && notifications) {

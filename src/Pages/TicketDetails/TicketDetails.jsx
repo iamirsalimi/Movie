@@ -37,7 +37,7 @@ export default function TicketDetails() {
     const chatEndingRef = useRef(null)
 
     let { ticketId } = useParams()
-    const userObj = useContext(UserContext)
+     let {userObj} = useContext(UserContext)
 
     // update ticket
     const updateTicketHandler = async newTicketObj => {

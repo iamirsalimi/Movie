@@ -18,7 +18,6 @@ import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
 
-
 let apiData = {
     updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
@@ -26,12 +25,12 @@ let apiData = {
 }
 
 export default function MovieCard({ id, title, mainTitle, movieType, description, cover, languages, countries, genres, imdb_score, rotten_score, metacritic_score, site_scores, year, duration, is_dubbed, has_subtitle, quality }) {
-    let { userObj , setUserObj } = useContext(UserContext)
+    let { userObj, setUserObj } = useContext(UserContext)
 
     let toastId = null
 
     // update user handler
-    const updateUserHandler = async (newUserObj , addFlag) => {
+    const updateUserHandler = async (newUserObj, addFlag) => {
         await fetch(`${apiData.updateUserApi}${userObj.id}`, {
             method: "PATCH",
             headers: {
@@ -43,7 +42,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
         }).then(res => {
             toast.dismiss(toastId)
             toastId = null
-            if(addFlag){
+            if (addFlag) {
                 toast.success('فیلم به لیست تماشا اضافه شد')
             } else {
                 toast.success('فیلم از لیست تماشا حذف شد')
@@ -64,32 +63,40 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
     }
 
     const addMovieToUserWatchList = () => {
-        let newWatchListObj = {
-            id: `${new Date().getTime()}`,
-            movieId: id,
-            movieType,
-            title,
-            cover
-        }
-
-        const newUserObj = { ...userObj }
-        newUserObj.watchList.push(newWatchListObj)
-
-
-        if (!toastId) {
-            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
-            updateUserHandler(newUserObj , true)
+        if(userObj.role == 'user'){
+            let newWatchListObj = {
+                id: `${new Date().getTime()}`,
+                movieId: id,
+                movieType,
+                title,
+                cover
+            }
+    
+            const newUserObj = { ...userObj }
+            newUserObj.watchList.push(newWatchListObj)
+    
+    
+            if (!toastId) {
+                toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
+                updateUserHandler(newUserObj, true)
+            }
+        } else {
+            toast.error('فقط كاربر ها مي توانند فيلم هارا به ليست تماشا اضافه كنند')
         }
     }
 
     const removeMovieFomUserWatchList = () => {
-        const newUserObj = { ...userObj }
-        let newWatchList = newUserObj?.watchList.filter(movie => id != movie.movieId)
-        newUserObj.watchList = [...newWatchList]
+        if (userObj.role == 'user') {
+            const newUserObj = { ...userObj }
+            let newWatchList = newUserObj?.watchList.filter(movie => id != movie.movieId)
+            newUserObj.watchList = [...newWatchList]
 
-        if (!toastId) {
-            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
-            updateUserHandler(newUserObj)
+            if (!toastId) {
+                toastId = toast.loading('در حال حذف فیلم از لیست تماشا')
+                updateUserHandler(newUserObj)
+            }
+        } else {
+            toast.error('فقط كاربر ها مي توانند فيلم هارا به ليست تماشا اضافه كنند')
         }
     }
 

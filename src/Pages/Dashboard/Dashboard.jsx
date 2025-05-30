@@ -18,7 +18,7 @@ dayjs.extend(jalali)
 export default function Dashboard() {
   const [ipObj, setIpObj] = useState(null)
 
-  let user = useContext(UserContext)
+  let {userObj} = useContext(UserContext)
 
   useEffect(() => {
     fetch('https://ipapi.co/json/')
@@ -39,15 +39,15 @@ export default function Dashboard() {
   return (
     <>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <UserActivityInfo color='from-orange-400 to-orange-600' title="مطالب درخواستی" value={user?.requests.length || 0}>
+        <UserActivityInfo color='from-orange-400 to-orange-600' title="مطالب درخواستی" value={userObj?.requests.length || 0}>
           <IoIosAddCircleOutline className="text-white text-xl xl:text-2xl" />
         </UserActivityInfo>
 
-        <UserActivityInfo color='from-purple-600 to-purple-800' title="لیست تماشا" value={user?.watchList.length || 0}>
+        <UserActivityInfo color='from-purple-600 to-purple-800' title="لیست تماشا" value={userObj?.watchList.length || 0}>
           <FaBookmark className="text-white text-xl xl:text-2xl" />
         </UserActivityInfo>
         
-        <UserActivityInfo color='from-sky-400 to-sky-700' title="عضویت" value={getDate(user?.created_At)}>
+        <UserActivityInfo color='from-sky-400 to-sky-700' title="عضویت" value={getDate(userObj?.created_At)}>
           <PiUserFocusFill className="text-white text-xl xl:text-2xl" />
         </UserActivityInfo>
         
@@ -108,17 +108,17 @@ export default function Dashboard() {
             <ul className="w-full flex flex-col gap-2">
               <li className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm font-shabnam-light">نام :</span>
-                <span className="text-light-gray dark:text-white font-vazir-light">{user?.firstName}</span>
+                <span className="text-light-gray dark:text-white font-vazir-light">{userObj?.firstName}</span>
               </li>
 
               <li className="flex items-center justify-between">
                 <span className="text-gray-500 text-sm font-shabnam-light">نام خانوادگي :</span>
-                <span className="text-light-gray dark:text-white font-vazir-light">{user?.lastName}</span>
+                <span className="text-light-gray dark:text-white font-vazir-light">{userObj?.lastName}</span>
               </li>
 
               <li className="flex flex-col gap-1">
                 <span className="text-gray-500 text-sm font-shabnam-light">ايميل :</span>
-                <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{user?.email}</span>
+                <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{userObj?.email}</span>
               </li>
 
               <li className="flex flex-col gap-1">

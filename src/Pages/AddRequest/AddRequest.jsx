@@ -26,7 +26,7 @@ export default function AddRequest() {
       .string().oneOf(['movie', 'series'])
   })
 
-  const userObj = useContext(UserContext)
+   let {userObj} = useContext(UserContext)
 
   let {
     register,

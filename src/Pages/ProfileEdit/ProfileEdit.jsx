@@ -25,7 +25,7 @@ export default function ProfileEdit() {
   const [showPass, setShowPass] = useState(false)
   const [showRepeatPass, setRepeatShowPass] = useState(false)
 
-  const user = useContext(UserContext)
+  const {userObj} = useContext(UserContext)
 
   const schema = yup.object().shape({
     firstName: yup.string().required('وارد كردن نام اجباري است'),

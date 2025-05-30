@@ -41,7 +41,7 @@ export default function AllTickets() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(null)
 
-  const userObj = useContext(UserContext)
+   let {userObj} = useContext(UserContext)
 
   useEffect(() => {
     const getAllTickets = async () => {

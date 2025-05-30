@@ -24,7 +24,7 @@ export default function AllRequests() {
   const [searchType, setSearchType] = useState('ID')
   const [searchValue, setSearchValue] = useState('')
 
-  const userObj = useContext(UserContext)
+   let {userObj} = useContext(UserContext)
 
   useEffect(() => {
     const getAllRequests = async () => {
