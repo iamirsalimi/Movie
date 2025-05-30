@@ -58,7 +58,7 @@ import AddRelease from './Pages/AddRelease/AddRelease'
 let Routes = [
     {
         element: <MainLayout />, children: [
-            { path: '/', element: <Home /> },
+            { path: '/' , element: <Home /> },
             { path: '/page/:pageId', element: <Home /> },
             { path: '/:movieType/:movieId', element: <Movie /> },
             { path: '/actors/:actorId', element: <Actor /> },

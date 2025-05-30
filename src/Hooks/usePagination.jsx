@@ -3,20 +3,18 @@ import React, { useState, useEffect } from 'react'
 export default function usePagination(movies , current , rows) {
     const [filteredMovies, setFilteredMovies] = useState([])
     const [buttonsArray, setButtonsArray] = useState([])
+    const [currentPage, setCurrentPage] = useState(current)
     
     let movieRowsCount = rows
-    let pagesCount = Math.ceil(movies.length / movieRowsCount)
-    current = current > pagesCount ? 1 : current
-    
-    const [currentPage, setCurrentPage] = useState(current)
+    let pagesCount = Math.ceil(movies?.length / movieRowsCount)
     
     let startIndex = (current - 1) * rows   
     let endIndex = startIndex + rows
-
+    
     useEffect(() => {
         setButtonsArray(Array.from(Array(pagesCount).keys()))
-        setFilteredMovies(movies.slice(startIndex, endIndex))
-    }, [currentPage])
+        setFilteredMovies(movies?.slice(startIndex, endIndex))
+    }, [currentPage , movies])
 
     // we should show only 2 more and 2 less of currentPage Btns 
     let bindingObj = {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 
+import toast from "react-hot-toast"
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
@@ -39,9 +40,10 @@ import { GrUpdate } from "react-icons/gr";
 import { RiMedalFill } from "react-icons/ri";
 
 let apiData = {
+    updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     updateCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.",
     postCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments",
-    getCommentsApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*",
+    getCommentsApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?movieId=eq.",
     getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
     getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
@@ -61,13 +63,16 @@ function Movie() {
     const [commentsError, setCommentsError] = useState(null)
     const [getComments, setGetComments] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
+    const [isMovieAddedToWatchList, setIsMovieAddedToWatchList] = useState(false)
+    let toastId = null
 
     const location = useLocation();
 
     const [movieTab, setMovieTab] = useState(location.hash ? "comments" : "download")
     const commentRefs = useRef({})
 
-    const userObj = useContext(UserContext)
+    const { userObj, setUserObj } = useContext(UserContext)
+
     // console.log('User ->', userObj)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
@@ -90,7 +95,7 @@ function Movie() {
 
                 const data = await res.json()
 
-                console.log(data)
+                // console.log(data)
                 if (data.length > 0) {
                     setMainMovie(data[0])
                     setIsPending(false)
@@ -174,7 +179,7 @@ function Movie() {
 
     const getCommentsInfo = async () => {
         try {
-            const res = await fetch(apiData.getCommentsApi, {
+            const res = await fetch(`${apiData.getCommentsApi}${movieId}`, {
                 headers: {
                     'apikey': apiData.apikey,
                     'Authorization': apiData.authorization
@@ -204,6 +209,7 @@ function Movie() {
         }
     }
 
+    // update comments 
     const updateCommentHandler = async (commentId, commentObj) => {
         await fetch(`${apiData.updateCommentApi}${commentId}`, {
             method: "PATCH",
@@ -244,6 +250,71 @@ function Movie() {
 
     }
 
+    // update user handler
+    const updateUserHandler = async (newUserObj , addFlag) => {
+        await fetch(`${apiData.updateUserApi}${userObj.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newUserObj)
+        }).then(res => {
+            toast.dismiss(toastId)
+            toastId = null
+            if(addFlag){
+                toast.success('فیلم به لیست تماشا اضافه شد')
+            } else {
+                toast.success('فیلم از لیست تماشا حذف شد')
+            }
+            setUserObj(newUserObj)
+        })
+            .catch(err => {
+                console.log(err)
+                toast.dismiss(toastId)
+                toastId = null
+                toast.error('مشکلی در افزودن فیلم به لیست تماشا پیش آمده')
+            })
+    }
+
+
+    const isMovieInUserWatchList = (watchList, movieId) => {
+        let isInWatchList = watchList?.some(movie => movie.movieId == movieId)
+        return isInWatchList
+    }
+
+    const addMovieToUserWatchList = () => {
+        let { id, movieType, title, cover } = mainMovie
+        let newWatchListObj = {
+            id: `${new Date().getTime()}`,
+            movieId: id,
+            movieType,
+            title,
+            cover
+        }
+
+        const newUserObj = { ...userObj }
+        newUserObj.watchList.push(newWatchListObj)
+
+        
+        if (!toastId) {
+            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
+            updateUserHandler(newUserObj , true)
+        }
+    }
+
+    const removeMovieFomUserWatchList = () => {
+        const newUserObj = { ...userObj }
+        let newWatchList = newUserObj?.watchList.filter(movie => mainMovie.id != movie.movieId)
+        newUserObj.watchList = [...newWatchList]
+
+        if (!toastId) {
+            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
+            updateUserHandler(newUserObj)
+        }
+    }
+
     useEffect(() => {
         // when we've already fetched datas and our comments we set errors false so that we can understand we have fetched that once  
         if (mainMovie && comments?.length == 0 && commentsError != false) {
@@ -260,7 +331,6 @@ function Movie() {
             getCommentsInfo()
         }
     }, [getComments])
-
 
     useEffect(() => {
         const hash = location.hash;
@@ -301,13 +371,18 @@ function Movie() {
                                     <div className="w-full lg:w-3/4 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-4">
                                         <div className="w-full flex flex-col md:flex-row gap-5 items-center justify-between pl-2">
                                             <h1 className="text-white font-bold text-xl text-center md:text-justify md:line-clamp-1">{mainMovie.mainTitle}</h1>
-                                            <div className="flex items-center justify-center gap-2">
+                                            <button
+                                                className="flex items-center justify-center gap-2"
+                                                onClick={isMovieInUserWatchList(userObj?.watchList, mainMovie.id) ? removeMovieFomUserWatchList : addMovieToUserWatchList}
+                                            >
                                                 <span className="inline-block relative cursor-pointer group">
-                                                    <CiBookmark className="text-white text-2xl" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`size-6 stroke-light-gray dark:stroke-white ${isMovieInUserWatchList(userObj?.watchList, mainMovie.id) ? 'fill-light-gray dark:fill-white' : ''} text-2xl`}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                                    </svg>
                                                     <span className="inline-block opacity-0 h-5 absolute left-2 -top-7 -translate-x-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-sm dark:text-white font-vazir text-nowrap z-20 after:!z-10 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:rotate-45 group-hover:opacity-100 transition-all">افزودن به لیست تماشا</span>
                                                 </span>
                                                 <IoNotificationsOutline className="text-white text-2xl cursor-pointer" />
-                                            </div>
+                                            </button>
                                         </div>
 
                                         <div className="w-full flex items-center justify-center lg:justify-start gap-10">
@@ -384,7 +459,7 @@ function Movie() {
                                                         <div className="p-1 rounded-full w-7 h-7 bg-red-500 flex items-center justify-center">
                                                             <GrUpdate className="text-md text-primary" />
                                                         </div>
-                                                        <span className="text-sm font-light text-gray-200 font-vazir">{mainMovie.notifications.episodes[mainMovie.notifications.length - 1]}</span>
+                                                        <span className="text-sm font-light text-gray-200 font-vazir">{mainMovie.notifications[mainMovie.notifications.length - 1]}</span>
                                                     </div>
                                                 )}
 

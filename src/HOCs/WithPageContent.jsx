@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect , useContext } from 'react'
 
 import NewMoviesTable from './../Components/NewMoviesTable/NewMoviesTable'
 import GenreTables from './../Components/GenreTables/GenreTables'
 import UpdatedSeries from './../Components/UpdatedSeries/UpdatedSeries'
 
 import { movies as moviesData } from '../moviesData'
+
+import MoviesContext from '../Contexts/MoviesContext'
 
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
@@ -22,18 +24,24 @@ export default function WithPageContent(Comp , movieContent) {
             'جمعه': [{ movieId: 15, newEpisode: { season: 1, episode: 7 } }],
         })
 
-        const [slides, setSlides] = useState(moviesData)
+        let {movies : moviesArray} = useContext(MoviesContext)
+        const [movies, setMovies] = useState(moviesArray)
+        // console.log(moviesArray)
 
         const [genres, setGenres] = useState({
             'movie': ['اکشن', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'ماجراجویی', 'انیمه', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی'],
             'series': ['اکشن', 'Talk-Show', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'انیمه' ,'ماجراجویی', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی', 'موسیقی']
         })
 
+        useEffect(() => {
+            setMovies(moviesArray)
+        } , [moviesArray])
+
         return (
             <div className={`container mx-auto ${movieContent && '!px-5'} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-12`}>
                 {/* right side */}
                 <div className="w-full lg:w-2/3 flex flex-col gap-7">
-                    <Comp movies={slides} movieTable={movieTable} />
+                    <Comp movies={movies} movieTable={movieTable} />
                 </div>
 
                 {/* left side */}
@@ -53,9 +61,10 @@ export default function WithPageContent(Comp , movieContent) {
                             </div>
                         </a>
                     </div>
-                    <NewMoviesTable movies={slides} />
-                    <UpdatedSeries series={slides.filter(slide => slide.type == 'series')} />
-                    <GenreTables genre={genres} movies={slides} />
+                    {/* <NewMoviesTable movies={movies.filter(movie => movie.is_in_new_movies)} /> */}
+                    <NewMoviesTable movies={movies} />
+                    <UpdatedSeries series={movies?.filter(movie => movie.movieType == 'series')} />
+                    <GenreTables genre={genres} movies={movies} />
                 </div>
             </div>
         )

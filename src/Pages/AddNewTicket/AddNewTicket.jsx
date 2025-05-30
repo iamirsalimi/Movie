@@ -23,7 +23,7 @@ let apiData = {
 export default function AddNewTicket() {
   const [isAdding , setIsAdding] =  useState(false)
 
-  const userObj = useContext(UserContext)
+  const {userObj} = useContext(UserContext)
 
   const schema = yup.object().shape({
     subject: yup.string().required('عنوان تیکت الزامی است.'),

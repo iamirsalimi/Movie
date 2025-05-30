@@ -15,7 +15,7 @@ export default function Comments() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(false)
 
-  const userObj = useContext(UserContext)
+  const {userObj} = useContext(UserContext)
 
   useEffect(() => {
     const getCommentsInfo = async () => {

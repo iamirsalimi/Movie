@@ -2,11 +2,11 @@ import React from 'react'
 
 import { LiaTrashAlt } from "react-icons/lia";
 
-export default function WatchListMovieCard({id , type , title , src}) {
+export default function WatchListMovieCard({id , type , title , cover}) {
     return (
         <a href={`/${type == 'series' ? 'series' : 'movie'}/${id}`} className="relative pb-2 group">
             <li key={id} className={`group overflow-hidden relative rounded-t-lg h-64 cursor-pointer`}>
-                <img src={src} className="w-full h-full object-cover object-center" alt="" />
+                <img src={cover} className="w-full h-full object-cover object-center" alt="" />
                 <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-white/0 flex items-center justify-center duration-200"></span>
                 <span className="text-nowrap line-clamp-1 absolute text-sm opacity-0 bottom-1 left-1/2 -translate-1/2 scale-50 text-white transition-all group-hover:scale-100 group-hover:opacity-100 duration-200">{title}</span>
             </li>

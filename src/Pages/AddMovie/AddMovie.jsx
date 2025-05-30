@@ -174,7 +174,7 @@ export default function AddMovie() {
             .when('movieType', {
                 is: 'movie',
                 then: schema => schema.notRequired(),
-                otherwise: schema => schema.erquired('وارد کردن تعداد فصل ها اجباری است')
+                otherwise: schema => schema.required('وارد کردن تعداد فصل ها اجباری است')
             }),
     })
 
@@ -211,7 +211,7 @@ export default function AddMovie() {
         }).then(res => {
             if (res.ok) {
                 console.log(res)
-                location.href = "/my-account/adminPanel/movies/add-movie"
+                location.href = "/my-account/adminPanel/movies"
             }
         })
             .catch(err => {
@@ -268,7 +268,7 @@ export default function AddMovie() {
     }
 
     const addMovie = async data => {
-        // setIsAdding(true)
+        setIsAdding(true)
         let newMovieObj = { ...data }
 
         newMovieObj.created_at = new Date()
@@ -281,11 +281,11 @@ export default function AddMovie() {
         newMovieObj.site_scores = []
         newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
 
-        for (let key in newMovieObj) {
-            console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
-        }
+        // for (let key in newMovieObj) {
+        //     console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
+        // }
 
-        console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
+        // console.log(newMovieObj, Object.keys(newMovieObj).join(' '))
         await addMovieHandler(newMovieObj)
     }
 

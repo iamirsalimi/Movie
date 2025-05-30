@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { FaTheaterMasks } from "react-icons/fa";
 
+
+
 export default function GenreTables({ genre, movies }) {
     const [activeType, setActiveType] = useState('movie')
     const [activeTypeArray, setActiveTypeArray] = useState(genre[activeType])
@@ -22,13 +24,13 @@ export default function GenreTables({ genre, movies }) {
 
     useEffect(() => {
         activeTypeArray.forEach(genre => {
-            newGenre = movies.filter(movie => movie.type == activeType).reduce((prev, current) => {
-                return { ...prev, [genre]: current.genre.some(genreItem => genreItem == genre) ? (prev[genre] ? prev[genre] + 1 : 1) : (prev[genre] ? prev[genre] : 0) }
+            newGenre = movies.filter(movie => movie.movieType == activeType).reduce((prev, current) => {
+                return { ...prev, [genre]: current.genres.some(genreItem => genreItem == genre) ? (prev[genre] ? prev[genre] + 1 : 1) : (prev[genre] ? prev[genre] : 0) }
             }, {})
             newGenres = { ...newGenres, ...newGenre }
         })
         setGenresCount(newGenres)
-    }, [activeTypeArray])
+    }, [activeTypeArray , movies])
 
     useEffect(() => {
         if (activeType == 'movie') {

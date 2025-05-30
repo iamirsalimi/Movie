@@ -5,8 +5,6 @@ import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { RiMovie2AiFill } from "react-icons/ri";
 
 export default function UpdatedSeries({ series }) {
-    const [updatedSeries, setUpdatedSeries] = useState(series.slice(-10))
-
     const calcUpdate = date => {
         let newDate = new Date()
         let updatedDate = new Date(date)
@@ -59,20 +57,22 @@ export default function UpdatedSeries({ series }) {
                 </div>
             </div>
             <ul className="mt-5 flex flex-col gap-2">
-                {updatedSeries.map(seriesItem => (
+                {series.slice(0 , 9).map(seriesItem => (
                     <a href={`/series/${seriesItem.id}`}>
-                        <li key={seriesItem.id} className="w-full bg-light dark:bg-primary flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
+                        <li key={seriesItem.id} className="w-full bg-light dark:bg-primary hover:bg-black/5 dark:hover:bg-black/35 transition-colors duration-300 flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
                             <div className="min-w-20 max-w-20 h-20 rounded-md overflow-hidden">
-                                <img src={seriesItem.src} className="w-full h-full object-cover object-center" alt="" />
+                                <img src={seriesItem.cover} className="w-full h-full object-cover object-center" alt="" />
                             </div>
 
                             <div className="flex flex-col gap-3 px-2">
                                 <h2 className="text-secondary dark:text-white font-vazir line-clamp-1">{seriesItem.mainTitle}</h2>
                                 <div className="flex items-start xs:items-center gap-2">
-                                    <p className="text-white dark:text-primary font-vazir text-xs text-nowrap bg-yellow-400 w-fit py-0.5 px-2 rounded-sm">{seriesItem.updateNotifs[seriesItem.updateNotifs.length - 1]}</p>
+                                    {seriesItem?.notifications.length > 0 && (
+                                        <p className="text-white dark:text-primary font-vazir text-xs text-nowrap bg-yellow-400 w-fit py-0.5 px-2 rounded-sm">{seriesItem?.notifications[seriesItem?.notifications.length - 1]}</p>
+                                    )}
                                     <p className="text-gray-500 items-center justify-center gap-1 text-xs hidden xs:flex lg:hidden xl:flex">
                                         <GrUpdate className="fill-gray-500" />
-                                        <span>{calcUpdate(seriesItem.updatedAt)}</span>
+                                        <span>{calcUpdate(seriesItem.updated_at)}</span>
                                     </p>
                                 </div>
                             </div>

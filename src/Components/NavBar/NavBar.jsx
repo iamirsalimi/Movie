@@ -21,7 +21,7 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
         setShowModal(true)
     }
 
-    let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
+    let links = [{ title: 'صفحه اصلی', href: '/' , paginate:"/page/" }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
 
     return (
         <nav className={`${navFlag ? 'shadow shadow-black/5 bg-white dark:bg-secondary' : 'absolute top-0'} w-full z-40 transition-colors`}>
@@ -45,7 +45,7 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
                             }
 
                             return (
-                                   <a href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
+                                   <a href={link.href} className={`${link.href == location.pathname || location.pathname.startsWith(link?.paginate) ? 'activeLink' : ''}`} >
                                        <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
                                    </a>
                                )
@@ -84,8 +84,8 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
                             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                     </button>
-                    {hasUserLoggedIn && (
-                        <a href={user?.role == 'admin' ? '/my-account/adminPanel' : '/my-account/userPanel'} className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
+                    {hasUserLoggedIn && user?.role != 'admin' && (
+                        <a href='/my-account/userPanel/notifications' className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
                             <IoNotificationsOutline className="text-2xl" />
                             <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">0</span>
                         </a>
