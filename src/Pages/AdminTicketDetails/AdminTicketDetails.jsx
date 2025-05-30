@@ -15,6 +15,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { TbSend2 } from "react-icons/tb";
 
 let apiData = {
+    postNotifApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications',
     updateTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
     getMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages?ticket_id=eq.',
     postMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages',
@@ -42,6 +43,40 @@ export default function AdminTicketDetails() {
 
     let { ticketId } = useParams()
     const userObj = useContext(UserContext)
+
+    // add new notification
+    const addNotificationHandler = async newNotificationObj => {
+        await fetch(apiData.postNotifApi, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newNotificationObj)
+        }).then(res => {
+            console.log(res)
+        })
+            .catch(err => {
+                console.log('مشکلی در افزودن فیلم پیش آمده')
+            })
+    }
+
+    const addNotification = async data => {
+        let newNotificationObj = {
+            title : `پیام جدید در تیکت "${ticketObj.subject}"`,
+            text : `شما در تیکت "${ticketObj.subject}" یک پیام جدید دارید برای بررسی آن میتوانید روی لینک کلیک کنید `,
+            userId : ticketObj.userId,
+            link : `/my-account/userPanel/messages/ticket-details/${ticketObj.id}`,
+            type : 'info',
+            created_at : new Date(),
+            updated_at : new Date()
+        }
+
+
+        console.log(newNotificationObj)
+        // await addNotificationHandler(newNotificationObj)
+    }
 
     // update ticket
     const updateTicketHandler = async (newTicketObj, reloadFlag) => {
@@ -116,6 +151,7 @@ export default function AdminTicketDetails() {
             if (res.ok) {
                 setGetMessages(prev => !prev)
                 setMessageText('')
+                addNotification()
                 updateTicket(true)
                 setIsSending(false)
                 toast.success('پیام شما ارسال شد')

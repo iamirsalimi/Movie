@@ -12,7 +12,6 @@ import { LuTrash2 } from "react-icons/lu";
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
-  'ID': { hasValue: false, property: 'id' },
   'subject': { hasValue: false, property: 'subject' },
   'movieTitle': { hasValue: false, property: 'movieTitle' },
   'account': { hasValue: true, property: 'category', value: 'account' },
@@ -91,11 +90,7 @@ export default function AllTickets() {
         filteredTicketsArray = tickets.filter(ticket => ticket[filterObj.property] == filterObj.value)
       } else {
         if (searchValue) {
-          if (filterObj.property == 'id') {
-            filteredTicketsArray = tickets.filter(ticket => ticket[filterObj.property] == searchValue)
-          } else if (typeof filterObj.property == 'string') {
-            filteredTicketsArray = tickets.filter(ticket => ticket[filterObj.property].toLowerCase().startsWith(searchValue))
-          }
+          filteredTicketsArray = tickets.filter(ticket => ticket[filterObj.property].toLowerCase().startsWith(searchValue))
         } else {
           filteredTicketsArray = [...tickets]
         }
@@ -129,7 +124,6 @@ export default function AllTickets() {
               value={searchType}
               onChange={e => setSearchType(e.target.value)}
             >
-              <option value="ID">ID</option>
               <option value="subject">عنوان</option>
               <option value="pending">در حال بررسی</option>
               <option value="answered">پاسخ داده شده</option>
