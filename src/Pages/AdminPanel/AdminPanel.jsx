@@ -162,7 +162,7 @@ export default function AdminPanel() {
                             <MdKeyboardArrowRight className="stroke-white text-2xl" />
                             <span className="text-sm font-vazir">بازگشت به صفحه اصلی</span>
                         </a>
-                        <span className="text-light-gray dark:text-white font-vazir">{mainLocationObj.title}</span>
+                        <span className="text-light-gray dark:text-white font-vazir">{mainLocationObj?.title}</span>
                     </div>
 
                     <Outlet />

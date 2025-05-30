@@ -218,9 +218,12 @@ export default function AllUsers() {
                                                         <FaEye className="text-green-500 group-hover:text-white transition-all" />
                                                     </a>
 
-                                                    <button className="p-1 rounded-md cursor-pointer bg-orange-200 hover:bg-orange-500 transition-colors group">
+                                                    <a
+                                                        href={`/my-account/adminPanel/tickets?userId=${user.id}`}
+                                                        className="p-1 rounded-md cursor-pointer bg-orange-200 hover:bg-orange-500 transition-colors group"
+                                                    >
                                                         <TbTicket className="text-orange-500 group-hover:text-white transition-all" />
-                                                    </button>
+                                                    </a>
 
                                                     <button
                                                         className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"

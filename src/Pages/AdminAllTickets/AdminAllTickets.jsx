@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 
+import { useLocation } from 'react-router-dom';
+
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -46,6 +48,9 @@ export default function AdminAllTickets() {
 
     const userObj = useContext(UserContext)
 
+    let location = useLocation().search
+    let searchParams = location.slice(1).split('=')
+
     useEffect(() => {
         const getAllTickets = async () => {
             try {
@@ -81,6 +86,13 @@ export default function AdminAllTickets() {
             getAllTickets()
         }
     }, [userObj])
+
+    useEffect(() => {
+        if (tickets.length > 0) {
+            setSearchValue(searchParams[1])
+            setSearchType(searchParams[0])
+        }
+    }, [tickets])
 
     useEffect(() => {
         let filterObj = filterSearchObj[searchType]
@@ -208,7 +220,7 @@ export default function AdminAllTickets() {
                     )}
 
                     {!isPending && tickets.length > 0 && filteredTickets.length == 0 && (
-                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">مقداری با همچین مشخصاتی پیدا نشد</h2>
+                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تیکتی با همچین مشخصاتی پیدا نشد</h2>
                     )}
 
                     {isPending && (

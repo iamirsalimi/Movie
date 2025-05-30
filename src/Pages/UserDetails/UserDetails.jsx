@@ -16,13 +16,33 @@ import { RxCross1 } from "react-icons/rx";
 let apiData = {
     getAllCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*',
     getCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?userId=eq.',
+    getTicketsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?userId=eq.',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
 // accord this object we ca understand which property and which value should compare to eachother
-const filterSearchObj = {
+const ticketFilterSearchObj = {
+    'ID': { hasValue: false, property: 'id' },
+    'subject': { hasValue: false, property: 'subject' },
+    'account': { hasValue: true, property: 'category', value: 'account' },
+    'payment': { hasValue: true, property: 'category', value: 'payment' },
+    'bug': { hasValue: true, property: 'category', value: 'bug' },
+    'requests': { hasValue: true, property: 'category', value: 'requests' },
+    'links': { hasValue: true, property: 'category', value: 'links' },
+    'content': { hasValue: true, property: 'category', value: 'content' },
+    'other': { hasValue: true, property: 'category', value: 'other' },
+    'pending': { hasValue: true, property: 'status', value: 'pending' },
+    'answered': { hasValue: true, property: 'status', value: 'answered' },
+    'closed': { hasValue: true, property: 'status', value: 'closed' },
+    'high-priority': { hasValue: true, property: 'priority', value: 'high' },
+    'middle-priority': { hasValue: true, property: 'priority', value: 'middle' },
+    'low-priority': { hasValue: true, property: 'priority', value: 'low' },
+}
+
+// accord this object we ca understand which property and which value should compare to eachother
+const commentFilterSearchObj = {
     'ID': { hasValue: false, property: 'id' },
     'movieId': { hasValue: false, property: 'movieId' },
     'approved': { hasValue: true, property: 'status', value: 'approved' },
@@ -32,12 +52,15 @@ const filterSearchObj = {
     'has_not_spoil': { hasValue: true, property: 'has_spoiler', value: false },
 }
 
-
 export default function UserDetails() {
     const [ticketSearchType, setTicketSearchType] = useState('ID')
     const [ticketSearchValue, setTicketSearchValue] = useState('')
     const [commentSearchType, setCommentSearchType] = useState('ID')
     const [commentSearchValue, setCommentSearchValue] = useState('')
+    const [tickets, setTickets] = useState([])
+    const [filteredTickets, setFilteredTickets] = useState(null)
+    const [ticketIsPending, setTicketIsPending] = useState(false)
+    const [ticketError, setTicketError] = useState(null)
     const [comments, setComments] = useState([])
     const [filteredComments, setFilteredComments] = useState(null)
     const [commentIsPending, setCommentIsPending] = useState(false)
@@ -81,6 +104,44 @@ export default function UserDetails() {
     }, [])
 
     useEffect(() => {
+        const getTicketsInfo = async () => {
+            try {
+                const res = await fetch(`${apiData.getTicketsApi}${userId}`, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    const sortedTickets = data.sort((a, b) => {
+                        let aDate = new Date(a.created_at).getTime()
+                        let bDate = new Date(b.created_at).getTime()
+                        return aDate - bDate
+                    })
+
+                    setTickets(sortedTickets)
+                    setFilteredTickets(sortedTickets)
+                }
+
+                setTicketIsPending(null)
+                setTicketError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setTicketError(err)
+                setTicketIsPending(false)
+                setTickets(null)
+            }
+        }
+
+        if (userObj) {
+            getTicketsInfo()
+        }
+    }, [userObj])
+
+    useEffect(() => {
         const getCommentsInfo = async () => {
             try {
                 const res = await fetch(`${apiData.getCommentsApi}${userId}`, {
@@ -118,13 +179,12 @@ export default function UserDetails() {
         }
     }, [userObj])
 
-
     useEffect(() => {
-        let filterObj = filterSearchObj[commentSearchType]
+        let filterObj = commentFilterSearchObj[commentSearchType]
         let filteredCommentsArray = []
 
         // when we search something or we change the searchType we should filter the comments Array again  
-        if (filterObj) {
+        if (filterObj && comments.length > 0) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
                 filteredCommentsArray = comments?.filter(user => user[filterObj.property] == filterObj.value)
@@ -144,12 +204,37 @@ export default function UserDetails() {
         setFilteredComments(filteredCommentsArray)
     }, [commentSearchValue, commentSearchType])
 
+    useEffect(() => {
+        let filterObj = ticketFilterSearchObj[ticketSearchType]
+        let filteredTicketsArray = []
+
+        // when we search something or we change the searchType we should filter the comments Array again  
+        if (filterObj && tickets.length > 0) {
+            console.log('filtered')
+            // for searchTypes that they have value (their value is not boolean and might be a variable)
+            if (filterObj.hasValue) {
+                filteredTicketsArray = tickets?.filter(ticket => ticket[filterObj.property] == filterObj.value)
+            } else {
+                if (ticketSearchValue) {
+                    if (filterObj.property == 'id') {
+                        filteredTicketsArray = tickets?.filter(ticket => ticket[filterObj.property] == ticketSearchValue)
+                    } else if (typeof filterObj.property == 'string') {
+                        filteredTicketsArray = tickets?.filter(ticket => ticket[filterObj.property].toLowerCase().startsWith(ticketSearchValue))
+                    }
+                } else {
+                    filteredTicketsArray = [...tickets]
+                }
+            }
+        }
+
+        setFilteredTickets(filteredTicketsArray)
+    }, [ticketSearchValue, ticketSearchType])
+
     const getDate = date => {
         let newDate = new Date(date)
-        let persianDate = dayjs(newDate).calendar('jalali').locale('fa').format('YYYY/MM/DD - HH:mm')
+        let persianDate = dayjs(newDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
         return persianDate
     }
-
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20 md:mb-5">
@@ -207,6 +292,28 @@ export default function UserDetails() {
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">وضعيت حساب :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.accountStatus}</span>
                             </li>
+                            {userObj.isBanned && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">علت بن :</h3>
+                                    <span className="text-vazir-light text-primary dark:text-white">{userObj.banReason}</span>
+                                </li>
+                            )}
+                            {userObj.isBanned && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">مدت زمان بن :</h3>
+                                    <span className="text-vazir-light text-primary dark:text-white">{userObj.banDuration} روز</span>
+                                </li>
+                            )}
+                            {userObj.isBanned && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">تاریخ انقضا بن :</h3>
+                                    <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.ban_expiration_date)}</span>
+                                </li>
+                            )}
+                            <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">وضعيت حساب :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{userObj.accountStatus}</span>
+                            </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">سوابق خريد :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.last_purchases}</span>
@@ -215,10 +322,12 @@ export default function UserDetails() {
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">اشتراك :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionStatus == 'active' ? 'فعال' : userObj.subscriptionStatus == 'expired' ? 'منقضی شده' : 'ندارد'}</span>
                             </li>
-                            <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">نوع اشتراك فعال :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionPlan.duration} روز</span>
-                            </li>
+                            {userObj.subscriptionStatus == 'active' && (
+                                <li className="w-full py-1 flex items-center justify-between">
+                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">نوع اشتراك فعال :</h3>
+                                    <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionPlan.duration} روز</span>
+                                </li>
+                            )}
                             {userObj.subscriptionStatus == 'active' && (
                                 <li className="w-full py-1 flex items-center justify-between">
                                     <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ فعال شدن اشتراك :</h3>
@@ -326,60 +435,105 @@ export default function UserDetails() {
                             <div className="flex flex-col items-center gap-2">
                                 <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                                     <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
-                                        <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={ticketSearchType} onChange={e => setTicketSearchType(e.target.value)} >
+                                        <select
+                                            name=""
+                                            id=""
+                                            className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                            value={ticketSearchType}
+                                            onChange={e => setTicketSearchType(e.target.value)}
+                                        >
                                             <option value="ID">ID</option>
-                                            <option value="title">عنوان تیکت</option>
-                                            <option value="type">دپارتمان</option>
-                                            <option value="open">باز</option>
-                                            <option value="pending">در حال بررسی</option>
+                                            <option value="subject">عنوان تیکت</option>
                                             <option value="answered">پاسخ داده شده</option>
+                                            <option value="pending">در حال بررسی</option>
                                             <option value="closed">بسته شده</option>
+                                            <option value="account">دپارتمان : اکانت</option>
+                                            <option value="payment">دپارتمان : پرداخت و اشتراک</option>
+                                            <option value="bug">دپارتمان : خطا در سایت یا فیلم</option>
+                                            <option value="requests">دپارتمان : درخواست فیلم/سریال</option>
+                                            <option value="links">دپارتمان :  خرابی یا مشکل لینک فیلم/سریال</option>
+                                            <option value="content">دپارتمان : محتوای سایت</option>
+                                            <option value="other">دپارتمان : سایر موارد</option>
+                                            <option value="high-priority">اولویت بالا</option>
+                                            <option value="middle-priority">اولویت متوسط</option>
+                                            <option value="low-priority">اولویت کم</option>
                                         </select>
                                         <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو بر اساس</span>
                                     </div>
-
-                                    <div className="w-full relative select-none">
-                                        <input
-                                            type="text"
-                                            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                                            value={ticketSearchValue}
-                                            onChange={e => setTicketSearchValue(e.target.value)}
-                                        />
-                                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو</span>
-                                    </div>
+                                    {(ticketSearchType !== 'account' && ticketSearchType !== 'payment' && ticketSearchType !== 'bug' && ticketSearchType !== 'requests' && ticketSearchType !== 'links' && ticketSearchType !== 'content' && ticketSearchType !== 'other' && ticketSearchType !== 'pending' && ticketSearchType !== 'answered' && ticketSearchType !== 'closed' && ticketSearchType !== 'high-priority' && ticketSearchType !== 'middle-priority' && ticketSearchType !== 'low-priority') && (
+                                        <div className="w-full relative select-none">
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                                value={ticketSearchValue}
+                                                onChange={e => setTicketSearchValue(e.target.value)}
+                                            />
+                                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="w-full py-3 px-2 rounded-lg border border-gray-200 dark:border-white/5 overflow-scroll lg:overflow-clip">
                                     <table className="w-full">
                                         <thead className="min-w-full">
                                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
+                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">پیام جدید</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان تيكت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">دپارتمان</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ ثبت تیکت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت تیکت</th>
+                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اولویت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-secondary text-center" >
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">123</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Alex123</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">20/5/1403</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">در حال بررسی</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
-                                                    <button className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group">
-                                                        <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                                    </button>
-
-                                                    <button className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group">
-                                                        <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            {!isPending && !error &&
+                                                filteredTickets.length > 0 && (
+                                                    filteredTickets.map(ticket => (
+                                                        <tr className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
+                                                                {!ticket.is_read_by_admin && (
+                                                                    <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
+                                                                )}
+                                                            </td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.id}</td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
+                                                            <td className={`py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
+                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">
+                                                                <a
+                                                                    href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
+                                                                    className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                                                                >
+                                                                    <FaEye className="text-sky-500 group-hover:text-white transition-all" />
+                                                                    <span className="text-sky-500 text-sm font-vazir group-hover:text-white transition-all">مشاهده</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                )
+                                            }
                                         </tbody>
                                     </table>
+
+                                    {ticketIsPending == null && tickets.length == 0 && (
+                                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تا کنون تیکتی توسط این کاربر ثبت نشده</h2>
+                                    )}
+
+                                    {!ticketIsPending && tickets.length > 0 && filteredTickets.length == 0 && (
+                                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">مقداری با همچین مشخصاتی پیدا نشد</h2>
+                                    )}
+
+                                    {ticketIsPending && (
+                                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>
+                                    )}
+
+                                    {ticketError && (
+                                        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در دریافت اطلاعات از سرور مشکل بر خوردیم لطفا صفحه را رفرش کنید</h2>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -388,7 +542,13 @@ export default function UserDetails() {
                             <div className="flex flex-col items-center gap-2">
                                 <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                                     <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
-                                        <select name="" id="" className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" value={commentSearchType} onChange={e => setCommentSearchType(e.target.value)} >
+                                        <select
+                                            name=""
+                                            id=""
+                                            className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                            value={commentSearchType}
+                                            onChange={e => setCommentSearchType(e.target.value)}
+                                        >
                                             <option value="ID">ID</option>
                                             <option value="movieId">ID فیلم</option>
                                             <option value="approved">تایید شده</option>
@@ -400,15 +560,17 @@ export default function UserDetails() {
                                         <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو بر اساس</span>
                                     </div>
 
-                                    <div className="w-full relative select-none">
-                                        <input
-                                            type="text"
-                                            className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
-                                            value={commentSearchValue}
-                                            onChange={e => setCommentSearchValue(e.target.value)}
-                                        />
-                                        <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو</span>
-                                    </div>
+                                    {commentSearchType != 'approved' && commentSearchType != 'pending' && commentSearchType != 'rejected' && commentSearchType != 'hasSpoil' && commentSearchType != 'has_not_spoil' && (
+                                        <div className="w-full relative select-none">
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                                value={commentSearchValue}
+                                                onChange={e => setCommentSearchValue(e.target.value)}
+                                            />
+                                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">جستجو</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="w-full py-3 px-2 rounded-lg border border-gray-200 dark:border-white/5 overflow-scroll lg:overflow-clip">
@@ -448,7 +610,7 @@ export default function UserDetails() {
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-center max-w-20">
-                                                                <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
+                                                                <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
                                                                 <a
@@ -474,7 +636,7 @@ export default function UserDetails() {
                                             ) : (
                                                 <h2 className="text-center text-red-500 font-vazir text-sm mt-4">کاربر تا کنون کامنتی نذاشته است</h2>
                                             )}
-                                        
+
                                         </>
                                     )}
 

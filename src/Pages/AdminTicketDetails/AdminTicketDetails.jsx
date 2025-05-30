@@ -62,20 +62,19 @@ export default function AdminTicketDetails() {
             })
     }
 
-    const addNotification = async data => {
+    const addNotification = async () => {
         let newNotificationObj = {
-            title : `پیام جدید در تیکت "${ticketObj.subject}"`,
-            text : `شما در تیکت "${ticketObj.subject}" یک پیام جدید دارید برای بررسی آن میتوانید روی لینک کلیک کنید `,
-            userId : ticketObj.userId,
-            link : `/my-account/userPanel/messages/ticket-details/${ticketObj.id}`,
-            type : 'info',
-            created_at : new Date(),
-            updated_at : new Date()
+            title: `پیام جدید در تیکت "${ticketObj.subject}"`,
+            text: `شما در تیکت "${ticketObj.subject}" یک پیام جدید دارید برای بررسی آن میتوانید روی لینک کلیک کنید `,
+            userId: ticketObj.userId,
+            link: `/my-account/userPanel/messages/ticket-details/${ticketObj.id}`,
+            type: 'info',
+            created_at: new Date(),
+            updated_at: new Date()
         }
 
-
-        console.log(newNotificationObj)
-        // await addNotificationHandler(newNotificationObj)
+        // console.log(newNotificationObj)
+        await addNotificationHandler(newNotificationObj)
     }
 
     // update ticket
@@ -108,18 +107,20 @@ export default function AdminTicketDetails() {
         let newTicketObj = { ...ticketObj }
 
         if (adminFlag) {
+            console.log('sdgsadga')
             newTicketObj.is_read_by_user = false
             newTicketObj.is_read_by_admin = true
             newTicketObj.status = 'answered'
             newTicketObj.last_message_by = 'admin'
-        } else {
+
+            updateTicketHandler(newTicketObj)
+        } else if (!newTicketObj.is_read_by_admin) {
             // user already saw the messages and ticket details so we don't have to update that 
-            if (newTicketObj.is_read_by_admin) {
-                return false
-            }
             newTicketObj.is_read_by_admin = true
+
+            updateTicketHandler(newTicketObj)
         }
-        updateTicketHandler(newTicketObj)
+
     }
 
     // updating details after changing details and clicking on update button
@@ -194,7 +195,6 @@ export default function AdminTicketDetails() {
                 if (data.length > 0) {
                     setTicketObj(data[0])
                     setIsPending(false)
-                    updateTicket(false)
                 } else {
                     window.location.href = '/my-account/adminPanel/messages'
                 }
@@ -237,14 +237,18 @@ export default function AdminTicketDetails() {
             }
         }
         if (ticketObj) {
+            console.log('ticket Obj ->', ticketObj)
             setMessageIsPending(true)
             getMessagesInfo(ticketId)
         }
     }, [getMessages, ticketObj])
 
     useEffect(() => {
-        setPriority(ticketObj?.priority)
-        setStatus(ticketObj?.status)
+        if(ticketObj){
+            setPriority(ticketObj?.priority)
+            setStatus(ticketObj?.status)
+            updateTicket(false)
+        }
     }, [ticketObj])
 
     const getDate = date => {
