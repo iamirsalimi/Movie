@@ -21,7 +21,7 @@ export default function AllRequests() {
   const [filteredRequests, setFilteredRequests] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(false)
-  const [searchType, setSearchType] = useState('ID')
+  const [searchType, setSearchType] = useState('title')
   const [searchValue, setSearchValue] = useState('')
 
    let {userObj} = useContext(UserContext)
@@ -38,7 +38,7 @@ export default function AllRequests() {
 
         const data = await res.json()
 
-        if (data) {
+        if (data.length > 0) {
           let sortedRequestsArray = data.sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()
@@ -46,7 +46,7 @@ export default function AllRequests() {
           })
           setRequests(sortedRequestsArray)
           setFilteredRequests(sortedRequestsArray)
-          setIsPending(false)
+          setIsPending(null)
           setError(false)
         }
 
@@ -57,10 +57,11 @@ export default function AllRequests() {
       }
     }
 
-    setIsPending(true)
-    getAllRequests()
-  }, [])
-
+    if(userObj){
+      setIsPending(true)
+      getAllRequests()
+    }
+  }, [userObj])
 
   useEffect(() => {
     let filterObj = filterSearchObj[searchType]
@@ -72,7 +73,7 @@ export default function AllRequests() {
       if (filterObj.hasValue) {
         filteredRequestsArray = requests.filter(request => request[filterObj.property] == filterObj.value)
       } else {
-        if (searchValue) {
+        if (searchValue.trim()) {
           filteredRequestsArray = requests.filter(request => request[filterObj.property].toLowerCase().startsWith(searchValue))
         } else {
           filteredRequestsArray = [...requests]
@@ -80,6 +81,7 @@ export default function AllRequests() {
       }
     }
 
+    console.log(requests , filteredRequests , filteredRequestsArray)
     setFilteredRequests(filteredRequestsArray)
   }, [searchValue, searchType])
 
@@ -136,8 +138,12 @@ export default function AllRequests() {
             </tbody>
           </table>
 
-          {!isPending && filteredRequests.length == 0 && (
+          {isPending == null && filteredRequests.length == 0 &&  (
             <h2 className="text-center text-red-500 font-vazir text-sm mt-4">درخواستی با همچین مشخصاتی پیدا نشد</h2>
+          )}
+          
+          {isPending == null && requests.length == 0 && (
+            <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تا كنون درخواستي توسط شما ثبت نشده</h2>
           )}
 
           {isPending && (

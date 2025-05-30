@@ -62,7 +62,7 @@ export default function ProfileEdit() {
   let newPassword = watch('newPassword')
   let confirmNewPassword = watch('confirmNewPassword')
 
-  const updateUser = async (userToken, userObj) => {
+  const updateUser = async (userToken, newUserObj) => {
     await fetch(`${apiData.updateApi}${userToken}`, {
       method: "PATCH",
       headers: {
@@ -70,7 +70,7 @@ export default function ProfileEdit() {
         'apikey': apiData.apikey,
         'Authorization': apiData.authorization
       },
-      body: JSON.stringify(userObj)
+      body: JSON.stringify(newUserObj)
     }).then(res => {
       location.reload()
     })
@@ -104,8 +104,8 @@ export default function ProfileEdit() {
     validatePasswords(data.recentPassword, data.newPassword, data.confirmNewPassword)
 
     if (Object.keys(errors).length == 0) {
-      if (user.firstName != data.firstName || user.lastName != data.lastName || user.nickName != data.nickName || user.userName != data.userName || user.email != data.email || user.password != data.newPassword) {
-        let newUserObj = { ...user }
+      if (userObj.firstName != data.firstName || userObj.lastName != data.lastName || userObj.nickName != data.nickName || userObj.userObjName != data.userObjName || userObj.email != data.email || userObj.password != data.newPassword) {
+        let newUserObj = { ...userObj }
         newUserObj.firstName = data.firstName
         newUserObj.lastName = data.lastName
         newUserObj.nickName = data.nickName
@@ -126,13 +126,13 @@ export default function ProfileEdit() {
   }
 
   useEffect(() => {
-    setValue('firstName', user?.firstName, { shouldValidate: true })
-    setValue('lastName', user?.lastName, { shouldValidate: true })
-    setValue('nickName', user?.nickName, { shouldValidate: true })
-    setValue('userName', user?.userName, { shouldValidate: true })
-    setValue('email', user?.email, { shouldValidate: true })
-    setValue('recentPassword', user?.password, { shouldValidate: true })
-  }, [user])
+    setValue('firstName', userObj?.firstName, { shouldValidate: true })
+    setValue('lastName', userObj?.lastName, { shouldValidate: true })
+    setValue('nickName', userObj?.nickName, { shouldValidate: true })
+    setValue('userName', userObj?.userName, { shouldValidate: true })
+    setValue('email', userObj?.email, { shouldValidate: true })
+    setValue('recentPassword', userObj?.password, { shouldValidate: true })
+  }, [userObj])
 
   useEffect(() => {
     if (newPassword || confirmNewPassword) {

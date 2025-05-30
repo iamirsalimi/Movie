@@ -215,10 +215,6 @@ export default function TicketDetails() {
                             <p className="text-primary dark:text-gray-300">{ticketObj?.subject}</p>
                         </li>
                         <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
-                            <h3 className="text-light-gray dark:text-gray-500">وضعیت تیکت</h3>
-                            <p className="text-primary dark:text-gray-300">{ticketObj?.status == 'pending' ? 'در حال بررسی' : ticketObj?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</p>
-                        </li>
-                        <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">دپارتمان تيكت</h3>
                             <p className="text-primary dark:text-gray-300">{ticketObj?.category == 'account' ? 'حساب' : ticketObj?.category == 'payment' ? 'پرداخت و اشتراک' : ticketObj?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticketObj?.category == 'requests' ? 'درخواست فیلم/سریال' : ticketObj?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticketObj?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</p>
                         </li>
