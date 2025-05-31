@@ -1,6 +1,8 @@
-import React, { useState , useEffect , forwardRef, useRef } from 'react'
+import React, { useState, useEffect, forwardRef, useRef } from 'react'
 
 import { useLocation } from 'react-router-dom';
+
+import toast from 'react-hot-toast';
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -13,11 +15,11 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 
-const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, movieType , movieTitle ,movieSrc , userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler , addCommentHandler , comments } , ref) => {
+const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, movieType, movieTitle, movieSrc, userObj, userId, user_name, userRole, parentId, id, text, has_spoiler, status, likes, disLikes, replied_to, created_at, replyId, setReplyId, setShowAddCommentForm, isAdding, setIsAdding, updateCommentsLikesHandler, addCommentHandler, comments }, ref) => {
     // the comments that they have spoil we shouldn't show them at first and give people choice to choose they wanna see comment or not regarded to spoil 
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
     // finding comments replied to this comments
-    const [replies , setReplies] = useState(() => {
+    const [replies, setReplies] = useState(() => {
         let repliesArray = comments?.filter(comment => comment.parentId == id)
         return repliesArray
     })
@@ -32,6 +34,11 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     }
 
     const likeComment = () => {
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return false;
+        }
+
         let newLikes = new Set(likes)
 
         // if user already liked comment after clicking again we should remove his like
@@ -56,6 +63,11 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     }
 
     const dislikeComment = () => {
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return false;
+        }
+
         let newDisLikes = new Set(disLikes)
 
         // if user already disLiked comment after clicking again we should remove his disLike
@@ -79,22 +91,20 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     }
 
     useEffect(() => {
-            const hash = location.hash;
-            const commentId = hash?.replace('#comment-', '');
-            if (replies?.length > 0 && commentId && replyRefs.current[commentId]) {
-                replyRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
-                replyRefs.current[commentId].classList.add('!bg-sky-100')
-                replyRefs.current[commentId].classList.add('dark:!bg-sky-900')
-                replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white')
-                setTimeout(() => {
-                    replyRefs.current[commentId].classList.remove('!bg-sky-100')
-                    replyRefs.current[commentId].classList.remove('dark:!bg-sky-900')
-                    replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
-                } , 3000)
-            }
-        }, [replies])
-
-
+        const hash = location.hash;
+        const commentId = hash?.replace('#comment-', '');
+        if (replies?.length > 0 && commentId && replyRefs.current[commentId]) {
+            replyRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            replyRefs.current[commentId].classList.add('!bg-sky-100')
+            replyRefs.current[commentId].classList.add('dark:!bg-sky-900')
+            replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white')
+            setTimeout(() => {
+                replyRefs.current[commentId].classList.remove('!bg-sky-100')
+                replyRefs.current[commentId].classList.remove('dark:!bg-sky-900')
+                replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
+            }, 3000)
+        }
+    }, [replies])
 
     // check if user liked comment or not
     const checkLike = () => likes.includes(+userId)
@@ -165,13 +175,13 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
             </div>
 
             {replyId === id && (
-                <CommentForm userId={mainUserId} userName={mainUserName} userRole={mainUserRole} movieId={movieId} movieTitle={movieTitle} movieSrc={movieSrc} movieType={movieType} parentId={id} repliedTo={user_name} showReply={true} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                <CommentForm userObj={userObj} userId={mainUserId} userName={mainUserName} userRole={mainUserRole} movieId={movieId} movieTitle={movieTitle} movieSrc={movieSrc} movieType={movieType} parentId={id} repliedTo={user_name} showReply={true} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
             )}
 
             <div className="w-full flex flex-col gap-5">
                 {replies?.length > 0 && replies?.map(reply => (
                     <div key={reply.id} className="w-full pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
-                        <Comment isReplied {...reply} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding}  mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType} movieTitle={movieTitle} movieSrc={movieSrc} addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
+                        <Comment isReplied {...reply} userObj={userObj} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType} movieTitle={movieTitle} movieSrc={movieSrc} addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
                     </div>
                 ))
                 }

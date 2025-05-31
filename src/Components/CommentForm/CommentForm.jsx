@@ -1,5 +1,7 @@
 import React, { useId, useState } from 'react'
 
+import toast from 'react-hot-toast'
+
 // class for making new comment Object for reply or adding 
 class CommentObj {
     constructor(movieId , movieType,movieTitle,movieSrc, userId, userName, userRole, parentId, replied_to, commentText, hasSpoil) {
@@ -21,7 +23,7 @@ class CommentObj {
     }
 }
 
-export default function CommentForm({ showReply = false, movieId,movieType, movieTitle,movieSrc, userId, userName, userRole, parentId = null, repliedTo = null, setReplyId, setShowAddCommentForm, addCommentHandler, isAdding, setIsAdding }) {
+export default function CommentForm({ showReply = false, movieId,movieType, movieTitle,movieSrc, userObj , userId, userName, userRole, parentId = null, repliedTo = null, setReplyId, setShowAddCommentForm, addCommentHandler, isAdding, setIsAdding }) {
     const [hasSpoil, setHasSpoil] = useState(false)
     const [commentText, setCommentText] = useState('')
 
@@ -39,6 +41,11 @@ export default function CommentForm({ showReply = false, movieId,movieType, movi
 
     // will make an Object for Comments
     const addComment = () => {
+        if(!userObj){
+            toast.error('برای افزودن دیدگاهتان ابتدا باید وارد حساب کاربری خود شوید')
+            return false
+        }
+
         if (commentText.trim()) {
             setIsAdding(true)
             let comment = new CommentObj(movieId,movieType,movieTitle,movieSrc, userId, userName, userRole, parentId, repliedTo, commentText.trim(), hasSpoil)

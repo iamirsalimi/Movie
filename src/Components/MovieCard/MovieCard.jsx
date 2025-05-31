@@ -63,7 +63,13 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
     }
 
     const addMovieToUserWatchList = () => {
-        if(userObj.role == 'user'){
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return;
+        }
+
+
+        if (userObj.role == 'user') {
             let newWatchListObj = {
                 id: `${new Date().getTime()}`,
                 movieId: id,
@@ -71,11 +77,11 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                 title,
                 cover
             }
-    
+
             const newUserObj = { ...userObj }
             newUserObj.watchList.push(newWatchListObj)
-    
-    
+
+
             if (!toastId) {
                 toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
                 updateUserHandler(newUserObj, true)
@@ -122,7 +128,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                 </div>
             </div>
             <div className="w-full md:w-2/3 flex flex-col gap-5">
-                <a href={`${movieType}/${id}`} className="group">
+                <a href={`/${movieType}/${id}`} className="group">
                     <h1 className="text-light-gray dark:text-white group-hover:text-sky-500 transition-colors text-xl md:text-2xl font-bold font-vazir line-clamp-1">{mainTitle}</h1>
                 </a>
 
@@ -212,7 +218,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                     <h1 className="text-gray-500 dark:text-white font-vazir font-bold text-sm md:text-md">خلاصه داستان</h1>
                     <span className="text-slate-400 dark:text-slate-300 text-sm space-x-1">
                         <span className="font-shabnam-light">{description}</span>
-                        <a href={`${movieType}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1 font-shabnam">
+                        <a href={`/${movieType}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1 font-shabnam">
                             <span>دانلود/جزییات بیشتر</span>
                             <PiArrowCircleLeftDuotone className="inline fill-sky-600 dark:fill-yellow-500 text-2xl group-hover:-translate-x-2 transition-all duration-150" />
                         </a>

@@ -44,6 +44,7 @@ let apiData = {
     updateCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.",
     postCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments",
     getCommentsApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?movieId=eq.",
+    updateMovieApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
     getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
@@ -169,11 +170,12 @@ function Movie() {
             if (res.ok) {
                 setIsAdding(false)
                 setGetComments(prev => !prev)
+                toast.success('دیدگاه شما با موفقیت اضافه شد و پس از تایید ادمین نمایش داده می شود')
             }
         })
             .catch(err => {
                 setIsAdding(false)
-                console.log('مشکلی در افزودن فیلم پیش آمده')
+                toast.error('مشکلی در افزودن دیدگاه پیش آمده')
             })
     }
 
@@ -228,7 +230,7 @@ function Movie() {
             .catch(err => {
                 setCommentsIsPending(false)
                 setIsAdding(false)
-                console.log('مشکلی در افزودن فیلم پیش آمده')
+                toast.error('مشکلی در افزودن دیدگاه پیش آمده')
             })
     }
 
@@ -251,7 +253,7 @@ function Movie() {
     }
 
     // update user handler
-    const updateUserHandler = async (newUserObj , addFlag) => {
+    const updateUserHandler = async (newUserObj, addFlag) => {
         await fetch(`${apiData.updateUserApi}${userObj.id}`, {
             method: "PATCH",
             headers: {
@@ -263,7 +265,7 @@ function Movie() {
         }).then(res => {
             toast.dismiss(toastId)
             toastId = null
-            if(addFlag){
+            if (addFlag) {
                 toast.success('فیلم به لیست تماشا اضافه شد')
             } else {
                 toast.success('فیلم از لیست تماشا حذف شد')
@@ -278,13 +280,19 @@ function Movie() {
             })
     }
 
-
     const isMovieInUserWatchList = (watchList, movieId) => {
         let isInWatchList = watchList?.some(movie => movie.movieId == movieId)
         return isInWatchList
     }
 
     const addMovieToUserWatchList = () => {
+        // console.log(userObj)
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return;
+        }
+
+
         let { id, movieType, title, cover } = mainMovie
         let newWatchListObj = {
             id: `${new Date().getTime()}`,
@@ -297,10 +305,10 @@ function Movie() {
         const newUserObj = { ...userObj }
         newUserObj.watchList.push(newWatchListObj)
 
-        
+
         if (!toastId) {
             toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
-            updateUserHandler(newUserObj , true)
+            updateUserHandler(newUserObj, true)
         }
     }
 
@@ -313,6 +321,140 @@ function Movie() {
             toastId = toast.loading('در حال حذف فیلم از لیست تماشا')
             updateUserHandler(newUserObj)
         }
+    }
+
+    const updateMovieLikesHandler = async (newMovieObj, likeFlag, removeFlag) => {
+        await fetch(`${apiData.updateMovieApi}${mainMovie.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newMovieObj)
+        }).then(res => {
+            if (res.ok) {
+                console.log(res)
+                setMainMovie(newMovieObj)
+                if (!removeFlag) {
+                    if (likeFlag) {
+                        toast.success('فیلم با موفقیت لایک شد')
+                    } else {
+                        toast.success('فیلم با موفقیت دیسلایک شد')
+                    }
+                } else {
+                    if (likeFlag) {
+                        toast.success('لایک با موفقیت برداشته شد')
+                    } else {
+                        toast.success('دیسلایک با موفقیت برداشته شد')
+                    }
+                }
+            }
+        })
+            .catch(err => {
+                setIsAdding(false)
+                toast.error('مشکلی در آپدیت لایک های فیلم پیش آمده')
+            })
+    }
+
+    const hasUserLiked = () => {
+        if (mainMovie && userObj) {
+            let scoreObj = mainMovie.site_scores?.find(score => score.userId == userObj.id)
+            return scoreObj?.likeStatus
+        }
+
+        return false
+    }
+
+    const likeMovie = () => {
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return false;
+        }
+
+        let scores = [...mainMovie.site_scores]
+
+        let removeFlag = false
+
+        // if user already liked comment after clicking again we should remove his like
+        let userLikedMovieObj = scores.find(score => score.userId == userObj.id)
+        if (!userLikedMovieObj) {
+            removeFlag = false
+
+            scores.push({
+                id: new Date().getTime(),
+                userId: userObj.id,
+                likeStatus: 'liked'
+            })
+
+            console.log('added')
+        } else {
+            // if user already liked the movie we should remove his like
+            if (userLikedMovieObj.likeStatus == 'liked') {
+                removeFlag = true
+                scores = scores.filter(score => score.userId != userObj.id)
+            } else {
+                // if user already disliked the movie and clicked on like button we should change his dislike to like
+                removeFlag = false
+
+                scores.forEach(score => {
+                    if (score.userId == userObj.id) {
+                        score.likeStatus = 'liked'
+                    }
+                })
+            }
+
+            console.log('removed')
+        }
+
+        let newMainMovie = { ...mainMovie }
+        newMainMovie.site_scores = [...scores]
+        updateMovieLikesHandler(newMainMovie, true, removeFlag)
+    }
+
+    const dislikeMovie = () => {
+        if (!userObj) {
+            toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
+            return false;
+        }
+
+        let scores = [...mainMovie.site_scores]
+
+        let removeFlag = false
+
+        // if user already liked comment after clicking again we should remove his like
+        let userLikedMovieObj = scores.find(score => score.userId == userObj.id)
+
+        if (!userLikedMovieObj) {
+            removeFlag = false
+            scores.push({
+                id: new Date().getTime(),
+                userId: userObj.id,
+                likeStatus: 'disliked'
+            })
+
+            console.log('added')
+        } else {
+            // if user already disliked the movie we should remove his dislike
+            if (userLikedMovieObj.likeStatus == 'disliked') {
+                scores = scores.filter(score => score.userId != userObj.id)
+                removeFlag = true
+            } else {
+                // if user already liked the movie and clicked on dislike button we should change his like to dislike
+                removeFlag = false
+                scores.forEach(score => {
+                    if (score.userId == userObj.id) {
+                        score.likeStatus = 'disliked'
+                    }
+                })
+            }
+            console.log('removed')
+        }
+        console.log(scores)
+
+        let newMainMovie = { ...mainMovie }
+        newMainMovie.site_scores = [...scores]
+        updateMovieLikesHandler(newMainMovie, false, removeFlag)
     }
 
     useEffect(() => {
@@ -401,10 +543,10 @@ function Movie() {
                                                 <span className="font-bold"><span className="text-lg sm:text-xl text-white">{mainMovie.metacritic_score}</span><span className="text-blue-500">%</span></span>
                                             </div>
 
-                                            <div className="hidden sm:flex items-center justify-center gap-1">
+                                            {/* <div className="hidden sm:flex items-center justify-center gap-1">
                                                 <BiLike className="text-2xl sm:text-3xl fill-green-500" />
                                                 <span className="font-bold"><span className="text-lg sm:text-xl text-white">{calcRates(mainMovie?.site_scores)}</span><span className="text-green-500">%</span> <span className="text-sm text-white dark:text-gray-100 font-vazir hidden md:inline lg:hidden xl:inline">({mainMovie?.site_scores.length} رای)</span> </span>
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                         <ul className="flex flex-col items-center lg:items-start justify-center gap-2">
@@ -480,13 +622,19 @@ function Movie() {
                                                 <span>پخش آنلاین</span>
                                             </button>
 
-                                            <button className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-green-500 transition-all duration-200 rounded-sm cursor-pointer ">
-                                                <span className="text-white group-hover:text-green-500 transition-all duration-200 text-lg">{mainMovie.site_scores.filter(rate => rate.liked).length}</span>
-                                                <AiFillLike className="text-white group-hover:text-green-500 transition-all duration-200 text-xl" />
+                                            <button
+                                                className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-green-500 transition-all duration-200 rounded-sm cursor-pointer "
+                                                onClick={likeMovie}
+                                            >
+                                                <span className={`group-hover:text-green-500 ${hasUserLiked() == 'liked' ? 'text-green-500' : 'text-white'} transition-all duration-200 text-lg`}>{mainMovie.site_scores.filter(score => score.likeStatus == 'liked').length}</span>
+                                                <AiFillLike className={`group-hover:text-green-500 ${hasUserLiked() == 'liked' ? 'text-green-500' : 'text-white'} transition-all duration-200 text-xl`} />
                                             </button>
-                                            <button className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-orange-500 transition-all duration-200 rounded-sm cursor-pointer ">
-                                                <span className="text-white group-hover:text-orange-500 transition-all duration-200 text-lg">{mainMovie.site_scores.filter(rate => !rate.liked).length}</span>
-                                                <AiFillDislike className="text-white group-hover:text-orange-500 transition-all duration-200 text-xl" />
+                                            <button
+                                                className="group inline-flex items-center justify-center gap-1 p-2 bg-secondary hover:border-orange-500 transition-all duration-200 rounded-sm cursor-pointer "
+                                                onClick={dislikeMovie}
+                                            >
+                                                <span className={`group-hover:text-orange-500 ${hasUserLiked() == 'disliked' ? 'text-orange-500' : 'text-white'} transition-all duration-200 text-lg`}>{mainMovie.site_scores.filter(score => score.likeStatus == 'disliked').length}</span>
+                                                <AiFillDislike className={`group-hover:text-orange-500 ${hasUserLiked() == 'disliked' ? 'text-orange-500' : 'text-white'} transition-all duration-200 text-xl`} />
                                             </button>
                                         </div>
                                     </div>
@@ -573,10 +721,18 @@ function Movie() {
                         <div className="pt-5">
                             <div className="w-full h-fit rounded-lg">
                                 {movieTab == 'download' && (
-                                    <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                        <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir-light">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
-                                        <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
-                                    </div>
+                                    <>
+                                        {userObj ? (
+                                            <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                                <h2 className="mx-auto text-red-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک دانلود</h2>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
+                                                <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir-light">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
+                                                <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
 
                                 {movieTab == 'similar' && (
@@ -639,16 +795,16 @@ function Movie() {
                                                     </div>
                                                     {/* leaving Comment */}
                                                     {showAddCommentForm && (
-                                                        <CommentForm userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} movieType={mainMovie?.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
+                                                        <CommentForm userObj={userObj} userId={userObj?.id} userName={userObj?.nickName || userObj?.userName} userRole={userObj?.role} movieId={+movieId} movieType={mainMovie?.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} addCommentHandler={addCommentHandler} />
                                                     )}
                                                 </div>
 
                                                 {/* Movie's Comments */}
                                                 <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
-                                                    {comments?.length ? (
+                                                    {comments?.filter(comment => comment.status == 'approved').length ? (
                                                         <div className="flex flex-col items-center justify-center gap-7">
                                                             {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
-                                                                <Comment comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
+                                                                <Comment userObj={userObj} comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                             ))}
                                                         </div>
                                                     ) : (
