@@ -4,7 +4,6 @@ import VipPlanTicket from '../VipPlanTicket/VipPlanTicket';
 
 import { RxCross2 } from "react-icons/rx";
 
-
 let vipPlans = [
     { id: 'Month1', month: "1 ماهه", price: "70000", days: 30 },
     { id: 'Month3', month: "3 ماهه", price: "190000", days: 90 },
@@ -12,7 +11,7 @@ let vipPlans = [
     { id: 'Month12', month: "1 ساله", price: "650000", days: 365 },
 ]
 
-export default function VipPlanModal({ showModal, setShowModal }) {
+export default function VipPlanModal({ userObj, showModal, setShowModal, isUpdating, setIsUpdating, updateUserHandler }) {
     const [selectedVipPlan, setSelectedVipPlan] = useState({ id: 'Month1', month: "1 ماهه", price: "70000", days: 30 })
     const [renewalDate, setRenewalDate] = useState(null)
     const [agreeWebsitePolicy, setAgreeWebsitePolicy] = useState(false)
@@ -26,16 +25,40 @@ export default function VipPlanModal({ showModal, setShowModal }) {
         let now = new Date()
         now.setDate(now.getDate() + daysToAdd)
 
-        return now.toLocaleDateString('fa-IR')
+        return now
     }
 
     useEffect(() => {
         setRenewalDate(getExpirationDate(selectedVipPlan.days))
     }, [selectedVipPlan])
 
-    //adding , after each 3 numbers
-    function formatPrice(price) {
+    //adding "," after each 3 numbers
+    const formatPrice = price => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    const getVipPlanChanging = () => {
+        let newUserObj = { ...userObj }
+        newUserObj.subscriptionStatus = 'active'
+
+        let newExpirationDate = getExpirationDate(selectedVipPlan.days)
+
+        newUserObj.subscriptionExpiresAt = newExpirationDate
+
+        let newPlanObj = { id: new Date().getTime(), duration: selectedVipPlan.days, activateDate: new Date(), expiration: newExpirationDate, isBought: { value: true, price: selectedVipPlan.price }, changedBy: [] }
+        newUserObj.subscriptionPlan = newPlanObj
+        newUserObj.all_subscription_plans = [...newUserObj?.all_subscription_plans, newPlanObj]
+        newUserObj.last_purchases = newUserObj.all_subscription_plans.filter(plan => plan.isBought?.value)
+
+        return newUserObj
+    }
+
+    const updateUser = () => {
+        if (userObj) {
+            let newUserObj = getVipPlanChanging()
+            setIsUpdating(true)
+            updateUserHandler(newUserObj)
+        }
     }
 
     return (
@@ -57,7 +80,7 @@ export default function VipPlanModal({ showModal, setShowModal }) {
                     </ul>
                     <div className="text-light-gray dark:text-white font-vazir inline-flex items-center gap-4">
                         <span>تاریخ تمدید : </span>
-                        <span>{renewalDate}</span>
+                        <span>{renewalDate?.toLocaleDateString('fa-IR')}</span>
                     </div>
                 </div>
 
@@ -83,7 +106,12 @@ export default function VipPlanModal({ showModal, setShowModal }) {
                 </div>
 
 
-                <button className="w-full py-2 rounded-md cursor-pointer font-vazir disabled:bg-green-200 bg-green-500 hover:bg-green-600 transition-all text-white dark:text-primary" disabled={!agreeWebsitePolicy}>پرداخت</button>
+                <button
+                    className="w-full py-2 rounded-md cursor-pointer font-vazir disabled:bg-green-200 bg-green-500 hover:bg-green-600 transition-all text-white dark:text-primary" disabled={!agreeWebsitePolicy || isUpdating}
+                    onClick={updateUser}
+                >
+                    {isUpdating ? 'در حال افزودن اشتراک ...' : 'پرداخت'}
+                </button>
             </div>
         </div>
     )
