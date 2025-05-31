@@ -20,7 +20,21 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     const [showSpoiledComment, setShowSpoiledComment] = useState(false)
     // finding comments replied to this comments
     const [replies, setReplies] = useState(() => {
-        let repliesArray = comments?.filter(comment => comment.parentId == id)
+        // admin reply must show upper than other replies
+        let repliesArray = [...comments]?.sort((a, b) => {
+            //if a was admin and b wasn't admin we should return -1 and a must be upper
+            if (a.userRole === 'admin' && b.userRole !== 'admin') {
+                return -1
+            }
+            
+            //if a wasn't admin and b was admin we should return 1 and b must be upper
+            if (a.userRole !== 'admin' && b.userRole === 'admin') {
+                return 1
+            }
+            
+            //if both were admin or both weren't admin we should keep order
+            return 0
+        }).filter(comment => comment.parentId == id)
         return repliesArray
     })
 
@@ -42,20 +56,20 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
         let newLikes = new Set(likes)
 
         // if user already liked comment after clicking again we should remove his like
-        console.log(newLikes, [...newLikes].includes(+userId))
-        if (![...newLikes].includes(+userId)) {
-            newLikes.add(+userId)
+        console.log(newLikes, [...newLikes].includes(userObj.id))
+        if (![...newLikes].includes(userObj.id)) {
+            newLikes.add(userObj.id)
 
-            if (disLikes.includes(+userId)) {
+            if (disLikes.includes(userObj.id)) {
                 let newDisLikes = new Set(disLikes)
-                newDisLikes.delete(+userId)
+                newDisLikes.delete(userObj.id)
                 // if fourth argument be true it means user already disliked comment so we should remove that dislike and add user Like to likes array
                 updateCommentsLikesHandler(id, 'likes', newLikes, true, newDisLikes)
                 return false;
             }
             console.log('added')
         } else {
-            newLikes.delete(+userId)
+            newLikes.delete(userObj.id)
             console.log('removed')
         }
 
@@ -71,12 +85,12 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
         let newDisLikes = new Set(disLikes)
 
         // if user already disLiked comment after clicking again we should remove his disLike
-        if (![...newDisLikes].includes(+userId)) {
-            newDisLikes.add(+userId)
+        if (![...newDisLikes].includes(userObj.id)) {
+            newDisLikes.add(userObj.id)
 
-            if (likes.includes(+userId)) {
+            if (likes.includes(userObj.id)) {
                 let newLikes = new Set(likes)
-                newLikes.delete(+userId)
+                newLikes.delete(userObj.id)
                 // if fourth argument be true it means user already liked comment so we should remove that like and add user disLike to disLikes array
                 updateCommentsLikesHandler(id, 'disLikes', newDisLikes, true, newLikes)
                 return false;
@@ -84,7 +98,7 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
 
             console.log('added')
         } else {
-            newDisLikes.delete(+userId)
+            newDisLikes.delete(userObj.id)
             console.log('removed')
         }
         updateCommentsLikesHandler(id, 'disLikes', newDisLikes, false)
@@ -97,26 +111,32 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
             replyRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
             replyRefs.current[commentId].classList.add('!bg-sky-100')
             replyRefs.current[commentId].classList.add('dark:!bg-sky-900')
-            replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white')
+            replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.add('dark:!text-white') // comment date element
+            replyRefs.current[commentId].firstElementChild.lastElementChild.firstElementChild.lastElementChild.classList.add('dark:!text-white') //reply to element
             setTimeout(() => {
                 replyRefs.current[commentId].classList.remove('!bg-sky-100')
                 replyRefs.current[commentId].classList.remove('dark:!bg-sky-900')
                 replyRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
+                replyRefs.current[commentId].firstElementChild.lastElementChild.firstElementChild.lastElementChild.classList.remove('dark:!text-white') //reply to element
             }, 3000)
         }
     }, [replies])
 
     // check if user liked comment or not
-    const checkLike = () => likes.includes(+userId)
-    const checkDisLike = () => disLikes.includes(+userId)
+    const checkLike = () => likes.includes(userObj.id)
+    const checkDisLike = () => disLikes.includes(userObj.id)
 
     return (
         <>
 
             <div id={`comment-${id}`} ref={ref} className={`w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none transition-all !text-white flex flex-col gap-5 ${parentId ? 'replied' : ''}`}>
                 <div className="flex items-center justify-start gap-2">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
-                        <FaUser className="translate-y-2 text-white text-4xl" />
+                    <div className={`w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center ${userRole == 'admin' ? 'border border-gray-200' : ''}`}>
+                        {userRole == 'user' ? (
+                            <FaUser className="translate-y-2 text-white text-4xl" />
+                        ) : (
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShxzmPdZupkjzSwh3F1vZsdWnaHLZGif44pzCFLPcdozYGU-z_aZlWGY3VKvTIWRedrfE&usqp=CAU" alt="" className="w-full h-full object-center object-cover" />
+                        )}
                     </div>
                     <div className="flex flex-col items-start justify-center gap-1">
                         <div className="flex items-center justify-start gap-4">

@@ -18,7 +18,7 @@ import { FaUsers } from "react-icons/fa";
 export default function AdminDashboard() {
     const [ipObj, setIpObj] = useState(null)
 
-    const user = useContext(UserContext)
+    const {userObj} = useContext(UserContext)
 
     useEffect(() => {
         fetch('https://ipapi.co/json/')
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
                     <IoIosAddCircleOutline className="text-white text-xl xl:text-2xl" />
                 </UserActivityInfo>
 
-                <UserActivityInfo color='from-sky-400 to-sky-700' title="عضویت" value={getDate(user?.created_At)}>
+                <UserActivityInfo color='from-sky-400 to-sky-700' title="عضویت" value={getDate(userObj?.created_At)}>
                     <PiUserFocusFill className="text-white text-xl xl:text-2xl" />
                 </UserActivityInfo>
 
@@ -111,17 +111,17 @@ export default function AdminDashboard() {
                         <ul className="w-full flex flex-col gap-2">
                             <li className="flex items-center justify-between">
                                 <span className="text-gray-500 text-sm font-shabnam-light">نام :</span>
-                                <span className="text-light-gray dark:text-white font-vazir-light">{user?.firstName}</span>
+                                <span className="text-light-gray dark:text-white font-vazir-light">{userObj?.firstName}</span>
                             </li>
 
                             <li className="flex items-center justify-between">
                                 <span className="text-gray-500 text-sm font-shabnam-light">نام خانوادگي :</span>
-                                <span className="text-light-gray dark:text-white font-vazir-light">{user?.lastName}</span>
+                                <span className="text-light-gray dark:text-white font-vazir-light">{userObj?.lastName}</span>
                             </li>
 
                             <li className="flex flex-col gap-1">
                                 <span className="text-gray-500 text-sm font-shabnam-light">ايميل :</span>
-                                <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{user?.email}</span>
+                                <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{userObj?.email}</span>
                             </li>
 
                             <li className="flex flex-col gap-1">

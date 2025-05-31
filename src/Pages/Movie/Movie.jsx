@@ -287,11 +287,14 @@ function Movie() {
 
     const addMovieToUserWatchList = () => {
         // console.log(userObj)
+        
         if (!userObj) {
             toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
             return;
+        } else if (userObj.role == 'admin') {
+            toast.error('فقط کاربر های عادی میتوانند فیلم ها را به لیست تماشا اضافه کنن')
+            return false;
         }
-
 
         let { id, movieType, title, cover } = mainMovie
         let newWatchListObj = {
@@ -668,7 +671,7 @@ function Movie() {
                                 <IoLanguageSharp className="text-gray-400 text-xs md:text-base" />
                             </MovieInfos>
 
-                            <MovieInfos infoTitle="مدت زمان" infoValue={mainMovie.duration}>
+                            <MovieInfos infoTitle="مدت زمان" infoValue={`${mainMovie.duration} دقیقه`}>
                                 <RiTimer2Line className="text-gray-400 text-xs md:text-base" />
                             </MovieInfos>
 

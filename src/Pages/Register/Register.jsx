@@ -141,10 +141,9 @@ export default function Register() {
     const testUserName = async () => {
         let userNameFlag = userNameRegex.test(userNameValue)
 
-        if (!userNameFlag && userNameValue) {
+        if (!userNameFlag && !userNameValue.trim()) {
             errorNotify('نام کاربری درست نيست')
             validationObj.userName = false
-            console.log('userNameFlag is false')
             console.log('notValid')
         } else {
             setUserNameTestingFlag(true)

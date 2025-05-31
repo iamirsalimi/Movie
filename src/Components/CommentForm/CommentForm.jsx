@@ -17,7 +17,7 @@ class CommentObj {
         this.created_at = new Date()
         this.text = commentText
         this.has_spoiler = hasSpoil
-        this.status = 'pending'
+        this.status = userRole == 'user' ? 'pending' : 'approved'
         this.likes = []
         this.disLikes = []
     }
