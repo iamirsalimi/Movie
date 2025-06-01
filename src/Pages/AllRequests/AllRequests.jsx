@@ -24,7 +24,7 @@ export default function AllRequests() {
   const [searchType, setSearchType] = useState('title')
   const [searchValue, setSearchValue] = useState('')
 
-   let {userObj} = useContext(UserContext)
+  let { userObj } = useContext(UserContext)
 
   useEffect(() => {
     const getAllRequests = async () => {
@@ -46,10 +46,10 @@ export default function AllRequests() {
           })
           setRequests(sortedRequestsArray)
           setFilteredRequests(sortedRequestsArray)
-          setIsPending(null)
-          setError(false)
         }
 
+        setIsPending(null)
+        setError(false)
       } catch (err) {
         console.log('fetch error', err)
         setIsPending(false)
@@ -57,7 +57,7 @@ export default function AllRequests() {
       }
     }
 
-    if(userObj){
+    if (userObj) {
       setIsPending(true)
       getAllRequests()
     }
@@ -81,7 +81,7 @@ export default function AllRequests() {
       }
     }
 
-    console.log(requests , filteredRequests , filteredRequestsArray)
+    console.log(requests, filteredRequests, filteredRequestsArray)
     setFilteredRequests(filteredRequestsArray)
   }, [searchValue, searchType])
 
@@ -138,10 +138,10 @@ export default function AllRequests() {
             </tbody>
           </table>
 
-          {isPending == null && filteredRequests.length == 0 &&  (
+          {isPending == null && requests.length > 0 && filteredRequests.length == 0 && (
             <h2 className="text-center text-red-500 font-vazir text-sm mt-4">درخواستی با همچین مشخصاتی پیدا نشد</h2>
           )}
-          
+
           {isPending == null && requests.length == 0 && (
             <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تا كنون درخواستي توسط شما ثبت نشده</h2>
           )}

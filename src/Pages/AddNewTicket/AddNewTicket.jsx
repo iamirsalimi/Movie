@@ -82,7 +82,7 @@ export default function AddNewTicket() {
         priority: 'middle', // it could be "low" , "middle" or "high"
         description: data.description,
         is_read_by_admin: false,
-        is_read_by_user: false,
+        is_read_by_user: true,
         last_message_by: null, // null means user just created ticket and it either can be "user" or "admin" 
         created_at: new Date(),
         updated_at: new Date(),

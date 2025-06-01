@@ -39,7 +39,7 @@ export default function WeeklyTable({ movieTable , movies }) {
                 </ul>
             </div>
             <ul className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 py-4 px-4 h-full bg-light dark:bg-primary rounded-lg">
-                {weekMovies.length ? weekMovies.map(movie => (
+                {/* {weekMovies.length ? weekMovies.map(movie => (
                     <li key={movie[0].id} className="rounded-md bg-light border-2 border-gray-200 dark:border-secondary dark:bg-primary max-h-18 flex gap-1">
                         <div className="w-1/3 p-1.5 h-full rounded-r-md !overflow-hidden">
                             <img src={movie[0].src} className="w-14 h-14 object-cover object-center rounded-md" alt="" />
@@ -51,7 +51,7 @@ export default function WeeklyTable({ movieTable , movies }) {
                     </li>
                 )) : (
                     <h1 className="col-start-1 col-end-4 text-center text-2xl text-gray-500 dark:text-white font-vazir">مقداری وجود ندارد!</h1>
-                )}
+                )} */}
             </ul>
         </div>
     )

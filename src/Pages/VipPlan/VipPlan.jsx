@@ -43,6 +43,7 @@ export default function VipPlan() {
         }).then(res => {
             setShowModal(false)
             setIsUpdating(false)
+            setUserObj(newUserObj)
             toast.success('اشتراک جدید با موفقیت خریداری شد')
         })
             .catch(err => {

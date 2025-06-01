@@ -171,9 +171,9 @@ export default function AdminDashboard() {
 
                 if (data.length > 0) {
                     setTickets(data)
-                    setTicketsIsPending(null)
                 }
-
+                
+                setTicketsIsPending(null)
                 setTicketsError(false)
             } catch (err) {
                 console.log('fetch error')
@@ -209,10 +209,9 @@ export default function AdminDashboard() {
                         let bDate = new Date(b.updated_at).getTime()
                         return bDate - aDate
                     }).slice(0, 5))
-
-                    setRequestsIsPending(null)
                 }
-
+                
+                setRequestsIsPending(null)
                 setRequestsError(false)
             } catch (err) {
                 console.log('fetch error')
@@ -364,7 +363,7 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
 
-                            {ticketsIsPending == null && tickets?.length == 0 && (
+                            {ticketsIsPending == null && tickets == null && (
                                 <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تا كنون تیکتی توسط کاربران ثبت نشده</h2>
                             )}
 
@@ -409,7 +408,7 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
 
-                            {requestsIsPending == null && requests?.length == 0 && (
+                            {requestsIsPending == null && requests == null && (
                                 <h2 className="text-center text-red-500 font-vazir text-sm mt-4">تا كنون درخواستي توسط کاربران ثبت نشده</h2>
                             )}
 
