@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
+import dayjs from 'dayjs'
+
 import { Toaster } from 'react-hot-toast';
 
 import NavBar from '../Components/NavBar/NavBar'
@@ -14,6 +16,7 @@ import MoviesContext from '../Contexts/MoviesContext'
 import { getCookie, getUserInfo } from '../utils'
 
 let apiData = {
+    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
@@ -30,6 +33,26 @@ export default function MainLayout() {
 
     const [userObj, setUserObj] = useState(null)
 
+    // update user Handler
+    const updateUserHandler = async newUserObj => {
+        await fetch(`${apiData.updateApi}${userObj.id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-type': 'application/json',
+                'apikey': apiData.apikey,
+                'Authorization': apiData.authorization
+            },
+            body: JSON.stringify(newUserObj)
+        }).then(res => {
+            if(res.ok){
+                setUserObj(newUserObj)
+            }
+        })
+            .catch(err => {
+                console.log('مشکلی در ثبت نام پیش آمده')
+                setIsPending(false)
+            })
+    }
 
     useEffect(() => {
         const token = getCookie('userToken');
@@ -86,8 +109,35 @@ export default function MainLayout() {
         getAllMovies()
     }, [])
 
+    useEffect(() => {
+        const checkUserSubscriptionStatus = async (userObj) => {
+            // which means user has no vip plan so it's not necessary to check user vipPlan  
+            if (!userObj.subscriptionExpiresAt) {
+                return false
+            }
+
+            const now = dayjs()
+            const expireDate = dayjs(userObj.subscriptionExpiresAt);
+
+            if (expireDate.isBefore(now)) {
+                const updatedUser = {
+                    ...userObj,
+                    subscriptionStatus: 'expired',
+                    subscriptionPlan: {},
+                    subscriptionExpiresAt: '',
+                }
+
+                await updateUserHandler(updatedUser)
+            }
+        }
+
+        if (userObj) {
+            checkUserSubscriptionStatus(userObj)
+        }
+    }, [userObj])
+
     return (
-        <UserContext.Provider value={{userObj , setUserObj}}>
+        <UserContext.Provider value={{ userObj, setUserObj }}>
             <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
                 <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} />
 

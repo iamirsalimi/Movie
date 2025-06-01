@@ -126,6 +126,10 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     const checkLike = () => likes.includes(userObj.id)
     const checkDisLike = () => disLikes.includes(userObj.id)
 
+    useEffect(() => {
+        console.log(userObj)
+    })
+
     return (
         <>
 

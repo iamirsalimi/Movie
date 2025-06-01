@@ -287,7 +287,7 @@ function Movie() {
 
     const addMovieToUserWatchList = () => {
         // console.log(userObj)
-        
+
         if (!userObj) {
             toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
             return;
@@ -663,7 +663,7 @@ function Movie() {
                                 </MovieInfos>
                             )}
 
-                            <MovieInfos infoTitle="سال های پخش" infoValue={mainMovie.year}>
+                            <MovieInfos infoTitle={`سال ${mainMovie.movieType == 'series' ? 'های' : ''} پخش`} infoValue={`${mainMovie.year} ${mainMovie.movieType == 'series' ? '-' : ''}`}>
                                 <MdOutlineDateRange className="text-gray-400 text-xs md:text-base" />
                             </MovieInfos>
 
@@ -727,12 +727,25 @@ function Movie() {
                                     <>
                                         {userObj ? (
                                             <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                                <h2 className="mx-auto text-red-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک دانلود</h2>
+                                                {(userObj.role == 'admin' || userObj.subscriptionStatus == 'active') ? (
+                                                    <h2 className="mx-auto text-sky-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک دانلود</h2>
+                                                ) : (
+                                                    <>
+                                                        <h2 className="mx-auto text-red-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">براي دسترسي به محتواي فيلم ها بايد اشتراك ويژه تهیه نمایید</h2>
+                                                        <a
+                                                            href='/my-account/userPanel/vip-plan'
+                                                            className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir"
+                                                        >خرید اشتراک</a>
+                                                    </>
+                                                )}
                                             </div>
                                         ) : (
                                             <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
                                                 <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir-light">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
-                                                <button className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir">ورود به حساب</button>
+                                                <a
+                                                    href='/account/login'
+                                                    className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir"
+                                                >ورود به حساب</a>
                                             </div>
                                         )}
                                     </>
