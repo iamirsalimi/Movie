@@ -13,7 +13,7 @@ import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton
 import UserContext from '../Contexts/UserContext'
 import MoviesContext from '../Contexts/MoviesContext'
 
-import { getCookie, getUserInfo } from '../utils'
+import { getCookie, getUserInfo, checkUserSubscriptionStatus, checkUserBanStatus } from '../utils'
 
 let apiData = {
     getNotificationsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
@@ -32,6 +32,7 @@ export default function MainLayout() {
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState(false)
     const [notifications, setNotifications] = useState([])
+    const [checked, setChecked] = useState(false)
 
     const [userObj, setUserObj] = useState(null)
 
@@ -54,6 +55,36 @@ export default function MainLayout() {
                 console.log('مشکلی در ثبت نام پیش آمده')
                 setIsPending(false)
             })
+    }
+
+    const runChecks = async () => {
+        if (!userObj || checked) return false
+
+        // if updated user exist means subscription expired
+        let updatedUser = null
+        updatedUser = await checkUserSubscriptionStatus(userObj)
+
+        if (userObj.isBanned) {
+            const user = await checkUserBanStatus(userObj)
+            // if user exist means ban expired
+            if (user) {
+                // if ban and subscription both expire add the same time we update user obj only once AutoMatically
+                if (updatedUser) {
+                    updatedUser.accountStatus = user.accountStatus
+                    updatedUser.isBanned = user.isBanned
+                    updatedUser.banReason = user.banReason
+                    updatedUser.banDuration = user.banDuration
+                    updatedUser.ban_expiration_date = user.ban_expiration_date
+                } else {
+                    updatedUser = { ...user }
+                }
+            }
+        }
+
+        if (updatedUser) {
+            // console.log('update' , updatedUser)
+            await updateUserHandler(updatedUser)
+        }
     }
 
     useEffect(() => {
@@ -112,29 +143,10 @@ export default function MainLayout() {
     }, [])
 
     useEffect(() => {
-        const checkUserSubscriptionStatus = async (userObj) => {
-            // which means user has no vip plan so it's not necessary to check user vipPlan  
-            if (!userObj.subscriptionExpiresAt) {
-                return false
-            }
-
-            const now = dayjs()
-            const expireDate = dayjs(userObj.subscriptionExpiresAt);
-
-            if (expireDate.isBefore(now)) {
-                const updatedUser = {
-                    ...userObj,
-                    subscriptionStatus: 'expired',
-                    subscriptionPlan: {},
-                    subscriptionExpiresAt: '',
-                }
-
-                await updateUserHandler(updatedUser)
-            }
-        }
-
-        if (userObj) {
-            checkUserSubscriptionStatus(userObj)
+        // checked is a flag to see if we had already checked user infos or not
+        if (userObj && !checked) {
+            setChecked(true)
+            runChecks()
         }
     }, [userObj])
 
@@ -151,9 +163,14 @@ export default function MainLayout() {
                 const data = await res.json()
 
                 if (data.length > 0) {
-                    setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj.id).sort((a,b) => {
-                        let aDate = new Date(a.created_at)
-                        let bDate = new Date(b.created_at)
+                    setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
+                        // we should show user the notification that made after user registration not earlier notifications
+                        let userAccountCreationDate = new Date(userObj.created_At).getTime()
+                        let notifCreationDate = new Date(notif.created_at).getTime()
+                        return notifCreationDate > userAccountCreationDate
+                    }).sort((a, b) => {
+                        let aDate = new Date(a.created_at).getTime()
+                        let bDate = new Date(b.created_at).getTime()
                         return bDate - aDate
                     }))
                 }

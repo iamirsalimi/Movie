@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext , memo } from 'react'
 import { useLocation } from 'react-router-dom';
 
 import ThemeContext from '../../Contexts/ThemeContext';
@@ -8,7 +8,7 @@ import { IoSunnyOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 
-export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, user, notifications }) {
+const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notifications }) => {
     let { theme, changeTheme, navFlag } = useContext(ThemeContext)
 
     const location = useLocation()
@@ -108,4 +108,6 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
             </div>
         </nav>
     )
-}
+})
+
+export default Navbar

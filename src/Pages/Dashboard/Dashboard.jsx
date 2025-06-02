@@ -90,7 +90,11 @@ export default function Dashboard() {
         const data = await res.json()
         console.log(data)
         if (data.length > 0) {
-          setTickets(data)
+          setTickets(data.sort((a, b) => {
+            let aDate = new Date(a.updated_at).getTime()
+            let bDate = new Date(b.updated_at).getTime()
+            return bDate - aDate
+          }).slice(0, 5))
         }
 
         setTicketsIsPending(null)

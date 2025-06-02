@@ -15,7 +15,7 @@ export default function Notifs() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(false)
 
-   let {userObj} = useContext(UserContext)
+  let { userObj } = useContext(UserContext)
 
   const updateUserHandler = async newUserObj => {
     await fetch(`${apiData.updateUserApi}${userObj?.id}`, {
@@ -68,16 +68,21 @@ export default function Notifs() {
 
         if (data) {
           // we should sow user the notifications that they either are for all users or they are for just that user (if it had userId it means we should show that to users)
-          let sortedNotificationsArray = data.filter(notif => !notif.userId || notif.userId == userObj?.id).sort((a, b) => {
+          let sortedNotificationsArray = data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
+            // we should show user the notification that made after user registration not earlier notifications
+            let userAccountCreationDate = new Date(userObj.created_At).getTime()
+            let notifCreationDate = new Date(notif.created_at).getTime()
+            return notifCreationDate > userAccountCreationDate
+          }).sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()
             return bDate - aDate
           })
           setNotifications(sortedNotificationsArray)
-          setIsPending(false)
-          setError(false)
         }
-
+        
+        setIsPending(null)
+        setError(false)
       } catch (err) {
         console.log('fetch error', err)
         setIsPending(false)
@@ -85,7 +90,7 @@ export default function Notifs() {
       }
     }
 
-    if(userObj){
+    if (userObj) {
       setIsPending(true)
       getAllNotifications()
     }
@@ -103,6 +108,10 @@ export default function Notifs() {
       {!isPending && notifications.map(notification => (
         <NotifAccordian key={notification.id} {...notification} />
       ))}
+
+      {isPending == null && notifications.length == 0 && (
+        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">اطلاعیه ای تا کنون ثبت نشده</h2>
+      )}
 
       {isPending && (
         <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>

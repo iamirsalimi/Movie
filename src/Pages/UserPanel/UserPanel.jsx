@@ -35,9 +35,17 @@ let links = [
     { title: 'پیام ها', href: '/my-account/userPanel/messages', icon: <BiMessageAltDetail className="text-light-gray dark:text-white text-xl" /> },
 ]
 
+let apiData = {
+    getNotificationsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
+    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
+}
+
+
 export default function UserPanel() {
     const [showMenu, setShowMenu] = useState(false)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
+    const [notifications, setNotifications] = useState([])
 
     const [userObj, setUserObj] = useState(null)
 
@@ -76,15 +84,56 @@ export default function UserPanel() {
         fetchUser()
     }, [])
 
-
     useEffect(() => {
         if (userObj && userObj?.role == 'admin') {
             window.location.href = '/my-account/adminPanel'
         }
     }, [userObj])
 
+
+    useEffect(() => {
+        const getNotifications = async () => {
+            try {
+                const res = await fetch(apiData.getNotificationsApi, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
+                        // we should show user the notification that made after user registration not earlier notifications
+                        let userAccountCreationDate = new Date(userObj.created_At).getTime()
+                        let notifCreationDate = new Date(notif.created_at).getTime()
+                        return notifCreationDate > userAccountCreationDate
+                    }).sort((a, b) => {
+                        let aDate = new Date(a.created_at).getTime()
+                        let bDate = new Date(b.created_at).getTime()
+                        return bDate - aDate
+                    }))
+                }
+            } catch (err) {
+                console.log('fetch error', err)
+            }
+        }
+
+        // when admin is on main page we don't show him notifications
+        if (userObj && userObj?.role == 'user') {
+            getNotifications()
+        }
+    }, [userObj])
+
+    const checkUserNewNotifs = () => {
+        // if a notification has been read by user its id will added to user "read_notifications" array and by checking that we will realize if user had any new notifications ,and use the length of unread notifications to show them you have a new notification 
+        let filteredNotifs = notifications.filter(notif => !userObj.read_notifications?.some(notifId => notif.id == notifId))
+        return filteredNotifs
+    }
+
     return (
-        <UserContext.Provider value={{userObj , setUserObj}}>
+        <UserContext.Provider value={{ userObj, setUserObj }}>
             <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
                 <div className="px-5 py-9 flex flex-col justify-start items-center gap-10 overflow-y-scroll lg:overflow-hidden">
                     <button className="block lg:hidden w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 dark:bg-primary dark:text-white cursor-pointer" onClick={hideMenu}>
@@ -111,13 +160,14 @@ export default function UserPanel() {
                         <a href='notifications' className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
                             <IoNotificationsOutline className='text-light-gray dark:text-white text-2xl' />
                             <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">اعلان ها</span>
-                            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center text-sm text-white">0</span>
+                            {checkUserNewNotifs().length > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center text-sm text-white">{checkUserNewNotifs().length}</span>
+                            )}
                         </a>
 
                         <a href="messages" className="relative flex items-center p-2 xl:p-3 rounded-xl border bg-white border-gray-200 hover:bg-gray-100 hover:border-gray-100 dark:border-none dark:bg-primary dark:hover:bg-white/5 cursor-pointer transition-all group">
                             <BiMessageAltDetail className='text-light-gray dark:text-white text-2xl' />
                             <span className="inline-block opacity-0 h-5 absolute left-1/2 -top-5 -translate-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-xs dark:text-white font-vazir text-nowrap z-20 after:z-40 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:-translate-x-1/2 after:rotate-45 group-hover:opacity-100 transition-all">پیام ها</span>
-                            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center text-sm text-white">0</span>
                         </a>
 
                         <button

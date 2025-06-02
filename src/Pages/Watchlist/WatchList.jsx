@@ -71,24 +71,20 @@ export default function WatchList() {
       <h2 className="text-gray-700 dark:text-white font-vazir text-xl">لیست تماشا</h2>
 
       <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-16">
-
         {!isPending && watchList?.map(movie => (
           <WatchListMovieCard key={movie.id} {...movie} deleteMovieFromWatchList={removeMovieFomUserWatchList} />
         ))}
-
-        {isPending && (
-          <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>
-        )}
-
-        {!isPending && watchList?.length == 0 && (
-          <div className="flex flex-col items-center gap-2">
-            <h2 className="text-center text-red-500 font-vazir text-sm mt-4">فيلمي در ليست تماشا وجود ندارد</h2>
-            <a href="/" className="inline-block py-1 px-2 rounded-md font-vazir bg-sky-500 hover:bg-sky-600 transition-colors text-white">مشاهده فيلم ها</a>
-          </div>
-        )}
-
-
       </div>
+      {isPending && (
+        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>
+      )}
+
+      {!isPending && watchList?.length == 0 && (
+        <div className="flex flex-col items-center gap-2">
+          <h2 className="text-center text-red-500 font-vazir text-sm mt-4">فيلمي در ليست تماشا وجود ندارد</h2>
+          <a href="/" className="inline-block py-1 px-2 rounded-md font-vazir bg-sky-500 hover:bg-sky-600 transition-colors text-white">مشاهده فيلم ها</a>
+        </div>
+      )}
     </div>
   )
 }
