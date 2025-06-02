@@ -68,6 +68,7 @@ export default function Dashboard() {
       }
     }
     if (userObj?.subscriptionStatus == 'active') {
+      setAnnouncementsIsPending(false)
       setAnnouncementsIsPending(true)
       getAnnouncements()
     } else {

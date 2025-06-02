@@ -10,7 +10,7 @@ export default function AnnouncementElem({ text, created_at, getDate, setUpdateF
             <span className="w-full rounded-sm inline-flex items-center gap-2">
                 {adminFlag && <span className="text-gray-400 dark:text-gray-500 text-xs text-xs font-vazir">{announcementObj.id}</span>}
                 <AiFillInfoCircle className="text-yellow-400 text-lg" />
-                <span className="text-light-gray dark:text-gray-400 font-vazir-light text-sm">{base ? 'اطلاعيه اي ثبت نشده' : text}</span>
+                <span className="text-light-gray dark:text-gray-400 font-vazir text-sm">{base ? 'اطلاعيه اي ثبت نشده' : text}</span>
                 {adminFlag && <span className="text-gray-400 dark:text-gray-600 text-xs font-vazir hidden sm:inline">{getDate(created_at)}</span>}
             </span>
             {adminFlag && (

@@ -8,7 +8,7 @@ import { IoSunnyOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 
-export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, user }) {
+export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, user, notifications }) {
     let { theme, changeTheme, navFlag } = useContext(ThemeContext)
 
     const location = useLocation()
@@ -21,7 +21,13 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
         setShowModal(true)
     }
 
-    let links = [{ title: 'صفحه اصلی', href: '/' , paginate:"/page/" }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
+    const checkUserNewNotifs = () => {
+        // if a notification has been read by user its id will added to user "read_notifications" array and by checking that we will realize if user had any new notifications ,and use the length of unread notifications to show them you have a new notification 
+        let filteredNotifs = notifications.filter(notif => !user.read_notifications?.some(notifId => notif.id == notifId))
+        return filteredNotifs 
+    }
+
+    let links = [{ title: 'صفحه اصلی', href: '/', paginate: "/page/" }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
 
     return (
         <nav className={`${navFlag ? 'shadow shadow-black/5 bg-white dark:bg-secondary' : 'absolute top-0'} w-full z-40 transition-colors`}>
@@ -40,15 +46,15 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
 
                     <ul className="hidden lg:flex items-center gap-1">
                         {links.map(link => {
-                            if(link.title == 'خرید اشتراک' && user?.role == 'admin'){
+                            if (link.title == 'خرید اشتراک' && user?.role == 'admin') {
                                 return false
                             }
 
                             return (
-                                   <a href={link.href} className={`${link.href == location.pathname || location.pathname.startsWith(link?.paginate) ? 'activeLink' : ''}`} >
-                                       <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
-                                   </a>
-                               )
+                                <a href={link.href} className={`${link.href == location.pathname || location.pathname.startsWith(link?.paginate) ? 'activeLink' : ''}`} >
+                                    <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
+                                </a>
+                            )
                         })}
 
                         {/* <a href="#">
@@ -87,7 +93,9 @@ export default function Navbar({ setShowModal, setShowMenu, hasUserLoggedIn, use
                     {hasUserLoggedIn && user?.role != 'admin' && (
                         <a href='/my-account/userPanel/notifications' className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
                             <IoNotificationsOutline className="text-2xl" />
-                            <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">0</span>
+                            {checkUserNewNotifs().length > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">{checkUserNewNotifs().length}</span>
+                            )}
                         </a>
                     )}
                     <div className="flex items-center justify-center gap-2">

@@ -71,7 +71,7 @@ export default function Notifs() {
           let sortedNotificationsArray = data.filter(notif => !notif.userId || notif.userId == userObj?.id).sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()
-            return aDate - bDate
+            return bDate - aDate
           })
           setNotifications(sortedNotificationsArray)
           setIsPending(false)

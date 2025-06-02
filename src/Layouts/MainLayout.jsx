@@ -16,6 +16,7 @@ import MoviesContext from '../Contexts/MoviesContext'
 import { getCookie, getUserInfo } from '../utils'
 
 let apiData = {
+    getNotificationsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
     getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
     deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
@@ -30,6 +31,7 @@ export default function MainLayout() {
     const [movies, setMovies] = useState([])
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState(false)
+    const [notifications, setNotifications] = useState([])
 
     const [userObj, setUserObj] = useState(null)
 
@@ -44,7 +46,7 @@ export default function MainLayout() {
             },
             body: JSON.stringify(newUserObj)
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setUserObj(newUserObj)
             }
         })
@@ -136,10 +138,40 @@ export default function MainLayout() {
         }
     }, [userObj])
 
+    useEffect(() => {
+        const getNotifications = async () => {
+            try {
+                const res = await fetch(apiData.getNotificationsApi, {
+                    headers: {
+                        'apikey': apiData.apikey,
+                        'Authorization': apiData.authorization
+                    }
+                })
+
+                const data = await res.json()
+
+                if (data.length > 0) {
+                    setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj.id).sort((a,b) => {
+                        let aDate = new Date(a.created_at)
+                        let bDate = new Date(b.created_at)
+                        return bDate - aDate
+                    }))
+                }
+            } catch (err) {
+                console.log('fetch error', err)
+            }
+        }
+
+        // when admin is on main page we don't show him notifications
+        if (userObj && userObj?.role == 'user') {
+            getNotifications()
+        }
+    }, [userObj])
+
     return (
         <UserContext.Provider value={{ userObj, setUserObj }}>
             <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
-                <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} />
+                <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} notifications={notifications} />
 
                 <MoviesContext.Provider value={{
                     isPending: isPending,

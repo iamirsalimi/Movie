@@ -22,11 +22,6 @@ let apiData = {
 export default function VipPlan() {
     const [showModal, setShowModal] = useState(false)
 
-    const [mainUserObj, setMainUserObj] = useState(null)
-    const [searchType, setSearchType] = useState('ID')
-    const [searchValue, setSearchValue] = useState('')
-    const [isPending, setIsPending] = useState(true)
-    const [error, setError] = useState(null)
     const [isUpdating, setIsUpdating] = useState(false)
 
     let { userObj, setUserObj } = useContext(UserContext)
