@@ -7,7 +7,6 @@ import PanelLayout from './Layouts/PanelLayout'
 import Home from './Pages/Home/Home'
 import Movie from './Pages/Movie/Movie'
 import Actor from './Pages/Actor/Actor'
-import NotFound from './Pages/NotFound/NotFound'
 import Dmca from './Pages/Dmca/Dmca'
 import ImdbTop from './Pages/ImdbTop/ImdbTop'
 import Register from './Pages/Register/Register'
@@ -55,16 +54,20 @@ import WeeklyRelease from './Pages/WeeklyRelease/WeeklyRelease'
 import AllWeeklyReleases from './Pages/AllWeeklyReleases/AllWeeklyReleases'
 import AddRelease from './Pages/AddRelease/AddRelease'
 
+import NotFound from './Pages/NotFound/NotFound'
+import Banned from './Pages/Banned/Banned'
+
 let Routes = [
     {
         element: <MainLayout />, children: [
-            { path: '/' , element: <Home /> },
+            { path: '/', element: <Home /> },
             { path: '/page/:pageId', element: <Home /> },
             { path: '/:movieType/:movieId', element: <Movie /> },
             { path: '/actors/:actorId', element: <Actor /> },
             { path: '/dmca', element: <Dmca /> },
             { path: '/imdb-top/:movieType', element: <ImdbTop /> },
-            { path: '/imdb-top/:movieType/page/:pageId', element: <ImdbTop /> }
+            { path: '/imdb-top/:movieType/page/:pageId', element: <ImdbTop /> },
+            { path: '/banned', element: <Banned /> },
         ]
     },
     {
@@ -82,61 +85,77 @@ let Routes = [
                     { path: 'vip-plan', element: <VipPlan /> },
                     { path: 'watchList', element: <WatchList /> },
                     { path: 'notifications', element: <Notifs /> },
-                    { path: 'requests', element: <Requests /> , children : [
-                        {index : true , element : <AllRequests /> },
-                        {path : 'add-request' , element : <AddRequest /> }
-                    ] },
+                    {
+                        path: 'requests', element: <Requests />, children: [
+                            { index: true, element: <AllRequests /> },
+                            { path: 'add-request', element: <AddRequest /> }
+                        ]
+                    },
                     { path: 'comments', element: <Comments /> },
-                    { path: 'messages', element: <Messages /> , children : [
-                        {index : true , element : <AllTickets /> },
-                        {path : 'add-new-ticket' , element : <AddNewTicket /> },
-                        {path : 'ticket-details/:ticketId' , element : <TicketDetails /> },
-                    ]},
+                    {
+                        path: 'messages', element: <Messages />, children: [
+                            { index: true, element: <AllTickets /> },
+                            { path: 'add-new-ticket', element: <AddNewTicket /> },
+                            { path: 'ticket-details/:ticketId', element: <TicketDetails /> },
+                        ]
+                    },
                 ]
             },
             {
                 path: 'adminPanel', element: <AdminPanel />, children: [
                     { index: true, element: <AdminDashboard /> },
                     { path: 'profile-edit', element: <ProfileEdit /> },
-                    { path: 'users', element: <Users />  , children : [
-                        { index : true , element: <AllUsers /> },
-                        { path: 'user-details/:userId', element: <UserDetails /> },
-                        { path: 'edit-user/:userId', element: <EditUser /> },
-                    ]},
-                    { path: 'movies', element: <Movies />  , children : [
-                        { index : true , element: <AllMovies /> },
-                        { path: 'add-movie', element: <AddMovie /> },
-                        { path: 'edit-movie/:movieId', element: <AddMovie /> },
-                        { path: 'movie-details/:movieId', element: <MovieDetails /> },
-                    ]},
+                    {
+                        path: 'users', element: <Users />, children: [
+                            { index: true, element: <AllUsers /> },
+                            { path: 'user-details/:userId', element: <UserDetails /> },
+                            { path: 'edit-user/:userId', element: <EditUser /> },
+                        ]
+                    },
+                    {
+                        path: 'movies', element: <Movies />, children: [
+                            { index: true, element: <AllMovies /> },
+                            { path: 'add-movie', element: <AddMovie /> },
+                            { path: 'edit-movie/:movieId', element: <AddMovie /> },
+                            { path: 'movie-details/:movieId', element: <MovieDetails /> },
+                        ]
+                    },
 
-                    { path: 'actors', element: <Actors />  , children : [
-                        { index : true , element: <AllActors /> },
-                        { path: 'actor-details/:actorId', element: <ActorDetails /> },
-                        { path: 'add-actor', element: <AddActor /> },
-                        { path: 'edit-actor/:actorId', element: <AddActor /> },
-                    ]},
-                    { path: 'tickets', element: <Tickets />  , children : [
-                        { index : true , element: <AdminAllTickets /> },
-                        { path: 'ticket-details/:ticketId', element: <EditTicket /> },
-                    ]},
+                    {
+                        path: 'actors', element: <Actors />, children: [
+                            { index: true, element: <AllActors /> },
+                            { path: 'actor-details/:actorId', element: <ActorDetails /> },
+                            { path: 'add-actor', element: <AddActor /> },
+                            { path: 'edit-actor/:actorId', element: <AddActor /> },
+                        ]
+                    },
+                    {
+                        path: 'tickets', element: <Tickets />, children: [
+                            { index: true, element: <AdminAllTickets /> },
+                            { path: 'ticket-details/:ticketId', element: <EditTicket /> },
+                        ]
+                    },
                     { path: 'comments', element: <AdminComments /> },
-                    { path: 'notifications', element: <AdminNotifs />  , children : [
-                        { index : true , element: <AdminAllNotifs /> },
-                        { path: 'add-notification', element: <AdminAddNotifs /> },
-                        { path: 'edit-notification/:notifId', element: <AdminAddNotifs /> },
-                    ]},
+                    {
+                        path: 'notifications', element: <AdminNotifs />, children: [
+                            { index: true, element: <AdminAllNotifs /> },
+                            { path: 'add-notification', element: <AdminAddNotifs /> },
+                            { path: 'edit-notification/:notifId', element: <AdminAddNotifs /> },
+                        ]
+                    },
                     { path: 'requests', element: <AdminRequests /> },
-                    { path: 'weekly-release', element: <WeeklyRelease />  , children : [
-                        { index : true , element: <AllWeeklyReleases /> },
-                        { path: 'add-release', element: <AddRelease /> },
-                        { path: 'edit-release/:releaseId', element: <AddRelease /> },
-                    ]}
+                    {
+                        path: 'weekly-release', element: <WeeklyRelease />, children: [
+                            { index: true, element: <AllWeeklyReleases /> },
+                            { path: 'add-release', element: <AddRelease /> },
+                            { path: 'edit-release/:releaseId', element: <AddRelease /> },
+                        ]
+                    }
                 ]
             },
         ]
     },
-    { path: '*', element: <NotFound /> },
+    { path: '*', element: <NotFound /> }
 ]
 
 export default Routes

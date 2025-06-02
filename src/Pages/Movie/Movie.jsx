@@ -195,7 +195,7 @@ function Movie() {
                     let aDate = new Date(a.created_at).getTime()
                     let bDate = new Date(b.created_at).getTime()
 
-                    return aDate - bDate
+                    return bDate - aDate
                 })
                 setComments(sortedComments)
                 setIsAdding(false)

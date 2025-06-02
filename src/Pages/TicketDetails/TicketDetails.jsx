@@ -165,10 +165,10 @@ export default function TicketDetails() {
 
                 if (data.length > 0) {
                     setMessages(data)
-                    setMessageIsPending(false)
                     chatEndingRef.current.scrollIntoView({ behavior: "smooth" })
                 }
-
+                
+                setMessageIsPending(null)
                 setMessageError(null)
             } catch (err) {
                 console.log('fetch error')
@@ -231,9 +231,11 @@ export default function TicketDetails() {
                     <div className="w-full flex flex-col justify-between gap-2 bg-gray-100 dark:bg-primary rounded-lg px-2 py-4">
                         <h2 className="text-gray-700 dark:text-white font-vazir text-xl">پیام های تیکت</h2>
 
-
-
                         <div className="py-5 px-2 border border-gray-300 dark:border-secondary rounded-lg flex flex-col items-center gap-7 sm:gap-5 lg:gap-2">
+                            {messageIsPending == null && messages.length == 0 && (
+                                <h2 className="text-center font-vazir text-red-500 text-sm md:text-lg my-12">پیامی تا کنون ارسال نشده</h2>
+                            )}
+
                             {messageIsPending && (
                                 <h2 className="text-center font-vazir text-red-500 text-sm">در حال دریافت پیام ها ... </h2>
                             )}

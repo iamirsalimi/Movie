@@ -79,7 +79,7 @@ export default function AllMovies() {
                     let sortedMoviesArray = data.sort((a , b) =>{
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
-                        return aDate - bDate
+                        return bDate - aDate
                     } )
                     setMovies(sortedMoviesArray)
                     setFilteredMovies(sortedMoviesArray)

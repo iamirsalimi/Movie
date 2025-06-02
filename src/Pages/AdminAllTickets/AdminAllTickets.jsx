@@ -46,7 +46,7 @@ export default function AdminAllTickets() {
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(null)
 
-     let {userObj} = useContext(UserContext)
+    let { userObj } = useContext(UserContext)
 
     let location = useLocation().search
     let searchParams = location.slice(1).split('=')
@@ -67,7 +67,7 @@ export default function AdminAllTickets() {
                     let sortedMoviesArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
-                        return aDate - bDate
+                        return bDate - aDate
                     })
                     setTickets(sortedMoviesArray)
                     setFilteredTickets(sortedMoviesArray)
@@ -88,7 +88,7 @@ export default function AdminAllTickets() {
     }, [userObj])
 
     useEffect(() => {
-        if (tickets.length > 0 && location.search) {
+        if (tickets.length > 0 && location) {
             setSearchValue(searchParams[1])
             setSearchType(searchParams[0])
         }

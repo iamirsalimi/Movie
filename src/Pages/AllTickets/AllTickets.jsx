@@ -59,7 +59,7 @@ export default function AllTickets() {
           let sortedMoviesArray = data.filter(ticket => ticket.userId == userObj.id).sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()
-            return aDate - bDate
+            return bDate - aDate
           })
           setTickets(sortedMoviesArray)
           setFilteredTickets(sortedMoviesArray)

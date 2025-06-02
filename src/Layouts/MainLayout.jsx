@@ -98,6 +98,9 @@ export default function MainLayout() {
             const user = await getUserInfo(token)
             if (user) {
                 setUserObj(user)
+                if (user?.isBanned && window.location.pathname !== '/banned') {
+                    window.location = '/banned'
+                }
             } else {
                 setUserObj(null)
             }

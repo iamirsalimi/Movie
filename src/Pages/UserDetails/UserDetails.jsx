@@ -119,7 +119,7 @@ export default function UserDetails() {
                     const sortedTickets = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
-                        return aDate - bDate
+                        return bDate - aDate
                     })
 
                     setTickets(sortedTickets)
@@ -157,7 +157,7 @@ export default function UserDetails() {
                     const sortedComments = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
-                        return aDate - bDate
+                        return bDate - aDate
                     })
 
                     setComments(sortedComments)
@@ -235,6 +235,12 @@ export default function UserDetails() {
         let persianDate = dayjs(newDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
         return persianDate
     }
+
+    //adding "," after each 3 numbers
+    const formatPrice = price => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20 md:mb-5">
@@ -315,10 +321,6 @@ export default function UserDetails() {
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.accountStatus}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">سوابق خريد :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.last_purchases}</span>
-                            </li>
-                            <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">اشتراك :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{userObj.subscriptionStatus == 'active' ? 'فعال' : userObj.subscriptionStatus == 'expired' ? 'منقضی شده' : 'ندارد'}</span>
                             </li>
@@ -338,16 +340,6 @@ export default function UserDetails() {
                                 <li className="w-full py-1 flex items-center justify-between">
                                     <h3 className="text-vazir text-light-gray dark:text-gray-500">تاريخ منقضي شدن اشتراك :</h3>
                                     <span className="text-vazir-light text-primary dark:text-white">{getDate(userObj.subscriptionExpiresAt)}</span>
-                                </li>
-                            )}
-                            <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تعداد لیست علاقه مندی ها :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{userObj.watchList.length}</span>
-                            </li>
-                            {userObj.watchList.length !== 0 && (
-                                <li className="w-full py-1 flex items-center justify-between">
-                                    <h3 className="text-vazir text-light-gray dark:text-gray-500">لیست علاقه مندی ها :</h3>
-                                    <button className="bg-sky-500 hover:bg-sky-600 transition-colors text-white dark:text-primary cursor-pointer font-vazir py-1 px-2 rounded-md">مشاهده</button>
                                 </li>
                             )}
                             <li className="w-full py-1 flex items-center justify-between">
@@ -375,6 +367,7 @@ export default function UserDetails() {
 
                             </li>
                         </ul>
+
                         <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">تمام اشتراک های کاربر</h2>
                             <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
@@ -402,12 +395,12 @@ export default function UserDetails() {
 
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
                                             <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">آیا اشتراک خریداری شده؟</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{plan.isBought.value ? 'بله' : 'خیر'}</span>
+                                            <span className="text-vazir-light text-primary dark:text-white">{typeof plan.isBought === 'object' && plan?.isBought?.value ? 'بله' : 'خیر'}</span>
                                         </li>
-                                        {plan.isBought.value && (
+                                        {typeof plan.isBought === 'object' && plan.isBought?.value && (
                                             <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
                                                 <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">قیمت خریداری شده : </h3>
-                                                <span className="text-vazir-light text-primary dark:text-white font-vazir">{getDate(plan.isBought.price)} تومان</span>
+                                                <span className="text-vazir-light text-primary dark:text-white font-vazir">{plan?.isBought?.price && formatPrice(plan?.isBought?.price)} تومان</span>
                                             </li>
                                         )}
                                         <li className="w-full py-1 flex flex-col justify-center gap-1">
@@ -426,6 +419,24 @@ export default function UserDetails() {
                                     </div>
                                 )) : (
                                     <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">کاربر تا کنون اشتراکی نداشته </h2>
+                                )}
+                            </ul>
+                        </div>
+
+                        <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
+                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">لیست تماشای کاربر</h2>
+                            <ul className="w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl pt-5">
+                                {userObj.watchList.length > 0 ? userObj.watchList.map(movie => (
+                                    <div className="relative pb-2 group">
+                                        <li key={movie.id} className={`group overflow-hidden relative rounded-lg h-64 cursor-pointer`}>
+                                            <img src={movie.cover} className="w-full h-full object-cover object-center" alt="" />
+                                            <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-white/0 flex items-center justify-center duration-200"></span>
+                                            <span className="text-nowrap line-clamp-1 absolute text-sm opacity-0 bottom-1 left-1/2 -translate-1/2 scale-50 text-white transition-all group-hover:scale-100 group-hover:opacity-100 duration-200">{movie.title}</span>
+                                        </li>
+                                        <span className={`border-2 border-white dark:border-primary font-vazir text-xs absolute top-0 left-1/2 -translate-1/2 inline-block px-3 py-0.5 rounded-full text-white dark:text-primary ${movie.movieType == 'series' ? 'bg-red-500' : 'bg-sky-500'}`}>{movie.movieType == 'series' ? 'سریال' : 'فیلم'}</span>
+                                    </div>
+                                )) : (
+                                    <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">کاربر تا کنون فیلمی به لیست تماشای خود اضافه نکرده </h2>
                                 )}
                             </ul>
                         </div>

@@ -88,6 +88,10 @@ export default function UserPanel() {
         if (userObj && userObj?.role == 'admin') {
             window.location.href = '/my-account/adminPanel'
         }
+
+        if (userObj && userObj?.isBanned && window.location.pathname !== '/banned' && window.location.pathname !== '/my-account/userPanel/messages' && window.location.pathname !== '/my-account/userPanel/messages/add-new-ticket' && !window.location.pathname.startsWith('/my-account/userPanel/messages/ticket-details/')) {
+            window.location = '/banned'
+        }
     }, [userObj])
 
 
