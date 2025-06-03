@@ -103,7 +103,7 @@ export default function SearchModal({ showModal, setShowModal }) {
                             {movies.filter(movie => movie.title.includes(searchValue.trim())).length !== 0 ? movies.filter(movie => movie.title.includes(searchValue.trim())).slice(0,5).map(movie => (
                                 <a href={`/${movie.movieType}/${movie.id}`} className="w-full">
                                     <li className="group cursor-pointer rounded-lg transition-all bg-white dark:bg-primary hover:bg-gray-100 dark:hover:bg-black/15  py-2 px-4 text-center flex items-center justify-start gap-2">
-                                        <div className="w-15 h-15 overflow-hidden rounded-lg">
+                                        <div className="min-w-15 max-w-15 h-15 overflow-hidden rounded-lg">
                                             <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
                                         </div>
                                         <div className="flex flex-col items-start justify-center gap-1">

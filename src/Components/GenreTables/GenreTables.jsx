@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { FaTheaterMasks } from "react-icons/fa";
 
-
-
 export default function GenreTables({ genre, movies }) {
     const [activeType, setActiveType] = useState('movie')
     const [activeTypeArray, setActiveTypeArray] = useState(genre[activeType])

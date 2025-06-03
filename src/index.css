@@ -76,11 +76,11 @@
   @apply bg-sky-500 text-white hover:text-white;
 }
 
-.filter-lang input[type="checkbox"]:checked + label > div{
+.filter-lang .checked-filter > div{
   @apply !bg-sky-100;
 }
 
-.filter-lang input[type="checkbox"]:checked + label > div > span{
+.filter-lang .checked-filter > div > span{
   @apply !-translate-x-4/5  !bg-sky-500;
 }
 

@@ -20,7 +20,6 @@ import { BiLike } from "react-icons/bi";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 
-
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -29,7 +28,6 @@ import 'swiper/css/autoplay';
 export default function Header() {
     const [activeIndex, setActiveIndex] = useState(0)
     const swiperRef = useRef(null)
-
 
     let { movies: moviesArray } = useContext(UserContext)
     const [movies, setMovies] = useState(moviesArray.filter(movie => movie.is_in_header_slider))
@@ -136,7 +134,7 @@ export default function Header() {
                             <div className="flex items-center gap-8">
                                 <div className="flex items-center justify-center gap-2">
                                     <GoClock className="text-2xl  fill-gray-200" />
-                                    <span className="text-gray-100 text-md font-semibold font-Shabnam">{activeObj?.duration}</span>
+                                    <span className="text-gray-100 text-md font-semibold font-Shabnam">{activeObj?.duration} دقیقه</span>
                                 </div>
 
                                 <div className="flex items-center justify-center gap-2">
