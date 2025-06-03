@@ -225,7 +225,7 @@ export default function AddActor() {
                         setMovieIsPending(false)
                     }
 
-                    setError(false)
+                    setMovieError(false)
                 } catch (err) {
                     console.log('fetch error')
                     setMovieError(err)

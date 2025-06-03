@@ -27,9 +27,20 @@ export default function NewMoviesTable({ movies }) {
                 </div>
             </div>
             <ul className="mt-5 grid grid-cols-4 gap-2">
-                {movies.slice(0, 8).map(movie => (  
+                {movies.length > 0 ? movies.slice(0, 8).map(movie => (
                     <NewMovieCard {...movie} />
-                ))}
+                )) : (
+                    <>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                    </>
+                )}
             </ul>
         </div>
     )

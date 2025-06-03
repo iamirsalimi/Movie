@@ -241,7 +241,6 @@ export default function UserDetails() {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20 md:mb-5">
             <div className="flex items-center justify-between">
