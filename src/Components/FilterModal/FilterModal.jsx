@@ -3,65 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { RxCross2 } from "react-icons/rx";
 
 export default function FilterModal({ showModal, setShowModal ,activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry,activeTypeArray, setActiveTypeArray,thisYear,filterMovies, resetFilters }) {
-    // const [activeType, setActiveType] = useState('movie')
-    // const [genre, setGenre] = useState('genre')
-    // const [imdb, setImdb] = useState('score')
-    // const [rotten, setRotten] = useState('score')
-    // const [metacritic, setMetacritic] = useState('score')
-    // const [hasSubtitle, setHasSubtitle] = useState(false)
-    // const [isDubbed, setIsDubbed] = useState(false)
-    // const [country, setCountry] = useState('country')
-    // const [fromYear, setFromYear] = useState(1950)
-    // const [toYear, setToYear] = useState(thisYear)
-
-    // const { activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry, resetFilters } = useFilter('movie', thisYear)
-
-    // const [activeTypeArray, setActiveTypeArray] = useState(genres[activeType])
-
-    const changeMovieType = e => {
-        let genreType = e.target.dataset.type
-        setActiveType(genreType)
-    }
-
-    // const resetFilters = () => {
-    //     setActiveType('movie')
-    //     setGenre('genre')
-    //     setImdb('score')
-    //     setRotten('score')
-    //     setMetacritic('score')
-    //     setHasSubtitle(false)
-    //     setIsDubbed(false)
-    //     setCountry('country')
-    //     setFromYear(1950)
-    //     setToYear(thisYear)
-    // }
-
-    // const filterMovies = () => {
-    //     console.log('clicked', country)
-    //     const query = new URLSearchParams()
-
-    //     if (activeType) query.set('movieType', activeType)
-    //     if (genre != 'genre') query.set('genre', genre)
-    //     if (imdb != 'score') query.set('imdb', imdb)
-    //     if (rotten != 'score') query.set('rotten', rotten)
-    //     if (metacritic != 'score') query.set('metacritic', metacritic)
-    //     if (country != 'country') query.set('country', country)
-    //     if (hasSubtitle) query.set('hasSubtitle', hasSubtitle)
-    //     if (isDubbed) query.set('isDubbed', isDubbed)
-    //     if (parseInt(fromYear) && +fromYear != 1950) query.set('fromYear', fromYear)
-    //     if (parseInt(toYear) && +toYear != 2025) query.set('toYear', toYear)
-
-    //     const queryString = query.toString()
-
-    //     console.log(queryString)
-    //     // if (queryString) {
-    //     //     window.location = `?${queryString}`
-    //     // }
-    // }
-
-    // useEffect(() => {
-    //     setActiveTypeArray(genres[activeType])
-    // }, [activeType])
 
     const hideMenu = () => {
         setShowModal()
@@ -92,7 +33,7 @@ export default function FilterModal({ showModal, setShowModal ,activeType, setAc
                         onChange={e => setGenre(e.target.value)}
                     >
                         <option value="genre">ژانر</option>
-                        {activeTypeArray.map(genre => (
+                        {activeTypeArray?.map(genre => (
                             <option key={genre.value} value={genre.value}>{genre.label}</option>
                         ))}
                     </select>

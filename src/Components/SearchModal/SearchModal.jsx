@@ -79,7 +79,7 @@ export default function SearchModal({ showModal, setShowModal }) {
                             if (!searchValue) {
                                 hideMenu()
                             } else {
-                                window.location = `?movieName=${searchValue}`
+                                window.location = `?search-type=normal&s=${searchValue}`
                             }
                         }}
                     >
@@ -100,7 +100,7 @@ export default function SearchModal({ showModal, setShowModal }) {
 
                     {isPending == null && searchValue.trim() && (
                         <>
-                            {movies.filter(movie => movie.title.includes(searchValue.trim())).length !== 0 ? movies.filter(movie => movie.title.includes(searchValue.trim())).slice(0,5).map(movie => (
+                            {movies.filter(movie => movie.title.toLowerCase().includes(searchValue.trim().toLowerCase())).length !== 0 ? movies.filter(movie => movie.title.toLowerCase().includes(searchValue.trim().toLowerCase())).slice(0,5).map(movie => (
                                 <a href={`/${movie.movieType}/${movie.id}`} className="w-full">
                                     <li className="group cursor-pointer rounded-lg transition-all bg-white dark:bg-primary hover:bg-gray-100 dark:hover:bg-black/15  py-2 px-4 text-center flex items-center justify-start gap-2">
                                         <div className="min-w-15 max-w-15 h-15 overflow-hidden rounded-lg">

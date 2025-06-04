@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import { useLocation } from 'react-router-dom'
+
 import FilterBox from './../FilterBox/FilterBox'
 import FilterModal from './../FilterModal/FilterModal'
 import MainPageComp from '../mainPageComp/MainPageComp'
@@ -11,7 +13,7 @@ let thisYear = new Date().getFullYear()
 
 export default function Content() {
   const [showFilterModal, setShowFilterModal] = useState(false)
-  const [genres, setGenres] = useState({
+  const genres = {
     movie: [
       { label: 'اکشن', value: 'action' },
       { label: 'ترسناک', value: 'horror' },
@@ -64,14 +66,19 @@ export default function Content() {
       { label: 'ورزشی', value: 'sport' },
       { label: 'موسیقی', value: 'music' },
     ]
-  })
+  }
 
   const { activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry, resetFilters } = useFilter('movie', thisYear)
 
   const [activeTypeArray, setActiveTypeArray] = useState(genres[activeType])
 
+  const location = useLocation()
+  const searchLocation = new URLSearchParams(location.search)
+
+  const [searchType, setSearchType] = useState(searchLocation.get('search-type'))
+  const [searchValue, setSearchValue] = useState(searchLocation.get('search-type') ? searchLocation.get('s') : null)
+
   const filterMovies = () => {
-    console.log('clicked', country)
     const query = new URLSearchParams()
 
     if (activeType) query.set('movieType', activeType)
@@ -87,16 +94,17 @@ export default function Content() {
 
     const queryString = query.toString()
 
-    console.log(queryString)
-    // if (queryString) {
-    //     window.location = `?${queryString}`
-    // }
+    if (queryString) {
+      window.location = `?search-type=advanced&${queryString}`
+    }
   }
 
-  const filterStates = { activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry, activeTypeArray, setActiveTypeArray,thisYear, filterMovies, resetFilters }
+  // to give all of them to components as a object
+  const filterStates = { activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry, activeTypeArray, setActiveTypeArray, thisYear, filterMovies, resetFilters }
 
+  // to reset filters when
   useEffect(() => {
-    if (showFilterModal) {
+    if (showFilterModal && !searchType) {
       resetFilters()
     }
   }, [showFilterModal])
@@ -105,8 +113,46 @@ export default function Content() {
     setActiveTypeArray(genres[activeType])
   }, [activeType])
 
+  useEffect(() => {
+    if (searchType == 'advanced') {
+      const params = new URLSearchParams(location.search)
+
+      const filters = {
+        search: params.get('s'),
+        movieType: params.get('movieType'),
+        genre: params.get('genre'),
+        imdb: params.get('imdb') || 0,
+        rotten: params.get('rotten') || 0,
+        metacritic: params.get('metacritic') || 0,
+        country: params.get('country'),
+        hasSubtitle: params.get('hasSubtitle') === 'true', // to change that to boolean
+        isDubbed: params.get('isDubbed') === 'true', // to change that to boolean
+        fromYear: +params.get('fromYear') || 1950,
+        toYear: +params.get('toYear') || thisYear
+      }
+
+      if (filters.movieType) {
+        setActiveType(filters.movieType)
+        setActiveTypeArray(genres[activeType])
+      }
+
+      if (filters.genre) setGenre(filters.genre)
+      if (filters.imdb) setImdb(filters.imdb)
+      if (filters.rotten) setRotten(filters.rotten)
+      if (filters.metacritic) setMetacritic(filters.metacritic)
+      if (filters.country) setCountry(filters.country)
+      if (filters.hasSubtitle) setHasSubtitle(filters.hasSubtitle)
+      if (filters.isDubbed) setIsDubbed(filters.isDubbed)
+      if (filters.fromYear) setFromYear(filters.fromYear)
+      if (filters.toYear) setToYear(filters.toYear)
+    }
+  }, [])
+
   return (
     <div className="mx-auto container w-full flex-col gap-y-7 gap-x-4 px-7">
+      {searchType && (
+        <h1 className="xs:text-lg md:text-xl lg:text-2xl font-vazir text-yellow-600 text-center mb-7">{searchType == 'advanced' ? 'نتايج جستجوي پیشرفته' : `نتايج جستجوي "${searchValue}"`}</h1>
+      )}
       <FilterBox setShowFilterModal={setShowFilterModal} {...filterStates} />
       <MainPageComp />
       <FilterModal showModal={showFilterModal} setShowModal={setShowFilterModal} {...filterStates} />

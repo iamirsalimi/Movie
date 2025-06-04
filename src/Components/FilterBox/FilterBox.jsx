@@ -4,79 +4,20 @@ import { IoFilter } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 
 export default function FilterBox({activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry,activeTypeArray, setActiveTypeArray,thisYear,filterMovies, resetFilters , setShowFilterModal}) {
-    // const [activeType, setActiveType] = useState('movie')
-    // const [genre, setGenre] = useState('genre')
-    // const [imdb, setImdb] = useState('score')
-    // const [rotten, setRotten] = useState('score')
-    // const [metacritic, setMetacritic] = useState('score')
-    // const [hasSubtitle, setHasSubtitle] = useState(false)
-    // const [isDubbed, setIsDubbed] = useState(false)
-    // const [country, setCountry] = useState('country')
-    // const [fromYear, setFromYear] = useState(1950)
-    // const [toYear, setToYear] = useState(thisYear)
 
-    // const {activeType, setActiveType, genre, setGenre, fromYear, setFromYear, toYear, setToYear, hasSubtitle, setHasSubtitle, isDubbed, setIsDubbed, imdb, setImdb, rotten, setRotten, metacritic, setMetacritic, country, setCountry, resetFilters} = useFilter('movie' , thisYear)
-    
-    // const [activeTypeArray, setActiveTypeArray] = useState(genres[activeType])
-    
     const showFilterModal = () => {
         setShowFilterModal(true)
     }
-
-    const changeMovieType = e => {
-        let genreType = e.target.dataset.type
-        setActiveType(genreType)
-    }
-
-    // const resetFilters = () => {
-    //     setActiveType('movie')
-    //     setGenre('genre')
-    //     setImdb('score')
-    //     setRotten('score')
-    //     setMetacritic('score')
-    //     setHasSubtitle(false)
-    //     setIsDubbed(false)
-    //     setCountry('country')
-    //     setFromYear(1950)
-    //     setToYear(thisYear)
-    // }
-
-    // const filterMovies = () => {
-    //     console.log('clicked', country)
-    //     const query = new URLSearchParams()
-
-    //     if (activeType) query.set('movieType', activeType)
-    //     if (genre != 'genre') query.set('genre', genre)
-    //     if (imdb != 'score') query.set('imdb', imdb)
-    //     if (rotten != 'score') query.set('rotten', rotten)
-    //     if (metacritic != 'score') query.set('metacritic', metacritic)
-    //     if (country != 'country') query.set('country', country)
-    //     if (hasSubtitle) query.set('hasSubtitle', hasSubtitle)
-    //     if (isDubbed) query.set('isDubbed', isDubbed)
-    //     if (parseInt(fromYear) && +fromYear != 1950) query.set('fromYear', fromYear)
-    //     if (parseInt(toYear) && +toYear != 2025) query.set('toYear', toYear)
-
-    //     const queryString = query.toString()
-
-    //     console.log(queryString)
-    //     if (queryString) {
-    //         window.location = `?${queryString}`
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     setActiveTypeArray(genres[activeType])
-    // }, [activeType])
 
     return (
         <div className="py-4 px-4 rounded-xl bg-white dark:bg-secondary shadow shadow-black/5">
             <div className="hidden xl:flex col-start-1 col-end-4 flex-col items-cent justify-center h-fit gap-5">
                 <div className="flex items-center justify-center gap-5">
                     <div className="genreType flex items-center justify-center gap-1 p-1 bg-sky-100 dark:bg-primary rounded-full">
-                        <input type="radio" name="box-genreTypes" id="box-film" className="hidden" onChange={changeMovieType} data-type="movie" checked={activeType == 'movie'} />
+                        <input type="radio" name="box-genreTypes" id="box-film" className="hidden" value="movie" onChange={() => setActiveType('movie')} checked={activeType == 'movie'} />
                         <label htmlFor="box-film" className="font-vazir text-light-gray dark:text-white transition-colors p-2 rounded-full cursor-pointer select-none" >فیلم</label>
 
-                        <input type="radio" name="box-genreTypes" id="box-serial" className="hidden" onChange={changeMovieType} data-type="series" checked={activeType == 'series'} />
+                        <input type="radio" name="box-genreTypes" id="box-serial" className="hidden" value="series" onChange={() => setActiveType('series')} checked={activeType == 'series'} />
                         <label htmlFor="box-serial" className="font-vazir text-light-gray dark:text-white transition-colors p-2 rounded-full cursor-pointer select-none">سریال</label>
                     </div>
                     <div className="filter-selectBox ">
@@ -89,7 +30,7 @@ export default function FilterBox({activeType, setActiveType, genre, setGenre, f
                             onChange={e => setGenre(e.target.value)}
                         >
                             <option value="genre">ژانر</option>
-                            {activeTypeArray.map(genre => (
+                            {activeTypeArray?.map(genre => (
                                 <option key={genre.value} value={genre.value}>{genre.label}</option>
                             ))}
                         </select>
