@@ -148,16 +148,25 @@ export default function AddMovie() {
             .string(),
         imdb_score: yup
             .number()
-            .min(0, 'نمره IMDb نمی تواند از 0 کمتر باشد')
-            .max(10, 'نمره IMDb نمی تواند از 10 بیشتر باشد'),
+            .when('broadcastStatus', {
+                is: 'premiere',
+                then: schema => schema.notRequired(),
+                otherwise: schema => schema.required('وارد کردن نمره IMDb اجباری است').min(-1, 'نمره IMDb نمی تواند از 0 کمتر باشد').max(10, 'نمره IMDb نمی تواند از 10 بیشتر باشد')
+            }),
         rotten_score: yup
             .number()
-            .min(0, 'نمره Rotten-Tomatoes نمی تواند از 0 کمتر باشد')
-            .max(100, 'نمره Rotten-Tomatoes نمی تواند از 10 بیشتر باشد'),
+            .when('broadcastStatus', {
+                is: 'premiere',
+                then: schema => schema.notRequired(),
+                otherwise: schema => schema.required('وارد کردن نمره rotten tomatoes اجباری است').min(-1, 'نمره Rotten-Tomatoes نمی تواند از 0 کمتر باشد').max(100, 'نمره Rotten-Tomatoes نمی تواند از 10 بیشتر باشد')
+            }),
         metacritic_score: yup
             .number()
-            .min(0, 'نمره Metacritic نمی تواند از 0 کمتر باشد')
-            .max(100, 'نمره Metacritic نمی تواند از 10 بیشتر باشد'),
+            .when('broadcastStatus', {
+                is: 'premiere',
+                then: schema => schema.notRequired(),
+                otherwise: schema => schema.required('وارد کردن نمره metacritic اجباری است').min(-1, 'نمره Metacritic نمی تواند از 0 کمتر باشد').max(100, 'نمره Metacritic نمی تواند از 10 بیشتر باشد')
+            }),
         quality: yup
             .string()
             .required('وارد كردن کیفیت اجباری است'),
@@ -188,7 +197,7 @@ export default function AddMovie() {
         defaultValues: {
             movieType: 'movie',
             age: 'G',
-            broadcastStatus: 'premiere',
+            broadcastStatus: 'released',
             totalSeasons: 1,
             genres: [],
             banner: null
@@ -197,6 +206,8 @@ export default function AddMovie() {
     })
 
     const movieType = watch('movieType')
+
+    console.log(watch('broadcastStatus'))
 
     // update movie
     const updateMovieHandler = async newMovieObj => {
@@ -280,6 +291,11 @@ export default function AddMovie() {
         newMovieObj.is_suggested = suggestedCheckbox
         newMovieObj.site_scores = []
         newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
+        if(data.broadcastStatus == 'premiere'){
+            newMovieObj.imdb_score = -1
+            newMovieObj.rotten_score = -1
+            newMovieObj.metacritic_score = -1
+        }
 
         // for (let key in newMovieObj) {
         //     console.log(`${key} - ${typeof newMovieObj[key]} - ${newMovieObj[key]}`)
@@ -673,7 +689,7 @@ export default function AddMovie() {
 
             {!isPending && (
                 <form className="w-full grid grid-cols-1 md:grid-cols-2 gap-5" onSubmit={!movieObj ? handleSubmit(addMovie) : handleSubmit(updateMovie)}>
-
+                    <h2 className="md:col-start-1 md:col-end-3 text-center py-1 rounded-md bg-red-500 text-white dark:text-primary font-vazir-light">در صورت وارد کردن نمرات -1 بدین معنی هست که نمره هنوز منتشر نشده</h2>
                     <div className="w-full relative select-none">
                         <input
                             type="text"

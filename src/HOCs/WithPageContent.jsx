@@ -26,7 +26,6 @@ export default function WithPageContent(Comp , movieContent) {
 
         let {movies : moviesArray} = useContext(MoviesContext)
         const [movies, setMovies] = useState(moviesArray)
-        // console.log(moviesArray)
 
         const [genres, setGenres] = useState({
             'movie': ['اکشن', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'ماجراجویی', 'انیمه', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی'],
@@ -41,7 +40,7 @@ export default function WithPageContent(Comp , movieContent) {
             <div className={`container mx-auto ${movieContent && '!px-5'} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-12`}>
                 {/* right side */}
                 <div className="w-full lg:w-2/3 flex flex-col gap-7">
-                    <Comp movies={movies} movieTable={movieTable} />
+                    <Comp movies={movies.filter(movie => movie.broadcastStatus !== 'premiere')} movieTable={movieTable} />
                 </div>
 
                 {/* left side */}

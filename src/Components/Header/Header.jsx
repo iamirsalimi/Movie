@@ -30,8 +30,8 @@ export default function Header() {
     const swiperRef = useRef(null)
 
     let { movies: moviesArray } = useContext(UserContext)
-    const [movies, setMovies] = useState(moviesArray.filter(movie => movie.is_in_header_slider))
-    const [activeObj, setActiveObj] = useState(moviesArray.filter(movie => movie.is_in_header_slider)[0])
+    const [movies, setMovies] = useState(moviesArray.filter(movie => movie.is_in_header_slider && movie.broadcastStatus != 'premiere'))
+    const [activeObj, setActiveObj] = useState(moviesArray.filter(movie => movie.is_in_header_slider && movie.broadcastStatus != 'premiere')[0])
 
     // calculate website rates bg average
     const calcRates = rates => {
@@ -48,7 +48,7 @@ export default function Header() {
 
     useEffect(() => {
         if (moviesArray.length > 0) {
-            let sliderMovies = moviesArray.filter(movie => movie.is_in_header_slider)
+            let sliderMovies = moviesArray.filter(movie => movie.is_in_header_slider && movie.broadcastStatus != 'premiere')
             setMovies(sliderMovies)
             setActiveObj(sliderMovies[0])
 
@@ -73,7 +73,6 @@ export default function Header() {
     return (
         <div className="h-full w-full -mt-12">
             <div className="relative w-full h-screen overflow-hidden bg-red-500">
-                {/* <img src="/src/assets/YouTube Banner.jpg" alt="" className="w-full h-full" /> */}
                 <img src={activeObj?.banner} alt="" className="w-full h-full object-cover object-center transition-all" />
                 <div className="lg:bg-gradient-to-r bg-gradient-to-t z-20 from-black/95 from-40% to-gray-0 !absolute top-0 h-full w-full"></div>
 
@@ -115,17 +114,17 @@ export default function Header() {
                             <div className="flex items-center gap-3 xs:gap-4 sm:gap-6 lg:gap-8 select-none">
                                 <div className="flex items-center justify-center gap-0.5">
                                     <FaImdb className="text-3xl md:text-3xl lg:text-4xl fill-yellow-500" />
-                                    <span className="font-bold"><span className="text-xl md:text-2xl text-yellow-500">{activeObj?.imdb_score}</span><span className="text-white">/10</span></span>
+                                    <span className="font-bold"><span className="text-xl md:text-2xl text-yellow-500">{activeObj?.imdb_score == -1 ? '-' : activeObj?.imdb_score}</span><span className="text-white">/10</span></span>
                                 </div>
 
                                 <div className="flex items-center justify-center gap-0.5">
                                     <SiRottentomatoes className="text-3xl md:text-3xl lg:text-4xl fill-red-500" />
-                                    <span className="font-bold"><span className="text-xl md:text-2xl text-white">{activeObj?.rotten_score}</span><span className="text-red-500">%</span></span>
+                                    <span className="font-bold"><span className="text-xl md:text-2xl text-white">{activeObj?.rotten_score == -1 ? '-' : activeObj?.rotten_score}</span><span className="text-red-500">%</span></span>
                                 </div>
 
                                 <div className="flex items-center justify-center gap-0.5">
                                     <SiMetacritic className="text-3xl md:text-3xl lg:text-4xl fill-blue-500" />
-                                    <span className="font-bold"><span className="text-xl md:text-2xl text-white">{activeObj?.metacritic_score}</span><span className="text-blue-500">%</span></span>
+                                    <span className="font-bold"><span className="text-xl md:text-2xl text-white">{activeObj?.metacritic_score == -1 ? '-' : activeObj?.metacritic_score}</span><span className="text-blue-500">%</span></span>
                                 </div>
                             </div>
 
@@ -162,14 +161,6 @@ export default function Header() {
                                 {movies.map((movie, index) => (
                                     <SwiperSlide key={movie.id} className={`w-1/2 bg-white rounded-lg text-center h-full select-none ${activeIndex == index && 'border border-yellow-500'}`}> <Card isActive={activeIndex == index} {...movie} /> </SwiperSlide>
                                 ))}
-                                {/* <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 2</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 3</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 4</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 5</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 6</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 7</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 8</SwiperSlide>
-                                <SwiperSlide className="w-1/2 bg-white h-full select-none">Slide 9</SwiperSlide> */}
                             </Swiper>
                         </div>
                     </div>

@@ -66,7 +66,7 @@ export default function AllWeeklyReleases() {
     }
 
     useEffect(() => {
-        const getAllMovies = async () => {
+        const getAllReleases = async () => {
             try {
                 const res = await fetch(apiData.getAllApi, {
                     headers: {
@@ -91,13 +91,13 @@ export default function AllWeeklyReleases() {
 
             } catch (err) {
                 console.log('fetch error', err)
-                isPending(false)
+                setIsPending(false)
                 setError(err)
             }
         }
 
         setIsPending(true)
-        getAllMovies()
+        getAllReleases()
     }, [getReleasesFlag])
 
     useEffect(() => {
@@ -124,7 +124,6 @@ export default function AllWeeklyReleases() {
 
         setFilteredReleases(filteredReleasesArray)
     }, [searchValue, searchType])
-
 
     // return the easy readable time and date with Iran timezone
     const getDate = date => {
