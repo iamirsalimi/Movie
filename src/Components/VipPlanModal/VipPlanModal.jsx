@@ -101,7 +101,7 @@ export default function VipPlanModal({ userObj, showModal, setShowModal, isUpdat
                     <input id="policy-checkbox" type="checkbox" value="" className="peer" hidden checked={agreeWebsitePolicy} onChange={e => setAgreeWebsitePolicy(e.target.checked)} />
                     <label htmlFor="policy-checkbox" className="flex items-center w-fit">
                         <span className={`inline-block cursor-pointer w-5 h-5 rounded-md border transition-colors ${agreeWebsitePolicy ? '!border-sky-500 bg-sky-500' : 'border-light-gray dark:border-gray-600'} `}></span>
-                        <a href="#" className="ms-2 text-sm font-vazir underline text-light-gray dark:text-sky-300 cursor-pointer select-none">قوانین و ظوابط سایت را مطالعه کردم</a>
+                        <a href="/faq" className="ms-2 text-sm font-vazir underline text-light-gray dark:text-sky-300 cursor-pointer select-none">قوانین و ظوابط سایت را مطالعه کردم</a>
                     </label>
                 </div>
 

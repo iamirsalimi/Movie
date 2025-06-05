@@ -3,7 +3,7 @@ import React from 'react'
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
 
-let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
+let links = [{ title: 'صفحه اصلی', href: '/' },{ title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
 
 export default function Footer() {
     return (

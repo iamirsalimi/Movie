@@ -73,7 +73,7 @@ export default function VipPlan() {
                 ) : (
                     <div className="w-full flex flex-col items-start- justify-center gap-2">
                         <h2 className="text-gray-700 dark:text-white font-vazir text-sm lg:text-base">اشتراک فعالی ندارید</h2>
-                        <ul className="w-full flex flex-col items-center gap-4 font-vazir text-light-gray dark:text-white py-2 px-4 border border-white dark:border-primary divide-y divide-white dark:divide-primary rounded-md">
+                        <ul className="w-full flex flex-col items-center gap-4 font-vazir text-light-gray dark:text-white py-2 px-4 border border-gray-200 dark:border-primary divide-y divide-gray-200 dark:divide-primary rounded-md">
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm md:text-base">نوع اشتراك فعال :</h3>
                                 <span className="text-vazir-light text-primary dark:text-white text-sm md:text-base">{userObj.subscriptionPlan.duration} روزه</span>
@@ -115,10 +115,12 @@ export default function VipPlan() {
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.activateDate)}</td>
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.expiration)}</td>
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">
-                                        <button
-                                            className="py-1 px-2 rounded-md bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-colors cursor-pointer text-white font-vazir"
-                                            disabled={!plan.isBought.value}
-                                        >فاکتور</button>
+                                        {plan.isBought && (
+                                            <a
+                                                href={`/reciept/${plan.id}`}
+                                                className="py-1 px-2 rounded-md bg-sky-500 hover:bg-sky-600 transition-colors cursor-pointer text-white font-vazir"
+                                            >فاکتور</a>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

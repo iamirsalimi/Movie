@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , memo } from 'react'
 
 import { MdOutlineDateRange } from "react-icons/md";
 
@@ -10,7 +10,7 @@ let apiData = {
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
-export default function WeeklyTable({ movieTable, movies }) {
+const WeeklyTable = memo(({ movies }) => {
 
     const [activeDay, setActiveDay] = useState(null)
     const [weekMovies, setWeekMovies] = useState([])
@@ -147,4 +147,6 @@ export default function WeeklyTable({ movieTable, movies }) {
             </ul>
         </div>
     )
-}
+})
+
+export default WeeklyTable

@@ -11,6 +11,8 @@ import Dmca from './Pages/Dmca/Dmca'
 import ImdbTop from './Pages/ImdbTop/ImdbTop'
 import Register from './Pages/Register/Register'
 import Login from './Pages/Login/Login'
+import Faq from './Pages/Faq/Faq'
+import Reciept from './Pages/Reciept/Reciept'
 // userPanel
 import UserPanel from './Pages/UserPanel/UserPanel'
 import Dashboard from './Pages/Dashboard/Dashboard'
@@ -68,6 +70,7 @@ let Routes = [
             { path: '/imdb-top/:movieType', element: <ImdbTop /> },
             { path: '/imdb-top/:movieType/page/:pageId', element: <ImdbTop /> },
             { path: '/banned', element: <Banned /> },
+            { path: '/faq', element: <Faq /> },
         ]
     },
     {
@@ -155,6 +158,7 @@ let Routes = [
             },
         ]
     },
+    { path: '/reciept/:subscriptionId', element: <Reciept /> },
     { path: '*', element: <NotFound /> }
 ]
 

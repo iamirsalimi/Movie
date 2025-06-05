@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useMemo } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
@@ -8,10 +8,9 @@ import WeeklyTable from './../WeeklyTable/WeeklyTable'
 import MainMovies from './../MainMovies/MainMovies'
 
 
-function MainPageComp({ movies, movieTable }) {
+function MainPageComp({ movies }) {
   const [filteredMovies, setFilteredMovies] = useState(movies)
   const [checked, setChecked] = useState(false)
-
 
   const searchLocation = new URLSearchParams(useLocation().search)
 
@@ -157,7 +156,9 @@ function MainPageComp({ movies, movieTable }) {
 
   return (
     <>
-      <WeeklyTable movieTable={movieTable} movies={movies} />
+      {useMemo(() => {
+        return <WeeklyTable movies={movies} />
+      } , [movies])}
       <MainMovies movies={filteredMovies} />
     </>
   )

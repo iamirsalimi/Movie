@@ -37,6 +37,7 @@ export default function AdminDashboard() {
     const [announcements, setAnnouncements] = useState(null)
     const [announcementsIsPending, setAnnouncementsIsPending] = useState(false)
     const [announcementError, setAnnouncementError] = useState(false)
+    const [announcementFlag, setAnnouncementFlag] = useState(false)
     const [showAnnouncementModal, setShowAnnouncementModal] = useState(false)
     const [updateFlag, setUpdateFlag] = useState(false)
     const [getAnnouncements, setGetAnnouncements] = useState(false)
@@ -46,11 +47,13 @@ export default function AdminDashboard() {
     const [tickets, setTickets] = useState(null)
     const [ticketsIsPending, setTicketsIsPending] = useState(false)
     const [ticketsError, setTicketsError] = useState(false)
+    const [ticketsFlag, setTicketsFlag] = useState(false)
     const [requests, setRequests] = useState(null)
     const [requestsIsPending, setRequestsIsPending] = useState(false)
     const [requestsError, setRequestsError] = useState(false)
+    const [requestsFlag, setRequestsFlag] = useState(false)
     const [users, setUsers] = useState(null)
-
+    
     const [ipObj, setIpObj] = useState(null)
 
     const { userObj } = useContext(UserContext)
@@ -148,10 +151,12 @@ export default function AdminDashboard() {
                 setAnnouncementError(err)
                 setAnnouncementsIsPending(false)
                 setAnnouncements(null)
+                setAnnouncementFlag(false)
             }
         }
-        if (userObj) {
+        if (userObj && !announcementFlag) {
             setAnnouncementsIsPending(true)
+            setAnnouncementFlag(true)
             getAnnouncements()
         }
     }, [getAnnouncements, userObj])
@@ -179,13 +184,15 @@ export default function AdminDashboard() {
                 console.log('fetch error')
                 setTicketsError(err)
                 setTicketsIsPending(false)
+                setTicketsFlag(false)
                 setTickets(null)
             }
         }
 
         // when the announcementsIsPending is null it means announcements has fetched 
-        if (announcementsIsPending == null) {
+        if (announcementsIsPending == null && !ticketsFlag) {
             setTicketsIsPending(true)
+            setTicketsFlag(true)
             getTickets()
         }
     }, [announcementsIsPending])
@@ -218,13 +225,15 @@ export default function AdminDashboard() {
                 setRequestsError(err)
                 console.log(err)
                 setRequestsIsPending(false)
+                setRequestsFlag(false)
                 setRequests(null)
             }
         }
 
         // when the ticketsIsPending is null it means tickets has fetched 
-        if (ticketsIsPending == null) {
+        if (ticketsIsPending == null && !requestsFlag) {
             setRequestsIsPending(true)
+            setRequestsFlag(true)
             getRequests()
         }
     }, [ticketsIsPending])

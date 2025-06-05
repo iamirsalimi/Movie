@@ -12,6 +12,7 @@ import Footer from '../Components/Footer/Footer'
 import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton.'
 import UserContext from '../Contexts/UserContext'
 import MoviesContext from '../Contexts/MoviesContext'
+import Loader from '../Components/Loader/Loader'
 
 import { getCookie, getUserInfo, checkUserSubscriptionStatus, checkUserBanStatus } from '../utils'
 
@@ -33,6 +34,7 @@ export default function MainLayout() {
     const [error, setError] = useState(false)
     const [notifications, setNotifications] = useState([])
     const [checked, setChecked] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const [userObj, setUserObj] = useState(null)
 
@@ -198,6 +200,8 @@ export default function MainLayout() {
                     error,
                     movies,
                     setMovies,
+                    loading,
+                    setLoading
                 }}>
                     <main className="w-full h-full" >
                         <Outlet />

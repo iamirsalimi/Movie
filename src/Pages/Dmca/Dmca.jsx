@@ -1,6 +1,5 @@
 import WithPageContent from './../../HOCs/WithPageContent'
 
-
 function Dmca(){
     return (
         <div className="rounded-xl py-5 px-4 bg-white shadow shadow-black/5  dark:bg-secondary flex flex-col items-center lg:items-start gap-2">

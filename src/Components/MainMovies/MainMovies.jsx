@@ -7,7 +7,7 @@ import PaginateBtns from '../PaginateBtns/PaginateBtns'
 
 import usePagination from '../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
 
-export default function MainMovies({ movies }) {
+export default function MainMovies({ movies, setLoading }) {
     // if pagesCount was equals to -1 that means it hasn't initialized yet 
 
     let { pageId } = useParams()
@@ -15,19 +15,19 @@ export default function MainMovies({ movies }) {
 
     const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount] = usePagination(movies, initialPage, 5)
 
-useEffect(() => {
-    const pageNumber = parseInt(pageId);
+    useEffect(() => {
+        const pageNumber = parseInt(pageId);
 
-    if (!pageId || isNaN(pageNumber)) return;
+        if (!pageId || isNaN(pageNumber)) return;
 
-    if (pagesCount === 0) return
+        if (pagesCount === 0) return
 
-    if (pageNumber >= 1 && pageNumber <= pagesCount) {
-        setCurrentPage(pageNumber);
-    } else {
-        navigate('/not-found');
-    }
-}, [pageId, pagesCount])
+        if (pageNumber >= 1 && pageNumber <= pagesCount) {
+            setCurrentPage(pageNumber);
+        } else {
+            navigate('/not-found');
+        }
+    }, [pageId, pagesCount])
 
     return (
         <div className="flex flex-col gap-5">

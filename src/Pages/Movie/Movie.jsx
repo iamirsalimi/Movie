@@ -115,16 +115,6 @@ function Movie() {
         getMovieInfo(movieId)
     }, [])
 
-    // console.log(mainMovie)    
-    const calcRates = rating => {
-        if (rating.length > 0) {
-            let likedRates = rating.filter(rate => rate.liked).length
-            let totalRate = Math.round(likedRates / rates.length * 100)
-
-            return totalRate
-        }
-    }
-
     // to change the tabs we should update the state
     const changeTab = e => {
         let target = e.target.tagName == "LI" ? event.target :
@@ -134,30 +124,8 @@ function Movie() {
         setMovieTab(target.dataset.tab)
     }
 
-    // this function will calculate the amount of the real array length , because in this array we can have nested array and for getting the real length of my array we should constantly call function by itself when we have another array in any index of our objects  
-    const calcLength = mainArray => {
-        const calcArrayLength = array => {
-            let sum = 0
-
-            for (let i = 0; i < array.length; i++) {
-                sum++;
-                // if the nested Comment Object has another array of replies and comments we should calculate them to so we call our function again for it
-                if (array[i].replies.length) {
-                    sum += calcArrayLength(array[i].replies);
-                }
-            }
-            return sum
-        }
-
-        let arrayLength = calcArrayLength(mainArray)
-        return arrayLength
-    }
-
-    // useEffect(() => {
-    //     console.log(mainMovie)
-    // }, [mainMovie])
-
     const addCommentHandler = async newComment => {
+        toastId = toast.loading('در حال افزودن کامنت')
         await fetch(apiData.postCommentApi, {
             method: "POST",
             headers: {
@@ -170,11 +138,13 @@ function Movie() {
             if (res.ok) {
                 setIsAdding(false)
                 setGetComments(prev => !prev)
+                toast.dismiss(toastId)
                 toast.success('دیدگاه شما با موفقیت اضافه شد و پس از تایید ادمین نمایش داده می شود')
             }
         })
             .catch(err => {
                 setIsAdding(false)
+                toast.dismiss(toastId)
                 toast.error('مشکلی در افزودن دیدگاه پیش آمده')
             })
     }
@@ -340,6 +310,7 @@ function Movie() {
                 console.log(res)
                 setMainMovie(newMovieObj)
                 if (!removeFlag) {
+                    toast.dismiss(toastId)
                     if (likeFlag) {
                         toast.success('فیلم با موفقیت لایک شد')
                     } else {
@@ -356,6 +327,7 @@ function Movie() {
         })
             .catch(err => {
                 setIsAdding(false)
+                toast.dismiss(toastId)
                 toast.error('مشکلی در آپدیت لایک های فیلم پیش آمده')
             })
     }
@@ -390,7 +362,7 @@ function Movie() {
                 likeStatus: 'liked'
             })
 
-            console.log('added')
+            // console.log('added')
         } else {
             // if user already liked the movie we should remove his like
             if (userLikedMovieObj.likeStatus == 'liked') {
@@ -407,9 +379,9 @@ function Movie() {
                 })
             }
 
-            console.log('removed')
+            // console.log('removed')
         }
-
+        toastId = toast.loading('در حال آپدیت لایک های فیلم')
         let newMainMovie = { ...mainMovie }
         newMainMovie.site_scores = [...scores]
         updateMovieLikesHandler(newMainMovie, true, removeFlag)
@@ -436,7 +408,7 @@ function Movie() {
                 likeStatus: 'disliked'
             })
 
-            console.log('added')
+            // console.log('added')
         } else {
             // if user already disliked the movie we should remove his dislike
             if (userLikedMovieObj.likeStatus == 'disliked') {
@@ -451,10 +423,11 @@ function Movie() {
                     }
                 })
             }
-            console.log('removed')
+            // console.log('removed')
         }
-        console.log(scores)
+        // console.log(scores)
 
+        toastId = toast.loading('در حال آپدیت لایک های فیلم')
         let newMainMovie = { ...mainMovie }
         newMainMovie.site_scores = [...scores]
         updateMovieLikesHandler(newMainMovie, false, removeFlag)
