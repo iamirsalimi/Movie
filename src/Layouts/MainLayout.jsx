@@ -130,10 +130,10 @@ export default function MainLayout() {
                     })
 
                     setMovies(sortedMoviesArray)
-                    setIsPending(false)
-                    setError(false)
                 }
 
+                setIsPending(null)
+                setError(false)
             } catch (err) {
                 console.log('fetch error', err)
                 isPending(false)
@@ -194,9 +194,10 @@ export default function MainLayout() {
                 <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} notifications={notifications} />
 
                 <MoviesContext.Provider value={{
-                    isPending: isPending,
-                    error: error,
-                    movies: movies,
+                    isPending,
+                    error,
+                    movies,
+                    setMovies,
                 }}>
                     <main className="w-full h-full" >
                         <Outlet />

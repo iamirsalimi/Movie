@@ -95,7 +95,7 @@ export default function Content() {
     const queryString = query.toString()
 
     if (queryString) {
-      window.location = `?search-type=advanced&${queryString}`
+      window.location = `/?search-type=advanced&${queryString}`
     }
   }
 

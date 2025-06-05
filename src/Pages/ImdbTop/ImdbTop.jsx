@@ -1,10 +1,10 @@
-import React , {useEffect} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { useNavigate, useParams } from 'react-router-dom'
 
 import PaginateBtns from './../../Components/PaginateBtns/PaginateBtns'
 import TopMovieCard from './../../Components/TopMovieCard/TopMovieCard'
-import { movies } from '../../moviesData'
+import MoviesContext from '../../Contexts/MoviesContext'
 
 import usePagination from '../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
 
@@ -12,21 +12,40 @@ import usePagination from '../../Hooks/usePagination' // arguments (movies array
 export default function ImdbTop() {
     let { movieType, pageId = 1 } = useParams()
 
-    
-    const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount, startIndex] = usePagination(movies.sort((a , b) => b.rating[0].rate - a.rating[0].rate), +pageId , 15)
-    
+    let { movies: moviesArray, isPending, error } = useContext(MoviesContext)
+    const [movies, setMovies] = useState(moviesArray)
+
+    const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount, startIndex] = usePagination(movies, +pageId, 15)
+
     let movieTypeRoute = movieType == 'series' ? 'سريال' : movieType == 'movies' ? 'فيلم' : 'انيمه'
-    
-    console.log(pageId , pagesCount , filteredMovies)
+
+    // console.log(pageId, pagesCount, filteredMovies)
     let navigate = useNavigate()
+
     useEffect(() => {
-        if (pagesCount && pageId <= pagesCount) {
-            setCurrentPage(+pageId)
+        const pageNumber = parseInt(pageId);
+
+        if (!pageId || isNaN(pageNumber)) return;
+
+        if (pagesCount === 0) return
+
+        if (pageNumber >= 1 && pageNumber <= pagesCount) {
+            setCurrentPage(pageNumber)
         } else {
-            setCurrentPage(1)
-            navigate(`/imdb-top/${movieType}/`)
+            navigate('/not-found')
         }
-    }, [])
+    }, [pageId, pagesCount])
+
+    useEffect(() => {
+        if (moviesArray.length > 0) {
+            if (movieType != 'anime') {
+                setMovies(moviesArray.filter(movie => movie.broadcastStatus != 'premiere' && movie.movieType == (movieType == 'movies' ? 'movie' : 'series'))?.sort((a, b) => b.imdb_score - a.imdb_score))
+            } else {
+                setMovies(moviesArray.filter(movie => movie.broadcastStatus != 'premiere' && movie.genres.includes('انیمه'))?.sort((a, b) => b.imdb_score - a.imdb_score))
+            }
+        }
+    }, [moviesArray])
+
 
     return (
         <div className="container mx-auto px-5 my-12 flex flex-col items-center gap-12 ">
@@ -40,14 +59,34 @@ export default function ImdbTop() {
                 </div>
             </div>
             <div className="w-full flex flex-col items-center gap-10">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-4 gap-y-12">
-                    {filteredMovies.map((movie, index) => (
-                        <TopMovieCard {...movie} index={startIndex + (index + 1)} />
-                    ))}
-                </div>
-                <div className="w-full flex items-center justify-center gap-1.5 flex-wrap rounded-lg py-4 bg-white shadow shadow-black/5 dark:bg-secondary">
-                    <PaginateBtns {...bindingObj} currentPage={currentPage} route={`/imdb-top/${movieType}`} />
-                </div>
+                {isPending && (
+                    <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت {movieType == 'movies' ? 'فیلم' : movieType == 'series' ? 'سریال' : 'انیمه'} ها ... </h2>
+                )}
+
+                {error && (
+                    <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در دریافت اطلاعات از سرور مشکل بر خوردیم لطفا صفحه را رفرش کنید</h2>
+                )}
+
+                {isPending == null && (
+                    <>
+                        {movies.length > 0 ? (
+                            <>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-4 gap-y-12">
+                                    {filteredMovies.map((movie, index) => (
+                                        <TopMovieCard {...movie} index={startIndex + (index + 1)} />
+                                    ))}
+                                </div>
+                                {pagesCount > 1 && (
+                                    <div className="w-full flex items-center justify-center gap-1.5 flex-wrap rounded-lg py-4 bg-white shadow shadow-black/5 dark:bg-secondary">
+                                        <PaginateBtns {...bindingObj} currentPage={currentPage} route={`/imdb-top/${movieType}`} />
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <h2 className="text-center text-gray-700 dark:text-gray-400 font-vazir text-sm sm:text-base md:text-lg lg:text-2xl mt-4">{movieType == 'movies' ? 'فیلمی' : movieType == 'series' ? 'سریالی' : 'انیمه ای'} تا کنون ثبت نشده</h2>
+                        )}
+                    </>
+                )}
             </div>
 
         </div>

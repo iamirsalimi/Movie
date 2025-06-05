@@ -116,7 +116,7 @@ export default function WeeklyTable({ movieTable, movies }) {
                     ))}
                 </ul>
             </div>
-            <ul className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 py-4 px-4 h-full bg-light dark:bg-primary rounded-lg">
+            <ul className="w-full min-h-full md:min-h-fit grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 py-4 px-4 h-full bg-light dark:bg-primary rounded-lg">
                 {isPending && (
                     <h2 className="md:col-start-1 md:col-end-3 lg:col-end-4 text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>
                 )}
@@ -140,7 +140,7 @@ export default function WeeklyTable({ movieTable, movies }) {
                                 </div>
                             </li>
                         )) : (
-                            <h1 className="col-start-1 col-end-4 text-center text-2xl text-gray-500 dark:text-white font-vazir">مقداری وجود ندارد!</h1>
+                            <h1 className="col-start-1 col-end-4 text-center text-lg md:text-xl lg:text-2xl text-gray-500 dark:text-white font-vazir">مقداری وجود ندارد!</h1>
                         )}
                     </>
                 )}

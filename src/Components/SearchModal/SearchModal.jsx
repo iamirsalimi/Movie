@@ -79,7 +79,7 @@ export default function SearchModal({ showModal, setShowModal }) {
                             if (!searchValue) {
                                 hideMenu()
                             } else {
-                                window.location = `?search-type=normal&s=${searchValue}`
+                                window.location = `/?search-type=normal&s=${searchValue}`
                             }
                         }}
                     >

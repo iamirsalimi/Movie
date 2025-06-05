@@ -57,7 +57,7 @@ export default function UpdatedSeries({ series }) {
                 </div>
             </div>
             <ul className="mt-5 flex flex-col gap-2">
-                {series.length ? series.slice(0 , 9).map(seriesItem => (
+                {series.length ? series.filter(seriesItem => seriesItem.broadcastStatus != 'premiere').slice(0 , 9).map(seriesItem => (
                     <a href={`/series/${seriesItem.id}`}>
                         <li key={seriesItem.id} className="w-full bg-light dark:bg-primary hover:bg-black/5 dark:hover:bg-black/35 transition-colors duration-300 flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
                             <div className="min-w-20 max-w-20 h-20 rounded-md overflow-hidden">

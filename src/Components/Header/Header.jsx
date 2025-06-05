@@ -102,7 +102,7 @@ export default function Header() {
 
                             <div className="flex flex-col lg:flex-row items-center justify-start gap-1 md:gap-2 lg:gap-5">
                                 <a href={`/${activeObj?.movieType}/${activeObj?.id}`} className="inline-block font-bold text-white hover:text-yellow-500 transition-colors text-3xl md:text-4xl font-sans shadow-black drop-shadow-2xl text-center lg:text-justify lg:line-clamp-1">{activeObj?.title}</a>
-                                <span className="inline-block p-1.5 md:p-2 border border-gray-300 text-gray-300 text-sm font-semibold">{activeObj?.age}</span>
+                                <span className="inline-block p-1 border border-gray-300 text-gray-300 text-sm font-semibold">{activeObj?.age}</span>
                             </div>
 
                             <ul className="flex items-center gap-1 -mt-2">

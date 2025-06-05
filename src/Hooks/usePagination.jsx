@@ -10,7 +10,7 @@ export default function usePagination(movies , current , rows) {
     
     let startIndex = (current - 1) * rows   
     let endIndex = startIndex + rows
-    
+
     useEffect(() => {
         setButtonsArray(Array.from(Array(pagesCount).keys()))
         setFilteredMovies(movies?.slice(startIndex, endIndex))
