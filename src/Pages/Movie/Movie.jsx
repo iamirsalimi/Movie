@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 
-import toast from "react-hot-toast"
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import toast from "react-hot-toast"
 
 import WithPageContent from './../../HOCs/WithPageContent'
 import MovieInfos from '../../Components/MovieInfos/MovieInfos'
@@ -10,6 +10,7 @@ import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
 import CommentForm from '../../Components/CommentForm/CommentForm'
 import ShareBox from '../../Components/ShareBox/ShareBox'
+import ReportBox from '../../Components/ReportBox/ReportBox'
 import UserContext from '../../Contexts/UserContext'
 
 // icons
@@ -55,8 +56,8 @@ let apiData = {
 
 function Movie() {
     const [mainMovie, setMainMovie] = useState(null)
-    const [isPending, setIsPending] = useState(true)
-    const [error, setError] = useState(false)
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(null)
     const [showAddCommentForm, setShowAddCommentForm] = useState(true)
     // const [showReply, setShowReply] = useState(false)
     const [replyId, setReplyId] = useState(null)
@@ -65,8 +66,8 @@ function Movie() {
     const [commentsError, setCommentsError] = useState(null)
     const [getComments, setGetComments] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
-    const [isMovieAddedToWatchList, setIsMovieAddedToWatchList] = useState(false)
-    const [showShareModal , setShareModal] = useState(false)
+    const [showShareModal , setShowShareModal] = useState(false)
+    const [showReportModal , setShowReportModal] = useState(false)
     let toastId = null
 
     const location = useLocation();
@@ -656,10 +657,23 @@ function Movie() {
                                 </MovieInfos>
 
                                 <div className="absolute bottom-3 left-2 flex items-center gap-2">
-                                    <button className="px-3 py-2 text-xs rounded-full bg-red-100 text-red-500 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer ">گزارش خرابی</button>
+                                    <button 
+                                        className="px-3 py-2 text-xs rounded-full bg-red-100 text-red-500 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer"
+                                        onClick={e => {
+                                            if(userObj){
+                                                if(userObj?.role == 'user'){
+                                                    setShowReportModal(true)
+                                                } else {
+                                                    toast.error("فقط کاربر های عادی میتوانند مشکلات را گزارش دهند")
+                                                }
+                                            } else {
+                                                toast.error("برای اینکار ابتدا باید وارد حساب کاربری خود بشوید")
+                                            }
+                                        }}
+                                    >گزارش خرابی</button>
                                     <button 
                                         className="px-3 py-2 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:text-primary dark:hover:text-white font-vazir cursor-pointer"
-                                        onClick={e => setShareModal(true)}
+                                        onClick={e => setShowShareModal(true)}
                                     >اشتراک گزاری</button>
                                 </div>
                             </div>
@@ -818,7 +832,8 @@ function Movie() {
                             </div>
                         </div>
                     </div>
-                    <ShareBox showModal={showShareModal} setShowModal={setShareModal} {...mainMovie} />
+                    <ReportBox showModal={showReportModal} setShowModal={setShowReportModal} userObj={userObj} movieObj={mainMovie} />
+                    <ShareBox showModal={showShareModal} setShowModal={setShowShareModal} {...mainMovie} />
                 </>
             )}
         </>

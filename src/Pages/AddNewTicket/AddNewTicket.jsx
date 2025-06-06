@@ -72,7 +72,7 @@ export default function AddNewTicket() {
   const addTicket = data => {
     if (userObj) {
       setIsAdding(true)
-      let newUserObj = {
+      let newTicketObj = {
         userId: userObj.id,
         fullName: `${userObj.firstName} ${userObj.lastName}`,
         userName: userObj.userName,
@@ -88,8 +88,8 @@ export default function AddNewTicket() {
         updated_at: new Date(),
       }
 
-      console.log(newUserObj , Object.keys(newUserObj))
-      addTicketHandler(newUserObj)
+      console.log(newTicketObj , Object.keys(newTicketObj))
+      addTicketHandler(newTicketObj)
     }
   }
 

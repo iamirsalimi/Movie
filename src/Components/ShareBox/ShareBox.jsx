@@ -26,7 +26,6 @@ export default function ShareBox({ showModal, setShowModal, id : movieId, movieT
     }
   }
 
-
   const hideModal = () => {
     setShowModal(false)
   }
@@ -43,8 +42,8 @@ export default function ShareBox({ showModal, setShowModal, id : movieId, movieT
 
         <div className="w-full flex flex-col items-center gap-4">
           <h2 className="text-light-gray dark:text-white font-shabnam">اشتراک‌ گذاری {title}</h2>
-          <div className="bg-white dark:bg-primary border border-gray-200 dark:border-gray-700 p-4 rounded-xl w-full max-w-md mx-auto">
-            <div className="flex items-center justify-between gap-2 border rounded-md px-3 py-2 border-gray-400 dark:bg-secondary">
+          <div className="bg-gray-100 dark:bg-secondary border border-gray-200 dark:border-gray-700 p-4 rounded-xl w-full max-w-md mx-auto">
+            <div className="flex items-center justify-between gap-2 border rounded-md px-3 py-2 border-white dark:border-primary bg-white dark:bg-primary">
               <input
                 type="text"
                 value={movieLink}
