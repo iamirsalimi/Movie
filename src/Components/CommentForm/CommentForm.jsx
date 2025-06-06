@@ -28,6 +28,7 @@ export default function CommentForm({ showReply = false, movieId,movieType, movi
     const [commentText, setCommentText] = useState('')
 
     let toggleId = useId()
+    let textAreaId = useId()
 
     // console.log(movieId , userId , userName, userRole, parentId , repliedTo)
 
@@ -57,20 +58,20 @@ export default function CommentForm({ showReply = false, movieId,movieType, movi
 
     return (
         <div className="w-full flex flex-col gap-3">
-            <label htmlFor={toggleId} className="w-fit text-light-gray font-vazir dark:text-white flex items-center justify-start gap-2">
+            <label htmlFor={textAreaId} className="w-fit text-light-gray font-vazir dark:text-white flex items-center justify-start gap-2">
                 <span>افزودن دیدگاه</span>
                 {showReply && (
                     <span className="text-gray-400 dark:text-gray-600 text-xs font-vazir">در پاسخ به @{repliedTo}</span>
                 )}
             </label>
-            <textarea id={toggleId} value={commentText} onChange={e => setCommentText(e.target.value)} className="h-32 font-vazir-light rounded-lg border border-gray-300 text-gray-700 dark:border-primary dark:bg-primary dark:text-white resize-none px-2 py-1 outline-none focus:border-2 transition-all focus:border-sky-500" placeholder="دیدگاه شما ..." maxLength={500}></textarea>
+            <textarea id={textAreaId} value={commentText} onChange={e => setCommentText(e.target.value)} className="h-32 font-vazir-light rounded-lg border border-gray-300 text-gray-700 dark:border-primary dark:bg-primary dark:text-white resize-none px-2 py-1 outline-none focus:border-2 transition-all focus:border-sky-500" placeholder="دیدگاه شما ..." maxLength={500}></textarea>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start gap-3 sm:gap-5">
-                <div className="filter-lang flex items-center">
-                    <input type="checkbox" className="hidden" id="dubed" checked={hasSpoil} onChange={e => setHasSpoil(e.target.checked)} />
-                    <label htmlFor="dubed" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
+                <div className="spoil-check flex items-center">
+                    <input type="checkbox" className="hidden" id={toggleId} checked={hasSpoil} onChange={e => setHasSpoil(e.target.checked)} />
+                    <label htmlFor={toggleId} className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
                         <span className="font-vazir">دیدگاه دارای اسپویل است</span>
-                        <div className="flex items-center w-12 rounded-full bg-gray-300 dark:bg-gray-700 p-0.5 cursor-pointer transition-colors">
-                            <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-white"></span>
+                        <div className={`flex items-center w-12 rounded-full ${hasSpoil ? 'bg-sky-100' : 'bg-gray-300 dark:bg-gray-700'} p-0.5 cursor-pointer transition-colors`}>
+                            <span className={`inline-block rounded-full w-6 h-6 transition-all ${hasSpoil ? '!-translate-x-4/5  !bg-sky-500' : 'translate-x-0 bg-white'}`}></span>
                         </div>
                     </label>
                 </div>

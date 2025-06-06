@@ -76,6 +76,14 @@
   @apply bg-sky-500 text-white hover:text-white;
 }
 
+.spoil-check input[type="radio"]:checked + label > div{
+  @apply !bg-red-900;
+}
+
+.spoil-check input[type="radio"]:checked + label > div > span{
+  @apply !-translate-x-4/5  !bg-sky-500;
+}
+
 .filter-lang .checked-filter > div{
   @apply !bg-sky-100;
 }

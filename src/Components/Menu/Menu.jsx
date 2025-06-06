@@ -7,8 +7,8 @@ export default function Menu({ showMenu, setShowMenu }) {
     const hideMenu = () => setShowMenu(false)
     const location = useLocation()
 
-    let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' },]
-
+    let links = [{ title: 'صفحه اصلی', href: '/', paginate: "/page/" }, { title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
+    
     return (
         <div className={`absolute w-full top-0 left-0 z-50 lg:hidden ${showMenu ? 'visible' : 'invisible'}`}>
             <div className={`fixed w-full top-0 left-0 bg-black/65 glass-effect min-h-screen transition-all duration-200 ${showMenu ? 'opacity-100 visible' : 'opacity-0 invisible'}`} onClick={hideMenu}></div>
