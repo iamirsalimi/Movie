@@ -8,6 +8,61 @@ export default function GenreTables({ genre, movies }) {
     const [genresCount, setGenresCount] = useState({})
     // console.log(genre[activeType] , movies)
 
+    const allGenres = {
+        movie: {
+            'اکشن': 'action',
+            'ترسناک': 'horror',
+            'انیمیشن': 'animation',
+            'تاریخی': 'history',
+            'جنایی': 'crime',
+            'جنگی': 'war',
+            'خانوادگی': 'family',
+            'درام': 'drama',
+            'زندگی نامه': 'biography',
+            'عاشقانه': 'romance',
+            'علمی تخیلی': 'sci-fi',
+            'فانتزی': 'fantasy',
+            'کمدی': 'comedy',
+            'کوتاه': 'short',
+            'ماجراجویی': 'adventure',
+            'انیمه': 'anime',
+            'مستند': 'documentary',
+            'معمایی': 'mystery',
+            'موزیکال': 'musical',
+            'وسترن': 'western',
+            'نوآر': 'noir',
+            'هیجان انگیز': 'thriller',
+            'ورزشی': 'sport',
+        },
+        series: {
+            'اکشن': 'action',
+            'Talk-Show': 'talk-show',
+            'ترسناک': 'horror',
+            'انیمیشن': 'animation',
+            'تاریخی': 'history',
+            'جنایی': 'crime',
+            'جنگی': 'war',
+            'خانوادگی': 'family',
+            'درام': 'drama',
+            'زندگی نامه': 'biography',
+            'عاشقانه': 'romance',
+            'علمی تخیلی': 'sci-fi',
+            'فانتزی': 'fantasy',
+            'کمدی': 'comedy',
+            'کوتاه': 'short',
+            'انیمه': 'anime',
+            'ماجراجویی': 'adventure',
+            'مستند': 'documentary',
+            'معمایی': 'mystery',
+            'موزیکال': 'musical',
+            'وسترن': 'western',
+            'نوآر': 'noir',
+            'هیجان انگیز': 'thriller',
+            'ورزشی': 'sport',
+            'موسیقی': 'music',
+        }
+    }
+
     let inputFilmRef = useRef(null)
     let inputSerialRef = useRef(null)
 
@@ -28,7 +83,7 @@ export default function GenreTables({ genre, movies }) {
             newGenres = { ...newGenres, ...newGenre }
         })
         setGenresCount(newGenres)
-    }, [activeTypeArray , movies])
+    }, [activeTypeArray, movies])
 
     useEffect(() => {
         if (activeType == 'movie') {
@@ -65,7 +120,7 @@ export default function GenreTables({ genre, movies }) {
             </div>
             <ul className="mt-5 grid grid-cols-2 gap-2">
                 {activeTypeArray.map(genre => (
-                    <a href="#">
+                    <a href={`/?search-type=advanced&movieType=${activeType}&genre=${allGenres[activeType][genre]}`}>
                         <li className="group relative font-shabnam-light rounded-lg bg-light hover:bg-sky-500 dark:bg-primary dark:hover:bg-sky-700 transition-colors duration-200 py-2 px-3 cursor-pointer flex items-center justify-between">
                             <span className="text-light-gray group-hover:text-white dark:text-white">{genre}</span>
                             <span className="text-light-gray dark:text-white opacity-100 group-hover:translate-x-2 group-hover:opacity-0 transition-all">{genresCount[genre]}</span>

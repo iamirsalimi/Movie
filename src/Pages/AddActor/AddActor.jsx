@@ -127,9 +127,9 @@ export default function AddActor() {
     const updateActor = async data => {
         setIsAdding(true)
         // if (actorObj.fullName != data.fullName || actorObj.originalName != data.originalName || actorObj.birthDate != actorBirthDate || actorObj.nationality != data.nationality || actorObj.biography != data.biography || actorObj.src != data.src) {
-            let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: actorBirthDate, nationality: data.nationality, biography: data.biography, src: data.src, movies: [...actorMovies] }
-            console.log(newActorObj)
-            await updateActorHandler(newActorObj)
+        let newActorObj = { fullName: data.fullName, originalName: data.originalName, birthDate: actorBirthDate, nationality: data.nationality, biography: data.biography, src: data.src, movies: [...actorMovies] }
+        console.log(newActorObj)
+        await updateActorHandler(newActorObj)
         // }
     }
 
@@ -152,7 +152,8 @@ export default function AddActor() {
         }
     }
 
-    const deleteActorMovie = movieId => {
+    const deleteActorMovie = (e, movieId) => {
+        e.preventDefault()
         let newActorMovies = actorMovies.filter(movie => movie.id !== movieId)
         setActorMovies(newActorMovies)
     }
@@ -378,7 +379,7 @@ export default function AddActor() {
 
                                                     <button
                                                         className="p-1 bg-red-500 hover:bg-red-600 transition-colors rounded-sm cursor-pointer"
-                                                        onClick={e => deleteActorMovie(movie.id)}
+                                                        onClick={e => deleteActorMovie(e, movie.id)}
                                                     >
                                                         <RxCross2 className="text-white dark:text-secondary" />
                                                     </button>

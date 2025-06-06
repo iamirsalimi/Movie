@@ -103,8 +103,8 @@ function MainPageComp({ movies }) {
         
         const filters = {
           search: params.get('s'),
-          movieType: params.get('movieType'),
-          genre: params.get('genre') && genres[params.get('movieType')].find(genre => genre.value == params.get('genre')).label,
+          movieType: params.get('movieType') || 'movie',
+          genre: params.get('genre') && genres[params.get('movieType') || 'movie'].find(genre => genre.value == params.get('genre')).label,
           imdb: params.get('imdb') || 0,
           rotten: params.get('rotten') || 0,
           metacritic: params.get('metacritic') || 0,

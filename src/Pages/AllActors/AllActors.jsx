@@ -57,8 +57,9 @@ export default function AllActors() {
         const data = await res.json()
 
         if (data) {
-          setActors(data)
-          setFilteredActors(data)
+          let sortedActors =  data.sort((a , b) => b.id - a.id)
+          setActors(sortedActors)
+          setFilteredActors(sortedActors)
           setIsPending(false)
         } else {
           setIsPending(true)

@@ -111,7 +111,7 @@ export default function AddMovie() {
         genres: yup
             .array()
             .required('مقدار ژانر نمی تواند خالی باشد')
-            .min(2, 'باید حداقل شامل 2 ژانر باشد'),
+            .min(1, 'باید حداقل شامل 1 ژانر باشد'),
         countries: yup
             .array()
             .required('مقدار کشور نمی تواند خالی باشد')

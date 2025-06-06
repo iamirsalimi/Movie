@@ -402,19 +402,20 @@ export default function UserDetails() {
                                                 <span className="text-vazir-light text-primary dark:text-white font-vazir">{plan?.isBought?.price && formatPrice(plan?.isBought?.price)} تومان</span>
                                             </li>
                                         )}
-                                        <li className="w-full py-1 flex flex-col justify-center gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تغییر داده شده توسط  :</h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                {plan.changedBy.map(user => (
-                                                    <div className="flex flex-col items-center justify-between gap-1 text-sm bg-white dark:bg-secondary p-1 rounded-md">
-                                                        <span className="text-vazir-light text-primary dark:text-white rounded-lg">{user.userName}</span>
-                                                        <span className="text-vazir-light text-primary dark:text-white rounded-lg">{getDate(user.date)}</span>
-                                                    </div>
-                                                ))}
+                                        {plan.changedBy.length > 0 && (
+                                            <li className="w-full py-1 flex flex-col justify-center gap-1">
+                                                <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">تغییر داده شده توسط  :</h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                    {plan.changedBy.map(user => (
+                                                        <div className="flex flex-col items-center justify-between gap-1 text-sm bg-white dark:bg-secondary p-1 rounded-md">
+                                                            <span className="text-vazir-light text-primary dark:text-white rounded-lg">{user.userName}</span>
+                                                            <span className="text-vazir-light text-primary dark:text-white rounded-lg">{getDate(user.date)}</span>
+                                                        </div>
+                                                    ))}
 
-                                            </div>
-                                        </li>
-
+                                                </div>
+                                            </li>
+                                        )}
                                     </div>
                                 )) : (
                                     <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">کاربر تا کنون اشتراکی نداشته </h2>

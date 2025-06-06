@@ -42,7 +42,7 @@ export default function AdminTicketDetails() {
     const chatEndingRef = useRef(null)
 
     let { ticketId } = useParams()
-     let {userObj} = useContext(UserContext)
+    let { userObj } = useContext(UserContext)
 
     // add new notification
     const addNotificationHandler = async newNotificationObj => {
@@ -89,7 +89,7 @@ export default function AdminTicketDetails() {
             body: JSON.stringify(newTicketObj)
         }).then(res => {
             if (res.ok) {
-                console.log(res)
+                // console.log(res)
                 if (reloadFlag) {
                     setIsUpdating(false)
                     location.reload()
@@ -148,7 +148,7 @@ export default function AdminTicketDetails() {
             },
             body: JSON.stringify(newMessageObj)
         }).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.ok) {
                 setGetMessages(prev => !prev)
                 setMessageText('')
@@ -224,10 +224,10 @@ export default function AdminTicketDetails() {
 
                 if (data.length > 0) {
                     setMessages(data)
-                    setMessageIsPending(false)
                     chatEndingRef.current.scrollIntoView({ behavior: "smooth" })
                 }
 
+                setMessageIsPending(null)
                 setMessageError(null)
             } catch (err) {
                 console.log('fetch error')
@@ -237,14 +237,14 @@ export default function AdminTicketDetails() {
             }
         }
         if (ticketObj) {
-            console.log('ticket Obj ->', ticketObj)
+            // console.log('ticket Obj ->', ticketObj)
             setMessageIsPending(true)
             getMessagesInfo(ticketId)
         }
     }, [getMessages, ticketObj])
 
     useEffect(() => {
-        if(ticketObj){
+        if (ticketObj) {
             setPriority(ticketObj?.priority)
             setStatus(ticketObj?.status)
             updateTicket(false)
@@ -372,15 +372,18 @@ export default function AdminTicketDetails() {
                                 <h2 className="text-center font-vazir text-red-500 text-sm">{messageError.message} </h2>
                             )}
 
-                            {!messageIsPending && (
+                            {messageIsPending == null && (
                                 <>
-                                    <div className="w-full flex flex-col items-start gap-7 sm:gap-5">
-                                        {messages?.map(message => (
-                                            // if receive flag is false it means we sent the message 
-                                            <TicketMessage key={message.id} receiveFlag={userObj?.id != message.sender_id} adminFlag={message.sender_role == 'admin'} {...message} />
-                                        ))}
-                                        {/* <TicketMessage userRole="admin" receiveFlag adminReceiver /> */}
-                                    </div>
+                                    {messages.length > 0 ? (
+                                        <div className="w-full flex flex-col items-start gap-7 sm:gap-5">
+                                            {messages?.map(message => (
+                                                // if receive flag is false it means we sent the message 
+                                                <TicketMessage key={message.id} receiveFlag={userObj?.id != message.sender_id} adminFlag={message.sender_role == 'admin'} {...message} />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <h2 className="text-center font-vazir text-light-gray dark:text-gray-600 md:text-lg lg:text-xl my-12">پیامی تا کنون ارسال نشده</h2>
+                                    )}
 
                                     {ticketObj?.status !== 'closed' ? (
                                         <div className="w-full flex flex-col items-center justify-between mt-2 gap-2">

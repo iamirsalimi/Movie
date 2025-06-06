@@ -1,10 +1,11 @@
 import React from 'react'
 
-
 import NewMovieCard from '../NewMovieCard/NewMovieCard';
 
 import { BiSolidMoviePlay } from "react-icons/bi";
 import { PiArrowCircleLeftDuotone } from "react-icons/pi";
+
+let thisYear = new Date().getFullYear()
 
 export default function NewMoviesTable({ movies }) {
     return (
@@ -19,15 +20,18 @@ export default function NewMoviesTable({ movies }) {
                         <span className="text-light-gray dark:text-gray-200 text-xs sm:text-sm font-shabnam-light">دانلود فیلم های جدید</span>
                     </div>
                 </div>
-                <div className="flex items-center justify-center gap-2">
-                    <span className="font-shabnam text-light-gray dark:text-white hidden xs:inline xs:text-xs sm:text-sm">مشاهده بیشتر</span>
-                    <button className="bg-sky-500 cursor-pointer p-1 h-fit rounded-md">
+                <a
+                    href={`/?search-type=advanced&fromYear=${thisYear}`}
+                    className="flex items-center justify-center gap-2"
+                >
+                    <span className="font-shabnam text-light-gray dark:text-white cursor-pointer hidden xs:inline xs:text-xs sm:text-sm">مشاهده بیشتر</span>
+                    <span className="bg-sky-500 cursor-pointer p-1 h-fit rounded-md">
                         <PiArrowCircleLeftDuotone className="text-white text-2xl" />
-                    </button>
-                </div>
+                    </span>
+                </a>
             </div>
             <ul className="mt-5 grid grid-cols-4 gap-2">
-                {movies.length > 0 ? movies.slice(0, 8).map(movie => (
+                {movies.length > 0 ? movies.filter(movie => movie.is_in_new_movies && movie.broadcastStatus == 'released').slice(0, 8).map(movie => (
                     <NewMovieCard {...movie} />
                 )) : (
                     <>
