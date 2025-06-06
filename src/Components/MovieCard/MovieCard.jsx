@@ -26,6 +26,60 @@ let apiData = {
 
 export default function MovieCard({ id, title, mainTitle, movieType, description, cover, languages, countries, genres, imdb_score, rotten_score, metacritic_score, site_scores, year, duration, is_dubbed, has_subtitle, quality }) {
     let { userObj, setUserObj } = useContext(UserContext)
+    const allGenres = {
+        movie: {
+            'اکشن': 'action',
+            'ترسناک': 'horror',
+            'انیمیشن': 'animation',
+            'تاریخی': 'history',
+            'جنایی': 'crime',
+            'جنگی': 'war',
+            'خانوادگی': 'family',
+            'درام': 'drama',
+            'زندگی نامه': 'biography',
+            'عاشقانه': 'romance',
+            'علمی تخیلی': 'sci-fi',
+            'فانتزی': 'fantasy',
+            'کمدی': 'comedy',
+            'کوتاه': 'short',
+            'ماجراجویی': 'adventure',
+            'انیمه': 'anime',
+            'مستند': 'documentary',
+            'معمایی': 'mystery',
+            'موزیکال': 'musical',
+            'وسترن': 'western',
+            'نوآر': 'noir',
+            'هیجان انگیز': 'thriller',
+            'ورزشی': 'sport',
+        },
+        series: {
+            'اکشن': 'action',
+            'Talk-Show': 'talk-show',
+            'ترسناک': 'horror',
+            'انیمیشن': 'animation',
+            'تاریخی': 'history',
+            'جنایی': 'crime',
+            'جنگی': 'war',
+            'خانوادگی': 'family',
+            'درام': 'drama',
+            'زندگی نامه': 'biography',
+            'عاشقانه': 'romance',
+            'علمی تخیلی': 'sci-fi',
+            'فانتزی': 'fantasy',
+            'کمدی': 'comedy',
+            'کوتاه': 'short',
+            'انیمه': 'anime',
+            'ماجراجویی': 'adventure',
+            'مستند': 'documentary',
+            'معمایی': 'mystery',
+            'موزیکال': 'musical',
+            'وسترن': 'western',
+            'نوآر': 'noir',
+            'هیجان انگیز': 'thriller',
+            'ورزشی': 'sport',
+            'موسیقی': 'music',
+        }
+    }
 
     let toastId = null
 
@@ -156,7 +210,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-sky-100 dark:bg-primary"></i>
                         <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genres.map(genreItem => (
-                            <span className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></span>
+                            <a href={`/?search-type=advanced&movieType=${movieType}&genre=${allGenres[movieType][genreItem]}`} className="group px-0.5 md:px-1"><span className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200">{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></a>
                         ))}</span>
                     </li>
 

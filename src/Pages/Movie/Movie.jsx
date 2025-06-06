@@ -66,8 +66,8 @@ function Movie() {
     const [commentsError, setCommentsError] = useState(null)
     const [getComments, setGetComments] = useState(false)
     const [isAdding, setIsAdding] = useState(false)
-    const [showShareModal , setShowShareModal] = useState(false)
-    const [showReportModal , setShowReportModal] = useState(false)
+    const [showShareModal, setShowShareModal] = useState(false)
+    const [showReportModal, setShowReportModal] = useState(false)
     let toastId = null
 
     const location = useLocation();
@@ -657,11 +657,11 @@ function Movie() {
                                 </MovieInfos>
 
                                 <div className="absolute bottom-3 left-2 flex items-center gap-2">
-                                    <button 
+                                    <button
                                         className="px-3 py-2 text-xs rounded-full bg-red-100 text-red-500 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:bg-red-500 hover:text-white font-vazir cursor-pointer"
                                         onClick={e => {
-                                            if(userObj){
-                                                if(userObj?.role == 'user'){
+                                            if (userObj) {
+                                                if (userObj?.role == 'user') {
                                                     setShowReportModal(true)
                                                 } else {
                                                     toast.error("فقط کاربر های عادی میتوانند مشکلات را گزارش دهند")
@@ -671,7 +671,7 @@ function Movie() {
                                             }
                                         }}
                                     >گزارش خرابی</button>
-                                    <button 
+                                    <button
                                         className="px-3 py-2 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-primary dark:text-gray-400 transition-all duration-200 hover:text-primary dark:hover:text-white font-vazir cursor-pointer"
                                         onClick={e => setShowShareModal(true)}
                                     >اشتراک گزاری</button>

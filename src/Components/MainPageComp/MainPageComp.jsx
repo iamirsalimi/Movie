@@ -100,7 +100,7 @@ function MainPageComp({ movies }) {
     if(searchType){
       if (searchType == 'advanced') {
         const params = new URLSearchParams(location.search)
-  
+        
         const filters = {
           search: params.get('s'),
           movieType: params.get('movieType'),
@@ -133,11 +133,14 @@ function MainPageComp({ movies }) {
   
           return true
         })
-      } else {
+        console.log(result)
+      }
+      else {
         result = movies.filter(movie => movie.title.toLowerCase().includes(searchValue))
       }
     }
-
+    
+    console.log('before update ', result)
     setFilteredMovies(result)
   }
 
@@ -147,12 +150,6 @@ function MainPageComp({ movies }) {
       filterMoviesHandler()
     }
   }, [location.search, movies, filteredMovies])
-
-  useEffect(() => {
-    if (movies.length > 0) {
-      setFilteredMovies(movies)
-    }
-  }, [movies])
 
   return (
     <>

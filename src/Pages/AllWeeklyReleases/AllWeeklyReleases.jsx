@@ -31,19 +31,17 @@ const filterSearchObj = {
 
 export default function AllWeeklyReleases() {
     const [showMovieReleaseDetails, setShowMovieReleaseDetails] = useState(false)
-
-    const movieReleaseDetailsRef = useRef(null)
-
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [searchType, setSearchType] = useState('ID')
     const [searchValue, setSearchValue] = useState('')
-
     const [getReleasesFlag, setGetReleasesFlag] = useState(false)
     const [releases, setReleases] = useState([])
     const [filteredReleases, setFilteredReleases] = useState([])
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(null)
     const [releaseObj, setReleaseObj] = useState(null)
+
+    const movieReleaseDetailsRef = useRef(null)
 
     const DeleteReleaseHandler = async () => {
         try {
@@ -58,6 +56,8 @@ export default function AllWeeklyReleases() {
             if (res.ok) {
                 setShowDeleteModal(false)
                 setGetReleasesFlag(prev => !prev)
+                setReleaseObj(null)
+                setShowMovieReleaseDetails(false)
             }
 
         } catch (err) {
