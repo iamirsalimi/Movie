@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+import Loader from '../../Components/Loader/Loader'
 import { useParams } from 'react-router-dom'
 
 import dayjs from 'dayjs';
@@ -22,8 +23,9 @@ export default function Actors() {
     const [isPending, setIsPending] = useState(true)
     const [error, setError] = useState(true)
     const [actorMovies, setActorMovies] = useState(null)
-    const [actorMovieIsPending, setActorMovieIsPending] = useState(null)
+    const [actorMovieIsPending, setActorMovieIsPending] = useState(true)
     const [actorMovieError, setActorMovieError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     let { actorId } = useParams()
 
@@ -78,14 +80,12 @@ export default function Actors() {
                 if (data.length > 0) {
                     // find the exact obj of movies
                     let actorMoviesArray = actorObj.movies?.map(actorMovie => {
-                        return data.find(movie => movie.id === actorMovie.movieId);
+                        return data.find(movie => movie.id == actorMovie.movieId);
                     })
                     setActorMovies(actorMoviesArray)
-                    setActorMovieIsPending(false)
-                } else {
-                    window.location.href = '/'
                 }
-
+                
+                setActorMovieIsPending(null)
                 setActorMovieError(false)
             } catch (err) {
                 console.log('fetch error')
@@ -98,6 +98,13 @@ export default function Actors() {
             getAllMovies(actorId)
         }
     }, [actorObj])
+
+    useEffect(() => {
+        // when "actorMovieIsPending" is null it means we fetched actorMovies and after that we can remove loader 
+        if(actorObj && actorMovieIsPending == null && loading){
+            setLoading(false)
+        }
+    } , [actorObj , actorMovieIsPending])
 
     return (
         <>
@@ -119,30 +126,30 @@ export default function Actors() {
                             <h2 className="text-gray-700 dark:text-white font-bold">{actorObj.originalName || actorObj.fulLName}</h2>
                             <div className="flex items-center gap-5">
                                 <div className="flex items-center justify-center gap-1 font-vazir">
-                                    <span className="text-light-gray dark:text-gray-500">تولد :</span>
-                                    <span className="text-light-gray dark:text-gray-500">{actorObj.birthDate ? getDate(actorObj.birthDate) : 'نامشخص'}</span>
+                                    <span className="text-gray-700 dark:text-gray-200">تولد :</span>
+                                    <span className="text-gray-700 dark:text-gray-200">{actorObj.birthDate ? getDate(actorObj.birthDate) : 'نامشخص'}</span>
                                 </div>
 
                                 {actorObj.originalName && (
                                     <div className="flex items-center justify-center gap-1 font-vazir">
-                                        <span className="text-light-gray dark:text-gray-500">نام کامل :</span>
-                                        <span className="text-light-gray dark:text-gray-500">{actorObj.fullName}</span>
+                                        <span className="text-gray-700 dark:text-gray-200">نام کامل :</span>
+                                        <span className="text-gray-700 dark:text-gray-200">{actorObj.fullName}</span>
                                     </div>
                                 )}
 
                                 {actorObj.birthDate && (
                                     <div className="flex items-center justify-center gap-1 font-vazir">
-                                        <span className="text-light-gray dark:text-gray-500">سن :</span>
-                                        <span className="text-light-gray dark:text-gray-500">{calculateAge(actorObj.birthDate)} سال</span>
+                                        <span className="text-gray-700 dark:text-gray-200">سن :</span>
+                                        <span className="text-gray-700 dark:text-gray-200">{calculateAge(actorObj.birthDate)} سال</span>
                                     </div>
                                 )}
 
                                 <div className="flex items-center justify-center gap-1 font-vazir">
-                                    <span className="text-light-gray dark:text-gray-500">ملیت :</span>
-                                    <span className="text-light-gray dark:text-gray-500">{actorObj.nationality}</span>
+                                    <span className="text-gray-700 dark:text-gray-200">ملیت :</span>
+                                    <span className="text-gray-700 dark:text-gray-200">{actorObj.nationality}</span>
                                 </div>
                             </div>
-                            <p className="text-light-gray dark:text-gray-400 font-vazir-light text-center md:text-justify">{actorObj.biography}</p>
+                            <p className="text-light-gray dark:text-gray-500 font-vazir-light text-center md:text-justify">{actorObj.biography}</p>
                         </div>
                     </div>
                     <div className="container mx-auto py-5 space-y-9 px-5">
@@ -160,7 +167,7 @@ export default function Actors() {
                             {!actorMovieIsPending && (
                                 <>
                                     {actorMovies?.length != 0 ? actorMovies?.map(movie => (
-                                        <ActorMovieCard {...movie} />
+                                        <ActorMovieCard key={movie.id} {...movie} />
                                     )) : (
                                         <h2 className="text-center md:col-start-1 md:col-end-3 xl:col-end-4 font-vazir text-red-500 text-sm">اثری برای {actorObj.fullName} ثبت نشده</h2>
 
@@ -171,6 +178,10 @@ export default function Actors() {
                     </div>
 
                 </div>
+            )}
+
+            {loading && (
+                <Loader words={['Actors', 'Movies', 'ActorDetails']} />
             )}
         </>
     )

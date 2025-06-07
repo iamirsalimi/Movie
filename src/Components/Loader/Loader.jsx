@@ -8,8 +8,8 @@ export default function Loader({words}) {
             <div className="card">
                 <div className="loader text-light-gray dark:text-white">
                     <div className="words">
-                        {words.map(word => (
-                            <span className="word text-sky-500">{word}</span>
+                        {words.map((word , index) => (
+                            <span key={index} className="word text-sky-500">{word}</span>
                         ))}
                     </div>
                     <p>Loading</p>

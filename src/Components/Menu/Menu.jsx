@@ -23,8 +23,8 @@ export default function Menu({ showMenu, setShowMenu }) {
                 </a>
 
                 <ul className="mt-5 flex flex-col gap-4 py-5 px-2 border-t border-gray-100 dark:border-secondary">
-                    {links.map(link => (
-                        <a href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
+                    {links.map((link , index) => (
+                        <a key={index} href={link.href} className={`${link.href == location.pathname && 'activeLink'}`} >
                             <li className="font-vazir text-lg text-gray-500 p-1 px-2 rounded-lg hover:text-sky-400 dark:text-white transition-colors">{link.title}</li>
                         </a>
                     ))}

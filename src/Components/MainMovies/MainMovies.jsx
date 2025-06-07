@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import MovieCard from './../MovieCard/MovieCard'
 import PaginateBtns from '../PaginateBtns/PaginateBtns'
 
 import usePagination from '../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
 
-export default function MainMovies({ movies, setLoading }) {
+export default function MainMovies({ movies }) {
     // if pagesCount was equals to -1 that means it hasn't initialized yet 
 
     let { pageId } = useParams()
     const initialPage = pageId ? parseInt(pageId) : 1
 
     const [filteredMovies, bindingObj, currentPage, setCurrentPage, pagesCount] = usePagination(movies, initialPage, 5)
+
 
     useEffect(() => {
         const pageNumber = parseInt(pageId);
@@ -28,6 +29,10 @@ export default function MainMovies({ movies, setLoading }) {
             navigate('/not-found');
         }
     }, [pageId, pagesCount])
+
+    console.log(movies , filteredMovies)
+
+
 
     return (
         <div className="flex flex-col gap-5">

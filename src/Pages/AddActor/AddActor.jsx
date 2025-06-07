@@ -137,7 +137,7 @@ export default function AddActor() {
     const addActorMovie = e => {
         e.preventDefault()
         if (actorMovieId) {
-            let isMovieAlreadyExist = actorMovies.some(movie => movie.movieId == actorMovieId)
+            let isMovieAlreadyExist = actorMovies.some(movie => movie.movieId == +actorMovieId)
 
             if (isMovieAlreadyExist) {
                 toast.error('این فیلم از قبل اضافه شده است')

@@ -13,6 +13,8 @@ import CommentForm from '../../Components/CommentForm/CommentForm'
 import ShareBox from '../../Components/ShareBox/ShareBox'
 import ReportBox from '../../Components/ReportBox/ReportBox'
 import UserContext from '../../Contexts/UserContext'
+import MoviesContext from '../../Contexts/MoviesContext'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 // icons
 import { FaTheaterMasks } from "react-icons/fa";
@@ -77,6 +79,9 @@ function Movie() {
     const commentRefs = useRef({})
 
     const { userObj, setUserObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
+    const { movies, setMovies } = useContext(MoviesContext)
+
 
     // console.log('User ->', userObj)
 
@@ -462,7 +467,7 @@ function Movie() {
                 return 1
             }
 
- 
+
             const qualityAPriority = qualityOrder[itemA.title] || 99 // means quality is wrong
             const qualityBPriority = qualityOrder[itemB.title] || 99
 
@@ -473,7 +478,7 @@ function Movie() {
                 return 1
             }
 
-            return 0;
+            return 0
         })
     }
 
@@ -509,7 +514,14 @@ function Movie() {
                 commentRefs.current[commentId].firstElementChild.lastElementChild.lastElementChild.classList.remove('dark:!text-white')
             }, 3000)
         }
-    }, [comments]);
+    }, [comments])
+
+    // removing loading
+    useEffect(() => {
+        if (mainMovie && movies.length > 0 && loading) {
+            setLoading(false)
+        }
+    }, [mainMovie , movies])
 
     return (
         <>

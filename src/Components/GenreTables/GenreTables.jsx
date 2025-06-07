@@ -119,8 +119,8 @@ export default function GenreTables({ genre, movies }) {
                 </div>
             </div>
             <ul className="mt-5 grid grid-cols-2 gap-2">
-                {activeTypeArray.map(genre => (
-                    <a href={`/?search-type=advanced&movieType=${activeType}&genre=${allGenres[activeType][genre]}`}>
+                {activeTypeArray.map((genre , index) => (
+                    <a key={index} href={`/?search-type=advanced&movieType=${activeType}&genre=${allGenres[activeType][genre]}`}>
                         <li className="group relative font-shabnam-light rounded-lg bg-light hover:bg-sky-500 dark:bg-primary dark:hover:bg-sky-700 transition-colors duration-200 py-2 px-3 cursor-pointer flex items-center justify-between">
                             <span className="text-light-gray group-hover:text-white dark:text-white">{genre}</span>
                             <span className="text-light-gray dark:text-white opacity-100 group-hover:translate-x-2 group-hover:opacity-0 transition-all">{genresCount[genre]}</span>

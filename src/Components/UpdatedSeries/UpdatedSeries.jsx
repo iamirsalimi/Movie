@@ -58,8 +58,8 @@ export default function UpdatedSeries({ series }) {
             </div>
             <ul className="mt-5 flex flex-col gap-2">
                 {series.length ? series.filter(seriesItem => seriesItem.broadcastStatus != 'premiere').slice(0 , 9).map(seriesItem => (
-                    <a href={`/series/${seriesItem.id}`}>
-                        <li key={seriesItem.id} className="w-full bg-light dark:bg-primary hover:bg-black/5 dark:hover:bg-black/35 transition-colors duration-300 flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
+                    <a key={seriesItem.id} href={`/series/${seriesItem.id}`}>
+                        <li className="w-full bg-light dark:bg-primary hover:bg-black/5 dark:hover:bg-black/35 transition-colors duration-300 flex items-center gap-2 group overflow-hidden relative rounded-lg p-1.5 cursor-pointer">
                             <div className="min-w-20 max-w-20 h-20 rounded-md overflow-hidden">
                                 <img src={seriesItem.cover} className="w-full h-full object-cover object-center" alt="" />
                             </div>
@@ -83,16 +83,16 @@ export default function UpdatedSeries({ series }) {
                     </a>
                 )) : (
                     <>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
                     </>
                 )}
             </ul>

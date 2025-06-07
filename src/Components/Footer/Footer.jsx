@@ -17,8 +17,8 @@ export default function Footer() {
                     <div className="flex flex-col gap-5">
                         <h2 className="text-sky-500 font-bold font-vazir text-2xl">دسترسی سریع</h2>
                         <ul className="grid grid-cols-2 gap-x-1 gap-y-2">
-                            {links.map(link => (
-                                <a href={link.href} >
+                            {links.map((link , index) => (
+                                <a key={index} href={link.href} >
                                     <li className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir">{link.title}</li>
                                 </a>
                             ))}

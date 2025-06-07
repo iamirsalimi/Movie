@@ -34,7 +34,6 @@ export default function MainLayout() {
     const [error, setError] = useState(false)
     const [notifications, setNotifications] = useState([])
     const [checked, setChecked] = useState(false)
-    const [loading, setLoading] = useState(true)
 
     const [userObj, setUserObj] = useState(null)
 
@@ -200,8 +199,6 @@ export default function MainLayout() {
                     error,
                     movies,
                     setMovies,
-                    loading,
-                    setLoading
                 }}>
                     <main className="w-full h-full" >
                         <Outlet />

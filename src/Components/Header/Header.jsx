@@ -106,8 +106,8 @@ export default function Header() {
                             </div>
 
                             <ul className="flex items-center gap-1 -mt-2">
-                                {activeObj?.genres.map(genreItem => (
-                                    <li className="group font-Shabnam text-sm lg:text-md text-gray-300"><span>{genreItem}</span>  <span className="group-last:hidden text-gray-300">.</span></li>
+                                {activeObj?.genres.map((genreItem , index) => (
+                                    <li key={index} className="group font-Shabnam text-sm lg:text-md text-gray-300"><span>{genreItem}</span>  <span className="group-last:hidden text-gray-300">.</span></li>
                                 ))}
                             </ul>
 

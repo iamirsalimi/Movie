@@ -1,8 +1,9 @@
-import React, { useState, useEffect , useMemo } from 'react'
+import React, { useState, useEffect, useMemo , useContext } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 import WeeklyTable from './../WeeklyTable/WeeklyTable'
 import MainMovies from './../MainMovies/MainMovies'
@@ -96,11 +97,11 @@ function MainPageComp({ movies }) {
 
   const filterMoviesHandler = () => {
     let result = [...movies]
-    
-    if(searchType){
+
+    if (searchType) {
       if (searchType == 'advanced') {
         const params = new URLSearchParams(location.search)
-        
+
         const filters = {
           search: params.get('s'),
           movieType: params.get('movieType') || 'movie',
@@ -114,23 +115,23 @@ function MainPageComp({ movies }) {
           fromYear: +params.get('fromYear') || 1950,
           toYear: +params.get('toYear') || new Date().getFullYear()
         }
-  
+
         result = movies.filter(movie => {
           if (filters.movieType && movie.movieType !== filters.movieType) return false
           if (filters.genre && filters.genre !== 'genre' && !movie.genres.includes(filters.genre)) return false
           if (filters.imdb && +movie.imdb_score < +filters.imdb) return false
           if (filters.rotten && +movie.rotten_score < +filters.rotten) return false
           if (filters.metacritic && +movie.metacritic_score < +filters.metacritic) return false
-  
+
           if (filters.country.length > 0) {
             if (!movie.countries?.some(country => filters.country.includes(country))) return false
           }
-  
+
           if (filters.hasSubtitle && !movie.has_subtitle) return false
           if (filters.isDubbed && !movie.is_dubbed) return false
           if (filters.fromYear && +movie.year < +filters.fromYear) return false
           if (filters.toYear && +movie.year > +filters.toYear) return false
-  
+
           return true
         })
         console.log(result)
@@ -139,23 +140,40 @@ function MainPageComp({ movies }) {
         result = movies.filter(movie => movie.title.toLowerCase().includes(searchValue))
       }
     }
-    
+
     console.log('before update ', result)
     setFilteredMovies(result)
   }
 
   useEffect(() => {
-    if (movies.length > 0 && !checked && filteredMovies.length == movies.length) {
-      setChecked(true)
-      filterMoviesHandler()
+    if(!checked){
+      if (movies.length > 0 && location.search) {
+        setChecked(true)
+        filterMoviesHandler()
+      }
+      
+      if(movies.length > 0 && !location.search){
+        setChecked(true)
+        setFilteredMovies(movies)
+      }
     }
+
   }, [location.search, movies, filteredMovies])
+
+  const { loading, setLoading } = useContext(LoadingContext)
+
+  useEffect(() => {
+    if (movies.length > 0 && loading) {
+      setLoading(false)
+    }
+  }, [movies])
+
 
   return (
     <>
       {useMemo(() => {
         return <WeeklyTable movies={movies} />
-      } , [movies])}
+      }, [movies])}
       <MainMovies movies={filteredMovies} />
     </>
   )

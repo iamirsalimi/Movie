@@ -30,8 +30,8 @@ export default function ActorMovieCard({ id, movieType, cover, mainTitle, imdb_s
                         </div>
                     </div>
                     <ul className="flex items-center justify-start gap-2 flex-wrap">
-                        {genres?.map(genreItem => (
-                            <li className="px-2 py-1 text-nowrap text-center border border-light-gray dark:border-gray-400 text-light-gray dark:text-gray-400 rounded-md text-gray font-vazir text-xs">{genreItem}</li>
+                        {genres?.map((genreItem , index) => (
+                            <li key={index} className="px-2 py-1 text-nowrap text-center border border-light-gray dark:border-gray-400 text-light-gray dark:text-gray-400 rounded-md text-gray font-vazir text-xs">{genreItem}</li>
                         ))}
                     </ul>
                     <p className="text-light-gray dark:text-white text-justify text-sm font-vazir-light line-clamp-3">{description}</p>

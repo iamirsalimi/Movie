@@ -32,17 +32,17 @@ export default function NewMoviesTable({ movies }) {
             </div>
             <ul className="mt-5 grid grid-cols-4 gap-2">
                 {movies.length > 0 ? movies.filter(movie => movie.is_in_new_movies && movie.broadcastStatus == 'released').slice(0, 8).map(movie => (
-                    <NewMovieCard {...movie} />
+                    <NewMovieCard key={movie.id} {...movie} />
                 )) : (
                     <>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
-                        <div className="bg-white dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
+                        <div className="bg-gray-100 dark:bg-primary rounded-lg h-20"></div>
                     </>
                 )}
             </ul>

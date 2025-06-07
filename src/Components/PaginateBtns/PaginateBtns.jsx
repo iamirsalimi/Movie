@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function PaginateBtns({currentPage , buttonsArray , midBtns , route = ""}) {
     let search = useLocation().search || ''
-    console.log(search)
+    
     return (
         <>
             {currentPage !== 1 && (
