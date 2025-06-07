@@ -43,7 +43,7 @@ export default function NotifAccordian({ title, text , type , link, created_at }
     }
 
     return (
-        <div className={`border-r-4 h-fit ${type =='warning' ? 'border-orange-500' :type =='warning' ? 'border-orange-500' : type =='info' ? 'border-yellow-500' : type =='success' ? 'border-green-500' : type =='danger' ? 'border-red-500' : 'border-gray-500'} px-4 panel-box ${!isOpen ? 'pb-4' : 'pb-0'}`}>
+        <div className={`border-r-4 h-fit ${type =='warning' ? 'border-orange-500' :type =='warning' ? 'border-orange-500' : type =='info' ? 'border-yellow-500' : type =='success' ? 'border-green-500' : type =='danger' ? 'border-red-500' : 'border-gray-500'} px-4 panel-box ${isOpen ? 'pb-4' : 'pb-0'}`}>
             <div
                 className="w-full flex items-center justify-between py-3"
                 onClick={() => setIsOpen(prev => !prev)}
@@ -58,10 +58,10 @@ export default function NotifAccordian({ title, text , type , link, created_at }
                     </div>
                 </div>
 
-                <IoChevronDown className={`text-gray-500 dark:text-gray-400 text-xl transition-all ${isOpen ? 'rotate-0' : 'rotate-180'}`} />
+                <IoChevronDown className={`text-gray-500 dark:text-gray-400 text-xl transition-all ${isOpen ? 'rotate-180' : 'rotate-0' }`} />
             </div>
 
-            <span className={`overflow-hidden flex-col gap-5 px-4 py-2 rounded-md bg-gray-100 dark:bg-primary text-light-gray dark:text-white text-sm md:text-base ${isOpen ? 'hidden' : 'flex'}`}>
+            <span className={`overflow-hidden flex-col gap-5 px-4 py-2 rounded-md bg-gray-100 dark:bg-primary text-light-gray dark:text-white text-sm md:text-base ${!isOpen ? 'hidden' : 'flex'}`}>
                 {link && (
                     <a href={link} className="w-fit px-2 py-1 rounded-md bg-yellow-500 font-shabnam text-white dark:text-primary cursor-pointer">{link}</a>
                 )}

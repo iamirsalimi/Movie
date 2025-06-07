@@ -5,6 +5,7 @@ import toast from "react-hot-toast"
 
 import WithPageContent from './../../HOCs/WithPageContent'
 import MovieInfos from '../../Components/MovieInfos/MovieInfos'
+import DownloadBoxAccordion from '../../Components/DownloadBoxAccordion/DownloadBoxAccordion'
 import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
@@ -436,6 +437,46 @@ function Movie() {
         updateMovieLikesHandler(newMainMovie, false, removeFlag)
     }
 
+    const sortMediaArray = (arr) => {
+        const typeOrder = {
+            "dubbed": 1,
+            "subtitle": 2,
+            "mainLanguage": 3,
+        };
+
+        const qualityOrder = {
+            "4K": 1,
+            "1080P": 2,
+            "720P": 3,
+            "480P": 4,
+        }
+
+        return [...arr].sort((itemA, itemB) => {
+            const typeAPriority = typeOrder[itemA.type]
+            const typeBPriority = typeOrder[itemB.type]
+
+            if (typeAPriority < typeBPriority) {
+                return -1
+            }
+            if (typeAPriority > typeBPriority) {
+                return 1
+            }
+
+ 
+            const qualityAPriority = qualityOrder[itemA.title] || 99 // means quality is wrong
+            const qualityBPriority = qualityOrder[itemB.title] || 99
+
+            if (qualityAPriority < qualityBPriority) {
+                return -1
+            }
+            if (qualityAPriority > qualityBPriority) {
+                return 1
+            }
+
+            return 0;
+        })
+    }
+
     useEffect(() => {
         // when we've already fetched datas and our comments we set errors false so that we can understand we have fetched that once  
         if (mainMovie && comments?.length == 0 && commentsError != false) {
@@ -719,19 +760,33 @@ function Movie() {
                                     {movieTab == 'download' && (
                                         <>
                                             {userObj ? (
-                                                <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
-                                                    {(userObj.role == 'admin' || userObj.subscriptionStatus == 'active') ? (
-                                                        <h2 className="mx-auto text-sky-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک دانلود</h2>
+                                                <>
+                                                    {mainMovie.broadcastStatus == 'premiere' ? (
+                                                        <h2 className="mx-auto bg-sky-100 text-sky-500 w-full py-3 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک های دانلود به محض انتشار قرار می گیرند</h2>
                                                     ) : (
-                                                        <>
-                                                            <h2 className="mx-auto text-red-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">براي دسترسي به محتواي فيلم ها بايد اشتراك ويژه تهیه نمایید</h2>
-                                                            <a
-                                                                href='/my-account/userPanel/vip-plan'
-                                                                className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir"
-                                                            >خرید اشتراک</a>
-                                                        </>
+                                                        <div className="bg-gray-100 dark:bg-primary rounded-xl py-3 px-2 flex flex-col items-center justify-center gap-5">
+                                                            {(userObj.role == 'admin' || userObj.subscriptionStatus == 'active') ? (
+                                                                <>
+                                                                    {mainMovie?.links.length > 0 ? sortMediaArray(mainMovie?.links).map(link =>
+                                                                        <DownloadBoxAccordion key={link.id} {...link} />
+                                                                    ) : (
+                                                                        <h2 className="mx-auto bg-sky-100 text-sky-500 w-full py-3 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لينكي براي دانلود تا كنون قرار نگرفته است</h2>
+
+                                                                    )}
+
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <h2 className="mx-auto text-red-500 py-5 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">براي دسترسي به محتواي فيلم ها بايد اشتراك ويژه تهیه نمایید</h2>
+                                                                    <a
+                                                                        href='/my-account/userPanel/vip-plan'
+                                                                        className="w-fit px-3 py-2 rounded-xl text-sm cursor-pointer bg-red-500 text-white transition-all hover:bg-red-600 font-vazir"
+                                                                    >خرید اشتراک</a>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                     )}
-                                                </div>
+                                                </>
                                             ) : (
                                                 <div className="bg-red-100 dark:bg-primary rounded-md py-7 px-2 flex flex-col items-center justify-center gap-5">
                                                     <h2 className="text-red-500 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir-light">برای مشاهده لینک های دانلود باید وارد حساب کاربری خود شوید!</h2>
@@ -835,7 +890,8 @@ function Movie() {
                     <ReportBox showModal={showReportModal} setShowModal={setShowReportModal} userObj={userObj} movieObj={mainMovie} />
                     <ShareBox showModal={showShareModal} setShowModal={setShowShareModal} {...mainMovie} />
                 </>
-            )}
+            )
+            }
         </>
     )
 }
