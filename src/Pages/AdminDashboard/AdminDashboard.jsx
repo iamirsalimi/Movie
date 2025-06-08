@@ -10,6 +10,7 @@ import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem
 import AnnounceMentModal from '../../Components/AnnounceMentModal/AnnounceMentModal'
 import DeleteModal from '../../Components/DeleteModal/DeleteModal';
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -53,10 +54,11 @@ export default function AdminDashboard() {
     const [requestsError, setRequestsError] = useState(false)
     const [requestsFlag, setRequestsFlag] = useState(false)
     const [users, setUsers] = useState(null)
-    
+
     const [ipObj, setIpObj] = useState(null)
 
     const { userObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const deleteAnnouncementHandler = async () => {
         try {
@@ -142,9 +144,9 @@ export default function AdminDashboard() {
 
                 if (data.length > 0) {
                     setAnnouncements(data)
-                    setAnnouncementsIsPending(null)
                 }
 
+                setAnnouncementsIsPending(null)
                 setAnnouncementError(false)
             } catch (err) {
                 console.log('fetch error')
@@ -177,7 +179,7 @@ export default function AdminDashboard() {
                 if (data.length > 0) {
                     setTickets(data)
                 }
-                
+
                 setTicketsIsPending(null)
                 setTicketsError(false)
             } catch (err) {
@@ -217,7 +219,7 @@ export default function AdminDashboard() {
                         return bDate - aDate
                     }).slice(0, 5))
                 }
-                
+
                 setRequestsIsPending(null)
                 setRequestsError(false)
             } catch (err) {
@@ -266,7 +268,7 @@ export default function AdminDashboard() {
     }, [requestsIsPending])
 
     useEffect(() => {
-        if(requestsIsPending == null){
+        if (requestsIsPending == null) {
             fetch('https://ipapi.co/json/')
                 .then(res => res.json())
                 .then(data => {
@@ -277,6 +279,12 @@ export default function AdminDashboard() {
 
         }
     }, [requestsIsPending])
+
+    useEffect(() => {
+        if(announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading){
+            setLoading(false)
+        }
+    }, [announcementsIsPending, ticketsIsPending, requestsIsPending])
 
     const getDate = date => {
         let registerDate = new Date(date)
@@ -362,7 +370,7 @@ export default function AdminDashboard() {
                                 </thead>
                                 <tbody className="min-w-full">
                                     {!ticketsIsPending && tickets?.map(ticket => (
-                                        <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                        <tr key={ticket.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.id}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.userName}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.subject}</td>
@@ -407,7 +415,7 @@ export default function AdminDashboard() {
                                 </thead>
                                 <tbody className="min-w-full">
                                     {!requestsIsPending && requests?.map(request => (
-                                        <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                        <tr key={request.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.id}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{getDate(request.created_at)}</td>

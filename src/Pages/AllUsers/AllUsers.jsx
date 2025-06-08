@@ -6,6 +6,7 @@ import jalali from 'jalaliday';
 import UserInfoModal from '../../Components/UserInfoModal/userModalInfo'
 import BanUserModal from '../../Components/BanUserModal/BanUserModal'
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -49,7 +50,9 @@ export default function AllUsers() {
     const [error, setError] = useState(null)
     const [isUpdating, setIsUpdating] = useState(false)
 
-     let {userObj , setUserObj} = useContext(UserContext)
+    let { userObj, setUserObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
+
 
     const updateUserHandler = async newUserObj => {
         setIsUpdating(true)
@@ -86,7 +89,7 @@ export default function AllUsers() {
                 const data = await res.json();
 
                 if (data) {
-                    let sortedUsers = data.sort((a , b) => {
+                    let sortedUsers = data.sort((a, b) => {
                         let aDate = new Date(a.created_At).getTime()
                         let bDate = new Date(b.created_At).getTime()
                         return bDate - aDate
@@ -109,7 +112,9 @@ export default function AllUsers() {
     }, [getUsers])
 
     useEffect(() => {
-        console.log(users)
+        if(users?.length > 0 && loading){
+            setLoading(false)
+        }
     }, [users])
 
 

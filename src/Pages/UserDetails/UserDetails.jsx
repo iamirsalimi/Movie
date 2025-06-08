@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState , useContext} from 'react'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -72,6 +73,8 @@ export default function UserDetails() {
     const userCommentRef = useRef(null)
 
     let { userId } = useParams()
+    const { loading, setLoading } = useContext(LoadingContext)
+
 
     useEffect(() => {
         const getUserInfo = async (userId) => {
@@ -178,6 +181,12 @@ export default function UserDetails() {
             getCommentsInfo()
         }
     }, [userObj])
+
+    useEffect(() => {
+        if(userObj && ticketIsPending == null && commentIsPending == null && loading){
+            setLoading(false)
+        }
+    } , [userObj , ticketIsPending , commentIsPending])
 
     useEffect(() => {
         let filterObj = commentFilterSearchObj[commentSearchType]
@@ -427,8 +436,8 @@ export default function UserDetails() {
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">لیست تماشای کاربر</h2>
                             <ul className="w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl pt-5">
                                 {userObj.watchList.length > 0 ? userObj.watchList.map(movie => (
-                                    <div className="relative pb-2 group">
-                                        <li key={movie.id} className={`group overflow-hidden relative rounded-lg h-64 cursor-pointer`}>
+                                    <div key={movie.id} className="relative pb-2 group">
+                                        <li className={`group overflow-hidden relative rounded-lg h-64 cursor-pointer`}>
                                             <img src={movie.cover} className="w-full h-full object-cover object-center" alt="" />
                                             <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-white/0 flex items-center justify-center duration-200"></span>
                                             <span className="text-nowrap line-clamp-1 absolute text-sm opacity-0 bottom-1 left-1/2 -translate-1/2 scale-50 text-white transition-all group-hover:scale-100 group-hover:opacity-100 duration-200">{movie.title}</span>
@@ -502,7 +511,7 @@ export default function UserDetails() {
                                             {!isPending && !error &&
                                                 filteredTickets.length > 0 && (
                                                     filteredTickets.map(ticket => (
-                                                        <tr className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                                                        <tr key={ticket.id} className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
                                                             <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
                                                                 {!ticket.is_read_by_admin && (
                                                                     <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
@@ -601,7 +610,7 @@ export default function UserDetails() {
                                             {!isPending && !error &&
                                                 filteredComments?.length > 0 && (
                                                     filteredComments?.map(comment => (
-                                                        <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
+                                                        <tr key={comment.id} className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
@@ -650,7 +659,6 @@ export default function UserDetails() {
 
                                         </>
                                     )}
-
 
                                     {commentIsPending && (
                                         <h2 className="text-center text-red-500 font-vazir text-sm mt-4">در حال دریافت اطلاعات ... </h2>

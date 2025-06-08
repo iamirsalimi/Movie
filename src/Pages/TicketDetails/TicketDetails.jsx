@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 
 import TicketMessage from '../../Components/TicketMessage/TicketMessage';
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -37,7 +38,8 @@ export default function TicketDetails() {
     const chatEndingRef = useRef(null)
 
     let { ticketId } = useParams()
-     let {userObj} = useContext(UserContext)
+    let { userObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     // update ticket
     const updateTicketHandler = async newTicketObj => {
@@ -167,7 +169,7 @@ export default function TicketDetails() {
                     setMessages(data)
                     chatEndingRef.current.scrollIntoView({ behavior: "smooth" })
                 }
-                
+
                 setMessageIsPending(null)
                 setMessageError(null)
             } catch (err) {
@@ -182,6 +184,13 @@ export default function TicketDetails() {
             getMessagesInfo(ticketId)
         }
     }, [getMessages, ticketObj])
+
+    useEffect(() => {
+        // when "messageIsPending" is null it means we fetched messages
+        if (ticketObj && messageIsPending == null && loading) {
+            setLoading(false)
+        }
+    }, [ticketObj, messageIsPending])
 
     const getDate = date => {
         let newDate = new Date(date)

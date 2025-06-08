@@ -5,6 +5,7 @@ import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
@@ -41,7 +42,8 @@ export default function AllTickets() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(null)
 
-   let {userObj} = useContext(UserContext)
+  let { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   useEffect(() => {
     const getAllTickets = async () => {
@@ -99,6 +101,12 @@ export default function AllTickets() {
 
     setFilteredTickets(filteredTicketsArray)
   }, [searchValue, searchType])
+
+  useEffect(() => {
+    if (tickets?.length > 0 && loading) {
+      setLoading(false)
+    }
+  }, [tickets])
 
   // return the easy readable time and date with Iran timezone
   const getDate = date => {
@@ -168,7 +176,7 @@ export default function AllTickets() {
               {!isPending && !error &&
                 filteredTickets.length > 0 && (
                   filteredTickets.map(ticket => (
-                    <tr r className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                    <tr key={ticket.id} className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">
                         {!ticket.is_read_by_user && (
                           <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>

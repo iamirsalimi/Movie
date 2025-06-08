@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
 import UserContext from '../../Contexts/UserContext'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
@@ -25,7 +26,9 @@ export default function ProfileEdit() {
   const [showPass, setShowPass] = useState(false)
   const [showRepeatPass, setRepeatShowPass] = useState(false)
 
-  const {userObj} = useContext(UserContext)
+  const { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
+
 
   const schema = yup.object().shape({
     firstName: yup.string().required('وارد كردن نام اجباري است'),
@@ -132,6 +135,9 @@ export default function ProfileEdit() {
     setValue('userName', userObj?.userName, { shouldValidate: true })
     setValue('email', userObj?.email, { shouldValidate: true })
     setValue('recentPassword', userObj?.password, { shouldValidate: true })
+    if(userObj && loading){
+      setLoading(false)
+    }
   }, [userObj])
 
   useEffect(() => {

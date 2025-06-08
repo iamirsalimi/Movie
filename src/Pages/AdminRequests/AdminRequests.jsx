@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef , useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -42,6 +44,7 @@ export default function AdminRequests() {
     const [searchValue, setSearchValue] = useState('')
 
     const requestDetailsRef = useRef(null)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const updateRequestHandler = async (id, newRequestObj) => {
         await fetch(`${apiData.updateApi}${id}`, {
@@ -150,10 +153,16 @@ export default function AdminRequests() {
     }, [searchValue, searchType])
 
     useEffect(() => {
-        if(requestObj){
+        if (requestObj) {
             setRequestStatus(requestObj.status)
         }
-    } , [requestObj])
+    }, [requestObj])
+
+    useEffect(() => {
+        if(requests?.length > 0 && loading){
+            setLoading(false)
+        }
+    } , [requests])
 
     // return the easy readable time and date with Iran timezone
     const getDate = date => {
@@ -162,8 +171,6 @@ export default function AdminRequests() {
         return persianDate
     }
 
-    
-    
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
             <div className="">
@@ -266,7 +273,7 @@ export default function AdminRequests() {
                             </thead>
                             <tbody>
                                 {!isPending && filteredRequests.map(request => (
-                                    <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                    <tr key={request.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                         <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.id}</td>
                                         <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.userId}</td>
                                         <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>

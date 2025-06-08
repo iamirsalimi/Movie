@@ -7,10 +7,9 @@ import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
-import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
-import { LuTrash2 } from "react-icons/lu";
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -47,6 +46,7 @@ export default function AdminAllTickets() {
     const [error, setError] = useState(null)
 
     let { userObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     let location = useLocation().search
     let searchParams = location.slice(1).split('=')
@@ -88,9 +88,15 @@ export default function AdminAllTickets() {
     }, [userObj])
 
     useEffect(() => {
-        if (tickets.length > 0 && location) {
-            setSearchValue(searchParams[1])
-            setSearchType(searchParams[0])
+        if (tickets?.length > 0) {
+            if (location) {
+                setSearchValue(searchParams[1])
+                setSearchType(searchParams[0])
+            }
+
+            if (loading) {
+                setLoading(false)
+            }
         }
     }, [tickets])
 

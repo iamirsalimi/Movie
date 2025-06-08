@@ -50,6 +50,7 @@ export default function ImdbTop() {
         }
     }, [moviesArray])
 
+    
     return (
         <>
             <div className="container mx-auto px-5 my-12 flex flex-col items-center gap-12 ">

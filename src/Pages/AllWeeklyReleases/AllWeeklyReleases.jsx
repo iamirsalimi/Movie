@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useContext } from 'react'
 
 import DeleteModal from '../../Components/DeleteModal/DeleteModal';
 
@@ -9,6 +9,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -28,7 +30,6 @@ const filterSearchObj = {
     'movie': { hasValue: true, property: 'movieType', value: 'movie' },
 }
 
-
 export default function AllWeeklyReleases() {
     const [showMovieReleaseDetails, setShowMovieReleaseDetails] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -42,6 +43,8 @@ export default function AllWeeklyReleases() {
     const [releaseObj, setReleaseObj] = useState(null)
 
     const movieReleaseDetailsRef = useRef(null)
+
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const DeleteReleaseHandler = async () => {
         try {
@@ -125,6 +128,12 @@ export default function AllWeeklyReleases() {
         setFilteredReleases(filteredReleasesArray)
     }, [searchValue, searchType])
 
+    useEffect(() => {
+        if (releases?.length > 0 && loading) {
+            setLoading(false)
+        }
+    }, [releases])
+
     // return the easy readable time and date with Iran timezone
     const getDate = date => {
         let newDate = new Date(date)
@@ -148,7 +157,17 @@ export default function AllWeeklyReleases() {
                             </li>
                             <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                                 <h3 className="text-light-gray dark:text-gray-500">ID فیلم</h3>
-                                <p className="text-primary dark:text-gray-300">{releaseObj?.mvoieId}</p>
+                                <p className="text-primary dark:text-gray-300">{releaseObj?.movieId}</p>
+                            </li>
+                            <li className="w-full py-1 flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">banner</h3>
+                                <div className="w-full max-w-50 max-h-80 overflow-hidden rounded-xl self-end">
+                                    <img src={releaseObj?.movie_cover} alt="" className="w-full h-full object-cover !object-center" />
+                                </div>
+                            </li>
+                            <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                                <h3 className="text-light-gray dark:text-gray-500">عنوان فیلم</h3>
+                                <p className="text-primary dark:text-gray-300">{releaseObj?.movieTitle}</p>
                             </li>
                             <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                                 <h3 className="text-light-gray dark:text-gray-500">نوع فیلم</h3>
@@ -156,33 +175,34 @@ export default function AllWeeklyReleases() {
                             </li>
                             <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
                                 <h3 className="text-light-gray dark:text-gray-500">تاریخ انتشار</h3>
-                                <p className="text-primary dark:text-gray-300">{getDate(releaseObj?.release_schedules[0].date)}</p>
+                                <p className="text-primary dark:text-gray-300">{getDate(releaseObj?.release_schedules[0]?.date)}</p>
                             </li>
-                            <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
-                                <h3 className="text-light-gray dark:text-gray-500">شماره فصل</h3>
-                                <p className="text-primary dark:text-gray-300">{releaseObj?.season_number || '-' }</p>
-                            </li>
+                            {releaseObj?.movieType == 'series' && (
+                                <li className="flex items-center justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                                    <h3 className="text-light-gray dark:text-gray-500">شماره فصل</h3>
+                                    <p className="text-primary dark:text-gray-300">{releaseObj?.season_number}</p>
+                                </li>
+                            )}
                             {releaseObj?.movieType == 'series' && (
                                 <li className="flex flex-col justify-center gap-1 w-full font-vazir p-2 text-sm sm:text-base">
                                     <h3 className="text-light-gray dark:text-gray-500">پخش قسمت ها</h3>
                                     <ul className="md:col-start-1 md:col-end-3 py-3 px-2 bg-gray-100 dark:bg-primary rounded-lg grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-2">
                                         {/* means all op the episodes will be released in a day */}
-                                        {newSeasonEpisodesTable.length == 1 ? (
+                                        {releaseObj?.release_schedules?.length == 1 ? (
                                             <li className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
-                                                <h3 className="text-light-gray dark:text-white font-vazir text-sm">تمام قسمت هاي فصل {newSeasonNumber}</h3>
+                                                <h3 className="text-light-gray dark:text-white font-vazir text-sm">تمام قسمت هاي فصل {releaseObj?.season_number}</h3>
                                                 <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
                                                     <span>پخش در :</span>
-                                                    <span>{newSeasonEpisodesTable[0].persianDate}</span>
+                                                    <span>{releaseObj?.release_schedules[0]?.persianDate}</span>
                                                 </div>
                                             </li>
-                                        ) : newSeasonEpisodesTable.map((newEpisode, index) => (
-
+                                        ) : releaseObj?.release_schedules?.map((newEpisode, index) => (
                                             <li key={index} className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
                                                 <h3 className="text-light-gray dark:text-white font-vazir text-sm">
-                                                    فصل {newSeasonNumber} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode?.episode?.episodes.join(' و ') : newEpisode.episode?.startEpisode}</h3>
+                                                    فصل {releaseObj?.season_number} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode?.episode?.episodes.join(' و ') : newEpisode.episode?.startEpisode}</h3>
                                                 <div className="flex items-center justify-center gap-2 font-shabnam text-gray-400 text-sm">
                                                     <span>پخش در :</span>
-                                                    <span>{newEpisode.persianDate}</span>
+                                                    <span>{getDate(newEpisode.date)}</span>
                                                 </div>
                                             </li>
                                         ))}
@@ -193,10 +213,10 @@ export default function AllWeeklyReleases() {
                     )}
                     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-7 sm:gap-5 lg:gap-4">
                         <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
-                            <select 
-                                name="" 
-                                id="" 
-                                className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors" 
+                            <select
+                                name=""
+                                id=""
+                                className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                 value={searchType}
                                 onChange={e => setSearchType(e.target.value)}
                             >
@@ -239,13 +259,13 @@ export default function AllWeeklyReleases() {
                                 {!isPending && !error &&
                                     filteredReleases.length > 0 && (
                                         filteredReleases.map(release => (
-                                            <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                                            <tr key={release.id} className="py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.id}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieId}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieTitle}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieType == 'series' ? 'سریال' : 'فیلم'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(release.release_schedules[0]?.date)}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.season_number || '-' }</td>
+                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.season_number || '-'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 flex items-center justify-center gap-2">
                                                     <a
                                                         href={`/my-account/adminPanel/weekly-release/edit-release/${release?.id}`}
@@ -258,6 +278,7 @@ export default function AllWeeklyReleases() {
                                                         className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
                                                         onClick={e => {
                                                             setShowMovieReleaseDetails(true)
+                                                            setReleaseObj(release)
                                                             movieReleaseDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
                                                         }}
                                                     >

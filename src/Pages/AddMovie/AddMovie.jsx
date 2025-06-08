@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
+
+import LoadingContext from '../../Contexts/LoadingContext'
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -90,6 +92,8 @@ export default function AddMovie() {
     // const formattedJalaliDate = dayjs(releaseDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
 
     const { movieId } = useParams()
+
+    const { loading, setLoading } = useContext(LoadingContext)
 
     // inputs validation
     const schema = yup.object().shape({
@@ -207,8 +211,6 @@ export default function AddMovie() {
 
     const movieType = watch('movieType')
 
-    console.log(watch('broadcastStatus'))
-
     // update movie
     const updateMovieHandler = async newMovieObj => {
         await fetch(`${apiData.updateApi}${movieObj.id}`, {
@@ -291,7 +293,7 @@ export default function AddMovie() {
         newMovieObj.is_suggested = suggestedCheckbox
         newMovieObj.site_scores = []
         newMovieObj.totalSeasons = movieType == 'series' ? newMovieObj.totalSeasons : null
-        if(data.broadcastStatus == 'premiere'){
+        if (data.broadcastStatus == 'premiere') {
             newMovieObj.imdb_score = -1
             newMovieObj.rotten_score = -1
             newMovieObj.metacritic_score = -1
@@ -399,12 +401,12 @@ export default function AddMovie() {
         if (similarMovieId) {
             let isMovieAlreadyExist = similarMovies.some(movie => movie.movieId == similarMovieId)
 
-            if(isMovieAlreadyExist){
+            if (isMovieAlreadyExist) {
                 toast.error('این فیلم از قبل اضافه شده است')
                 setSimilarMovieId('')
                 return false;
             }
-            
+
             let movieObj = moviesArray.find(movie => movie.id == similarMovieId)
             let newSimilarMovieObj = { id: Math.floor(Math.random() * 99999), movieId: similarMovieId, title: movieObj.title, cover: movieObj.cover }
             setSimilarMovies(prev => [...prev, newSimilarMovieObj])
@@ -660,8 +662,17 @@ export default function AddMovie() {
             setNotifs(movieObj.notifications)
             setValue('totalSeasons', movieObj.totalSeasons)
             setValue('year', movieObj.year)
+            if(loading){
+                setLoading(false)
+            }
         }
     }, [movieObj])
+
+    useEffect(() => {
+        if(!movieId){
+            setLoading(false)
+        }
+    } , [])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
@@ -835,6 +846,7 @@ export default function AddMovie() {
                         <ul className={`absolute top-15 z-30 ${showGenres ? 'translate-y-0 opacity-100 visible' : 'translate-y-5 opacity-0 invisible'} transition-all w-full rounded-md grid grid-cols-4 gap-x-2 gap-y-4 py-4 px-5 bg-gray-200  dark:bg-primary`}>
                             {genres[movieType].filter(movieGenre => movieGenre.toLowerCase().startsWith(genre.toLowerCase())).length !== 0 ? genres[movieType].filter(movieGenre => movieGenre.toLowerCase().startsWith(genre.toLowerCase())).map(genre => (
                                 <li
+                                    key={genre}
                                     className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center"
                                     onClick={e => addGenre(genre)}
                                 >
@@ -853,6 +865,7 @@ export default function AddMovie() {
                             <div className="w-full bg-gray-100 dark:bg-primary rounded-lg py-2 px-4 flex items-center gap-2">
                                 {movieGenres.map(genre => (
                                     <li
+                                        key={genre}
                                         className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-center gap-4"
                                     >
                                         <span className="text-sm font-vazir text-light-gray dark:text-white">{genre}</span>
@@ -1017,8 +1030,8 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">کشور ها</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {countries.map(country => (
-                                            <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        {countries.map((country , index) => (
+                                            <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{country}</h3>
                                                 <button
                                                     className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
@@ -1062,8 +1075,8 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">زبان ها</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {languages.map(language => (
-                                            <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        {languages.map((language , index) => (
+                                            <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{language}</h3>
                                                 <button
                                                     className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
@@ -1113,8 +1126,8 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">لینک های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {links.map(link => (
-                                            <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        {links.map((link , index) => (
+                                            <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <div className="flex items-end justify-center gap-1">
                                                     <h3 className="text-light-gray dark:text-white font-shabnam">{link.title}</h3>
                                                     <span className="text-gray-400 text-sm dark:text-gray-500 font-shabnam-light">{link.type}</span>
@@ -1158,8 +1171,8 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">تگ های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {tags.map(tag => (
-                                            <div className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        {tags.map((tag , index) => (
+                                            <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{tag}</h3>
                                                 <button
                                                     className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"
@@ -1207,6 +1220,7 @@ export default function AddMovie() {
                                             <>
                                                 {moviesArray.filter(movie => movie.id == similarMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == similarMovieId).map(movie => (
                                                     <li
+                                                        key={movie.id}
                                                         className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
                                                         onClick={e => {
                                                             setShowSimilarMovies(false)
@@ -1239,7 +1253,7 @@ export default function AddMovie() {
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">فیلم مشابه</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
                                         {similarMovies.map(movie => (
-                                            <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
+                                            <div key={movie.id} className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-15 h-15 overflow-hidden rounded-md">
                                                         <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />
@@ -1290,6 +1304,7 @@ export default function AddMovie() {
                                                 {castsArray.length != 0 &&
                                                     castsArray?.filter(cast => cast.fullName.toLowerCase().startsWith(castName.toLowerCase())).length !== 0 ? castsArray?.filter(cast => cast.fullName.toLowerCase().startsWith(castName.toLowerCase())).map(cast => (
                                                         <li
+                                                            key={cast.id}
                                                             className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
                                                             onClick={e => {
                                                                 setShowCasts(false)
@@ -1332,6 +1347,7 @@ export default function AddMovie() {
                                 <div className="w-full bg-gray-100 dark:bg-primary rounded-lg py-2 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                     {movieCasts.map(cast => (
                                         <li
+                                        key={cast.id}
                                             className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-between gap-4"
                                         >
                                             <div className="flex items-center justify-center gap-1">
@@ -1376,8 +1392,8 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">اعلان های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {notifs.map(notif => (
-                                            <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
+                                        {notifs.map((notif , index) => (
+                                            <div key={index} className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{notif}</h3>
                                                 <button
                                                     className="p-1 bg-red-500 hover:bg-blackred-600 transition-colors rounded-sm cursor-pointer"

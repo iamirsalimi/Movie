@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -35,6 +36,7 @@ export default function EditUser() {
     const [decreaseMax, setDecreaseMax] = useState(1)
 
     const { userId } = useParams()
+    const { loading, setLoading } = useContext(LoadingContext)
 
     // admin infos
     const mainUserObj = useContext(UserContext)
@@ -248,7 +250,6 @@ export default function EditUser() {
         }
     }, [userObj])
 
-
     useEffect(() => {
         const getUserInfo = async (userId) => {
             try {
@@ -292,6 +293,9 @@ export default function EditUser() {
             setValue('userName', userObj.userName)
             setValue('role', userObj.role)
             setValue('accountStatus', userObj.accountStatus)
+            if(loading){
+                setLoading(false)
+            }
         }
     }, [userObj])
 
@@ -495,19 +499,19 @@ export default function EditUser() {
                                         <button
                                             className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'activate-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                             onClick={changeVipTab}
-                                            data-vipTab='activate-vipPlan'
+                                            data-viptab='activate-vipPlan'
                                         >فعالسازی اشتراک</button>
                                     )}
                                     <button
                                         className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'increase-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                         onClick={changeVipTab}
-                                        data-vipTab='increase-vipPlan'
+                                        data-viptab='increase-vipPlan'
                                     >افزایش اشتراک(کاستوم)</button>
                                     {userObj?.subscriptionStatus && (
                                         <button
                                             className={`cursor-pointer font-shabnam px-2 py-1 rounded-t-md text-xs sm:text-sm ${vipTab == 'decrease-vipPlan' ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-400 hover:bg-black/20 dark:bg-secondary text-white'} transition-colors`}
                                             onClick={changeVipTab}
-                                            data-vipTab='decrease-vipPlan'
+                                            data-viptab='decrease-vipPlan'
                                         >کاهش اشتراک(کاستوم)</button>
                                     )}
                                 </div>

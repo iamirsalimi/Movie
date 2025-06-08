@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useContext } from 'react'
 
 import { MdEdit } from "react-icons/md";
 import { LuTrash2 } from "react-icons/lu";
 
 import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -34,6 +35,8 @@ export default function AdminAllNotifs() {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [searchType, setSearchType] = useState('ID')
     const [searchValue, setSearchValue] = useState('')
+
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const DeleteNotifHandler = async () => {
         try {
@@ -116,6 +119,11 @@ export default function AdminAllNotifs() {
         setFilteredNotifications(filteredNotificationsArray)
     }, [searchValue, searchType])
 
+    useEffect(() => {
+        if(notifications?.length > 0 && loading){
+            setLoading(false)
+        }
+    } , [notifications])
 
     return (
         <>
@@ -168,7 +176,7 @@ export default function AdminAllNotifs() {
                             </thead>
                             <tbody>
                                 {!isPending && filteredNotifications.map(notification => (
-                                    <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                    <tr key={notification.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.id}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.userId || 'تعیین نشده'}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">{notification.title}</td>

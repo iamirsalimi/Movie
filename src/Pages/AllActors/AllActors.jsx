@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
 
 import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 let apiData = {
   deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
@@ -24,10 +25,12 @@ export default function AllActors() {
   const [searchType, setSearchType] = useState('ID')
   const [actorObj, setActorObj] = useState(null)
 
+  const { loading, setLoading } = useContext(LoadingContext)
+
   const DeleteActorHandler = async () => {
     try {
       const res = await fetch(`${apiData.deleteApi}${actorObj.id}`, {
-        method:'DELETE',
+        method: 'DELETE',
         headers: {
           'apikey': apiData.apikey,
           'Authorization': apiData.authorization
@@ -35,8 +38,8 @@ export default function AllActors() {
       })
 
       if (res.ok) {
-      setShowDeleteModal(false)
-      setGetActorsFlag(prev => !prev)
+        setShowDeleteModal(false)
+        setGetActorsFlag(prev => !prev)
       }
 
     } catch (err) {
@@ -57,7 +60,7 @@ export default function AllActors() {
         const data = await res.json()
 
         if (data) {
-          let sortedActors =  data.sort((a , b) => b.id - a.id)
+          let sortedActors = data.sort((a, b) => b.id - a.id)
           setActors(sortedActors)
           setFilteredActors(sortedActors)
           setIsPending(false)
@@ -86,6 +89,12 @@ export default function AllActors() {
       setFilteredActors(actors)
     }
   }, [searchValue, searchType])
+
+  useEffect(() => {
+    if (actors?.length > 0 && loading) {
+      setLoading(false)
+    }
+  }, [actors])
 
   return (
     <>
@@ -136,37 +145,35 @@ export default function AllActors() {
               {(!isPending && filteredActors) && (
                 <tbody>
                   {filteredActors?.map(actor => (
-                    <tr className="py-1 px-2 border-b last:border-none border-gray-200 dark:border-white/5" >
+                    <tr key={actor.id} className="py-1 px-2 border-b last:border-none border-gray-200 dark:border-white/5" >
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.id}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.fullName}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.nationality}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.birthDate || 'نامشخص'}</td>
-                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">
-                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex items-center justify-center gap-2">
-                          <a
-                            href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
-                            className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                          >
-                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                          </a>
+                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex items-center justify-center gap-2">
+                        <a
+                          href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
+                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                        >
+                          <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                        </a>
 
-                          <a
-                            href={`/my-account/adminPanel/actors/edit-actor/${actor.id}`}
-                            className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                          >
-                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                          </a>
+                        <a
+                          href={`/my-account/adminPanel/actors/edit-actor/${actor.id}`}
+                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                        >
+                          <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                        </a>
 
-                          <button
-                            className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                            onClick={e => {
-                              setActorObj(actor)
-                              setShowDeleteModal(true)
-                            }}
-                          >
-                            <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                          </button>
-                        </td>
+                        <button
+                          className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                          onClick={e => {
+                            setActorObj(actor)
+                            setShowDeleteModal(true)
+                          }}
+                        >
+                          <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                        </button>
                       </td>
                     </tr>
                   ))}

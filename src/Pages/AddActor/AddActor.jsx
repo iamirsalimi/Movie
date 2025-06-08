@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -44,6 +46,8 @@ export default function AddActor() {
     const [moviesArray, setMoviesArray] = useState([])
     const [movieIsPending, setMovieIsPending] = useState(false)
     const [movieError, setMovieError] = useState(false)
+
+    const { loading, setLoading } = useContext(LoadingContext)
 
 
     const schema = yup.object().shape({
@@ -205,6 +209,9 @@ export default function AddActor() {
             setValue('biography', actorObj.biography)
             setActorMovies(actorObj.movies)
             setActorBirthDate(actorObj.birthDate)
+            if(loading){
+                setLoading(false)
+            }
         }
     }, [actorObj])
 
@@ -239,6 +246,12 @@ export default function AddActor() {
             getAllMovies()
         }
     }, [actorMovieId])
+
+    useEffect(() => {
+        if(!actorId && loading){
+            setLoading(false)
+        }
+    } , [])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -337,6 +350,7 @@ export default function AddActor() {
                                                 <>
                                                     {moviesArray.filter(movie => movie.id == actorMovieId).length !== 0 ? moviesArray.filter(movie => movie.id == actorMovieId).map(movie => (
                                                         <li
+                                                            key={movie.id}
                                                             className="group cursor-pointer rounded-md border border-white dark:border-secondary hover:bg-sky-500 transition-all py-2 px-1 text-center flex items-center justify-start gap-4"
                                                             onClick={e => {
                                                                 setShowMovies(false)
@@ -369,7 +383,7 @@ export default function AddActor() {
                                         <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">فیلم ها</h3>
                                         <div className="w-full flex flex-col items-center gap-2">
                                             {actorMovies.map(movie => (
-                                                <div className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-1 py-1 rounded-lg">
+                                                <div key={movie.id} className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-1 py-1 rounded-lg">
                                                     <div className="flex items-center gap-2">
                                                         <div className="w-15 h-15 overflow-hidden rounded-md">
                                                             <img src={movie.cover} alt="" className="w-full h-full object-center object-cover" />

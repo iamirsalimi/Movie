@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 
 import TicketMessage from '../../Components/TicketMessage/TicketMessage';
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -43,6 +44,7 @@ export default function AdminTicketDetails() {
 
     let { ticketId } = useParams()
     let { userObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     // add new notification
     const addNotificationHandler = async newNotificationObj => {
@@ -250,6 +252,13 @@ export default function AdminTicketDetails() {
             updateTicket(false)
         }
     }, [ticketObj])
+
+    useEffect(() => {
+        // when "messageIsPending" is null it means we fetched messages
+        if(ticketObj && messageIsPending == null && loading){
+            setLoading(false)
+        }
+    } , [ticketObj , messageIsPending])
 
     const getDate = date => {
         let newDate = new Date(date)

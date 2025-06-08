@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useContext } from 'react'
 
 import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+import LoadingContext from '../../Contexts/LoadingContext'
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
@@ -43,6 +44,8 @@ export default function AllMovies() {
     const [error, setError] = useState(null)
     const [movieObj, setMovieObj] = useState(null)
 
+    const { loading, setLoading } = useContext(LoadingContext)
+
     const DeleteMovieHandler = async () => {
         try {
             const res = await fetch(`${apiData.deleteApi}${movieObj.id}`, {
@@ -76,14 +79,14 @@ export default function AllMovies() {
                 const data = await res.json();
 
                 if (data) {
-                    let sortedMoviesArray = data.sort((a , b) =>{
+                    let sortedMoviesArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
                         return bDate - aDate
-                    } )
+                    })
                     setMovies(sortedMoviesArray)
                     setFilteredMovies(sortedMoviesArray)
-                    console.log(sortedMoviesArray)
+                    // console.log(sortedMoviesArray)
                     setIsPending(false)
                     setError(false)
                 }
@@ -124,6 +127,12 @@ export default function AllMovies() {
 
         setFilteredMovies(filteredUsersArray)
     }, [searchValue, searchType])
+
+    useEffect(() => {
+        if(movies.length > 0 && loading){
+            setLoading(false)
+        }
+    } , [movies])
 
     return (
         <>
@@ -193,7 +202,7 @@ export default function AllMovies() {
                                 {!isPending && !error &&
                                     filteredMovies.length > 0 && (
                                         filteredMovies.map(movie => (
-                                            <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                            <tr key={movie.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{movie.id}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{movie.title}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{movie.year}</td>

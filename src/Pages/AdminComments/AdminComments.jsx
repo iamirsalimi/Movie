@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState , useContext } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -45,14 +47,17 @@ export default function AdminComments() {
     const [commentHasSpoil, setCommentHasSpoil] = useState(true)
     const [commentStatus, setCommentStatus] = useState('pending')
     const commentDetailsRef = useRef(null)
-    
+
+    const { loading, setLoading } = useContext(LoadingContext)
+
+
     let location = useLocation().search?.slice(1).split('=')
-    
+
     // console.log(location[0])
 
     const [searchType, setSearchType] = useState('ID')
     const [searchValue, setSearchValue] = useState(location[1] || '')
-    
+
     const updateCommentHandler = async (id, newCommentObj) => {
         await fetch(`${apiData.updateCommentApi}${id}`, {
             method: "PATCH",
@@ -172,7 +177,13 @@ export default function AdminComments() {
         }
 
         setFilteredComments(filteredCommentsArray)
-    }, [searchValue, searchType , comments])
+    }, [searchValue, searchType, comments])
+
+    useEffect(() => {
+        if(comments?.length > 0 && loading){
+            setLoading(false)
+        }
+    } , [comments])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-12">
@@ -313,7 +324,7 @@ export default function AdminComments() {
                                 {!isPending && !error &&
                                     filteredComments.length > 0 && (
                                         filteredComments.map(comment => (
-                                            <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
+                                            <tr key={comment.id} className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
@@ -339,7 +350,7 @@ export default function AdminComments() {
                                                     <button
                                                         className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
                                                         onClick={e => {
-                                                            if(!commentsIsPending){
+                                                            if (!commentsIsPending) {
                                                                 setCommentObj(comment)
                                                                 setShowCommentDetails(true)
                                                                 commentDetailsRef.current.scrollIntoView({ behavior: 'smooth' })

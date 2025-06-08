@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import { useParams } from 'react-router-dom'
 
@@ -7,6 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { MdKeyboardArrowRight } from "react-icons/md"
+
+import LoadingContext from '../../Contexts/LoadingContext'
 
 let apiData = {
     updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?id=eq.',
@@ -47,6 +49,7 @@ export default function AdminAddNotifs() {
     })
 
     let { notifId } = useParams()
+    const { loading, setLoading } = useContext(LoadingContext)
 
     // update movie
     const updateNotificationHandler = async newNotificationObj => {
@@ -158,15 +161,23 @@ export default function AdminAddNotifs() {
     }, [])
 
     useEffect(() => {
-        if(notifObj){
-            setValue('title' , notifObj.title)
-            setValue('text' , notifObj.text)
-            setValue('userId' , notifObj.userId)
-            setValue('link' , notifObj.link)
-            setValue('type' , notifObj.type)
+        if (notifObj) {
+            setValue('title', notifObj.title)
+            setValue('text', notifObj.text)
+            setValue('userId', notifObj.userId)
+            setValue('link', notifObj.link)
+            setValue('type', notifObj.type)
+            if(loading){
+                setLoading(false)
+            }
         }
     }, [notifObj])
 
+    useEffect(() => {
+        if(!notifId){
+            setLoading(false)
+        }
+    } , [])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">

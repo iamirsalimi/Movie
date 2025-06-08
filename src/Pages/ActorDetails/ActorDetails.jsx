@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState , useContext } from 'react'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
 
-import { calculateAge } from '../../utils'; 
+import { calculateAge } from '../../utils';
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -23,6 +25,7 @@ export default function ActorDetails() {
     const [error, setError] = useState(true)
 
     let { actorId } = useParams()
+    const { loading, setLoading } = useContext(LoadingContext)
 
     useEffect(() => {
         const getActorInfo = async (actorId) => {
@@ -53,6 +56,12 @@ export default function ActorDetails() {
         }
         getActorInfo(actorId)
     }, [])
+
+    useEffect(() => {
+        if(actorObj && loading){
+            setLoading(false)
+        }
+    } , [actorObj])
 
     const getDate = date => {
         let newDate = new Date(date)
@@ -122,7 +131,7 @@ export default function ActorDetails() {
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">مجموعه آثار هنرپیشه</h2>
                             <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
                                 {actorObj.movies.length > 0 ? actorObj.movies.map(movie => (
-                                    <div className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
+                                    <div key={movie.id} className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
                                             <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID فیلم :</h3>
                                             <span className="text-vazir-light text-primary dark:text-white">{movie.movieId}</span>

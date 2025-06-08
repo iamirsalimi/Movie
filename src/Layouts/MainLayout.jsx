@@ -137,7 +137,7 @@ export default function MainLayout() {
                 setError(false)
             } catch (err) {
                 console.log('fetch error', err)
-                isPending(false)
+                setIsPending(false)
                 setError(err)
             }
         }

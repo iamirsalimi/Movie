@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +13,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
+
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -45,6 +47,8 @@ export default function AddRelease() {
     const [releaseDate, setReleaseDate] = useState(new Date())
 
     const { releaseId } = useParams()
+
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const formattedJalaliDate = dayjs(releaseDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
 
@@ -388,6 +392,9 @@ export default function AddRelease() {
             setValue('releaseDate', new Date(releaseObj.release_schedules[0]?.date))
             setReleaseDate(new Date(releaseObj.release_schedules[0]?.date))
             setNewSeasonEpisodesTable(releaseObj.release_schedules)
+            if(loading){
+                setLoading(false)
+            }
         }
     }, [releaseObj])
 
@@ -426,8 +433,10 @@ export default function AddRelease() {
     }, [])
 
     useEffect(() => {
-        console.log(movieObj)
-    } , [movieObj])
+        if(!releaseId){
+            setLoading(false)
+        }
+    } , [])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -653,7 +662,6 @@ export default function AddRelease() {
                                     </div>
                                 </li>
                             ) : newSeasonEpisodesTable.map((newEpisode, index) => (
-
                                 <li key={index} className="flex flex-col items-center xs:items-start justify-center border border-gray-200 dark:border-secondary rounded-md py-1 px-2">
                                     <h3 className="text-light-gray dark:text-white font-vazir text-sm">
                                         فصل {newSeasonNumber} قسمت {newEpisode.episode?.episodes?.length != 1 ? newEpisode?.episode?.episodes.join(' و ') : newEpisode.episode?.startEpisode}</h3>

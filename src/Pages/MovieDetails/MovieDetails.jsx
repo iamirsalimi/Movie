@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState , useContext } from 'react'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
+import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -45,6 +46,7 @@ export default function MovieDetails() {
     const commentsRef = useRef(null)
 
     let { movieId } = useParams()
+    const { loading, setLoading } = useContext(LoadingContext)
 
     useEffect(() => {
         const getMovie = async (movieId) => {
@@ -137,6 +139,12 @@ export default function MovieDetails() {
 
         setFilteredComments(filteredCommentsArray)
     }, [commentSearchValue, commentSearchType])
+
+    useEffect(() => {
+        if(movieObj && commentIsPending == null && loading){
+            setLoading(false)
+        }
+    } , [movieObj , commentIsPending])
 
     const getDate = date => {
         let newDate = new Date(date)
