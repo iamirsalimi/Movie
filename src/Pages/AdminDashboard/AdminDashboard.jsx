@@ -487,7 +487,7 @@ export default function AdminDashboard() {
                 </div>
             </div>
 
-            <DeleteModal deleteHandler={deleteAnnouncementHandler} showModal={showDeleteModal} setShowModal={setShowDeleteModal} name={`اطلاعیه ${announcementObj?.id} `} tableName="اطلاعیه" />
+            <DeleteModal deleteHandler={deleteAnnouncementHandler} showModal={showDeleteModal} setShowModal={setShowDeleteModal} name={announcementObj?.id} tableName="اطلاعیه" />
 
             <AnnounceMentModal showModal={showAnnouncementModal} setShowModal={setShowAnnouncementModal} isAdding={isAdding} setIsAdding={setIsAdding} updateFlag={updateFlag} setUpdateFlag={setUpdateFlag} addAnnouncementHandler={addAnnouncementHandler} updateAnnouncementHandler={updateAnnouncementHandler} announcementObj={announcementObj} />
         </>

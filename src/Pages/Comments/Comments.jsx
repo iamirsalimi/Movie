@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 
 import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
 import PanelComment from './../../Components/PanelComment/PanelComment'
 
@@ -15,7 +16,8 @@ export default function Comments() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(false)
 
-  const {userObj} = useContext(UserContext)
+  const { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   useEffect(() => {
     const getCommentsInfo = async () => {
@@ -54,6 +56,12 @@ export default function Comments() {
     }
 
   }, [userObj])
+
+  useEffect(() => {
+    if(userObj && isPending == null){
+      setLoading(false)
+    }
+  } , [userObj , isPending])
 
   return (
     <div className="panel-box flex flex-col gap-4 py-4 px-5 mb-16">

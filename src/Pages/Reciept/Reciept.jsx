@@ -14,7 +14,7 @@ dayjs.extend(jalali)
 export default function Reciept() {
     const [userObj, setUserObj] = useState(null)
     const [mainSubscriptionObj, setMainSubscriptionObj] = useState(null)
-    const [loader, setLoader] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const { subscriptionId } = useParams()
 
@@ -64,50 +64,45 @@ export default function Reciept() {
     const getJalaliDate = date => {
         let newDate = new Date(date)
 
-        return dayjs(newDate).calendar("jalali").locale("fa").format("YYYY/MM/DD")
+        return dayjs(newDate).calendar("jalali").locale("fa").format("YYYY/MM/DD - HH:MM")
     }
 
     return (
         <>
-            {loading ? (
-                <Loader words={["Your Informations" ,"Your Purchases" , "Subscription Status" , "Reciept Details"]} />
-            ) : (
-                <div className="relative h-screen bg-white">
-                    <div className="border border-gray-200 w-1/2 absolute top-1/2 left-1/2 -translate-1/2 p-2 rounded-lg">
-                        <h1 className="text-light-gray font-vazir text-center text-xl">فاکتور خرید</h1 >
-                        <ul className="w-full flex flex-col items-center gap-2 divide-y divide-gray-100">
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">رسید برای : </h3>
-                                <span className="text-light-gray font-shabnam-light">{userObj?.firstName} {userObj?.lastName}</span>
-                            </li>
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">ایمیل : </h3>
-                                <span className="text-light-gray font-shabnam-light">{userObj?.email}</span>
-                            </li>
-                        </ul>
-                        <h3 className="bg-gray-700 text-white py-1 my-2 w-full font-vazir text-center">
-                            توضیحات
-                        </h3>
-                        <ul className="w-full flex flex-col items-center gap-2 divide-y divide-gray-100">
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">نوع اشتراک : </h3>
-                                <span className="text-light-gray font-shabnam-light">{mainSubscriptionObj?.duration} روز</span>
-                            </li>
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">هزینه پرداخت شده : </h3>
-                                <span className="text-light-gray font-shabnam-light">{formatPrice(mainSubscriptionObj?.isBought?.price || 0)} تومان</span>
-                            </li>
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">تاریخ : </h3>
-                                <span className="text-light-gray font-shabnam-light">{mainSubscriptionObj?.activateDate}</span>
-                            </li>
-                            <li className="w-full flex items-center justify-between">
-                                <h3 className="text-gray-500 font-shabnam">تاریخ شمسی :</h3>
-                                <span className="text-light-gray font-shabnam-light">{getJalaliDate(mainSubscriptionObj?.activateDate)}</span>
-                            </li>
-                        </ul>
-                    </div >
+            <div className="relative h-screen bg-white">
+                <div className="border border-gray-200 w-1/2 absolute top-1/2 left-1/2 -translate-1/2 p-2 rounded-lg">
+                    <h1 className="text-light-gray font-vazir text-center text-xl">فاکتور خرید</h1 >
+                    <ul className="w-full flex flex-col items-center gap-2 divide-y divide-gray-100">
+                        <li className="w-full flex items-center justify-between">
+                            <h3 className="text-gray-500 font-shabnam">رسید برای : </h3>
+                            <span className="text-light-gray font-shabnam-light">{userObj?.firstName} {userObj?.lastName}</span>
+                        </li>
+                        <li className="w-full flex items-center justify-between">
+                            <h3 className="text-gray-500 font-shabnam">ایمیل : </h3>
+                            <span className="text-light-gray font-shabnam-light">{userObj?.email}</span>
+                        </li>
+                    </ul>
+                    <h3 className="bg-gray-700 text-white py-1 my-2 w-full font-vazir text-center">
+                        توضیحات
+                    </h3>
+                    <ul className="w-full flex flex-col items-center gap-2 divide-y divide-gray-100">
+                        <li className="w-full flex items-center justify-between">
+                            <h3 className="text-gray-500 font-shabnam">نوع اشتراک : </h3>
+                            <span className="text-light-gray font-shabnam-light">{mainSubscriptionObj?.duration} روز</span>
+                        </li>
+                        <li className="w-full flex items-center justify-between">
+                            <h3 className="text-gray-500 font-shabnam">هزینه پرداخت شده : </h3>
+                            <span className="text-light-gray font-shabnam-light">{formatPrice(mainSubscriptionObj?.isBought?.price || 0)} تومان</span>
+                        </li>
+                        <li className="w-full flex items-center justify-between">
+                            <h3 className="text-gray-500 font-shabnam">تاریخ شمسی :</h3>
+                            <span className="text-light-gray font-shabnam-light">{getJalaliDate(mainSubscriptionObj?.activateDate)}</span>
+                        </li>
+                    </ul>
                 </div >
+            </div >
+            {loading && (
+                <Loader words={["Your Informations", "Your Purchases", "Subscription Status", "Reciept Details"]} />
             )}
         </>
     )

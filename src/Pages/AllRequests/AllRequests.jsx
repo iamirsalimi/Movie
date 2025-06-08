@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 
 import UserContext from '../../Contexts/UserContext'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -25,6 +26,7 @@ export default function AllRequests() {
   const [searchValue, setSearchValue] = useState('')
 
   let { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   useEffect(() => {
     const getAllRequests = async () => {
@@ -84,6 +86,12 @@ export default function AllRequests() {
     console.log(requests, filteredRequests, filteredRequestsArray)
     setFilteredRequests(filteredRequestsArray)
   }, [searchValue, searchType])
+
+  useEffect(() => {
+    if(userObj && isPending == null){
+      setLoading(false)
+    }
+  } , [userObj , isPending])
 
   return (
     <>

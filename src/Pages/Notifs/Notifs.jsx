@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import NotifAccordian from '../../Components/NotifAccordian/NotifAccordian'
 import UserContext from '../../Contexts/UserContext'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 let apiData = {
   updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
@@ -16,6 +17,7 @@ export default function Notifs() {
   const [error, setError] = useState(false)
 
   let { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   const updateUserHandler = async newUserObj => {
     await fetch(`${apiData.updateUserApi}${userObj?.id}`, {
@@ -80,7 +82,7 @@ export default function Notifs() {
           })
           setNotifications(sortedNotificationsArray)
         }
-        
+
         setIsPending(null)
         setError(false)
       } catch (err) {
@@ -97,11 +99,13 @@ export default function Notifs() {
   }, [userObj])
 
   useEffect(() => {
-    if (userObj && notifications) {
+    if (userObj && isPending == null) {
       updateUser()
+      if(loading){
+        setLoading(false)
+      }
     }
-
-  }, [userObj, notifications])
+  }, [userObj, isPending])
 
   return (
     <div className="w-full flex flex-col items-center gap-5 mb-16">

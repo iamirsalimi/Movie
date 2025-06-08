@@ -1,6 +1,18 @@
+import { useContext, useEffect } from 'react'
+
 import WithPageContent from './../../HOCs/WithPageContent'
+import LoadingContext from '../../Contexts/LoadingContext'
+import MoviesContext from '../../Contexts/MoviesContext'
 
 function Faq() {
+    const { setLoading } = useContext(LoadingContext)
+    const { movies } = useContext(MoviesContext)
+
+    useEffect(() => {
+        if (movies?.length > 0)
+            setLoading(false)
+    }, [movies])
+
     return (
         <div className="rounded-xl py-5 px-4 bg-white shadow shadow-black/5  dark:bg-secondary flex flex-col items-center lg:items-start gap-7">
             <h2 className="text-gray-700 dark:text-white text-2xl font-vazir font-bold">سوالات متداول</h2>

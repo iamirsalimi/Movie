@@ -4,9 +4,9 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import UserActivityInfo from '../../Components/UserActivityInfo/UserActivityInfo'
-import DashboardTable from '../../Components/DashboardTable/DashboardTable'
 import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem';
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa6";
@@ -40,6 +40,7 @@ export default function Dashboard() {
   const [ipObj, setIpObj] = useState(null)
 
   const { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   // getting all announcements
   useEffect(() => {
@@ -193,6 +194,12 @@ export default function Dashboard() {
     }
   }, [comments])
 
+  useEffect(() => {
+    if(userObj && announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading){
+      setLoading(false)
+    }
+  } , [userObj , announcementsIsPending , ticketsIsPending , requestsIsPending])
+
   const getDate = date => {
     let registerDate = new Date(date)
     let persianDate = dayjs(registerDate).calendar('jalali').locale('fa').format('YYYY/MM/DD')
@@ -283,7 +290,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody className="min-w-full">
                   {!ticketsIsPending && tickets?.map(ticket => (
-                    <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                    <tr key={ticket.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                       <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">
                         {!ticket.is_read_by_user && (
                           <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
@@ -332,7 +339,7 @@ export default function Dashboard() {
                 </thead>
                 <tbody className="min-w-full">
                   {!requestsIsPending && requests?.map(request => (
-                    <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                    <tr key={request.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                       <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>
                       <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.movieType == 'series' ? 'سریال' : 'فیلم'}</td>
                       <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{getDate(request.created_at)}</td>

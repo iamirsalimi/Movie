@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 import VipPlanModal from '../../Components/VipPlanModal/VipPlanModal'
 
@@ -25,6 +26,7 @@ export default function VipPlan() {
     const [isUpdating, setIsUpdating] = useState(false)
 
     let { userObj, setUserObj } = useContext(UserContext)
+    const { loading, setLoading } = useContext(LoadingContext)
 
     const updateUserHandler = async newUserObj => {
         await fetch(`${apiData.updateApi}${userObj?.id}`, {
@@ -58,6 +60,12 @@ export default function VipPlan() {
 
         return dayjs(newDate).calendar("jalali").locale("fa").format("YYYY/MM/DD")
     }
+
+    useEffect(() => {
+        if (userObj && loading) {
+            setLoading(false)
+        }
+    }, [userObj])
 
     return (
         <>
@@ -109,7 +117,7 @@ export default function VipPlan() {
                         </thead>
                         <tbody>
                             {(userObj && userObj.all_subscription_plans.length > 0) && userObj.all_subscription_plans.map(plan => (
-                                <tr className="py-1 px-2 border-b last:border-b-0 border-gray-200 dark:border-white/5" >
+                                <tr key={plan.id} className="py-1 px-2 border-b last:border-b-0 border-gray-200 dark:border-white/5" >
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{plan.duration} روزه</td>
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{formatPrice(plan.isBought.price)}</td>
                                     <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.activateDate)}</td>

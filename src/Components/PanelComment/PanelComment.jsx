@@ -19,7 +19,7 @@ export default function PanelComment({ id, comments, movieId, movieType, movieTi
     }
 
     return (
-        <div className="w-full flex flex-col items-center gap-5 bg-gray-100 dark:bg-primary rounded-lg border-r-4 px-3 py-2 border-sky-500">
+        <div className="w-full flex flex-col items-center lg:items-start gap-5 bg-gray-100 dark:bg-primary rounded-lg border-r-4 px-3 py-2 border-sky-500">
             <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex flex-col items-center gap-2">
                     <div className="overflow-hidden rounded-md w-full h-36 lg:min-w-28 lg:h-28">
@@ -46,7 +46,7 @@ export default function PanelComment({ id, comments, movieId, movieType, movieTi
                 <div className="flex flex-col lg:flex-row lg:items-start gap-2 pt-5 border-t border-gray-200 dark:border-gray-700 w-full">
                     <h2 className="text-light-gray dark:text-gray-300 font-vazir text-nowrap">پاسخ ها</h2>
 
-                    {replies.map(reply => (
+                    {replies.filter(reply => reply.status == 'approved').map(reply => (
                         <div className="w-full flex flex-col gap-2 bg-white dark:bg-secondary rounded-lg py-4 px-5">
                             <div className="w-full flex flex-col lg:flex-row gap-4 border border-gray-200 dark:border-primary px-3 py-2 rounded-md">
                                 <div className="flex flex-col xs:flex-row lg:flex-col items-center gap-2">

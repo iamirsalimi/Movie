@@ -1,10 +1,11 @@
-import React, { useState , useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
 import UserContext from '../../Contexts/UserContext';
+import LoadingContext from '../../Contexts/LoadingContext';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 
@@ -13,7 +14,6 @@ let apiData = {
   apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
   authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
-
 
 export default function AddRequest() {
   const [isAdding, setIsAdding] = useState(false)
@@ -26,7 +26,8 @@ export default function AddRequest() {
       .string().oneOf(['movie', 'series'])
   })
 
-   let {userObj} = useContext(UserContext)
+  let { userObj } = useContext(UserContext)
+  const { loading, setLoading } = useContext(LoadingContext)
 
   let {
     register,
@@ -63,17 +64,22 @@ export default function AddRequest() {
   }
 
   const addRequest = data => {
-    let newRequest = {...data}
+    let newRequest = { ...data }
 
     newRequest.userId = userObj?.id
     newRequest.status = 'pending'
     newRequest.created_at = new Date()
-    
+
 
     // console.log(newRequest)
     addRequestHandler(newRequest)
   }
 
+  useEffect(() => {
+    if(userObj && loading){
+      setLoading(false)
+    }
+  } , [userObj])
 
   return (
     <>

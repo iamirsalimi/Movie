@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import toast from 'react-hot-toast'
 import UserContext from '../../Contexts/UserContext'
+import LoadingContext from '../../Contexts/LoadingContext'
 
 import { movies } from './../../moviesData'
 
@@ -20,6 +21,7 @@ export default function WatchList() {
   const [isPending, setIsPending] = useState(true)
 
   let toastId = null
+  const { loading, setLoading } = useContext(LoadingContext)
 
   // update user handler
   const updateUserHandler = async (newUserObj) => {
@@ -58,9 +60,11 @@ export default function WatchList() {
 
   useEffect(() => {
     if (userObj) {
-      console.log(userObj.watchList)
       setWatchList(userObj?.watchList)
       setIsPending(false)
+      if (loading) {
+        setLoading(false)
+      }
     } else {
       setIsPending(true)
     }

@@ -45,13 +45,13 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">
-                        {links.map(link => {
+                        {links.map((link , index) => {
                             if (link.title == 'خرید اشتراک' && user?.role == 'admin') {
                                 return false
                             }
 
                             return (
-                                <a href={link.href} className={`${link.href == location.pathname || location.pathname.startsWith(link?.paginate) ? 'activeLink' : ''}`} >
+                                <a key={index} href={link.href} className={`${link.href == location.pathname || location.pathname.startsWith(link?.paginate) ? 'activeLink' : ''}`} >
                                     <li className={`font-vazir-light p-1 px-2 rounded-lg  ${navFlag ? 'text-light-gray hover:bg-gray-100 dark:hover:bg-primary dark:' : ''}text-white hover:text-sky-400 transition-colors`}>{link.title}</li>
                                 </a>
                             )
