@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { toast } from 'react-hot-toast'
 
+import { addTicket as addReportTicket } from '../../Services/Axios/Requests/Tickets';
+
 import { RxCross2 } from "react-icons/rx";
 
 let apiData = {
@@ -16,21 +18,10 @@ export default function ReportBox({ showModal, setShowModal, userObj, movieObj }
   const [isSending, setIsSending] = useState(false)
 
   const addTicketHandler = async newTicketObj => {
-    await fetch(apiData.postApi, {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      },
-      body: JSON.stringify(newTicketObj)
-    }).then(res => {
-      if (res.ok) {
-        hideModal()
-        setIsSending(false)
-        setTitle('')
-        setMessage('')
-      }
+    await addReportTicket(newTicketObj).then(res => {
+      hideModal()
+      setIsSending(false)
+      setMessage('')
     })
       .catch(err => {
         setIsSending(false)
@@ -52,11 +43,11 @@ export default function ReportBox({ showModal, setShowModal, userObj, movieObj }
         userId: userObj.id,
         fullName: `${userObj.firstName} ${userObj.lastName}`,
         userName: userObj.userName,
-        subject: `(لینک های دانلود فیلم با ID "${movieObj.id}" - "${movieObj.title}" به مشکل برخوردند) \n ${message}`,
+        subject: title,
         category: 'links',
         status: 'pending', // it could be "pending" , "answered" or "closed"
         priority: 'middle', // it could be "low" , "middle" or "high"
-        description: message,
+        description: `(لینک های دانلود فیلم با ID "${movieObj.id}" - "${movieObj.title}" به مشکل برخوردند) \n ${message}`,
         is_read_by_admin: false,
         is_read_by_user: true,
         last_message_by: null, // null means user just created ticket and it either can be "user" or "admin" 

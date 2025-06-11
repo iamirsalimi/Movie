@@ -50,7 +50,7 @@ export default function CommentForm({ showReply = false, movieId,movieType, movi
         if (commentText.trim()) {
             setIsAdding(true)
             let comment = new CommentObj(movieId,movieType,movieTitle,movieSrc, userId, userName, userRole, parentId, repliedTo, commentText.trim(), hasSpoil)
-            console.log(comment)
+            // console.log(comment)
             addCommentHandler(comment)
             closeReplyForm()
         }

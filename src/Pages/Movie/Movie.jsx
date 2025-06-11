@@ -3,6 +3,10 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import toast from "react-hot-toast"
 
+import { updateUser } from '../../Services/Axios/Requests/Users'
+import { updateMovie, getMovieById } from '../../Services/Axios/Requests/Movies'
+import { getCommentsByMovieId, addComment, updateComment } from '../../Services/Axios/Requests/Comments'
+
 import WithPageContent from './../../HOCs/WithPageContent'
 import MovieInfos from '../../Components/MovieInfos/MovieInfos'
 import DownloadBoxAccordion from '../../Components/DownloadBoxAccordion/DownloadBoxAccordion'
@@ -44,19 +48,6 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { GrUpdate } from "react-icons/gr";
 import { RiMedalFill } from "react-icons/ri";
 
-let apiData = {
-    updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    updateCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.",
-    postCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments",
-    getCommentsApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?movieId=eq.",
-    updateMovieApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
-    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
 function Movie() {
     const [mainMovie, setMainMovie] = useState(null)
     const [isPending, setIsPending] = useState(false)
@@ -92,37 +83,6 @@ function Movie() {
     let navigate = useNavigate()
     hasRoute == false && navigate('/', { replace: true })
 
-    useEffect(() => {
-        const getMovieInfo = async (movieId) => {
-            try {
-                const res = await fetch(`${apiData.getApi}${movieId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
-
-                // console.log(data)
-                if (data.length > 0) {
-                    setMainMovie(data[0])
-                    setIsPending(false)
-                } else {
-                    window.location.href = '/'
-                }
-
-                setError(false)
-            } catch (err) {
-                console.log('fetch error')
-                setError(err)
-                setIsPending(false)
-                setMainMovie(null)
-            }
-        }
-        getMovieInfo(movieId)
-    }, [])
-
     // to change the tabs we should update the state
     const changeTab = e => {
         let target = e.target.tagName == "LI" ? event.target :
@@ -134,22 +94,13 @@ function Movie() {
 
     const addCommentHandler = async newComment => {
         toastId = toast.loading('در حال افزودن کامنت')
-        await fetch(apiData.postCommentApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newComment)
-        }).then(res => {
-            if (res.ok) {
+        await addComment(newComment)
+            .then(res => {
                 setIsAdding(false)
                 setGetComments(prev => !prev)
                 toast.dismiss(toastId)
                 toast.success('دیدگاه شما با موفقیت اضافه شد و پس از تایید ادمین نمایش داده می شود')
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 toast.dismiss(toastId)
@@ -159,14 +110,7 @@ function Movie() {
 
     const getCommentsInfo = async () => {
         try {
-            const res = await fetch(`${apiData.getCommentsApi}${movieId}`, {
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            })
-
-            const data = await res.json()
+            const data = await getCommentsByMovieId(movieId)
 
             if (data.length > 0) {
                 const sortedComments = data.sort((a, b) => {
@@ -182,7 +126,7 @@ function Movie() {
             setCommentsIsPending(false)
             setCommentsError(false)
         } catch (err) {
-            console.log('fetch error')
+            console.log('fetch error', err)
             setCommentsError(err)
             setCommentsIsPending(false)
             setComments(null)
@@ -191,20 +135,11 @@ function Movie() {
 
     // update comments 
     const updateCommentHandler = async (commentId, commentObj) => {
-        await fetch(`${apiData.updateCommentApi}${commentId}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(commentObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateComment(commentId, commentObj)
+            .then(res => {
                 setCommentsIsPending(false)
                 console.log('comment Updated')
-            }
-        })
+            })
             .catch(err => {
                 setCommentsIsPending(false)
                 setIsAdding(false)
@@ -232,24 +167,17 @@ function Movie() {
 
     // update user handler
     const updateUserHandler = async (newUserObj, addFlag) => {
-        await fetch(`${apiData.updateUserApi}${userObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
-            toast.dismiss(toastId)
-            toastId = null
-            if (addFlag) {
-                toast.success('فیلم به لیست تماشا اضافه شد')
-            } else {
-                toast.success('فیلم از لیست تماشا حذف شد')
-            }
-            setUserObj(newUserObj)
-        })
+        await updateUser(userObj.id, newUserObj)
+            .then(res => {
+                toast.dismiss(toastId)
+                toastId = null
+                if (addFlag) {
+                    toast.success('فیلم به لیست تماشا اضافه شد')
+                } else {
+                    toast.success('فیلم از لیست تماشا حذف شد')
+                }
+                setUserObj(newUserObj)
+            })
             .catch(err => {
                 console.log(err)
                 toast.dismiss(toastId)
@@ -305,16 +233,8 @@ function Movie() {
     }
 
     const updateMovieLikesHandler = async (newMovieObj, likeFlag, removeFlag) => {
-        await fetch(`${apiData.updateMovieApi}${mainMovie.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newMovieObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateMovie(movieId, newMovieObj)
+            .then(res => {
                 console.log(res)
                 setMainMovie(newMovieObj)
                 if (!removeFlag) {
@@ -331,8 +251,7 @@ function Movie() {
                         toast.success('دیسلایک با موفقیت برداشته شد')
                     }
                 }
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 toast.dismiss(toastId)
@@ -482,6 +401,30 @@ function Movie() {
     }
 
     useEffect(() => {
+        const getMovieInfo = async movieId => {
+            try {
+                const data = await getMovieById(movieId)
+
+                // console.log(data)
+                if (data.length > 0) {
+                    setMainMovie(data[0])
+                    setIsPending(false)
+                } else {
+                    window.location.href = '/'
+                }
+
+                setError(false)
+            } catch (err) {
+                console.log('fetch error')
+                setError(err)
+                setIsPending(false)
+                setMainMovie(null)
+            }
+        }
+        getMovieInfo(movieId)
+    }, [])
+
+    useEffect(() => {
         // when we've already fetched datas and our comments we set errors false so that we can understand we have fetched that once  
         if (mainMovie && comments?.length == 0 && commentsError != false) {
             // console.log('get Comments 0')
@@ -502,7 +445,7 @@ function Movie() {
         const hash = location.hash;
         const commentId = hash?.replace('#comment-', '');
 
-        if (comments.length > 0 && commentId && commentRefs.current[commentId]) {
+        if (comments?.length > 0 && commentId && commentRefs.current[commentId]) {
             commentRefs.current[commentId].scrollIntoView({ behavior: 'smooth', block: 'start' });
             commentRefs.current[commentId].classList.add('!bg-sky-100')
             commentRefs.current[commentId].classList.add('dark:!bg-sky-900')
@@ -520,7 +463,7 @@ function Movie() {
         if (mainMovie && movies.length > 0 && loading) {
             setLoading(false)
         }
-    }, [mainMovie , movies])
+    }, [mainMovie, movies])
 
     return (
         <>
@@ -587,8 +530,8 @@ function Movie() {
                                                         <FaTheaterMasks className="text-xl" />
                                                         <span>ژانر</span>
                                                     </span>
-                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genres.map(genreItem => (
-                                                        <span className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-500"> .</span></span>
+                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genres.map((genreItem , index) => (
+                                                        <span key={index} className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                     ))}</span>
                                                 </li>
 
@@ -605,8 +548,8 @@ function Movie() {
                                                         <FiFlag className="text-xl" />
                                                         <span>محصول</span>
                                                     </span>
-                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.countries.map(country => (
-                                                        <span className="group px-0.5 md:px-1"><span>{country}</span><span className="group-last:hidden text-slate-500"> .</span></span>
+                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.countries.map((country , index) => (
+                                                        <span key={index} className="group px-0.5 md:px-1"><span>{country}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                     ))}</span>
                                                 </li>
                                             </ul>
@@ -763,7 +706,7 @@ function Movie() {
                                 >
                                     <FaRegCommentDots className="text-base" />
                                     <span className="font-shabnam">دیدگاه ها</span>
-                                    <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{comments.filter(comment => comment.status == 'approved').length}</span>
+                                    <span className="px-2 py-0.5 text-xs rounded-full bg-sky-500 text-white font-semibold font-shabnam">{comments?.filter(comment => comment.status == 'approved').length || 0}</span>
                                 </li>
                             </ul>
                             <div className="pt-5">
@@ -775,7 +718,7 @@ function Movie() {
                                                     {mainMovie.broadcastStatus == 'premiere' ? (
                                                         <h2 className="mx-auto bg-sky-100 text-sky-500 w-full py-3 px-2 dark:bg-primary text-center md:text-justify text-sm md:text-base font-semibold font-vazir">لینک های دانلود به محض انتشار قرار می گیرند</h2>
                                                     ) : (
-                                                        <div className="bg-gray-100 dark:bg-primary rounded-xl py-3 px-2 flex flex-col items-center justify-center gap-5">
+                                                        <div className={`bg-gray-100 dark:bg-primary rounded-xl py-3 px-2 flex flex-col items-center justify-center ${userObj.role == 'admin' || userObj.subscriptionStatus == 'active' ? 'gap-5' : ''}`}>
                                                             {(userObj.role == 'admin' || userObj.subscriptionStatus == 'active') ? (
                                                                 <>
                                                                     {mainMovie?.links.length > 0 ? sortMediaArray(mainMovie?.links).map(link =>
@@ -816,7 +759,7 @@ function Movie() {
                                                 mainMovie.similarMovies.length > 0 ? (
                                                     <ul className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-5 gap-y-9">
                                                         {mainMovie.similarMovies.map(movie => (
-                                                            <NewMovieCard {...movie} showTitle />
+                                                            <NewMovieCard key={movie.id} {...movie} showTitle />
                                                         ))}
                                                     </ul>
                                                 ) : (
@@ -834,7 +777,7 @@ function Movie() {
                                                 mainMovie?.casts.length != 0 ? (
                                                     <div className="py-2 pb-5 px-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
                                                         {mainMovie?.casts.map(actor => (
-                                                            <ActorsCard {...actor} />
+                                                            <ActorsCard key={actor.id} {...actor} />
                                                         ))}
                                                     </div>
                                                 ) : (
@@ -879,7 +822,7 @@ function Movie() {
                                                         {comments?.filter(comment => comment.status == 'approved').length ? (
                                                             <div className="flex flex-col items-center justify-center gap-7">
                                                                 {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
-                                                                    <Comment userObj={userObj} comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} key={comment.id} {...comment} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
+                                                                    <Comment key={comment.id} {...comment} userObj={userObj} comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                                 ))}
                                                             </div>
                                                         ) : (

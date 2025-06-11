@@ -7,8 +7,8 @@ export default function MovieInfos({ infoTitle, infoValue, children }) {
         {children}
         <span className="text-gray-500 dark:text-gray-400 font-vazir text-xs">{infoTitle}</span>
       </div>
-      <span className="text-primary dark:text-white font-shabnam-light text-xs sm:text-sm">{typeof infoValue == 'object' ? infoValue.map(value => (
-        <span className={`group ${infoValue.length > 2 ? 'text-xs' : 'text-sm'} px-0.5 md:px-1`}><span>{value}</span><span className="group-last:hidden text-slate-500"> ,</span></span>
+      <span className="text-primary dark:text-white font-shabnam-light text-xs sm:text-sm">{typeof infoValue == 'object' ? infoValue.map((value , index) => (
+        <span key={index} className={`group ${infoValue.length > 2 ? 'text-xs' : 'text-sm'} px-0.5 md:px-1`}><span>{value}</span><span className="group-last:hidden text-slate-500"> ,</span></span>
       )) : infoValue}</span>
     </div>
   )

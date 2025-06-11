@@ -104,6 +104,7 @@ export default function MainLayout() {
                 const data = await getMovies()
 
                 if (data) {
+                    console.log(data)
                     let sortedMoviesArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()

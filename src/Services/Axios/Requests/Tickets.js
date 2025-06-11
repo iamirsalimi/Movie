@@ -1,13 +1,13 @@
 import apiRequests from "../Configs/configs";
 
-const addMovie = newMovie => {
-    return apiRequests.post('/Movies', newMovie)
+const addTicket = newTicket => {
+    return apiRequests.post('/tickets', newTicket)
         .then(res => res)
         .catch(err => err)
 }
 
-const getMovies = async () => {
-    return await apiRequests.get('/Movies' , {
+const getTickets = async () => {
+    return await apiRequests.get('/tickets' , {
         params : {
             select : '*'
         }
@@ -16,8 +16,8 @@ const getMovies = async () => {
         .catch(err => err)
 }
 
-const getMovieById = async id => {
-    return await apiRequests.get('/Movies', {
+const getTicketById = async id => {
+    return await apiRequests.get('/tickets', {
         params: {
             id: `eq.${id}`
         }
@@ -27,8 +27,8 @@ const getMovieById = async id => {
         .catch(err => err)
 }
 
-const getMovieByTitle = title => {
-    return apiRequests.get('/Movies', {
+const getTicketByTitle = title => {
+    return apiRequests.get('/tickets', {
         params: {
             title: `eq.${title}`
         }
@@ -38,8 +38,8 @@ const getMovieByTitle = title => {
         .catch(err => err)
 }
 
-const deleteMovie = id => {
-    return apiRequests.delete('/Movies', {
+const deleteTicket = id => {
+    return apiRequests.delete('/tickets', {
         params: {
             id: `eq.${id}`
         }
@@ -47,8 +47,8 @@ const deleteMovie = id => {
         .catch(err => err)
 }
 
-const updateMovie = (id, movieObj) => {
-    return apiRequests.patch('/Movies', movieObj, {
+const updateTicket = (id, movieObj) => {
+    return apiRequests.patch('/tickets', movieObj, {
         params: {
             id: `eq.${id}`
         }
@@ -56,4 +56,4 @@ const updateMovie = (id, movieObj) => {
         .catch(err => err)
 }
 
-export {getMovies , getMovieById , getMovieByTitle , addMovie , updateMovie , deleteMovie}
+export {getTickets , getTicketById , getTicketByTitle , addTicket , updateTicket , deleteTicket}

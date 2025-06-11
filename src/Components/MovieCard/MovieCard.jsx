@@ -4,6 +4,8 @@ import toast from "react-hot-toast"
 
 import UserContext from '../../Contexts/UserContext'
 
+import { updateUser } from '../../Services/Axios/Requests/Users';
+
 import { FaTheaterMasks } from "react-icons/fa";
 import { MdOutlineDateRange } from "react-icons/md";
 import { FaRegFlag } from "react-icons/fa6";
@@ -17,12 +19,6 @@ import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { CiBookmark } from "react-icons/ci";
-
-let apiData = {
-    updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function MovieCard({ id, title, mainTitle, movieType, description, cover, languages, countries, genres, imdb_score, rotten_score, metacritic_score, site_scores, year, duration, is_dubbed, has_subtitle, quality }) {
     let { userObj, setUserObj } = useContext(UserContext)
@@ -85,24 +81,17 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
 
     // update user handler
     const updateUserHandler = async (newUserObj, addFlag) => {
-        await fetch(`${apiData.updateUserApi}${userObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
-            toast.dismiss(toastId)
-            toastId = null
-            if (addFlag) {
-                toast.success('فیلم به لیست تماشا اضافه شد')
-            } else {
-                toast.success('فیلم از لیست تماشا حذف شد')
-            }
-            setUserObj(newUserObj)
-        })
+        await updateUser(userObj.id, newUserObj)
+            .then(res => {
+                toast.dismiss(toastId)
+                toastId = null
+                if (addFlag) {
+                    toast.success('فیلم به لیست تماشا اضافه شد')
+                } else {
+                    toast.success('فیلم از لیست تماشا حذف شد')
+                }
+                setUserObj(newUserObj)
+            })
             .catch(err => {
                 console.log(err)
                 toast.dismiss(toastId)
@@ -121,7 +110,6 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
             toast.error('لطفا ابتدا وارد حساب کاربری خود شوید')
             return;
         }
-
 
         if (userObj.role == 'user') {
             let newWatchListObj = {
@@ -159,7 +147,6 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
             toast.error('فقط كاربر ها مي توانند فيلم هارا به ليست تماشا اضافه كنند')
         }
     }
-
 
     return (
         <div className="bg-white shadow shadow-black/5 dark:bg-secondary rounded-xl p-4 flex flex-col md:flex-row gap-y-5 gap-x-5">
@@ -209,7 +196,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                             <FaTheaterMasks className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-sky-100 dark:bg-primary"></i>
-                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genres.map((genreItem , index) => (
+                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genres.map((genreItem, index) => (
                             <a key={index} href={`/?search-type=advanced&movieType=${movieType}&genre=${allGenres[movieType][genreItem]}`} className="group px-0.5 md:px-1"><span className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200">{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></a>
                         ))}</span>
                     </li>
