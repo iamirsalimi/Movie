@@ -30,9 +30,7 @@ export default function MainMovies({ movies }) {
         }
     }, [pageId, pagesCount])
 
-    console.log(movies , filteredMovies)
-
-
+    // console.log(movies , filteredMovies)
 
     return (
         <div className="flex flex-col gap-5">

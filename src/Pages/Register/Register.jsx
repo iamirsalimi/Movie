@@ -4,7 +4,9 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import { setCookie } from '../../utils';
 import useInput from '../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
+
 import FormContext from '../../Contexts/FormContext'
+import {registerUser as registerUserHandler , checkUserName} from '../../Services/Axios/Requests/Users'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
@@ -114,22 +116,19 @@ export default function Register() {
     }
 
     const checkUserNameExist = async () => {
-        console.log('before fetch', validationObj.userName)
+        // console.log('before fetch', validationObj.userName)
 
-        await fetch(`${apiData.getApi}${userNameValue.toLowerCase()}`, {
-            headers: {
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            }
-        }).then(res => res.json())
+        await checkUserName(userNameValue.toLowerCase())
             .then(data => {
                 if (data.length > 0) {
                     validationObj.userName = false
                     setUserNameValidFlag(false)
                     errorNotify('نام کاربری از قبل موجود هست')
                 } else {
+                    console.log(validationObj.userName)
                     validationObj.userName = true
-                    console.log('after fetch not exist', validationObj.userName)
+                    console.log(validationObj.userName)
+                    // console.log('after fetch not exist', validationObj.userName)
                     setUserNameValidFlag(true)
                 }
 
@@ -192,19 +191,10 @@ export default function Register() {
         testPassword(passwordValue)
 
         let isAllValid = isAllInputsValid()
-        console.log(isAllValid, validationObj)
+        // console.log(isAllValid, validationObj)
         if (isAllValid) {
-            let newUserObj = new User(firstNameValue, lastNameValue, emailValue, userNameValue, passwordValue)
-
-            await fetch(apiData.api, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json',
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                },
-                body: JSON.stringify(newUserObj)
-            }).then(res => {
+            let newUserObj = new User(firstNameValue, lastNameValue, emailValue, userNameValue, passwordValue);
+            registerUserHandler(newUserObj).then(res => {
                 toast.success('ثبت نام با موفقیت انجام شد')
                 setCookie('userToken' , newUserObj.userToken , 10)
                 firstNameReset()

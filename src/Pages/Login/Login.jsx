@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import { setCookie } from '../../utils';
 import useInput from '../../Hooks/useInput'
+import {checkUserName , updateUser as updateUserHandler} from '../../Services/Axios/Requests/Users'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
@@ -34,46 +35,32 @@ export default function Login() {
         setShowPass(prev => !prev)
     }
 
-    const updateUser = async (userToken, userObj) => {
-        await fetch(`${apiData.updateApi}${userToken}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(userObj)
-        }).then(res => {
+    const updateUser = async (userId, userObj) => {
+        await updateUserHandler(userId , userObj)
+        .then(res => {
             console.log(res)
             location.href = "/"
         })
             .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
-
     }
-
 
     const loginUser = async e => {
         e.preventDefault()
 
         if (!userNameValue || !passwordValue) {
             toast.error("نام کاربری و رمز عبور را وارد کنید");
-            return
+            return;
         }
 
         setIsPending(true)
-        await fetch(`${apiData.getApi}${userNameValue.toLowerCase()}`, {
-            headers: {
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            }
-        }).then(res => res.json())
+        await checkUserName(userNameValue.toLowerCase())
             .then(data => {
                 if (data.length > 0) {
                     if (data[0].password == passwordValue) {
                         let newUser = { ...data[0] }
                         newUser.last_login_at = new Date()
                         // to update user login
-                        updateUser(data[0].userToken, newUser);
+                        updateUser(data[0].id, newUser);
 
                         setErrors({ userName: '', password: '' })
 

@@ -209,8 +209,8 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                             <FaTheaterMasks className="text-light-gray dark:text-white text-2xl" />
                         </span>
                         <i className="inline-block w-full h-px mx-2 bg-sky-100 dark:bg-primary"></i>
-                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genres.map(genreItem => (
-                            <a href={`/?search-type=advanced&movieType=${movieType}&genre=${allGenres[movieType][genreItem]}`} className="group px-0.5 md:px-1"><span className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200">{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></a>
+                        <span className="text-nowrap text-light-gray dark:text-white font-vazir-light text-xs sm:text-base">{genres.map((genreItem , index) => (
+                            <a key={index} href={`/?search-type=advanced&movieType=${movieType}&genre=${allGenres[movieType][genreItem]}`} className="group px-0.5 md:px-1"><span className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200">{genreItem}</span><span className="group-last:hidden text-slate-400"> .</span></a>
                         ))}</span>
                     </li>
 

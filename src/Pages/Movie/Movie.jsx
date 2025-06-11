@@ -82,7 +82,6 @@ function Movie() {
     const { loading, setLoading } = useContext(LoadingContext)
     const { movies, setMovies } = useContext(MoviesContext)
 
-
     // console.log('User ->', userObj)
 
     // we have only 2 route for this page "Movie" and "Series" So whenever user enter a wrong route we can either show "404 page" or redirect him/her to the main page   
@@ -551,7 +550,7 @@ function Movie() {
                                                     onClick={isMovieInUserWatchList(userObj?.watchList, mainMovie.id) ? removeMovieFomUserWatchList : addMovieToUserWatchList}
                                                 >
                                                     <span className="inline-block relative cursor-pointer group">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`size-6 stroke-white ${isMovieInUserWatchList(userObj?.watchList, mainMovie.id) ? 'fill-light-gray dark:fill-white' : ''} text-2xl`}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`size-6 stroke-white ${isMovieInUserWatchList(userObj?.watchList, mainMovie.id) ? 'fill-white' : ''} text-2xl`}>
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                                         </svg>
                                                         <span className="inline-block opacity-0 h-5 absolute left-2 -top-7 -translate-x-1/2 bg-gray-100 text-light-gray dark:bg-gray-900 px-2 py-0.5 rounded-md text-sm dark:text-white font-vazir text-nowrap z-20 after:!z-10 after:absolute after:w-2 after:h-2 dark:after:bg-gray-900 after:bg-gray-100 after:left-1/2 after:-bottom-1 after:rotate-45 group-hover:opacity-100 transition-all">افزودن به لیست تماشا</span>
