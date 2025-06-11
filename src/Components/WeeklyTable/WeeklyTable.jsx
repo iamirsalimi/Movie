@@ -2,6 +2,8 @@ import React, { useEffect, useState , memo } from 'react'
 
 import { MdOutlineDateRange } from "react-icons/md";
 
+import { getReleases } from '../../Services/Axios/Requests/Releases';
+
 const days = ['یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه']
 
 let apiData = {
@@ -11,7 +13,6 @@ let apiData = {
 }
 
 const WeeklyTable = memo(({ movies }) => {
-
     const [activeDay, setActiveDay] = useState(null)
     const [weekMovies, setWeekMovies] = useState([])
     const [releases, setReleases] = useState([])
@@ -34,14 +35,7 @@ const WeeklyTable = memo(({ movies }) => {
     useEffect(() => {
         const getAllReleases = async () => {
             try {
-                const res = await fetch(apiData.getAllApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json();
+                const data = await getReleases()
 
                 if (data) {
                     let sortedMoviesArray = data.sort((a, b) => {
