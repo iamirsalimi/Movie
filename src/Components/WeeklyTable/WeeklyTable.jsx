@@ -11,6 +11,7 @@ const WeeklyTable = memo(({ movies }) => {
     const [weekMovies, setWeekMovies] = useState([])
     const [releases, setReleases] = useState([])
     const [isPending, setIsPending] = useState(true)
+    const [checkFetch, setCheckFetch] = useState(false)
     const [error, setError] = useState(null)
     const [daysOfWeek, setDaysOfWeek] = useState(null)
     const [dayReleases, setDayReleases] = useState(null)
@@ -42,6 +43,7 @@ const WeeklyTable = memo(({ movies }) => {
 
                 setIsPending(null)
                 setError(false)
+                setCheckFetch(true)
             } catch (err) {
                 console.log('fetch error', err)
                 setIsPending(false)
@@ -49,7 +51,7 @@ const WeeklyTable = memo(({ movies }) => {
             }
         }
 
-        if (movies.length > 0) {
+        if (movies.length > 0 && !checkFetch) {
             setIsPending(true)
             getAllReleases()
         }

@@ -27,17 +27,6 @@ const getMovieById = async id => {
         .catch(err => err)
 }
 
-const getMovieByTitle = title => {
-    return apiRequests.get('/Movies', {
-        params: {
-            title: `eq.${title}`
-        }
-    })
-        // to return movie Obj
-        .then(res => res.data)
-        .catch(err => err)
-}
-
 const deleteMovie = id => {
     return apiRequests.delete('/Movies', {
         params: {
@@ -56,4 +45,4 @@ const updateMovie = (id, movieObj) => {
         .catch(err => err)
 }
 
-export {getMovies , getMovieById , getMovieByTitle , addMovie , updateMovie , deleteMovie}
+export {getMovies , getMovieById , addMovie , updateMovie , deleteMovie}

@@ -28,7 +28,6 @@ export default function WithPageContent(Comp, movieContent) {
             setMovies(moviesArray)
         }, [moviesArray])
 
-
         return (
             <LoadingContext.Provider value={{
                 loading,
@@ -68,7 +67,6 @@ export default function WithPageContent(Comp, movieContent) {
                     <Loader words={['Movies', 'Series', 'Animes', 'New Movies']} />
                 )}
             </LoadingContext.Provider>
-
         )
     }
 
