@@ -5,6 +5,10 @@ import dayjs from 'dayjs'
 
 import { Toaster } from 'react-hot-toast';
 
+import { getUserByToken , updateUser } from '../Services/Axios/Requests/Users';
+import { getMovies } from '../Services/Axios/Requests/Movies';
+import { getNotifications as getNotificationsHandler } from '../Services/Axios/Requests/Notifications';
+
 import NavBar from '../Components/NavBar/NavBar'
 import Menu from '../Components/Menu/Menu'
 import SearchModal from '../Components/SearchModal/SearchModal'
@@ -12,9 +16,9 @@ import Footer from '../Components/Footer/Footer'
 import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton.'
 import UserContext from '../Contexts/UserContext'
 import MoviesContext from '../Contexts/MoviesContext'
-import Loader from '../Components/Loader/Loader'
 
-import { getCookie, getUserInfo, checkUserSubscriptionStatus, checkUserBanStatus } from '../utils'
+
+import { getCookie, checkUserSubscriptionStatus, checkUserBanStatus } from '../utils'
 
 let apiData = {
     getNotificationsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
@@ -39,15 +43,7 @@ export default function MainLayout() {
 
     // update user Handler
     const updateUserHandler = async newUserObj => {
-        await fetch(`${apiData.updateApi}${userObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
+        await updateUser(userObj.id , newUserObj).then(res => {
             if (res.ok) {
                 setUserObj(newUserObj)
             }
@@ -96,7 +92,8 @@ export default function MainLayout() {
         }
 
         const fetchUser = async () => {
-            const user = await getUserInfo(token)
+            const user = await getUserByToken(token)
+
             if (user) {
                 setUserObj(user)
                 if (user?.isBanned && window.location.pathname !== '/banned') {
@@ -114,14 +111,7 @@ export default function MainLayout() {
     useEffect(() => {
         const getAllMovies = async () => {
             try {
-                const res = await fetch(apiData.getApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json();
+                const data = await getMovies()
 
                 if (data) {
                     let sortedMoviesArray = data.sort((a, b) => {
@@ -157,14 +147,8 @@ export default function MainLayout() {
     useEffect(() => {
         const getNotifications = async () => {
             try {
-                const res = await fetch(apiData.getNotificationsApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                
+                const data = await getNotificationsHandler()
 
                 if (data.length > 0) {
                     setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
