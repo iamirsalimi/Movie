@@ -27,10 +27,10 @@ const getTicketById = async id => {
         .catch(err => err)
 }
 
-const getTicketByTitle = title => {
-    return apiRequests.get('/tickets', {
+const getTicketByUserId = async userId => {
+    return await apiRequests.get('/tickets', {
         params: {
-            title: `eq.${title}`
+            userId: `eq.${userId}`
         }
     })
         // to return movie Obj
@@ -56,4 +56,4 @@ const updateTicket = (id, movieObj) => {
         .catch(err => err)
 }
 
-export {getTickets , getTicketById , getTicketByTitle , addTicket , updateTicket , deleteTicket}
+export {getTickets , getTicketById ,getTicketByUserId , addTicket , updateTicket , deleteTicket}

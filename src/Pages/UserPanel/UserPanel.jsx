@@ -3,7 +3,9 @@ import { useLocation, Outlet } from 'react-router-dom';
 
 import { Toaster } from 'react-hot-toast';
 
-import { getCookie, getUserInfo, deleteCookie } from '../../utils';
+import { getCookie, deleteCookie } from '../../utils';
+import { getNotifications as getNotificationsHandler } from '../../Services/Axios/Requests/Notifications';
+import { getUserByToken } from '../../Services/Axios/Requests/Users';
 import ThemeContext from '../../Contexts/ThemeContext';
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
@@ -37,12 +39,6 @@ let links = [
     { title: 'پیام ها', href: '/my-account/userPanel/messages', icon: <BiMessageAltDetail className="text-light-gray dark:text-white text-xl" /> },
 ]
 
-let apiData = {
-    getNotificationsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
 export default function UserPanel() {
     const [showMenu, setShowMenu] = useState(false)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
@@ -74,7 +70,7 @@ export default function UserPanel() {
         }
 
         const fetchUser = async () => {
-            const user = await getUserInfo(token)
+            const user = await getUserByToken(token)
             if (user) {
                 setUserObj(user)
             } else {
@@ -98,14 +94,7 @@ export default function UserPanel() {
     useEffect(() => {
         const getNotifications = async () => {
             try {
-                const res = await fetch(apiData.getNotificationsApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getNotificationsHandler()
 
                 if (data.length > 0) {
                     setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {

@@ -6,23 +6,18 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import toast from 'react-hot-toast';
 
+import { getTicketById, updateTicket as updateUserTicket } from '../../Services/Axios/Requests/Tickets';
+import { getMessagesByTicketId, addMessage as addUserMessage } from '../../Services/Axios/Requests/Messages';
+
 import TicketMessage from '../../Components/TicketMessage/TicketMessage';
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
+
 
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { TbSend2 } from "react-icons/tb";
-
-let apiData = {
-    updateTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
-    getMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages?ticket_id=eq.',
-    postMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages',
-    getTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function TicketDetails() {
     const [ticketObj, setTicketObj] = useState(null)
@@ -43,19 +38,10 @@ export default function TicketDetails() {
 
     // update ticket
     const updateTicketHandler = async newTicketObj => {
-        await fetch(`${apiData.updateTicketApi}${ticketId}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newTicketObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateUserTicket(ticketId, newTicketObj)
+            .then(res => {
                 console.log(res)
-            }
-        })
+            })
             .catch(err => {
                 console.log('مشکلی در آپدیت تیکت پیش آمده')
             })
@@ -82,23 +68,13 @@ export default function TicketDetails() {
 
     // add new message
     const addMessageHandler = async newMessageObj => {
-        await fetch(apiData.postMessageApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newMessageObj)
-        }).then(res => {
+        await addUserMessage(newMessageObj).then(res => {
             console.log(res)
-            if (res.ok) {
-                setGetMessages(prev => !prev)
-                setMessageText('')
-                updateTicket(true)
-                setIsSending(false)
-                toast.success('پیام شما ارسال شد')
-            }
+            setGetMessages(prev => !prev)
+            setMessageText('')
+            updateTicket(true)
+            setIsSending(false)
+            toast.success('پیام شما ارسال شد')
         })
             .catch(err => {
                 setIsSending(false)
@@ -123,16 +99,9 @@ export default function TicketDetails() {
     }
 
     useEffect(() => {
-        const getUserInfo = async ticketId => {
+        const getTicketInfo = async ticketId => {
             try {
-                const res = await fetch(`${apiData.getTicketApi}${ticketId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getTicketById(ticketId)
 
                 if (data.length > 0) {
                     setTicketObj(data[0])
@@ -150,20 +119,13 @@ export default function TicketDetails() {
                 setTicketObj(null)
             }
         }
-        getUserInfo(ticketId)
+        getTicketInfo(ticketId)
     }, [])
 
     useEffect(() => {
         const getMessagesInfo = async ticketId => {
             try {
-                const res = await fetch(`${apiData.getMessageApi}${ticketId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getMessagesByTicketId(ticketId)
 
                 if (data.length > 0) {
                     setMessages(data)

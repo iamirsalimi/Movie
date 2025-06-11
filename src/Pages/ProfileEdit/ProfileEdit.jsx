@@ -3,7 +3,9 @@ import React, { useState, useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
+import toast from 'react-hot-toast';
 
+import { checkUserName, updateUser as updateUserDetails } from '../../Services/Axios/Requests/Users';
 import UserContext from '../../Contexts/UserContext'
 import LoadingContext from '../../Contexts/LoadingContext'
 
@@ -25,6 +27,9 @@ export default function ProfileEdit() {
   const [showCurrentPass, setShowCurrentPass] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showRepeatPass, setRepeatShowPass] = useState(false)
+
+  const [userNameTestingFlag, setUserNameTestingFlag] = useState(false)
+  const [userNameValidFlag, setUserNameValidFlag] = useState(null)
 
   const { userObj } = useContext(UserContext)
   const { loading, setLoading } = useContext(LoadingContext)
@@ -65,18 +70,15 @@ export default function ProfileEdit() {
   let newPassword = watch('newPassword')
   let confirmNewPassword = watch('confirmNewPassword')
 
-  const updateUser = async (userToken, newUserObj) => {
-    await fetch(`${apiData.updateApi}${userToken}`, {
-      method: "PATCH",
-      headers: {
-        'Content-type': 'application/json',
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      },
-      body: JSON.stringify(newUserObj)
-    }).then(res => {
-      location.reload()
-    })
+  const errorNotify = text => {
+    toast.error(text)
+  }
+
+  const updateUser = async (userId, newUserObj) => {
+    await updateUserDetails(userId, newUserObj)
+      .then(res => {
+        location.reload()
+      })
       .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
   }
 
@@ -119,13 +121,38 @@ export default function ProfileEdit() {
           newUserObj.password = data.newPassword
         }
 
-        await updateUser(newUserObj.userToken, newUserObj)
+        await updateUser(newUserObj.id, newUserObj)
       }
     }
   }
 
   const toggleShowingPassHandler = (setShowPass) => {
     setShowPass(prev => !prev)
+  }
+
+  const checkUserNameExist = async () => {
+    // console.log('before fetch')
+    const userNameValue = watch('userName').toLowerCase()
+
+    if (userNameValue.trim() && userNameValue != userObj?.userName) {
+      setUserNameTestingFlag(true)
+      await checkUserName(userNameValue)
+        .then(data => {
+          if (data.length > 0) {
+            setUserNameValidFlag(false)
+          } else {
+            setUserNameValidFlag(true)
+          }
+
+          setUserNameTestingFlag(false)
+        })
+        .catch(err => {
+          errorNotify('خطا هنگام بررسی نام کاربری')
+          console.log(err)
+        })
+    } else {
+      setUserNameValidFlag(null)
+    }
   }
 
   useEffect(() => {
@@ -135,7 +162,7 @@ export default function ProfileEdit() {
     setValue('userName', userObj?.userName, { shouldValidate: true })
     setValue('email', userObj?.email, { shouldValidate: true })
     setValue('recentPassword', userObj?.password, { shouldValidate: true })
-    if(userObj && loading){
+    if (userObj && loading) {
       setLoading(false)
     }
   }, [userObj])
@@ -197,8 +224,22 @@ export default function ProfileEdit() {
             type="text"
             className="w-full rounded-md p-3 border border-light-gray dark:border-gray-500 dark:bg-secondary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
             {...register('userName')}
+            onBlur={checkUserNameExist}
           />
           <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-500 bg-white dark:bg-secondary">نام کاربری</span>
+          {userNameTestingFlag && (
+            <div className="flex items-center justify-start gap-2 mt-2 text-sm">
+              <span className="font-vazir text-sky-500">در حال بررسی  وجود نام کاربری</span>
+              <span className="inline-block w-4 h-4 rounded-full border-2 border-gray-200 dark:border-secondary !border-t-sky-500 animate-spin"></span>
+            </div>
+          )}
+
+          {!errors.userName && !userNameTestingFlag && userNameValidFlag != null && (
+            <span className={`mt-2 font-vazir text-sm ${userNameValidFlag ? 'text-green-500' : 'text-red-500'}`}>
+              {userNameValidFlag ? 'نام کاربری معتبر است' : 'نام کاربری از قبل موجود نیست'}
+            </span>
+          )}
+
           {errors.userName && (
             <span className="text-sm text-red-500 font-vazir">{errors.userName.message}</span>
           )}

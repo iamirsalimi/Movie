@@ -3,18 +3,14 @@ import React, { useEffect, useState, useContext } from 'react'
 import UserContext from '../../Contexts/UserContext'
 import LoadingContext from '../../Contexts/LoadingContext'
 
+import { getRequestsByUserId } from '../../Services/Axios/Requests/Requests'
+
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
   'title': { hasValue: false, property: 'title' },
   'pending': { hasValue: true, property: 'status', value: 'pending' },
   'approved': { hasValue: true, property: 'status', value: 'approved' },
   'rejected': { hasValue: true, property: 'status', value: 'rejected' }
-}
-
-let apiData = {
-  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/requests?userId=eq.',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
 export default function AllRequests() {
@@ -31,14 +27,7 @@ export default function AllRequests() {
   useEffect(() => {
     const getAllRequests = async () => {
       try {
-        const res = await fetch(`${apiData.getApi}${userObj?.id}`, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json()
+        const data = await getRequestsByUserId(userObj?.id)
 
         if (data.length > 0) {
           let sortedRequestsArray = data.sort((a, b) => {

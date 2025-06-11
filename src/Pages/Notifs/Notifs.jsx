@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import NotifAccordian from '../../Components/NotifAccordian/NotifAccordian'
 import UserContext from '../../Contexts/UserContext'
 import LoadingContext from '../../Contexts/LoadingContext'
+import { updateUser as updateUserNotifs } from '../../Services/Axios/Requests/Users'
+import { getNotifications } from '../../Services/Axios/Requests/Notifications'
 
 let apiData = {
   updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
@@ -20,19 +22,10 @@ export default function Notifs() {
   const { loading, setLoading } = useContext(LoadingContext)
 
   const updateUserHandler = async newUserObj => {
-    await fetch(`${apiData.updateUserApi}${userObj?.id}`, {
-      method: "PATCH",
-      headers: {
-        'Content-type': 'application/json',
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      },
-      body: JSON.stringify(newUserObj)
-    }).then(res => {
-      if (res.ok) {
+    await updateUserNotifs(userObj?.id, newUserObj)
+      .then(res => {
         console.log('کاربر اپدیت شد')
-      }
-    })
+      })
       .catch(err => {
         console.log('مشکلی در ثبت نام پیش آمده')
 
@@ -59,15 +52,7 @@ export default function Notifs() {
   useEffect(() => {
     const getAllNotifications = async () => {
       try {
-        const res = await fetch(apiData.getApi, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json();
-
+        const data = await getNotifications()
         if (data) {
           // we should sow user the notifications that they either are for all users or they are for just that user (if it had userId it means we should show that to users)
           let sortedNotificationsArray = data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
@@ -101,20 +86,20 @@ export default function Notifs() {
   useEffect(() => {
     if (userObj && isPending == null) {
       updateUser()
-      if(loading){
+      if (loading) {
         setLoading(false)
       }
     }
   }, [userObj, isPending])
 
   return (
-    <div className="w-full flex flex-col items-center gap-5 mb-16">
+    <div className="w-full flex flex-col items-center gap-5 mb-16 panel-box py-5">
       {!isPending && notifications.map(notification => (
         <NotifAccordian key={notification.id} {...notification} />
       ))}
 
       {isPending == null && notifications.length == 0 && (
-        <h2 className="text-center text-red-500 font-vazir text-sm mt-4">اطلاعیه ای تا کنون ثبت نشده</h2>
+        <h2 className="text-center text-light-gray dark:text-gray-300 text-lg md:text-xl font-vazir text-sm">اطلاعیه ای تا کنون ثبت نشده</h2>
       )}
 
       {isPending && (

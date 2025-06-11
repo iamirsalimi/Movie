@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -8,26 +8,24 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
+import { addTicket as addUserTicket } from '../../Services/Axios/Requests/Tickets';
+
 import UserContext from '../../Contexts/UserContext'
+import LoadingContext from '../../Contexts/LoadingContext';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 dayjs.extend(jalali)
 
-let apiData = {
-  postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
 export default function AddNewTicket() {
-  const [isAdding , setIsAdding] =  useState(false)
+  const [isAdding, setIsAdding] = useState(false)
 
-  const {userObj} = useContext(UserContext)
+  const { userObj } = useContext(UserContext)
+  const { loading , setLoading } = useContext(LoadingContext)
 
   const schema = yup.object().shape({
     subject: yup.string().required('عنوان تیکت الزامی است.'),
-    category: yup.string().oneOf(['account', 'payment', 'bug', 'requests' , 'links', 'content', 'other'], 'نوع دچارتمان تیکت نامعتبر است.').required('نوع دپارتمان تیکت الزامی است.'),
+    category: yup.string().oneOf(['account', 'payment', 'bug', 'requests', 'links', 'content', 'other'], 'نوع دچارتمان تیکت نامعتبر است.').required('نوع دپارتمان تیکت الزامی است.'),
     description: yup
       .string()
       .required('توضیحات تیکت الزامی است.')
@@ -49,20 +47,11 @@ export default function AddNewTicket() {
   })
 
   const addTicketHandler = async newTicketObj => {
-    await fetch(apiData.postApi, {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      },
-      body: JSON.stringify(newTicketObj)
-    }).then(res => {
-      console.log(res)
-      if (res.ok) {
+    await addUserTicket(newTicketObj)
+      .then(res => {
+        console.log(res)
         location.href = "/my-account/userPanel/messages"
-      }
-    })
+      })
       .catch(err => {
         setIsAdding(false)
         console.log('مشکلی در افزودن تیکت پیش آمده')
@@ -88,10 +77,17 @@ export default function AddNewTicket() {
         updated_at: new Date(),
       }
 
-      console.log(newTicketObj , Object.keys(newTicketObj))
+      console.log(newTicketObj, Object.keys(newTicketObj))
       addTicketHandler(newTicketObj)
     }
   }
+
+  useEffect(() => {
+    if(userObj && loading){
+      setLoading(false)
+    }
+  } , [userObj])
+
 
   return (
     <>
@@ -148,7 +144,7 @@ export default function AddNewTicket() {
           )}
         </div>
 
-        <button 
+        <button
           className="col-start-1 col-end-3 w-full bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 transition-all cursor-pointer rounded-md py-2 text-white font-vazir"
           disabled={isAdding}
         >

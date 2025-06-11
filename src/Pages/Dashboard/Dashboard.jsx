@@ -8,6 +8,11 @@ import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
 
+import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
+import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments';
+import { getRequestsByUserId } from '../../Services/Axios/Requests/Requests';
+import { getAnnouncements as getAnnouncementsHandler } from '../../Services/Axios/Requests/Announcements';
+
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { FaBookmark } from "react-icons/fa";
@@ -15,15 +20,6 @@ import { PiUserFocusFill } from "react-icons/pi";
 import { AiFillInfoCircle } from "react-icons/ai";
 
 dayjs.extend(jalali)
-
-let apiData = {
-  getAnnouncementsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Announcements?select=*',
-  getRequestsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/requests?userId=eq.',
-  getTicketsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?userId=eq.',
-  getCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?userId=eq.',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function Dashboard() {
   const [announcements, setAnnouncements] = useState(null)
@@ -46,14 +42,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getAnnouncements = async () => {
       try {
-        const res = await fetch(apiData.getAnnouncementsApi, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json()
+        const data = await getAnnouncementsHandler()
 
         if (data.length > 0) {
           setAnnouncements(data)
@@ -81,14 +70,8 @@ export default function Dashboard() {
   useEffect(() => {
     const getTickets = async () => {
       try {
-        const res = await fetch(`${apiData.getTicketsApi}${userObj?.id}`, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
+        const data = await getTicketByUserId(userObj?.id)
 
-        const data = await res.json()
         console.log(data)
         if (data.length > 0) {
           setTickets(data.sort((a, b) => {
@@ -119,14 +102,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const res = await fetch(`${apiData.getRequestsApi}${userObj?.id}`, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json()
+        const data = await getRequestsByUserId(userObj?.id)
 
         if (data.length > 0) {
           setRequests(data.sort((a, b) => {
@@ -158,14 +134,7 @@ export default function Dashboard() {
   useEffect(() => {
     const getAllComments = async () => {
       try {
-        const res = await fetch(`${apiData.getCommentsApi}${userObj?.id}`, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json()
+        const data = await getCommentsByUserId(userObj?.id)
 
         if (data.length > 0) {
           setComments(data)
@@ -195,10 +164,10 @@ export default function Dashboard() {
   }, [comments])
 
   useEffect(() => {
-    if(userObj && announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading){
+    if (userObj && announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading) {
       setLoading(false)
     }
-  } , [userObj , announcementsIsPending , ticketsIsPending , requestsIsPending])
+  }, [userObj, announcementsIsPending, ticketsIsPending, requestsIsPending])
 
   const getDate = date => {
     let registerDate = new Date(date)
@@ -392,20 +361,24 @@ export default function Dashboard() {
                 <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{userObj?.email}</span>
               </li>
 
-              <li className="flex flex-col gap-1">
-                <span className="text-gray-500 text-sm font-shabnam-light">آدرس IP :</span>
-                <span className="text-light-gray dark:text-white text-left text-sm font-vazir-light">{ipObj?.ip}</span>
-              </li>
+              {ipObj && (
+                <>
+                  <li className="flex flex-col gap-1">
+                    <span className="text-gray-500 text-sm font-shabnam-light">آدرس IP :</span>
+                    <span className="text-light-gray dark:text-white text-left text-sm font-vazir-light">{ipObj?.ip}</span>
+                  </li>
 
-              <li className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm font-shabnam-light">کشور :</span>
-                <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.country_name}</span>
-              </li>
+                  <li className="flex items-center justify-between">
+                    <span className="text-gray-500 text-sm font-shabnam-light">کشور :</span>
+                    <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.country_name}</span>
+                  </li>
 
-              <li className="flex items-center justify-between">
-                <span className="text-gray-500 text-sm font-shabnam-light">شهر :</span>
-                <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.city}</span>
-              </li>
+                  <li className="flex items-center justify-between">
+                    <span className="text-gray-500 text-sm font-shabnam-light">شهر :</span>
+                    <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.city}</span>
+                  </li>
+                </>
+              )}
             </ul>
 
           </div>

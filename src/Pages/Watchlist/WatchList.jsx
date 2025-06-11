@@ -4,15 +4,9 @@ import toast from 'react-hot-toast'
 import UserContext from '../../Contexts/UserContext'
 import LoadingContext from '../../Contexts/LoadingContext'
 
-import { movies } from './../../moviesData'
+import { updateUser } from '../../Services/Axios/Requests/Users'
 
 import WatchListMovieCard from '../../Components/WatchListMovieCard/WatchListMovieCard'
-
-let apiData = {
-  updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function WatchList() {
   let { userObj, setUserObj } = useContext(UserContext)
@@ -24,16 +18,8 @@ export default function WatchList() {
   const { loading, setLoading } = useContext(LoadingContext)
 
   // update user handler
-  const updateUserHandler = async (newUserObj) => {
-    await fetch(`${apiData.updateUserApi}${userObj.id}`, {
-      method: "PATCH",
-      headers: {
-        'Content-type': 'application/json',
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      },
-      body: JSON.stringify(newUserObj)
-    }).then(res => {
+  const updateUserHandler = async newUserObj => {
+    await updateUser(userObj?.id , newUserObj).then(res => {
       toast.dismiss(toastId)
       toastId = null
       toast.success('فیلم از لیست تماشا حذف شد')

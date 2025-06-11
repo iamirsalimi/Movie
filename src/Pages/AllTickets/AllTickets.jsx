@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
 
@@ -27,11 +28,6 @@ const filterSearchObj = {
   'closed': { hasValue: true, property: 'status', value: 'closed' },
 }
 
-let apiData = {
-  getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?select=*',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function AllTickets() {
   const [searchType, setSearchType] = useState('ID')
@@ -48,16 +44,9 @@ export default function AllTickets() {
   useEffect(() => {
     const getAllTickets = async () => {
       try {
-        const res = await fetch(apiData.getAllApi, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
+        const data = await getTicketByUserId(userObj?.id)
 
-        const data = await res.json();
-
-        if (data) {
+        if (data.length > 0) {
           let sortedMoviesArray = data.filter(ticket => ticket.userId == userObj.id).sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()

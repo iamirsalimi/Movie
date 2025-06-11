@@ -27,6 +27,17 @@ const getCommentsByMovieId = movieId => {
         .catch(err => err)
 }
 
+const getCommentsByUserId = userId => {
+    return apiRequests.get('/Comments', {
+        params: {
+            userId: `eq.${userId}`
+        }
+    })
+        // to return movie Obj
+        .then(res => res.data)
+        .catch(err => err)
+}
+
 const updateComment = (id, movieObj) => {
     return apiRequests.patch('/Comments', movieObj, {
         params: {
@@ -36,4 +47,4 @@ const updateComment = (id, movieObj) => {
         .catch(err => err)
 }
 
-export {getComments , getCommentsByMovieId , addComment , updateComment}
+export {getComments , getCommentsByMovieId , getCommentsByUserId , addComment , updateComment}

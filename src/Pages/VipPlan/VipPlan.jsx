@@ -7,18 +7,11 @@ import jalali from 'jalaliday';
 
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
+import { updateUser } from '../../Services/Axios/Requests/Users';
 
 import VipPlanModal from '../../Components/VipPlanModal/VipPlanModal'
 
 dayjs.extend(jalali)
-
-let apiData = {
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    getAllUsersApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function VipPlan() {
     const [showModal, setShowModal] = useState(false)
@@ -29,15 +22,7 @@ export default function VipPlan() {
     const { loading, setLoading } = useContext(LoadingContext)
 
     const updateUserHandler = async newUserObj => {
-        await fetch(`${apiData.updateApi}${userObj?.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
+        await updateUser(userObj?.id , newUserObj).then(res => {
             setShowModal(false)
             setIsUpdating(false)
             setUserObj(newUserObj)

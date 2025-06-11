@@ -25,8 +25,8 @@ const deleteNotification = id => {
         .catch(err => err)
 }
 
-const updateNotification = (id, movieObj) => {
-    return apiRequests.patch('/movies', movieObj, {
+const updateNotification = (id, notifObj) => {
+    return apiRequests.patch('/Notifications', notifObj, {
         params: {
             id: `eq.${id}`
         }

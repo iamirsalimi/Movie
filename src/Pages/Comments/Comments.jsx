@@ -3,13 +3,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import UserContext from './../../Contexts/UserContext'
 import LoadingContext from './../../Contexts/LoadingContext'
 
+import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments'
 import PanelComment from './../../Components/PanelComment/PanelComment'
-
-let apiData = {
-  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function Comments() {
   const [comments, setComments] = useState([])
@@ -22,14 +17,7 @@ export default function Comments() {
   useEffect(() => {
     const getCommentsInfo = async () => {
       try {
-        const res = await fetch(apiData.getApi, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
-
-        const data = await res.json()
+        const data = await getCommentsByUserId(userObj?.id)
 
         if (data.length > 0) {
           const sortedComments = data.sort((a, b) => {
