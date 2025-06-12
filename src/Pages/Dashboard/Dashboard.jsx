@@ -266,7 +266,7 @@ export default function Dashboard() {
                         )}
                       </td>
                       <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.subject}</td>
-                      <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticketObj?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
+                      <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
                       <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.status == 'pending' ? 'در حال بررسی ' : ticket.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
                     </tr>
                   ))}

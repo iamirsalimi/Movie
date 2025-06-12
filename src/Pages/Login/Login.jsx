@@ -31,7 +31,7 @@ export default function Login() {
         await updateUserHandler(userId , userObj)
         .then(res => {
             console.log(res)
-            location.href = "/"
+            window.location.href = "/"
         })
             .catch(err => errorNotify('مشکلی در ثبت نام پیش آمده'))
     }
