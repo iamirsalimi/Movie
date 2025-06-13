@@ -6,6 +6,16 @@ const registerUser = newUser => {
         .catch(err => err)
 }
 
+const getUsers = async () => {
+    return await apiRequests.get('/users' , {
+        params : {
+            select : '*'
+        }
+    })
+        .then(res => res.data)
+        .catch(err => err)
+}
+
 const getUserByToken = userToken => {
     return apiRequests.get('/users' , {
         params : {
@@ -13,6 +23,16 @@ const getUserByToken = userToken => {
         }
         // to return userObj
     }).then(res => res.data[0])
+    .catch(err => err)
+}
+
+const getUserById = id => {
+    return apiRequests.get('/users' , {
+        params : {
+            id : `eq.${id}`
+        }
+        // to return userObj
+    }).then(res => res.data)
     .catch(err => err)
 }
 
@@ -34,4 +54,4 @@ const updateUser = (id , userObj) => {
     .catch(err => err)
 }
 
-export { registerUser , checkUserName ,getUserByToken, updateUser }
+export { registerUser , getUsers , checkUserName ,getUserByToken, getUserById , updateUser }

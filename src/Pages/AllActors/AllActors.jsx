@@ -14,6 +14,8 @@ let apiData = {
   authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
+import { addCast , deleteCast, getCasts } from '../../Services/Axios/Requests/Actors';
+
 export default function AllActors() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [actors, setActors] = useState(null)
@@ -29,18 +31,11 @@ export default function AllActors() {
 
   const DeleteActorHandler = async () => {
     try {
-      const res = await fetch(`${apiData.deleteApi}${actorObj.id}`, {
-        method: 'DELETE',
-        headers: {
-          'apikey': apiData.apikey,
-          'Authorization': apiData.authorization
-        }
-      })
+      const res = await deleteCast(actorObj.id)
 
-      if (res.ok) {
-        setShowDeleteModal(false)
-        setGetActorsFlag(prev => !prev)
-      }
+      console.log(res)
+      setShowDeleteModal(false)
+      setGetActorsFlag(prev => !prev)
 
     } catch (err) {
       console.log('fetch error')
@@ -50,16 +45,9 @@ export default function AllActors() {
   useEffect(() => {
     const getActorInfo = async () => {
       try {
-        const res = await fetch(apiData.getApi, {
-          headers: {
-            'apikey': apiData.apikey,
-            'Authorization': apiData.authorization
-          }
-        })
+        const data = await getCasts()
 
-        const data = await res.json()
-
-        if (data) {
+        if (data.length > 0) {
           let sortedActors = data.sort((a, b) => b.id - a.id)
           setActors(sortedActors)
           setFilteredActors(sortedActors)

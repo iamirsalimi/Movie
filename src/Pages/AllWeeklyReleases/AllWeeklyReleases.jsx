@@ -12,6 +12,8 @@ import { LuTrash2 } from "react-icons/lu";
 
 import LoadingContext from '../../Contexts/LoadingContext';
 
+import { getReleases , deleteRelease } from '../../Services/Axios/Requests/Releases'
+
 dayjs.extend(jalali)
 
 let apiData = {
@@ -48,21 +50,14 @@ export default function AllWeeklyReleases() {
 
     const DeleteReleaseHandler = async () => {
         try {
-            const res = await fetch(`${apiData.deleteApi}${releaseObj.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            })
+            const res = await deleteRelease(releaseObj.id)
 
-            if (res.ok) {
-                setShowDeleteModal(false)
-                setGetReleasesFlag(prev => !prev)
-                setReleaseObj(null)
-                setShowMovieReleaseDetails(false)
-            }
+            console.log(res)
 
+            setShowDeleteModal(false)
+            setGetReleasesFlag(prev => !prev)
+            setReleaseObj(null)
+            setShowMovieReleaseDetails(false)
         } catch (err) {
             console.log('fetch error')
         }
@@ -71,16 +66,9 @@ export default function AllWeeklyReleases() {
     useEffect(() => {
         const getAllReleases = async () => {
             try {
-                const res = await fetch(apiData.getAllApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
+                const data = await getReleases()
 
-                const data = await res.json();
-
-                if (data) {
+                if (data.length > 0) {
                     let sortedMoviesArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()

@@ -16,6 +16,17 @@ const getNotifications = () => {
         .catch(err => err)
 }
 
+const getNotificationById = async id => {
+    return await apiRequests.get('/Notifications', {
+        params: {
+            id: `eq.${id}`
+        }
+    })
+        // to return movie Obj
+        .then(res => res.data)
+        .catch(err => err)
+}
+
 const deleteNotification = id => {
     return apiRequests.delete('/Notifications', {
         params: {
@@ -34,4 +45,4 @@ const updateNotification = (id, notifObj) => {
         .catch(err => err)
 }
 
-export {getNotifications  , addNotification , updateNotification , deleteNotification}
+export {getNotifications  , getNotificationById , addNotification , updateNotification , deleteNotification}

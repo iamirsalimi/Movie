@@ -10,13 +10,7 @@ import { MdKeyboardArrowRight } from "react-icons/md"
 
 import LoadingContext from '../../Contexts/LoadingContext'
 
-let apiData = {
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?id=eq.',
-    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { addNotification as addNewNotification, updateNotification as updateNotif , getNotificationById } from '../../Services/Axios/Requests/Notifications'
 
 export default function AdminAddNotifs() {
     const [notifObj, setNotifObj] = useState(null)
@@ -41,8 +35,8 @@ export default function AdminAddNotifs() {
         watch
     } = useForm({
         defaultValues: {
-            userId: null,
-            link: null,
+            userId: '',
+            link: '',
             type: 'info',
         },
         resolver: yupResolver(schema)
@@ -53,21 +47,12 @@ export default function AdminAddNotifs() {
 
     // update movie
     const updateNotificationHandler = async newNotificationObj => {
-        await fetch(`${apiData.updateApi}${notifObj?.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newNotificationObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateNotif(notifObj.id, newNotificationObj)
+            .then(res => {
                 console.log(res)
                 setIsAdding(false)
                 location.href = "/my-account/adminPanel/notifications/"
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
@@ -93,21 +78,12 @@ export default function AdminAddNotifs() {
 
     // add new notification
     const addNotificationHandler = async newNotificationObj => {
-        await fetch(apiData.postApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newNotificationObj)
-        }).then(res => {
-            console.log(res)
-            if (res.ok) {
+        await addNewNotification(newNotificationObj)
+            .then(res => {
+                console.log(res)
                 setIsAdding(false)
                 location.href = "/my-account/adminPanel/notifications"
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در افزودن فیلم پیش آمده')
@@ -129,14 +105,7 @@ export default function AdminAddNotifs() {
     useEffect(() => {
         const getMovieInfo = async notifId => {
             try {
-                const res = await fetch(`${apiData.getApi}${notifId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getNotificationById(notifId)
 
                 if (data.length > 0) {
                     setNotifObj(data[0])
@@ -167,17 +136,17 @@ export default function AdminAddNotifs() {
             setValue('userId', notifObj.userId)
             setValue('link', notifObj.link)
             setValue('type', notifObj.type)
-            if(loading){
+            if (loading) {
                 setLoading(false)
             }
         }
     }, [notifObj])
 
     useEffect(() => {
-        if(!notifId){
+        if (!notifId) {
             setLoading(false)
         }
-    } , [])
+    }, [])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">

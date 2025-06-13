@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef , useContext } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
@@ -12,6 +12,8 @@ import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
+import { getRequests as getAllReqs , updateRequest as updateReq } from '../../Services/Axios/Requests/Requests'
+
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
     'ID': { hasValue: false, property: 'id' },
@@ -20,13 +22,6 @@ const filterSearchObj = {
     'pending': { hasValue: true, property: 'status', value: 'pending' },
     'approved': { hasValue: true, property: 'status', value: 'approved' },
     'rejected': { hasValue: true, property: 'status', value: 'rejected' }
-}
-
-let apiData = {
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/requests?id=eq.',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/requests?select=*',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
 export default function AdminRequests() {
@@ -47,27 +42,18 @@ export default function AdminRequests() {
     const { loading, setLoading } = useContext(LoadingContext)
 
     const updateRequestHandler = async (id, newRequestObj) => {
-        await fetch(`${apiData.updateApi}${id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newRequestObj)
-        }).then(res => {
-            if (res.ok) {
-                toast.success('کامنت با موفقیت آپدیت شد')
+        await updateReq(id, newRequestObj)
+            .then(res => {
+                toast.success('درخواست با موفقیت آپدیت شد')
                 setRequestIsPending(false)
                 setRequestObj(null)
                 setShowRequestDetails(false)
                 setGetRequests(prev => !prev)
-            }
-        })
+            })
             .catch(err => {
                 setRequestIsPending(false)
                 setRequestError(err)
-                toast.error('مشکلی در افزودن فیلم پیش آمده')
+                toast.error('مشکلی در افزودن درخواست پیش آمده')
             })
     }
 
@@ -75,7 +61,7 @@ export default function AdminRequests() {
         if (requestObj.status != requestStatus) {
             setRequestIsPending(true)
             let newRequestObj = { ...requestObj }
-            newRequestObj.status = commentStatus
+            newRequestObj.status = requestStatus
             await updateRequestHandler(requestObj.id, newRequestObj)
         }
     }
@@ -95,16 +81,9 @@ export default function AdminRequests() {
     useEffect(() => {
         const getAllRequests = async () => {
             try {
-                const res = await fetch(apiData.getApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
+                const data = await getAllReqs()
 
-                const data = await res.json()
-
-                if (data) {
+                if (data.length > 0) {
                     let sortedRequestsArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
@@ -159,10 +138,10 @@ export default function AdminRequests() {
     }, [requestObj])
 
     useEffect(() => {
-        if(requests?.length > 0 && loading){
+        if (requests?.length > 0 && loading) {
             setLoading(false)
         }
-    } , [requests])
+    }, [requests])
 
     // return the easy readable time and date with Iran timezone
     const getDate = date => {
@@ -266,7 +245,7 @@ export default function AdminRequests() {
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">userId</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نوع فیلم</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت درخواست</th>
+                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن درخواست</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                 </tr>

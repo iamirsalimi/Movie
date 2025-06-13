@@ -8,18 +8,13 @@ import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
+import { getMovieById } from '../../Services/Axios/Requests/Movies';
+import { getCommentsByMovieId } from '../../Services/Axios/Requests/Comments';
+
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
-
-let apiData = {
-    getCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?movieId=eq.',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 // accord this object we ca understand which property and which value should compare to eachother
 const commentFilterSearchObj = {
@@ -48,22 +43,28 @@ export default function MovieDetails() {
     let { movieId } = useParams()
     const { loading, setLoading } = useContext(LoadingContext)
 
-    useEffect(() => {
-        const getMovie = async (movieId) => {
-            try {
-                const res = await fetch(`${apiData.getApi}${movieId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
+    // to calc how much users liked movie
+    const calcSiteScores = (siteScores , value) => {
+        let likesCount = siteScores?.reduce((a , b) => b.likeStatus == value ? a + 1 : a , 0)
+        
+        let likedRates = 0
+        if(likesCount > 0){
+            likedRates = siteScores?.length * 100 / likesCount 
+        }
 
-                const data = await res.json()
+        return likedRates
+    }
+
+    useEffect(() => {
+        const getMovie = async movieId => {
+            try {
+                const data = await getMovieById(movieId)
+
                 if (data.length > 0) {
                     setMovieObj(data[0])
                     setIsPending(false)
                 } else {
-                    // window.location.href = '/my-account/adminPanel/movies'
+                    window.location.href = '/my-account/adminPanel/movies'
                 }
 
                 setError(false)
@@ -80,14 +81,7 @@ export default function MovieDetails() {
     useEffect(() => {
         const getCommentsInfo = async () => {
             try {
-                const res = await fetch(`${apiData.getCommentsApi}${movieId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getCommentsByMovieId(movieId)
 
                 if (data.length > 0) {
                     const sortedComments = data.sort((a, b) => {
@@ -248,8 +242,16 @@ export default function MovieDetails() {
                                 <span className="text-vazir-light text-primary dark:text-white">{movieObj.metacritic_score}</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">نمرات Site :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{movieObj.site_score}</span>
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تعداد نظرهای کاربران :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{movieObj.site_scores?.length} کاربر رای دادند</span>
+                            </li>
+                            <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">نظر کاربران (لایک) :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores , 'liked')}% پسندیدند</span>
+                            </li>
+                            <li className="w-full py-1 flex items-center justify-between">
+                                <h3 className="text-vazir text-light-gray dark:text-gray-500">نظر کاربران (دیسلایک) :</h3>
+                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores , 'disliked')}% نپسندیدند</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">کشورها :</h3>

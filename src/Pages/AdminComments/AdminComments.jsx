@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState , useContext } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
@@ -14,13 +14,7 @@ import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
-let apiData = {
-    updateCommentApi: "https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.",
-    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getComments as getAllComments, updateComment as updateCommentDetails } from '../../Services/Axios/Requests/Comments'
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -59,23 +53,14 @@ export default function AdminComments() {
     const [searchValue, setSearchValue] = useState(location[1] || '')
 
     const updateCommentHandler = async (id, newCommentObj) => {
-        await fetch(`${apiData.updateCommentApi}${id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newCommentObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateCommentDetails(id, newCommentObj)
+            .then(res => {
                 toast.success('کامنت با موفقیت آپدیت شد')
                 setCommentsIsPending(false)
                 setCommentObj(null)
                 setShowCommentDetails(false)
                 setGetComments(prev => !prev)
-            }
-        })
+            })
             .catch(err => {
                 setCommentsIsPending(false)
                 setCommentError(err)
@@ -115,21 +100,34 @@ export default function AdminComments() {
     useEffect(() => {
         const getCommentsInfo = async () => {
             try {
-                const res = await fetch(apiData.getAllApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getAllComments()
 
                 if (data.length > 0) {
+                    // sorting comments to make pending comments above of others
                     const sortedComments = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
 
                         return bDate - aDate
+                    }).sort((a, b) => {
+                        console.log(a.status, b.status)
+                        if (a.status == 'pending' && b.status != 'pending') {
+                            return -1
+                        }
+
+                        if (a.status != 'pending' && b.status == 'pending') {
+                            return 1
+                        }
+
+                        if (a.status == 'approved' && b.status != 'approved') {
+                            return -1
+                        }
+
+                        if (a.status != 'approved' && b.status == 'approved') {
+                            return 1
+                        }
+
+                        return 0;
                     })
                     setComments(sortedComments)
                     setFilteredComments(sortedComments)
@@ -138,7 +136,7 @@ export default function AdminComments() {
                 setIsPending(false)
                 setError(false)
             } catch (err) {
-                console.log('fetch error')
+                console.log('fetch error', err)
                 setError(err)
                 setIsPending(false)
                 setComments(null)
@@ -159,16 +157,16 @@ export default function AdminComments() {
         let filterObj = filterSearchObj[searchType]
         let filteredCommentsArray = []
         // when we search something or we change the searchType we should filter the comments Array again  
-        if (filterObj && comments.length > 0) {
+        if (filterObj && comments?.length > 0) {
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
-                filteredCommentsArray = comments.filter(user => user[filterObj.property] == filterObj.value)
+                filteredCommentsArray = comments?.filter(user => user[filterObj.property] == filterObj.value)
             } else {
                 if (searchValue) {
                     if (filterObj.property == 'id' || filterObj.property == 'movieId') {
-                        filteredCommentsArray = comments.filter(user => user[filterObj.property] == searchValue)
+                        filteredCommentsArray = comments?.filter(user => user[filterObj.property] == searchValue)
                     } else if (typeof filterObj.property == 'string') {
-                        filteredCommentsArray = comments.filter(user => user[filterObj.property].toLowerCase().startsWith(searchValue))
+                        filteredCommentsArray = comments?.filter(user => user[filterObj.property].toLowerCase().startsWith(searchValue))
                     }
                 } else {
                     filteredCommentsArray = [...comments]
@@ -180,10 +178,10 @@ export default function AdminComments() {
     }, [searchValue, searchType, comments])
 
     useEffect(() => {
-        if(comments?.length > 0 && loading){
+        if (comments?.length > 0 && loading) {
             setLoading(false)
         }
-    } , [comments])
+    }, [comments])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-12">
@@ -196,6 +194,14 @@ export default function AdminComments() {
                         <li className="flex flex-col md:flex-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">ID</h3>
                             <p className="text-primary dark:text-gray-300">#{commentObj.id}</p>
+                        </li>
+                        <li className="flex flex-col md:flex-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                            <h3 className="text-light-gray dark:text-gray-500">ID فیلم</h3>
+                            <p className="text-primary dark:text-gray-300">#{commentObj.movieId}</p>
+                        </li>
+                        <li className="flex flex-col md:flex-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
+                            <h3 className="text-light-gray dark:text-gray-500">نام فيلم</h3>
+                            <p className="text-primary dark:text-gray-300">{commentObj.movieTitle}</p>
                         </li>
                         <li className="flex flex-col md:flex-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">ID کاربر</h3>

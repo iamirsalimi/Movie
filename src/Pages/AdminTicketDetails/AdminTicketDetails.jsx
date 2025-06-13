@@ -15,16 +15,9 @@ dayjs.extend(jalali)
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { TbSend2 } from "react-icons/tb";
 
-let apiData = {
-    postNotifApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications',
-    updateTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
-    getMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages?ticket_id=eq.',
-    postMessageApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/ticketMessages',
-    getTicketApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?id=eq.',
-    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?select=*',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getTicketById, updateTicket as updateTicketInfos } from '../../Services/Axios/Requests/Tickets';
+import { addNotification as addNewNotification } from '../../Services/Axios/Requests/Notifications'
+import { getMessagesByTicketId, addMessage as addNewMessage } from '../../Services/Axios/Requests/Messages'
 
 export default function AdminTicketDetails() {
     const [ticketObj, setTicketObj] = useState(null)
@@ -48,17 +41,10 @@ export default function AdminTicketDetails() {
 
     // add new notification
     const addNotificationHandler = async newNotificationObj => {
-        await fetch(apiData.postNotifApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newNotificationObj)
-        }).then(res => {
-            console.log(res)
-        })
+        await addNewNotification(newNotificationObj)
+            .then(res => {
+                console.log(res)
+            })
             .catch(err => {
                 console.log('مشکلی در افزودن فیلم پیش آمده')
             })
@@ -81,23 +67,14 @@ export default function AdminTicketDetails() {
 
     // update ticket
     const updateTicketHandler = async (newTicketObj, reloadFlag) => {
-        await fetch(`${apiData.updateTicketApi}${ticketId}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newTicketObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateTicketInfos(ticketId, newTicketObj)
+            .then(res => {
                 // console.log(res)
                 if (reloadFlag) {
                     setIsUpdating(false)
                     location.reload()
                 }
-            }
-        })
+            })
             .catch(err => {
                 setIsUpdating(false)
                 console.log('مشکلی در آپدیت تیکت پیش آمده')
@@ -141,25 +118,16 @@ export default function AdminTicketDetails() {
 
     // add new message
     const addMessageHandler = async newMessageObj => {
-        await fetch(apiData.postMessageApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newMessageObj)
-        }).then(res => {
-            // console.log(res)
-            if (res.ok) {
+        await addNewMessage(newMessageObj)
+            .then(res => {
+                // console.log(res)
                 setGetMessages(prev => !prev)
                 setMessageText('')
                 addNotification()
                 updateTicket(true)
                 setIsSending(false)
                 toast.success('پیام شما ارسال شد')
-            }
-        })
+            })
             .catch(err => {
                 setIsSending(false)
                 toast.error('مشکلی در افزودن پیام پیش آمده')
@@ -185,14 +153,7 @@ export default function AdminTicketDetails() {
     useEffect(() => {
         const getUserInfo = async ticketId => {
             try {
-                const res = await fetch(`${apiData.getTicketApi}${ticketId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getTicketById(ticketId)
 
                 if (data.length > 0) {
                     setTicketObj(data[0])
@@ -215,14 +176,7 @@ export default function AdminTicketDetails() {
     useEffect(() => {
         const getMessagesInfo = async ticketId => {
             try {
-                const res = await fetch(`${apiData.getMessageApi}${ticketId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getMessagesByTicketId(ticketId)
 
                 if (data.length > 0) {
                     setMessages(data)
@@ -255,10 +209,10 @@ export default function AdminTicketDetails() {
 
     useEffect(() => {
         // when "messageIsPending" is null it means we fetched messages
-        if(ticketObj && messageIsPending == null && loading){
+        if (ticketObj && messageIsPending == null && loading) {
             setLoading(false)
         }
-    } , [ticketObj , messageIsPending])
+    }, [ticketObj, messageIsPending])
 
     const getDate = date => {
         let newDate = new Date(date)

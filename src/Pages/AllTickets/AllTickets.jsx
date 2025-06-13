@@ -28,7 +28,6 @@ const filterSearchObj = {
   'closed': { hasValue: true, property: 'status', value: 'closed' },
 }
 
-
 export default function AllTickets() {
   const [searchType, setSearchType] = useState('ID')
   const [searchValue, setSearchValue] = useState('')

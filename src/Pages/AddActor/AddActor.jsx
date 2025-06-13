@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
@@ -18,14 +18,8 @@ dayjs.extend(jalali)
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 
-let apiData = {
-    getMoviesApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
-    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getMovies } from '../../Services/Axios/Requests/Movies';
+import { addCast, getCastById, getCasts, updateCast } from '../../Services/Axios/Requests/Actors';
 
 export default function AddActor() {
     let { actorId } = useParams()
@@ -82,18 +76,11 @@ export default function AddActor() {
 
     // add actor
     const addActorHandler = async newActorObj => {
-        await fetch(apiData.postApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newActorObj)
-        }).then(res => {
-            console.log(res)
-            location.href = "/my-account/adminPanel/actors/add-actor"
-        })
+        await addCast(newActorObj)
+            .then(res => {
+                console.log(res)
+                location.href = "/my-account/adminPanel/actors/add-actor"
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در افزودن هنرپیشه پیش آمده')
@@ -110,17 +97,10 @@ export default function AddActor() {
 
     // update actor
     const updateActorHandler = async newActorObj => {
-        await fetch(`${apiData.updateApi}${actorId}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newActorObj)
-        }).then(res => {
-            location.href = "/my-account/adminPanel/actors/add-actor"
-        })
+        await updateCast(actorId, newActorObj)
+            .then(res => {
+                location.href = "/my-account/adminPanel/actors"
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
@@ -163,16 +143,9 @@ export default function AddActor() {
     }
 
     useEffect(() => {
-        const getActorInfo = async (actorId) => {
+        const getActorInfo = async actorId => {
             try {
-                const res = await fetch(`${apiData.getApi}${actorId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getCastById(actorId)
 
                 if (data.length > 0) {
                     setActorObj(data[0])
@@ -209,7 +182,7 @@ export default function AddActor() {
             setValue('biography', actorObj.biography)
             setActorMovies(actorObj.movies)
             setActorBirthDate(actorObj.birthDate)
-            if(loading){
+            if (loading) {
                 setLoading(false)
             }
         }
@@ -219,16 +192,9 @@ export default function AddActor() {
         if (moviesArray.length == 0 && actorMovieId) {
             const getAllMovies = async () => {
                 try {
-                    const res = await fetch(apiData.getMoviesApi, {
-                        headers: {
-                            'apikey': apiData.apikey,
-                            'Authorization': apiData.authorization
-                        }
-                    })
+                    const data = await getMovies()
 
-                    const data = await res.json()
-
-                    if (data) {
+                    if (data.length > 0) {
                         setMoviesArray(data)
                         setMovieIsPending(false)
                     }
@@ -248,10 +214,10 @@ export default function AddActor() {
     }, [actorMovieId])
 
     useEffect(() => {
-        if(!actorId && loading){
+        if (!actorId && loading) {
             setLoading(false)
         }
-    } , [])
+    }, [])
 
     return (
         <div className="panel-box py-4 px-5 flex flex-col gap-7 mb-20">

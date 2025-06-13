@@ -5,6 +5,11 @@ import toast from 'react-hot-toast'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
+import { getAnnouncements as getAllAnnouncements, addAnnouncement, updateAnnouncement, deleteAnnouncement } from '../../Services/Axios/Requests/Announcements';
+import { getUsers } from '../../Services/Axios/Requests/Users'
+import { getRequests as getAllRequests } from '../../Services/Axios/Requests/Requests';
+import { getTickets as getAllTickets } from '../../Services/Axios/Requests/Tickets';
+
 import UserActivityInfo from './../../Components/UserActivityInfo/UserActivityInfo'
 import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem';
 import AnnounceMentModal from '../../Components/AnnounceMentModal/AnnounceMentModal'
@@ -16,23 +21,9 @@ dayjs.extend(jalali)
 
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { PiUserFocusFill } from "react-icons/pi";
-import { AiFillInfoCircle } from "react-icons/ai";
 import { TbTicket } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
-import { LuTrash2 } from "react-icons/lu";
 
-let apiData = {
-    deleteAnnouncementApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Announcements?id=eq.',
-    updateAnnouncementApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Announcements?id=eq.',
-    postAnnouncement: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Announcements',
-    getAnnouncementsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Announcements?select=*',
-    getRequestsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/requests?select=*',
-    getTicketsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?select=*',
-    getUsersApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?select=*',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function AdminDashboard() {
     const [announcements, setAnnouncements] = useState(null)
@@ -62,19 +53,11 @@ export default function AdminDashboard() {
 
     const deleteAnnouncementHandler = async () => {
         try {
-            const res = await fetch(`${apiData.deleteAnnouncementApi}${announcementObj.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            })
+            const res = await deleteAnnouncement(announcementObj.id)
 
-            if (res.ok) {
-                toast.success('اطلاعیه با موفقیت حذف شد')
-                setShowDeleteModal(false)
-                setGetAnnouncements(prev => !prev)
-            }
+            toast.success('اطلاعیه با موفقیت حذف شد')
+            setShowDeleteModal(false)
+            setGetAnnouncements(prev => !prev)
 
         } catch (err) {
             toast.error('مشکلی در حذف اطلاعیه به وجود آمده')
@@ -83,22 +66,13 @@ export default function AdminDashboard() {
     }
 
     const addAnnouncementHandler = async announcementObj => {
-        await fetch(apiData.postAnnouncement, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(announcementObj)
-        }).then(res => {
-            if (res.ok) {
+        await addAnnouncement(announcementObj)
+            .then(res => {
                 setIsAdding(false)
                 toast.success('اطلاعیه شما با موفقیت اضافه شد')
                 setShowAnnouncementModal(false)
                 setGetAnnouncements(prev => !prev)
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 toast.error('مشکلی در افزودن اطلاعیه پیش آمده')
@@ -107,18 +81,11 @@ export default function AdminDashboard() {
     }
 
     const updateAnnouncementHandler = async (id, newAnnouncementObj) => {
-        await fetch(`${apiData.updateAnnouncementApi}${id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newAnnouncementObj)
-        }).then(res => {
+        await updateAnnouncement(id, newAnnouncementObj).then(res => {
             setShowAnnouncementModal(false)
             setIsAdding(false)
             setUpdateFlag(false)
+            setGetAnnouncements(prev => !prev)
             toast.success('اشتراک جدید با موفقیت خریداری شد')
         })
             .catch(err => {
@@ -133,14 +100,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const getAnnouncements = async () => {
             try {
-                const res = await fetch(apiData.getAnnouncementsApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getAllAnnouncements()
 
                 if (data.length > 0) {
                     setAnnouncements(data)
@@ -156,7 +116,7 @@ export default function AdminDashboard() {
                 setAnnouncementFlag(false)
             }
         }
-        if (userObj && !announcementFlag) {
+        if (userObj) {
             setAnnouncementsIsPending(true)
             setAnnouncementFlag(true)
             getAnnouncements()
@@ -167,14 +127,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const getTickets = async () => {
             try {
-                const res = await fetch(apiData.getTicketsApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getAllTickets()
 
                 if (data.length > 0) {
                     setTickets(data)
@@ -203,14 +156,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const getRequests = async () => {
             try {
-                const res = await fetch(apiData.getRequestsApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getAllRequests()
 
                 if (data.length > 0) {
                     setRequests(data.sort((a, b) => {
@@ -244,14 +190,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const getAllUsers = async () => {
             try {
-                const res = await fetch(apiData.getUsersApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getUsers()
 
                 if (data.length > 0) {
                     setUsers(data)
@@ -281,7 +220,7 @@ export default function AdminDashboard() {
     }, [requestsIsPending])
 
     useEffect(() => {
-        if(announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading){
+        if (announcementsIsPending == null && ticketsIsPending == null && requestsIsPending == null && loading) {
             setLoading(false)
         }
     }, [announcementsIsPending, ticketsIsPending, requestsIsPending])
@@ -465,21 +404,24 @@ export default function AdminDashboard() {
                                 <span className="text-gray-500 text-sm font-shabnam-light">ايميل :</span>
                                 <span className="text-light-gray text-sm text-left dark:text-white font-vazir-light">{userObj?.email}</span>
                             </li>
+                            {ipObj && (
+                                <>
+                                    <li className="flex flex-col gap-1">
+                                        <span className="text-gray-500 text-sm font-shabnam-light">آدرس IP :</span>
+                                        <span className="text-light-gray dark:text-white text-left text-sm font-vazir-light">{ipObj?.ip}</span>
+                                    </li>
 
-                            <li className="flex flex-col gap-1">
-                                <span className="text-gray-500 text-sm font-shabnam-light">آدرس IP :</span>
-                                <span className="text-light-gray dark:text-white text-left text-sm font-vazir-light">{ipObj?.ip}</span>
-                            </li>
+                                    <li className="flex items-center justify-between">
+                                        <span className="text-gray-500 text-sm font-shabnam-light">کشور :</span>
+                                        <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.country_name}</span>
+                                    </li>
 
-                            <li className="flex items-center justify-between">
-                                <span className="text-gray-500 text-sm font-shabnam-light">کشور :</span>
-                                <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.country_name}</span>
-                            </li>
-
-                            <li className="flex items-center justify-between">
-                                <span className="text-gray-500 text-sm font-shabnam-light">شهر :</span>
-                                <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.city}</span>
-                            </li>
+                                    <li className="flex items-center justify-between">
+                                        <span className="text-gray-500 text-sm font-shabnam-light">شهر :</span>
+                                        <span className="text-light-gray dark:text-white font-vazir-light">{ipObj?.city}</span>
+                                    </li>
+                                </>
+                            )}
                         </ul>
 
                     </div>

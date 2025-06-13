@@ -14,6 +14,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
+import { addRelease, getReleaseById, updateRelease as updateWeeklyRelease } from '../../Services/Axios/Requests/Releases';
+import { getMovieById } from '../../Services/Axios/Requests/Movies';
+
 import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
@@ -34,8 +37,10 @@ const genres = {
 
 const days = ['sunday', 'monday', 'tuesday', 'wednsday', 'thursday', 'friday', 'saturday']
 
+
 export default function AddRelease() {
     const [allEpisodesReleasedInADayCheckBox, setAllEpisodesReleasedInADayCheckBox] = useState(false)
+    const [movies, setMovies] = useState(null)
     const [movieObj, setMovieObj] = useState(null)
     const [releaseObj, setReleaseObj] = useState(null)
     const [isPending, setIsPending] = useState(false)
@@ -186,30 +191,24 @@ export default function AddRelease() {
     let newSeasonNumber = watch('newSeasonNumber')
     let newSeasonStartEpisode = watch('newSeasonStartEpisode')
 
-    const getMovieInfo = async movieId => {
+    // getting movies array from server
+    const getMovieInfo = async id => {
         try {
-            const res = await fetch(`${apiData.getMovieApi}${movieId}`, {
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            })
-
-            const data = await res.json()
+            const data = await getMovieById(id)
 
             if (data.length > 0) {
-                console.log(data)
+                // console.log(data)
                 setMovieObj(data[0])
             } else {
                 setMovieObj(null)
             }
-
+            
             setMovieIsPending(null)
             setMovieError(false)
         } catch (err) {
             console.log('fetch error')
             setMovieError(err)
-            setMovieIsPending(false)
+            setMovieIsPending(null)
             setMovieObj(null)
         }
     }
@@ -223,20 +222,11 @@ export default function AddRelease() {
 
     // update release
     const updateReleaseHandler = async newReleaseObj => {
-        await fetch(`${apiData.updateApi}${releaseObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newReleaseObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateWeeklyRelease(releaseObj.id, newReleaseObj)
+            .then(res => {
                 console.log(res)
-                location.href = "/my-account/adminPanel/movies/add-movie"
-            }
-        })
+                location.href = "/my-account/adminPanel/weekly-release"
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
@@ -263,21 +253,12 @@ export default function AddRelease() {
     }
 
     // add release
-    const addReleaseHandler = async newrelease => {
-        await fetch(apiData.postApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newrelease)
-        }).then(res => {
-            console.log(res)
-            if (res.ok) {
+    const addReleaseHandler = async newRelease => {
+        await addRelease(newRelease)
+            .then(res => {
+                console.log(res)
                 location.href = "/my-account/adminPanel/weekly-release"
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در افزودن فیلم پیش آمده')
@@ -392,7 +373,7 @@ export default function AddRelease() {
             setValue('releaseDate', new Date(releaseObj.release_schedules[0]?.date))
             setReleaseDate(new Date(releaseObj.release_schedules[0]?.date))
             setNewSeasonEpisodesTable(releaseObj.release_schedules)
-            if(loading){
+            if (loading) {
                 setLoading(false)
             }
         }
@@ -402,14 +383,7 @@ export default function AddRelease() {
     useEffect(() => {
         const getReleaseInfo = async releaseId => {
             try {
-                const res = await fetch(`${apiData.getApi}${releaseId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getReleaseById(releaseId)
 
                 if (data.length > 0) {
                     setReleaseObj(data[0])
@@ -433,10 +407,10 @@ export default function AddRelease() {
     }, [])
 
     useEffect(() => {
-        if(!releaseId){
+        if (!releaseId) {
             setLoading(false)
         }
-    } , [])
+    }, [])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 mb-20">
@@ -478,7 +452,7 @@ export default function AddRelease() {
                             <span className="text-red-500 text-sm mt-2 font-vazir">{errors.movieId?.message}</span>
                         )}
 
-                        {movieIsPending == null && (
+                        {movieIsPending == null && movieObj && (
                             <>
                                 {movieObj ? (
                                     <span className="text-light-gray dark:text-white text-xs mt-2 font-vazir">{movieObj?.title}</span>
@@ -487,11 +461,17 @@ export default function AddRelease() {
                                 )}
                             </>
                         )}
-
+                        
                         {movieIsPending && (
                             <span className="mt-2 font-vazir flex items-center gap-2">
                                 <h2 className="text-gray-500 text-xs font-vazir">در حال بررسی id فیلم</h2>
                                 <span className="inline-block w-4 h-4 rounded-full border-2 border-gray-500 border-t-sky-500 animate-spin"></span>
+                            </span>
+                        )}
+
+                        {movieIsPending == null && !movieObj && (
+                            <span className="mt-2 font-vazir flex items-center gap-2">
+                                <h2 className="text-red-500 text-xs font-vazir">فیلمی با همچین ID  ای وجود ندارد</h2>
                             </span>
                         )}
                     </div>

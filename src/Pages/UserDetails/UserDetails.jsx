@@ -9,19 +9,13 @@ import LoadingContext from '../../Contexts/LoadingContext';
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
-let apiData = {
-    getAllCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?select=*',
-    getCommentsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Comments?userId=eq.',
-    getTicketsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?userId=eq.',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments';
+import { getUserById } from '../../Services/Axios/Requests/Users';
+import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const ticketFilterSearchObj = {
@@ -75,18 +69,10 @@ export default function UserDetails() {
     let { userId } = useParams()
     const { loading, setLoading } = useContext(LoadingContext)
 
-
     useEffect(() => {
-        const getUserInfo = async (userId) => {
+        const getUserInfo = async userId => {
             try {
-                const res = await fetch(`${apiData.getApi}${userId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getUserById(userId)
 
                 if (data.length > 0) {
                     setUserObj(data[0])
@@ -109,14 +95,7 @@ export default function UserDetails() {
     useEffect(() => {
         const getTicketsInfo = async () => {
             try {
-                const res = await fetch(`${apiData.getTicketsApi}${userId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getTicketByUserId(userId)
 
                 if (data.length > 0) {
                     const sortedTickets = data.sort((a, b) => {
@@ -147,14 +126,7 @@ export default function UserDetails() {
     useEffect(() => {
         const getCommentsInfo = async () => {
             try {
-                const res = await fetch(`${apiData.getCommentsApi}${userId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getCommentsByUserId(userId)
 
                 if (data.length > 0) {
                     const sortedComments = data.sort((a, b) => {
@@ -219,7 +191,6 @@ export default function UserDetails() {
 
         // when we search something or we change the searchType we should filter the comments Array again  
         if (filterObj && tickets.length > 0) {
-            console.log('filtered')
             // for searchTypes that they have value (their value is not boolean and might be a variable)
             if (filterObj.hasValue) {
                 filteredTicketsArray = tickets?.filter(ticket => ticket[filterObj.property] == filterObj.value)
@@ -380,7 +351,7 @@ export default function UserDetails() {
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">تمام اشتراک های کاربر</h2>
                             <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
                                 {userObj.all_subscription_plans.length > 0 ? userObj.all_subscription_plans.map(plan => (
-                                    <div className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
+                                    <div key={plan.id} className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
                                             <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID :</h3>
                                             <span className="text-vazir-light text-primary dark:text-white">{plan.id}</span>
@@ -388,7 +359,7 @@ export default function UserDetails() {
 
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
                                             <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نوع اشتراك فعال  :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{plan.duration}</span>
+                                            <span className="text-vazir-light text-primary dark:text-white">{plan.duration} روز</span>
                                         </li>
 
                                         <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">

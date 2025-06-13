@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import toast from 'react-hot-toast';
 import DatePicker from 'react-datepicker';
@@ -15,24 +15,14 @@ import LoadingContext from '../../Contexts/LoadingContext'
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { getCasts } from '../../Services/Axios/Requests/Actors';
+import { getMovies, getMovieById, addMovie as addNewMovie, updateMovie as updateMovieDetails } from '../../Services/Axios/Requests/Movies';
 
 dayjs.extend(jalali)
 
 const genres = {
     'movie': ['اکشن', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'ماجراجویی', 'انیمه', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی'],
     'series': ['اکشن', 'Talk-Show', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'انیمه', 'ماجراجویی', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی', 'موسیقی']
-}
-
-const days = ['sunday', 'monday', 'tuesday', 'wednsday', 'thursday', 'friday', 'saturday']
-
-let apiData = {
-    getActorsApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*',
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies',
-    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
 // uses for year max limit
@@ -213,20 +203,11 @@ export default function AddMovie() {
 
     // update movie
     const updateMovieHandler = async newMovieObj => {
-        await fetch(`${apiData.updateApi}${movieObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newMovieObj)
-        }).then(res => {
-            if (res.ok) {
+        await updateMovieDetails(movieObj.id, newMovieObj)
+            .then(res => {
                 console.log(res)
                 location.href = "/my-account/adminPanel/movies"
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
@@ -260,20 +241,11 @@ export default function AddMovie() {
 
     // add new movie
     const addMovieHandler = async movieObj => {
-        await fetch(apiData.postApi, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(movieObj)
-        }).then(res => {
-            console.log(res)
-            if (res.ok) {
+        await addNewMovie(movieObj)
+            .then(res => {
+                console.log(res)
                 location.href = "/my-account/adminPanel/movies/add-movie"
-            }
-        })
+            })
             .catch(err => {
                 setIsAdding(false)
                 console.log('مشکلی در افزودن فیلم پیش آمده')
@@ -518,16 +490,9 @@ export default function AddMovie() {
         if (castsArray.length == 0 && castName) {
             const getAllActors = async () => {
                 try {
-                    const res = await fetch(apiData.getActorsApi, {
-                        headers: {
-                            'apikey': apiData.apikey,
-                            'Authorization': apiData.authorization
-                        }
-                    })
+                    const data = await getCasts()
 
-                    const data = await res.json()
-
-                    if (data) {
+                    if (data.length > 0) {
                         setCastsArray(data)
                         setCastIsPending(false)
                     }
@@ -555,16 +520,9 @@ export default function AddMovie() {
         if (moviesArray.length == 0 && similarMovieId) {
             const getAllMovies = async () => {
                 try {
-                    const res = await fetch(apiData.getAllApi, {
-                        headers: {
-                            'apikey': apiData.apikey,
-                            'Authorization': apiData.authorization
-                        }
-                    })
+                    const data = await getMovies()
 
-                    const data = await res.json()
-
-                    if (data) {
+                    if (data.length > 0) {
                         // means we are in update a movie so we shouldn't have our movie in movies array
                         let filteredMovies = [...data];
                         if (movieId) {
@@ -590,16 +548,9 @@ export default function AddMovie() {
 
     // for editing movie
     useEffect(() => {
-        const getMovieInfo = async (movieId) => {
+        const getMovieInfo = async movieId => {
             try {
-                const res = await fetch(`${apiData.getApi}${movieId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getMovieById(movieId)
 
                 if (data.length > 0) {
                     setMovieObj(data[0])
@@ -662,17 +613,17 @@ export default function AddMovie() {
             setNotifs(movieObj.notifications)
             setValue('totalSeasons', movieObj.totalSeasons)
             setValue('year', movieObj.year)
-            if(loading){
+            if (loading) {
                 setLoading(false)
             }
         }
     }, [movieObj])
 
     useEffect(() => {
-        if(!movieId){
+        if (!movieId) {
             setLoading(false)
         }
-    } , [])
+    }, [])
 
     return (
         <div className="w-full panel-box py-4 px-5 flex flex-col gap-7 overflow-hidden mb-20 md:mb-10">
@@ -1030,7 +981,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">کشور ها</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {countries.map((country , index) => (
+                                        {countries.map((country, index) => (
                                             <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{country}</h3>
                                                 <button
@@ -1075,7 +1026,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">زبان ها</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {languages.map((language , index) => (
+                                        {languages.map((language, index) => (
                                             <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{language}</h3>
                                                 <button
@@ -1126,7 +1077,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">لینک های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {links.map((link , index) => (
+                                        {links.map((link, index) => (
                                             <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <div className="flex items-end justify-center gap-1">
                                                     <h3 className="text-light-gray dark:text-white font-shabnam">{link.title}</h3>
@@ -1171,7 +1122,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">تگ های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {tags.map((tag , index) => (
+                                        {tags.map((tag, index) => (
                                             <div key={index} className="w-full bg-gray-200 dark:bg-secondary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{tag}</h3>
                                                 <button
@@ -1347,7 +1298,7 @@ export default function AddMovie() {
                                 <div className="w-full bg-gray-100 dark:bg-primary rounded-lg py-2 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                                     {movieCasts.map(cast => (
                                         <li
-                                        key={cast.id}
+                                            key={cast.id}
                                             className="rounded-md border border-white dark:border-secondary transition-all py-2 px-1 text-center inline-flex items-center justify-between gap-4"
                                         >
                                             <div className="flex items-center justify-center gap-1">
@@ -1392,7 +1343,7 @@ export default function AddMovie() {
                                 <div className="w-full flex flex-col items-center gap-2">
                                     <h3 className="w-full text-center font-vazir text-gray-800 dark:text-white text-lg">اعلان های فیلم</h3>
                                     <div className="w-full flex flex-col items-center gap-2">
-                                        {notifs.map((notif , index) => (
+                                        {notifs.map((notif, index) => (
                                             <div key={index} className="w-full bg-gray-200 dark:bg-primary flex items-center justify-between px-2 py-1 rounded-lg">
                                                 <h3 className="text-light-gray dark:text-white font-shabnam">{notif}</h3>
                                                 <button
@@ -1410,10 +1361,9 @@ export default function AddMovie() {
                     </div>
 
                     <button className="md:col-start-1 md:col-end-3 w-full bg-green-600 hover:bg-green-500 disabled:bg-green-300 transition-colors text-white font-vazir font-semibold rounded-md p-2 cursor-pointer" disabled={isAdding}>
-                        {isAdding ? 'در حال افزودن فیلم ...' : 'افزودن فیلم'}
+                        {isAdding ? `در حال ${movieId ? 'آپدیت' : 'افزودن'} فیلم ..` : `${movieId ? 'آپدیت' : 'افزودن'} فیلم`}
                     </button>
                 </form>
-
             )}
         </div >
     )

@@ -7,12 +7,7 @@ import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
 
-let apiData = {
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
-    deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getMovies , deleteMovie } from '../../Services/Axios/Requests/Movies';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -48,18 +43,11 @@ export default function AllMovies() {
 
     const DeleteMovieHandler = async () => {
         try {
-            const res = await fetch(`${apiData.deleteApi}${movieObj.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'apikey': apiData.apikey,
-                    'Authorization': apiData.authorization
-                }
-            })
+            const res = await deleteMovie(movieObj.id)
 
-            if (res.ok) {
-                setShowDeleteModal(false)
-                setGetMoviesFlag(prev => !prev)
-            }
+            console.log(res , res.status)
+            setShowDeleteModal(false)
+            setGetMoviesFlag(prev => !prev)
 
         } catch (err) {
             console.log('fetch error')
@@ -69,16 +57,9 @@ export default function AllMovies() {
     useEffect(() => {
         const getAllMovies = async () => {
             try {
-                const res = await fetch(apiData.getApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
+                const data = await getMovies()
 
-                const data = await res.json();
-
-                if (data) {
+                if (data.length > 0) {
                     let sortedMoviesArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()

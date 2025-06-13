@@ -1,13 +1,13 @@
 import apiRequests from "../Configs/configs";
 
-const addRelease = newRelease => {
-    return apiRequests.post('/Releases', newRelease)
+const addCast = newCast => {
+    return apiRequests.post('/Casts', newCast)
         .then(res => res)
         .catch(err => err)
 }
 
-const getReleases = () => {
-    return apiRequests.get('/Releases', {
+const getCasts = async () => {
+    return await apiRequests.get('/Casts', {
         params: {
             select: '*'
         }
@@ -16,18 +16,19 @@ const getReleases = () => {
         .catch(err => err)
 }
 
-const getReleaseById = id => {
-    return apiRequests.get('/Releases', {
+const getCastById = async id => {
+    return await apiRequests.get('/Casts', {
         params: {
             id: `eq.${id}`
         }
     })
+        // to return movie Obj
         .then(res => res.data)
         .catch(err => err)
 }
 
-const deleteRelease = id => {
-    return apiRequests.delete('/Releases', {
+const deleteCast = id => {
+    return apiRequests.delete('/Casts', {
         params: {
             id: `eq.${id}`
         }
@@ -35,8 +36,8 @@ const deleteRelease = id => {
         .catch(err => err)
 }
 
-const updateRelease = (id, movieObj) => {
-    return apiRequests.patch('/movies', movieObj, {
+const updateCast = (id, movieObj) => {
+    return apiRequests.patch('/Casts', movieObj, {
         params: {
             id: `eq.${id}`
         }
@@ -44,4 +45,4 @@ const updateRelease = (id, movieObj) => {
         .catch(err => err)
 }
 
-export { getReleases, getReleaseById , addRelease, updateRelease, deleteRelease }
+export { getCasts, getCastById, addCast, updateCast, deleteCast }

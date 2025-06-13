@@ -76,14 +76,14 @@ export default function MainLayout() {
 
     useEffect(() => {
         const token = getCookie('userToken');
-        console.log(token)
+        // console.log(token)
         if (!token) {
             return;
         }
 
         const fetchUser = async () => {
             const user = await getUserByToken(token)
-            console.log(user)
+            // console.log(user)
             if (user) {
                 setUserObj(user)
                 if (user?.isBanned && window.location.pathname !== '/banned') {
@@ -102,7 +102,7 @@ export default function MainLayout() {
         const getAllMovies = async () => {
             try {
                 const data = await getMovies()
-                console.log(data)
+                // console.log(data)
                 if (data.length > 0) {
                     console.log(data)
                     let sortedMoviesArray = data.sort((a, b) => {

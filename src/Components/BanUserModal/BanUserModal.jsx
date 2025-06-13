@@ -7,13 +7,16 @@ dayjs.extend(jalali)
 
 export default function BanUserModal({ showModal, setShowModal, userObj, updateUser, isUpdating }) {
     const [accountStatus, setAccountStatus] = useState('active')
-    const [banDuration, setBanDuration] = useState( '30')
+    const [banDuration, setBanDuration] = useState('30')
     const [banReason, setBanReason] = useState('')
 
-    console.log(userObj)
+    // console.log(userObj)
 
     const hideModal = () => {
         setShowModal(false)
+        setAccountStatus('active')
+        setBanDuration('30')
+        setBanReason('')
     }
 
     const getJalaliDate = date => {
@@ -54,7 +57,6 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
             }
 
             updateUser(newUserObj)
-
         }
     }
 
@@ -96,7 +98,7 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
                             <select
                                 name=""
                                 id=""
-                                className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                 value={accountStatus}
                                 onChange={e => setAccountStatus(e.target.value)}
                             >
@@ -104,7 +106,7 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
                                 <option value="temporary-banned">بن موقت</option>
                                 <option value="permanent-banned">بن دایمی</option>
                             </select>
-                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">وضعیت حساب کاربر</span>
+                            <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-primary">وضعیت حساب کاربر</span>
                         </div>
 
                         {accountStatus == 'temporary-banned' && (
@@ -112,7 +114,7 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
                                 <select
                                     name=""
                                     id=""
-                                    className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                    className="w-full md:min-w-52 rounded-md p-3 border border-light-gray dark:border-gray-600 dark:bg-primary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                     value={banDuration}
                                     onChange={e => setBanDuration(e.target.value)}
                                 >
@@ -121,18 +123,18 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
                                     <option value="180">6 ماه</option>
                                     <option value="365">12 ماه</option>
                                 </select>
-                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">مدت زمان بن</span>
+                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-primary">مدت زمان بن</span>
                             </div>
                         )}
 
                         {(accountStatus == 'temporary-banned' || accountStatus == 'permanent-banned') && (
                             <div className="md:col-start-1 md:col-end-3 w-full relative select-none">
                                 <textarea
-                                    className="w-full rounded-md p-3 min-h-28 border border-light-gray dark:border-gray-600 dark:bg-primary bg-gray-100 text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
+                                    className="w-full rounded-md p-3 min-h-28 border border-light-gray dark:border-gray-600 dark:bg-primary bg-white text-light-gray dark:text-white outline-none peer focus:border-sky-500 focus:text-sky-500 transition-colors"
                                     value={banReason}
                                     onChange={e => setBanReason(e.target.value)}
                                 ></textarea>
-                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-gray-100 dark:bg-primary">علت بن</span>
+                                <span className="absolute peer-focus:text-sky-500 transition-all -top-3 right-2 font-vazir px-2 text-light-gray dark:text-gray-600 bg-white dark:bg-primary">علت بن</span>
                             </div>
                         )}
                     </div>

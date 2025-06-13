@@ -13,17 +13,12 @@ import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
+import { getUserById, updateUser as updateUserDetails } from '../../Services/Axios/Requests/Users';
+
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 let userNameRegex = /^[0-9A-Za-z_.]+$/
 let passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#@_.])(?!.* ).{8,16}$/
-
-let apiData = {
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 export default function EditUser() {
     const [vipTab, setVipTab] = useState('increase-vipPlan')
@@ -39,7 +34,7 @@ export default function EditUser() {
     const { loading, setLoading } = useContext(LoadingContext)
 
     // admin infos
-    const mainUserObj = useContext(UserContext)
+    const { userObj: mainUserObj } = useContext(UserContext)
 
     const schema = yup.object().shape({
         firstName: yup.string().required('وارد كردن نام اجباري است'),
@@ -127,17 +122,10 @@ export default function EditUser() {
     }
 
     const updateUserHandler = async newUserObj => {
-        await fetch(`${apiData.updateApi}${userObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
-            location.reload()
-        })
+        await updateUserDetails(userObj.id, newUserObj)
+            .then(res => {
+                location.reload()
+            })
             .catch(err => {
                 console.log('مشکلی در ثبت نام پیش آمده')
                 setIsUpdating(false)
@@ -245,22 +233,9 @@ export default function EditUser() {
     }
 
     useEffect(() => {
-        if (userObj && userObj?.subscriptionStatus) {
-            setDecreaseMax(getMaxDecreaseVipPlanLimit())
-        }
-    }, [userObj])
-
-    useEffect(() => {
-        const getUserInfo = async (userId) => {
+        const getUserInfo = async userId => {
             try {
-                const res = await fetch(`${apiData.getApi}${userId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getUserById(userId)
 
                 if (data.length > 0) {
                     setUserObj(data[0])
@@ -277,12 +252,19 @@ export default function EditUser() {
             }
         }
 
+        // if it equals to the main admin Id we can't change his details
         if (userId == 2) {
             location.href = '/'
         }
 
         getUserInfo(userId)
     }, [])
+
+    useEffect(() => {
+        if (userObj && userObj?.subscriptionStatus) {
+            setDecreaseMax(getMaxDecreaseVipPlanLimit())
+        }
+    }, [userObj])
 
     useEffect(() => {
         if (userObj) {
@@ -293,7 +275,7 @@ export default function EditUser() {
             setValue('userName', userObj.userName)
             setValue('role', userObj.role)
             setValue('accountStatus', userObj.accountStatus)
-            if(loading){
+            if (loading) {
                 setLoading(false)
             }
         }

@@ -8,20 +8,14 @@ import BanUserModal from '../../Components/BanUserModal/BanUserModal'
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
 
+import { getUsers as getUsersHandler, updateUser } from '../../Services/Axios/Requests/Users';
+
 dayjs.extend(jalali)
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FaBan } from "react-icons/fa";
 import { TbTicket } from "react-icons/tb";
-
-let apiData = {
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-    getAllUsersApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -53,23 +47,15 @@ export default function AllUsers() {
     let { userObj, setUserObj } = useContext(UserContext)
     const { loading, setLoading } = useContext(LoadingContext)
 
-
     const updateUserHandler = async newUserObj => {
         setIsUpdating(true)
 
-        await fetch(`${apiData.updateApi}${mainUserObj.id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-type': 'application/json',
-                'apikey': apiData.apikey,
-                'Authorization': apiData.authorization
-            },
-            body: JSON.stringify(newUserObj)
-        }).then(res => {
-            setGetUsers(prev => !prev)
-            setShowBanModal(false)
-            setIsUpdating(false)
-        })
+        await updateUser(mainUserObj.id, newUserObj)
+            .then(res => {
+                setGetUsers(prev => !prev)
+                setShowBanModal(false)
+                setIsUpdating(false)
+            })
             .catch(err => {
                 console.log('مشکلی در ثبت نام پیش آمده')
                 setIsUpdating(false)
@@ -79,16 +65,9 @@ export default function AllUsers() {
     useEffect(() => {
         const getAllUsers = async () => {
             try {
-                const res = await fetch(`${apiData.getAllUsersApi}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
+                const data = await getUsersHandler()
 
-                const data = await res.json();
-
-                if (data) {
+                if (data.length > 0) {
                     let sortedUsers = data.sort((a, b) => {
                         let aDate = new Date(a.created_At).getTime()
                         let bDate = new Date(b.created_At).getTime()
@@ -112,11 +91,10 @@ export default function AllUsers() {
     }, [getUsers])
 
     useEffect(() => {
-        if(users?.length > 0 && loading){
+        if (users?.length > 0 && loading) {
             setLoading(false)
         }
     }, [users])
-
 
     useEffect(() => {
         let filterObj = filterSearchObj[searchType]
@@ -205,7 +183,7 @@ export default function AllUsers() {
                                 {!isPending && !error &&
                                     filteredUsers.length > 0 && (
                                         filteredUsers.map(user => user.id !== userObj?.id && (
-                                            <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
+                                            <tr key={user.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.id}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.firstName} {user.lastName}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.userName}</td>
