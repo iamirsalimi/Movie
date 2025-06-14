@@ -3,7 +3,6 @@ import React, { useEffect, useState, useContext } from 'react'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import UserInfoModal from '../../Components/UserInfoModal/userModalInfo'
 import BanUserModal from '../../Components/BanUserModal/BanUserModal'
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
@@ -31,7 +30,6 @@ const filterSearchObj = {
 }
 
 export default function AllUsers() {
-    const [showModal, setShowModal] = useState(false)
     const [showBanModal, setShowBanModal] = useState(false)
     const [mainUserObj, setMainUserObj] = useState(null)
     const [searchType, setSearchType] = useState('ID')
@@ -280,7 +278,6 @@ export default function AllUsers() {
             </div>
 
             <BanUserModal showModal={showBanModal} setShowModal={setShowBanModal} userObj={mainUserObj} updateUser={updateUserHandler} isUpdating={isUpdating} />
-            <UserInfoModal showModal={showModal} setShowModal={setShowModal} />
         </>
     )
 }
