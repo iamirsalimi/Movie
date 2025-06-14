@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
@@ -13,9 +13,9 @@ import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
-import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments';
-import { getUserById } from '../../Services/Axios/Requests/Users';
-import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
+import { getCommentsByUserId } from './../../Services/Axios/Requests/Comments';
+import { getUserById } from './../../Services/Axios/Requests/Users';
+import { getTicketByUserId } from './../../Services/Axios/Requests/Tickets';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const ticketFilterSearchObj = {

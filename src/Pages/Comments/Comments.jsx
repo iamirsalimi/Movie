@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import UserContext from './../../Contexts/UserContext'
 import LoadingContext from './../../Contexts/LoadingContext'
 
-import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments'
+import { getCommentsByUserId } from './../../Services/Axios/Requests/Comments'
 import PanelComment from './../../Components/PanelComment/PanelComment'
 
 export default function Comments() {

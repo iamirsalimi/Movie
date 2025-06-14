@@ -10,11 +10,11 @@ import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
-import { getComments as getAllComments, updateComment as updateCommentDetails } from '../../Services/Axios/Requests/Comments'
+import { getComments as getAllComments, updateComment as updateCommentDetails } from './../../Services/Axios/Requests/Comments'
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {

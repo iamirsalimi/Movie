@@ -3,8 +3,8 @@ import React, { useState, useEffect , useContext } from 'react'
 import { MdEdit } from "react-icons/md";
 import { LuTrash2 } from "react-icons/lu";
 
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
-import LoadingContext from '../../Contexts/LoadingContext';
+import DeleteModal from './../../Components/DeleteModal/DeleteModal';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -25,7 +25,7 @@ let apiData = {
     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
-import { getNotifications as getAllNotifs , deleteNotification } from '../../Services/Axios/Requests/Notifications';
+import { getNotifications as getAllNotifs , deleteNotification } from './../../Services/Axios/Requests/Notifications';
 
 export default function AdminAllNotifs() {
     const [notifications, setNotifications] = useState([])

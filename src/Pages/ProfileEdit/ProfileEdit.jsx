@@ -5,9 +5,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 import toast from 'react-hot-toast';
 
-import { checkUserName, updateUser as updateUserDetails } from '../../Services/Axios/Requests/Users';
-import UserContext from '../../Contexts/UserContext'
-import LoadingContext from '../../Contexts/LoadingContext'
+import { checkUserName, updateUser as updateUserDetails } from './../../Services/Axios/Requests/Users';
+import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";

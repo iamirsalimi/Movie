@@ -4,8 +4,8 @@ import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
 
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
-import LoadingContext from '../../Contexts/LoadingContext';
+import DeleteModal from './../../Components/DeleteModal/DeleteModal';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 let apiData = {
   deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
@@ -14,7 +14,7 @@ let apiData = {
   authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
 }
 
-import { addCast , deleteCast, getCasts } from '../../Services/Axios/Requests/Actors';
+import { addCast , deleteCast, getCasts } from './../../Services/Axios/Requests/Actors';
 
 export default function AllActors() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)

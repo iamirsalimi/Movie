@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addComment = newComment => {
     return apiRequests.post('/Comments', newComment)

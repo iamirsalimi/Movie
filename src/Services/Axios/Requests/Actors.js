@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addCast = newCast => {
     return apiRequests.post('/Casts', newCast)

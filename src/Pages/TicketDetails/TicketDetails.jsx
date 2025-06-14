@@ -6,12 +6,12 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import toast from 'react-hot-toast';
 
-import { getTicketById, updateTicket as updateUserTicket } from '../../Services/Axios/Requests/Tickets';
-import { getMessagesByTicketId, addMessage as addUserMessage } from '../../Services/Axios/Requests/Messages';
+import { getTicketById, updateTicket as updateUserTicket } from './../../Services/Axios/Requests/Tickets';
+import { getMessagesByTicketId, addMessage as addUserMessage } from './../../Services/Axios/Requests/Messages';
 
-import TicketMessage from '../../Components/TicketMessage/TicketMessage';
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import TicketMessage from './../../Components/TicketMessage/TicketMessage';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 
 dayjs.extend(jalali)

@@ -6,8 +6,8 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 import { FaEye } from "react-icons/fa";
 
@@ -31,7 +31,7 @@ const filterSearchObj = {
     'low-priority': { hasValue: true, property: 'priority', value: 'low' },
 }
 
-import { getTickets } from '../../Services/Axios/Requests/Tickets'
+import { getTickets } from './../../Services/Axios/Requests/Tickets'
 
 let apiData = {
     getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/tickets?select=*',

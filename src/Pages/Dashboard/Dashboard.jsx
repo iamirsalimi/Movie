@@ -3,15 +3,15 @@ import React, { useEffect, useState, useContext } from 'react'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import UserActivityInfo from '../../Components/UserActivityInfo/UserActivityInfo'
-import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem';
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import UserActivityInfo from './../../Components/UserActivityInfo/UserActivityInfo'
+import AnnouncementElem from './../../Components/AnnouncementElem/AnnouncementElem';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
-import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
-import { getCommentsByUserId } from '../../Services/Axios/Requests/Comments';
-import { getRequestsByUserId } from '../../Services/Axios/Requests/Requests';
-import { getAnnouncements as getAnnouncementsHandler } from '../../Services/Axios/Requests/Announcements';
+import { getTicketByUserId } from './../../Services/Axios/Requests/Tickets';
+import { getCommentsByUserId } from './../../Services/Axios/Requests/Comments';
+import { getRequestsByUserId } from './../../Services/Axios/Requests/Requests';
+import { getAnnouncements as getAnnouncementsHandler } from './../../Services/Axios/Requests/Announcements';
 
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa6";

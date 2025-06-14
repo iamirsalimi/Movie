@@ -3,10 +3,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import NewMoviesTable from './../Components/NewMoviesTable/NewMoviesTable'
 import GenreTables from './../Components/GenreTables/GenreTables'
 import UpdatedSeries from './../Components/UpdatedSeries/UpdatedSeries'
-import Loader from '../Components/Loader/Loader'
+import Loader from './../Components/Loader/Loader'
 
-import MoviesContext from '../Contexts/MoviesContext'
-import LoadingContext from '../Contexts/LoadingContext'
+import MoviesContext from './../Contexts/MoviesContext'
+import LoadingContext from './../Contexts/LoadingContext'
 
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";

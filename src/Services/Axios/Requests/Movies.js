@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addMovie = newMovie => {
     return apiRequests.post('/Movies', newMovie)

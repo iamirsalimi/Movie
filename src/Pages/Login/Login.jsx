@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react'
 
 import toast, { Toaster } from 'react-hot-toast';
 
-import { setCookie } from '../../utils';
-import useInput from '../../Hooks/useInput'
-import {checkUserName , updateUser as updateUserHandler} from '../../Services/Axios/Requests/Users'
+import { setCookie } from './../../utils';
+import useInput from './../../Hooks/useInput'
+import {checkUserName , updateUser as updateUserHandler} from './../../Services/Axios/Requests/Users'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";

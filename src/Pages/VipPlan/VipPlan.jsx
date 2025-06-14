@@ -5,11 +5,11 @@ import toast from 'react-hot-toast'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
-import { updateUser } from '../../Services/Axios/Requests/Users';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
+import { updateUser } from './../../Services/Axios/Requests/Users';
 
-import VipPlanModal from '../../Components/VipPlanModal/VipPlanModal'
+import VipPlanModal from './../../Components/VipPlanModal/VipPlanModal'
 
 dayjs.extend(jalali)
 

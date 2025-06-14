@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { RxCross2 } from "react-icons/rx";
 
-import { getMovies } from '../../Services/Axios/Requests/Movies';
+import { getMovies } from './../../Services/Axios/Requests/Movies';
 
 export default function SearchModal({ showModal, setShowModal }) {
     const [searchValue, setSearchValue] = useState('')

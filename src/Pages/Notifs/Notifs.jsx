@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-import NotifAccordian from '../../Components/NotifAccordian/NotifAccordian'
-import UserContext from '../../Contexts/UserContext'
-import LoadingContext from '../../Contexts/LoadingContext'
-import { updateUser as updateUserNotifs } from '../../Services/Axios/Requests/Users'
-import { getNotifications } from '../../Services/Axios/Requests/Notifications'
+import NotifAccordian from './../../Components/NotifAccordian/NotifAccordian'
+import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext'
+import { updateUser as updateUserNotifs } from './../../Services/Axios/Requests/Users'
+import { getNotifications } from './../../Services/Axios/Requests/Notifications'
 
 export default function Notifs() {
   const [notifications, setNotifications] = useState([])

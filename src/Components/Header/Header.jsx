@@ -2,8 +2,8 @@ import { useRef, useState, useEffect, useContext } from 'react';
 
 import Card from './../Card/Card'
 
-// import {movies as moviesData} from '../../moviesData'
-import UserContext from '../../Contexts/MoviesContext'
+// import {movies as moviesData} from './../../moviesData'
+import UserContext from './../../Contexts/MoviesContext'
 
 // icons
 import { SiMetacritic } from "react-icons/si";

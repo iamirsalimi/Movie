@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo , useContext } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import WithPageContent from './../../HOCs/WithPageContent'
-import LoadingContext from '../../Contexts/LoadingContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
 import WeeklyTable from './../WeeklyTable/WeeklyTable'
 import MainMovies from './../MainMovies/MainMovies'

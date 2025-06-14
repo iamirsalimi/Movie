@@ -5,10 +5,10 @@ import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import { getCookie } from '../../utils'
-import { getUserByToken } from '../../Services/Axios/Requests/Users';
+import { getCookie } from './../../utils'
+import { getUserByToken } from './../../Services/Axios/Requests/Users';
 
-import Loader from '../../Components/Loader/Loader'
+import Loader from './../../Components/Loader/Loader'
 
 dayjs.extend(jalali)
 

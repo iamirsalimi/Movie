@@ -5,19 +5,19 @@ import dayjs from 'dayjs'
 
 import { Toaster } from 'react-hot-toast';
 
-import { getUserByToken , updateUser } from '../Services/Axios/Requests/Users';
-import { getMovies } from '../Services/Axios/Requests/Movies';
-import { getNotifications as getNotificationsHandler } from '../Services/Axios/Requests/Notifications';
+import { getUserByToken , updateUser } from './../Services/Axios/Requests/Users';
+import { getMovies } from './../Services/Axios/Requests/Movies';
+import { getNotifications as getNotificationsHandler } from './../Services/Axios/Requests/Notifications';
 
-import NavBar from '../Components/NavBar/NavBar'
-import Menu from '../Components/Menu/Menu'
-import SearchModal from '../Components/SearchModal/SearchModal'
-import Footer from '../Components/Footer/Footer'
-import ScrollToTopButton from '../Components/ScrollToTopButton/ScrollToTopButton.'
-import UserContext from '../Contexts/UserContext'
-import MoviesContext from '../Contexts/MoviesContext'
+import NavBar from './../Components/NavBar/NavBar'
+import Menu from './../Components/Menu/Menu'
+import SearchModal from './../Components/SearchModal/SearchModal'
+import Footer from './../Components/Footer/Footer'
+import ScrollToTopButton from './../Components/ScrollToTopButton/ScrollToTopButton.'
+import UserContext from './../Contexts/UserContext'
+import MoviesContext from './../Contexts/MoviesContext'
 
-import { getCookie, checkUserSubscriptionStatus, checkUserBanStatus } from '../utils'
+import { getCookie, checkUserSubscriptionStatus, checkUserBanStatus } from './../utils'
 
 export default function MainLayout() {
     const [showMenu, setShowMenu] = useState(false)

@@ -3,22 +3,22 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import toast from "react-hot-toast"
 
-import { updateUser } from '../../Services/Axios/Requests/Users'
-import { updateMovie, getMovieById } from '../../Services/Axios/Requests/Movies'
-import { getCommentsByMovieId, addComment, updateComment } from '../../Services/Axios/Requests/Comments'
+import { updateUser } from './../../Services/Axios/Requests/Users'
+import { updateMovie, getMovieById } from './../../Services/Axios/Requests/Movies'
+import { getCommentsByMovieId, addComment, updateComment } from './../../Services/Axios/Requests/Comments'
 
 import WithPageContent from './../../HOCs/WithPageContent'
-import MovieInfos from '../../Components/MovieInfos/MovieInfos'
-import DownloadBoxAccordion from '../../Components/DownloadBoxAccordion/DownloadBoxAccordion'
+import MovieInfos from './../../Components/MovieInfos/MovieInfos'
+import DownloadBoxAccordion from './../../Components/DownloadBoxAccordion/DownloadBoxAccordion'
 import NewMovieCard from './../../Components/NewMovieCard/NewMovieCard'
 import ActorsCard from './../../Components/ActorsCard/ActorsCard'
 import Comment from './../../Components/Comment/Comment'
-import CommentForm from '../../Components/CommentForm/CommentForm'
-import ShareBox from '../../Components/ShareBox/ShareBox'
-import ReportBox from '../../Components/ReportBox/ReportBox'
-import UserContext from '../../Contexts/UserContext'
-import MoviesContext from '../../Contexts/MoviesContext'
-import LoadingContext from '../../Contexts/LoadingContext'
+import CommentForm from './../../Components/CommentForm/CommentForm'
+import ShareBox from './../../Components/ShareBox/ShareBox'
+import ReportBox from './../../Components/ReportBox/ReportBox'
+import UserContext from './../../Contexts/UserContext'
+import MoviesContext from './../../Contexts/MoviesContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
 // icons
 import { FaTheaterMasks } from "react-icons/fa";

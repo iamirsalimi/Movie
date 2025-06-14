@@ -3,11 +3,11 @@ import React, { useEffect, useState, useContext } from 'react'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import BanUserModal from '../../Components/BanUserModal/BanUserModal'
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import BanUserModal from './../../Components/BanUserModal/BanUserModal'
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
-import { getUsers as getUsersHandler, updateUser } from '../../Services/Axios/Requests/Users';
+import { getUsers as getUsersHandler, updateUser } from './../../Services/Axios/Requests/Users';
 
 dayjs.extend(jalali)
 

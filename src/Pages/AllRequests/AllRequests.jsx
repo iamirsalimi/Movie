@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
 
-import UserContext from '../../Contexts/UserContext'
-import LoadingContext from '../../Contexts/LoadingContext'
+import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
-import { getRequestsByUserId } from '../../Services/Axios/Requests/Requests'
+import { getRequestsByUserId } from './../../Services/Axios/Requests/Requests'
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {

@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addTicket = newTicket => {
     return apiRequests.post('/tickets', newTicket)

@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import CommentForm from '../CommentForm/CommentForm';
+import CommentForm from './../CommentForm/CommentForm';
 
 dayjs.extend(jalali)
 

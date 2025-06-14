@@ -4,12 +4,12 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
-import { getMovieById } from '../../Services/Axios/Requests/Movies';
-import { getCommentsByMovieId } from '../../Services/Axios/Requests/Comments';
+import { getMovieById } from './../../Services/Axios/Requests/Movies';
+import { getCommentsByMovieId } from './../../Services/Axios/Requests/Comments';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaEye } from "react-icons/fa";

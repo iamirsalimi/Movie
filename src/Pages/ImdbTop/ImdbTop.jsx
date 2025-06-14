@@ -4,10 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import PaginateBtns from './../../Components/PaginateBtns/PaginateBtns'
 import TopMovieCard from './../../Components/TopMovieCard/TopMovieCard'
-import MoviesContext from '../../Contexts/MoviesContext'
-import Loader from '../../Components/Loader/Loader'
+import MoviesContext from './../../Contexts/MoviesContext'
+import Loader from './../../Components/Loader/Loader'
 
-import usePagination from '../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
+import usePagination from './../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
 
 export default function ImdbTop() {
     let { movieType, pageId = 1 } = useParams()

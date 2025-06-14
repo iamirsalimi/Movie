@@ -8,10 +8,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
-import { addTicket as addUserTicket } from '../../Services/Axios/Requests/Tickets';
+import { addTicket as addUserTicket } from './../../Services/Axios/Requests/Tickets';
 
-import UserContext from '../../Contexts/UserContext'
-import LoadingContext from '../../Contexts/LoadingContext';
+import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 

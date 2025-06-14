@@ -1,7 +1,7 @@
 import { useContext, memo } from 'react'
 import { useLocation } from 'react-router-dom';
 
-import ThemeContext from '../../Contexts/ThemeContext';
+import ThemeContext from './../../Contexts/ThemeContext';
 
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";

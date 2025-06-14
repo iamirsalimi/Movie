@@ -11,12 +11,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
-import LoadingContext from '../../Contexts/LoadingContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { getCasts } from '../../Services/Axios/Requests/Actors';
-import { getMovies, getMovieById, addMovie as addNewMovie, updateMovie as updateMovieDetails } from '../../Services/Axios/Requests/Movies';
+import { getCasts } from './../../Services/Axios/Requests/Actors';
+import { getMovies, getMovieById, addMovie as addNewMovie, updateMovie as updateMovieDetails } from './../../Services/Axios/Requests/Movies';
 
 dayjs.extend(jalali)
 

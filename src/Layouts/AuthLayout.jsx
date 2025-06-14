@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import InfoModal from '../Components/InfoModal/InfoModal'
-import FormContext from '../Contexts/FormContext'
+import InfoModal from './../Components/InfoModal/InfoModal'
+import FormContext from './../Contexts/FormContext'
 
 export default function Form() {
     const [showModal, setShowModal] = useState(false)

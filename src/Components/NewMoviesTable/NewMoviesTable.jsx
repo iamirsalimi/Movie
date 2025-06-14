@@ -1,6 +1,6 @@
 import React from 'react'
 
-import NewMovieCard from '../NewMovieCard/NewMovieCard';
+import NewMovieCard from './../NewMovieCard/NewMovieCard';
 
 import { BiSolidMoviePlay } from "react-icons/bi";
 import { PiArrowCircleLeftDuotone } from "react-icons/pi";

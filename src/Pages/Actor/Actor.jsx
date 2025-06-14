@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 
-import Loader from '../../Components/Loader/Loader'
+import Loader from './../../Components/Loader/Loader'
 import { useParams } from 'react-router-dom'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import ActorMovieCard from '../../Components/ActorMovieCard/ActorMovieCard'
-import { calculateAge } from '../../utils'
+import ActorMovieCard from './../../Components/ActorMovieCard/ActorMovieCard'
+import { calculateAge } from './../../utils'
 
 dayjs.extend(jalali)
 
-import { getMovies } from '../../Services/Axios/Requests/Movies';
-import { getCastById } from '../../Services/Axios/Requests/Actors';
+import { getMovies } from './../../Services/Axios/Requests/Movies';
+import { getCastById } from './../../Services/Axios/Requests/Actors';
 
 export default function Actors() {
     const [actorObj, setActorObj] = useState(null)

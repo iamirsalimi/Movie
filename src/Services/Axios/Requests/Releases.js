@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addRelease = newRelease => {
     return apiRequests.post('/Releases', newRelease)

@@ -4,12 +4,11 @@ import { useLocation } from 'react-router-dom'
 
 import FilterBox from './../FilterBox/FilterBox'
 import FilterModal from './../FilterModal/FilterModal'
-import MainPageComp from '../mainPageComp/MainPageComp'
+import MainPageComp from './../mainPageComp/MainPageComp'
 
-import useFilter from '../../Hooks/useFilter';
+import useFilter from './../../Hooks/useFilter';
 
 let thisYear = new Date().getFullYear()
-
 
 export default function Content() {
   const [showFilterModal, setShowFilterModal] = useState(false)

@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addRequest = newRequest => {
     return apiRequests.post('/requests', newRequest)

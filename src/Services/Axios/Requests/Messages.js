@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addMessage = newMessage => {
     return apiRequests.post('/ticketMessages', newMessage)

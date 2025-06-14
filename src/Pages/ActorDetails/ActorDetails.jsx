@@ -5,14 +5,14 @@ import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
 
-import { calculateAge } from '../../utils';
+import { calculateAge } from './../../utils';
 
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { getCastById } from '../../Services/Axios/Requests/Actors';
+import { getCastById } from './../../Services/Axios/Requests/Actors';
 
 export default function ActorDetails() {
     const [actorObj, setActorObj] = useState(null)

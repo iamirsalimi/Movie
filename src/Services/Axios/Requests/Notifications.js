@@ -1,4 +1,4 @@
-import apiRequests from "../Configs/configs";
+import apiRequests from "./../Configs/configs";
 
 const addNotification = newNotification => {
     return apiRequests.post('/Notifications', newNotification)

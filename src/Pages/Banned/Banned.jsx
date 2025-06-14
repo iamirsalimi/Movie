@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import dayjs from 'dayjs'
 import jalali from 'jalaliday'
 
-import UserContext from '../../Contexts/UserContext'
+import UserContext from './../../Contexts/UserContext'
 
 dayjs.extend(jalali)
 

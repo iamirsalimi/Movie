@@ -5,17 +5,17 @@ import toast from 'react-hot-toast'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import { getAnnouncements as getAllAnnouncements, addAnnouncement, updateAnnouncement, deleteAnnouncement } from '../../Services/Axios/Requests/Announcements';
-import { getUsers } from '../../Services/Axios/Requests/Users'
-import { getRequests as getAllRequests } from '../../Services/Axios/Requests/Requests';
-import { getTickets as getAllTickets } from '../../Services/Axios/Requests/Tickets';
+import { getAnnouncements as getAllAnnouncements, addAnnouncement, updateAnnouncement, deleteAnnouncement } from './../../Services/Axios/Requests/Announcements';
+import { getUsers } from './../../Services/Axios/Requests/Users'
+import { getRequests as getAllRequests } from './../../Services/Axios/Requests/Requests';
+import { getTickets as getAllTickets } from './../../Services/Axios/Requests/Tickets';
 
 import UserActivityInfo from './../../Components/UserActivityInfo/UserActivityInfo'
-import AnnouncementElem from '../../Components/AnnouncementElem/AnnouncementElem';
-import AnnounceMentModal from '../../Components/AnnounceMentModal/AnnounceMentModal'
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import AnnouncementElem from './../../Components/AnnouncementElem/AnnouncementElem';
+import AnnounceMentModal from './../../Components/AnnounceMentModal/AnnounceMentModal'
+import DeleteModal from './../../Components/DeleteModal/DeleteModal';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 

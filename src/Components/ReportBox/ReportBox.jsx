@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { toast } from 'react-hot-toast'
 
-import { addTicket as addReportTicket } from '../../Services/Axios/Requests/Tickets';
+import { addTicket as addReportTicket } from './../../Services/Axios/Requests/Tickets';
 
 import { RxCross2 } from "react-icons/rx";
 

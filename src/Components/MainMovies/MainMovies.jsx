@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import MovieCard from './../MovieCard/MovieCard'
-import PaginateBtns from '../PaginateBtns/PaginateBtns'
+import PaginateBtns from './../PaginateBtns/PaginateBtns'
 
-import usePagination from '../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
+import usePagination from './../../Hooks/usePagination' // arguments (movies array - default value of currentPage - pageCount or movieElements shown per page) , returns (filteredMovies - bindingObj - currentPage - setCurrentPage - pagesCount - startIndex)
 
 export default function MainMovies({ movies }) {
     // if pagesCount was equals to -1 that means it hasn't initialized yet 

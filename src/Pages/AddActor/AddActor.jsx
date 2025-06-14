@@ -11,15 +11,15 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 
-import { getMovies } from '../../Services/Axios/Requests/Movies';
-import { addCast, getCastById, getCasts, updateCast } from '../../Services/Axios/Requests/Actors';
+import { getMovies } from './../../Services/Axios/Requests/Movies';
+import { addCast, getCastById, getCasts, updateCast } from './../../Services/Axios/Requests/Actors';
 
 export default function AddActor() {
     let { actorId } = useParams()

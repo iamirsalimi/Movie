@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import VipPlanTicket from '../VipPlanTicket/VipPlanTicket';
+import VipPlanTicket from './../VipPlanTicket/VipPlanTicket';
 
 import { RxCross2 } from "react-icons/rx";
 

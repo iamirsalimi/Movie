@@ -8,9 +8,9 @@ import * as yup from 'yup'
 
 import { MdKeyboardArrowRight } from "react-icons/md"
 
-import LoadingContext from '../../Contexts/LoadingContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
-import { addNotification as addNewNotification, updateNotification as updateNotif , getNotificationById } from '../../Services/Axios/Requests/Notifications'
+import { addNotification as addNewNotification, updateNotification as updateNotif , getNotificationById } from './../../Services/Axios/Requests/Notifications'
 
 export default function AdminAddNotifs() {
     const [notifObj, setNotifObj] = useState(null)

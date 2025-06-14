@@ -4,9 +4,9 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import { getTicketByUserId } from './../../Services/Axios/Requests/Tickets';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 import { FaEye } from "react-icons/fa";
 

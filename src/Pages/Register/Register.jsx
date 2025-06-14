@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react'
 
 import toast, { Toaster } from 'react-hot-toast';
 
-import { setCookie } from '../../utils';
-import useInput from '../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
+import { setCookie } from './../../utils';
+import useInput from './../../Hooks/useInput'; // value , binding , resetValue , it gets init value but if we don't pass the init value to it it'll consider the init value as ''
 
-import FormContext from '../../Contexts/FormContext'
-import {registerUser as registerUserHandler , checkUserName} from '../../Services/Axios/Requests/Users'
+import FormContext from './../../Contexts/FormContext'
+import {registerUser as registerUserHandler , checkUserName} from './../../Services/Axios/Requests/Users'
 
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";

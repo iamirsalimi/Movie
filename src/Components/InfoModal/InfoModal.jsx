@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import FormContext from '../../Contexts/FormContext'
+import FormContext from './../../Contexts/FormContext'
 
 export default function InfoModal() {
     let { showModal, setShowModal } = useContext(FormContext)

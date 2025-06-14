@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react'
 
 import WithPageContent from './../../HOCs/WithPageContent'
-import LoadingContext from '../../Contexts/LoadingContext'
-import MoviesContext from '../../Contexts/MoviesContext'
+import LoadingContext from './../../Contexts/LoadingContext'
+import MoviesContext from './../../Contexts/MoviesContext'
 
 
 function Dmca(){

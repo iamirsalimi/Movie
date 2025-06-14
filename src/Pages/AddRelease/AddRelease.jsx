@@ -14,10 +14,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { RxCross2 } from "react-icons/rx";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-import { addRelease, getReleaseById, updateRelease as updateWeeklyRelease } from '../../Services/Axios/Requests/Releases';
-import { getMovieById } from '../../Services/Axios/Requests/Movies';
+import { addRelease, getReleaseById, updateRelease as updateWeeklyRelease } from './../../Services/Axios/Requests/Releases';
+import { getMovieById } from './../../Services/Axios/Requests/Movies';
 
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 

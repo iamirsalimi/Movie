@@ -1,13 +1,13 @@
 import React, { useState, useEffect , useContext } from 'react'
 
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
-import LoadingContext from '../../Contexts/LoadingContext'
+import DeleteModal from './../../Components/DeleteModal/DeleteModal';
+import LoadingContext from './../../Contexts/LoadingContext'
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
 
-import { getMovies , deleteMovie } from '../../Services/Axios/Requests/Movies';
+import { getMovies , deleteMovie } from './../../Services/Axios/Requests/Movies';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {

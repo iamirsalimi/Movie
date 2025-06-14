@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 
 import toast from 'react-hot-toast'
-import UserContext from '../../Contexts/UserContext'
-import LoadingContext from '../../Contexts/LoadingContext'
+import UserContext from './../../Contexts/UserContext'
+import LoadingContext from './../../Contexts/LoadingContext'
 
-import { updateUser } from '../../Services/Axios/Requests/Users'
+import { updateUser } from './../../Services/Axios/Requests/Users'
 
-import WatchListMovieCard from '../../Components/WatchListMovieCard/WatchListMovieCard'
+import WatchListMovieCard from './../../Components/WatchListMovieCard/WatchListMovieCard'
 
 export default function WatchList() {
   let { userObj, setUserObj } = useContext(UserContext)

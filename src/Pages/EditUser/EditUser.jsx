@@ -8,12 +8,12 @@ import * as yup from 'yup'
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import UserContext from '../../Contexts/UserContext';
-import LoadingContext from '../../Contexts/LoadingContext';
+import UserContext from './../../Contexts/UserContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
-import { getUserById, updateUser as updateUserDetails } from '../../Services/Axios/Requests/Users';
+import { getUserById, updateUser as updateUserDetails } from './../../Services/Axios/Requests/Users';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 

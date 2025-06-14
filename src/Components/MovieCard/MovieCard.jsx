@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 
 import toast from "react-hot-toast"
 
-import UserContext from '../../Contexts/UserContext'
+import UserContext from './../../Contexts/UserContext'
 
-import { updateUser } from '../../Services/Axios/Requests/Users';
+import { updateUser } from './../../Services/Axios/Requests/Users';
 
 import { FaTheaterMasks } from "react-icons/fa";
 import { MdOutlineDateRange } from "react-icons/md";

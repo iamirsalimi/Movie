@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 
-import DeleteModal from '../../Components/DeleteModal/DeleteModal';
+import DeleteModal from './../../Components/DeleteModal/DeleteModal';
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -10,9 +10,9 @@ import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
 
-import LoadingContext from '../../Contexts/LoadingContext';
+import LoadingContext from './../../Contexts/LoadingContext';
 
-import { getReleases , deleteRelease } from '../../Services/Axios/Requests/Releases'
+import { getReleases , deleteRelease } from './../../Services/Axios/Requests/Releases'
 
 dayjs.extend(jalali)
 
