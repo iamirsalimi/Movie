@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 import FilterBox from './../FilterBox/FilterBox'
 import FilterModal from './../FilterModal/FilterModal'
-import MainPageComp from './../mainPageComp/MainPageComp'
+import MainPageComp from './../MainPageComp/MainPageComp'
 
 import useFilter from './../../Hooks/useFilter';
 

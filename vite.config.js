@@ -8,4 +8,19 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  build: {
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name][extname]'
+      }
+    }
+  },
+  publicDir: 'public',
+  base: '/',
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  }
 })

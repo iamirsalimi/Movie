@@ -142,22 +142,22 @@
 
 @font-face {
   font-family: Shabnam;
-  src: url("./assets/fonts/Shabnam-Medium.ttf");
+  src: url("/fonts/Shabnam-Medium.ttf");
 }
 
 @font-face {
   font-family: ShabnamLight;
-  src: url("./assets/fonts/Shabnam-Light.ttf");
+  src: url("/fonts/Shabnam-Light.ttf");
 }
 
 @font-face {
   font-family: Vazir;
-  src: url("./assets/fonts/Vazirmatn-Medium.ttf");
+  src: url("/fonts/Vazirmatn-Medium.ttf");
 }
 
 @font-face {
   font-family: VazirLight;
-  src: url("./assets/fonts/Vazirmatn-Light.ttf");
+  src: url("/fonts/Vazirmatn-Light.ttf");
 }
 
 /* custom styles */
