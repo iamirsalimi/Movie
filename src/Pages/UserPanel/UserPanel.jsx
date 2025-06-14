@@ -95,7 +95,6 @@ export default function UserPanel() {
         const getNotifications = async () => {
             try {
                 const data = await getNotificationsHandler()
-
                 if (data.length > 0) {
                     setNotifications(data.filter(notif => !notif.userId || notif.userId == userObj?.id).filter(notif => {
                         // we should show user the notification that made after user registration not earlier notifications

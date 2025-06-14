@@ -57,6 +57,9 @@ export default function BanUserModal({ showModal, setShowModal, userObj, updateU
             }
 
             updateUser(newUserObj)
+            setAccountStatus('active')
+            setBanDuration('30')
+            setBanReason('')
         }
     }
 

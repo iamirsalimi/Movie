@@ -6,13 +6,6 @@ import LoadingContext from '../../Contexts/LoadingContext'
 import { updateUser as updateUserNotifs } from '../../Services/Axios/Requests/Users'
 import { getNotifications } from '../../Services/Axios/Requests/Notifications'
 
-let apiData = {
-  updateUserApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?id=eq.',
-  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Notifications?select=*',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
 export default function Notifs() {
   const [notifications, setNotifications] = useState([])
   const [isPending, setIsPending] = useState(true)
@@ -93,13 +86,15 @@ export default function Notifs() {
   }, [userObj, isPending])
 
   return (
-    <div className="w-full flex flex-col items-center gap-5 mb-16 panel-box py-5">
+    <div className="w-full flex flex-col items-center gap-5 mb-16">
       {!isPending && notifications.map(notification => (
         <NotifAccordian key={notification.id} {...notification} />
       ))}
 
       {isPending == null && notifications.length == 0 && (
-        <h2 className="text-center text-light-gray dark:text-gray-300 text-lg md:text-xl font-vazir text-sm">اطلاعیه ای تا کنون ثبت نشده</h2>
+        <div className="w-full mt-16 panel-box py-5">
+          <h2 className="text-center text-light-gray dark:text-gray-300 text-lg md:text-xl font-vazir">اعلانی تا کنون ثبت نشده</h2>
+        </div>
       )}
 
       {isPending && (

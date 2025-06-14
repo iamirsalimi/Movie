@@ -5,7 +5,7 @@ import RadialProgress from './../RadialProgress/RadialProgress'
 export default function Card({ id, title, cover, description, isActive, movieType, imdb_score}) {
   // console.log(genre)
   return (
-    <a href={`${movieType}/${id}`}>
+    <a href={`/${movieType}/${id}`}>
       <div className={`relative h-full w-full space-y-2.5 group ${isActive && 'cursor-pointer'}`}>
         <div className="w-full h-full overflow-hidden rounded-lg">
           <img src={cover} className="h-full w-full object-center object-cover" alt="" />

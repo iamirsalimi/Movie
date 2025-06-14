@@ -308,7 +308,11 @@ export default function AdminDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="min-w-full">
-                                    {!ticketsIsPending && tickets?.map(ticket => (
+                                    {!ticketsIsPending && tickets?.sort((a, b) => {
+                                        let aDate = new Date(a.created_at)
+                                        let bDate = new Date(b.created_at)
+                                        return bDate - aDate
+                                    }).slice(0 , 5).map(ticket => (
                                         <tr key={ticket.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.id}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{ticket.userName}</td>
@@ -353,7 +357,11 @@ export default function AdminDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="min-w-full">
-                                    {!requestsIsPending && requests?.map(request => (
+                                    {!requestsIsPending && requests?.sort((a, b) => {
+                                        let aDate = new Date(a.created_at)
+                                        let bDate = new Date(b.created_at)
+                                        return bDate - aDate
+                                    }).slice(0 , 5).map(request => (
                                         <tr key={request.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.id}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>

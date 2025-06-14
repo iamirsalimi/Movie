@@ -58,7 +58,12 @@ export default function WithPageContent(Comp, movieContent) {
                         </div>
                         {/* <NewMoviesTable movies={movies.filter(movie => movie.is_in_new_movies)} /> */}
                         <NewMoviesTable movies={movies} />
-                        <UpdatedSeries series={movies?.filter(movie => movie.movieType == 'series')} />
+                        <UpdatedSeries series={movies?.filter(movie => movie.movieType == 'series').sort((a , b) => {
+                            let aDate = new Date(a.updated_at).getTime()
+                            let bDate = new Date(b.updated_at).getTime()
+
+                            return bDate - aDate
+                        })} />
                         <GenreTables genre={genres} movies={movies} />
                     </div>
                 </div>

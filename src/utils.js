@@ -49,56 +49,6 @@ const deleteCookie = (cookieName, cookieValue) => {
   location.reload()
 }
 
-let apiData = {
-  getAllUsersApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
-  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/users?userToken=eq.',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
-// const getUserInfo = async (token) => {
-//     let userObj = null
-//     await fetch(`${apiData.getApi}${token}`, {
-//         headers: {
-//             'apikey': apiData.apikey,
-//             'Authorization': apiData.authorization
-//         }
-//     }).then(res => res.json())
-//         .then(data => {
-//             if (data.length > 0) {
-//                 userObj = data[0]
-//             }
-//         })
-//         .catch(err => {
-//             userObj = null
-//             console.log(err)
-//         })
-
-//     return userObj
-// }
-
-const getUserInfo = async (token) => {
-  try {
-    const res = await fetch(`${apiData.getApi}${token}`, {
-      headers: {
-        'apikey': apiData.apikey,
-        'Authorization': apiData.authorization
-      }
-    })
-
-    const data = await res.json();
-
-    if (data.length === 0) {
-      return null;
-    }
-
-    return data[0]
-  } catch (err) {
-    console.log('fetch error')
-    return null
-  }
-}
-
 const calculateAge = actorBirthDate => {
   const today = new Date()
   const birthDate = new Date(actorBirthDate)
@@ -162,4 +112,4 @@ const checkUserBanStatus = async userObj => {
   return false
 }
 
-export { findArrayByIds, setCookie, getCookie, getUserInfo, deleteCookie, calculateAge, checkUserSubscriptionStatus , checkUserBanStatus }
+export { findArrayByIds, setCookie, getCookie, deleteCookie, calculateAge, checkUserSubscriptionStatus , checkUserBanStatus }

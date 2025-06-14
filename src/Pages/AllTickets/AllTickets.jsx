@@ -8,9 +8,7 @@ import { getTicketByUserId } from '../../Services/Axios/Requests/Tickets';
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
 
-import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
-import { LuTrash2 } from "react-icons/lu";
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -40,12 +38,13 @@ export default function AllTickets() {
   let { userObj } = useContext(UserContext)
   const { loading, setLoading } = useContext(LoadingContext)
 
+  console.log(userObj)
   useEffect(() => {
     const getAllTickets = async () => {
       try {
         const data = await getTicketByUserId(userObj?.id)
-
-        if (data.length > 0) {
+        console.log(data)
+        if (data) {
           let sortedMoviesArray = data.filter(ticket => ticket.userId == userObj.id).sort((a, b) => {
             let aDate = new Date(a.created_at).getTime()
             let bDate = new Date(b.created_at).getTime()
@@ -91,7 +90,7 @@ export default function AllTickets() {
   }, [searchValue, searchType])
 
   useEffect(() => {
-    if (tickets?.length > 0 && loading) {
+    if (tickets && loading) {
       setLoading(false)
     }
   }, [tickets])

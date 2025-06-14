@@ -1,4 +1,4 @@
-import { useContext , memo } from 'react'
+import { useContext, memo } from 'react'
 import { useLocation } from 'react-router-dom';
 
 import ThemeContext from '../../Contexts/ThemeContext';
@@ -23,11 +23,13 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
 
     const checkUserNewNotifs = () => {
         // if a notification has been read by user its id will added to user "read_notifications" array and by checking that we will realize if user had any new notifications ,and use the length of unread notifications to show them you have a new notification 
-        let filteredNotifs = notifications.filter(notif => !user.read_notifications?.some(notifId => notif.id == notifId))
-        return filteredNotifs 
+        let filteredNotifs = notifications?.filter(notif => !user.read_notifications?.some(notifId => notif.id == notifId))
+        return filteredNotifs
     }
 
-    let links = [{ title: 'صفحه اصلی', href: '/', paginate: "/page/" }, { title: 'DMCA', href: '/dmca' } , { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
+    console.log(notifications)
+
+    let links = [{ title: 'صفحه اصلی', href: '/', paginate: "/page/" }, { title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
 
     return (
         <nav className={`${navFlag ? 'shadow shadow-black/5 bg-white dark:bg-secondary' : 'absolute top-0'} w-full z-40 transition-colors`}>
@@ -45,7 +47,7 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">
-                        {links.map((link , index) => {
+                        {links.map((link, index) => {
                             if (link.title == 'خرید اشتراک' && user?.role == 'admin') {
                                 return false
                             }
@@ -56,22 +58,6 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                                 </a>
                             )
                         })}
-
-                        {/* <a href="#">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">خرید اشتراک</li>
-                        </a>
-                        <a href="#">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">فیلم های برتر</li>
-                        </a>
-                        <a href="#">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">سریال های برتر</li>
-                        </a>
-                        <a href="#">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">انیمه های برتر</li>
-                        </a>
-                        <a href="/dmca">
-                            <li className="font-vazir text-gray-500  p-1 px-2 rounded-lg hover:bg-gray-50 hover:text-sky-400 dark:text-white dark:hover:bg-secondary transition-colors">DMCA</li>
-                        </a> */}
                     </ul>
                 </div>
                 <div className="flex items-center justify-end gap-2">
@@ -91,12 +77,26 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                         </svg>
                     </button>
                     {hasUserLoggedIn && user?.role != 'admin' && (
-                        <a href='/my-account/userPanel/notifications' className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
-                            <IoNotificationsOutline className="text-2xl" />
-                            {checkUserNewNotifs().length > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">{checkUserNewNotifs().length}</span>
+                        <div className="relative group">
+                            <a href='/my-account/userPanel/notifications' className={`relative flex items-center p-2 rounded-xl border ${navFlag ? 'bg-white text-light-gray dark:text-white border-gray-300 dark:border-none hover:bg-black/5 dark:hover:bg-white/5 dark:' : 'border-none text-white hover:bg-gray-800 '}bg-primary cursor-pointer transition-all`}>
+                                <IoNotificationsOutline className="text-2xl peer" />
+
+                                {checkUserNewNotifs().length > 0 && (
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 text-sm flex items-center justify-center rounded-full bg-sky-500 text-white">{checkUserNewNotifs().length}</span>
+                                )}
+                            </a>
+                            {notifications?.length > 0 && (
+                                <ul className="absolute hidden md:flex top-full mt-2 left-1/2 -translate-x-1/2 bg-white dark:bg-primary border border-gray-300 dark:border-gray-700 opacity-0 invisible group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 rounded-xl shadow-xl w-80 p-3 transition-all duration-200 flex-col items-center gap-1">
+                                    {notifications?.slice(0, 3).map(notif => (
+                                        <li className="p-1 rounded-lg bg-gray-50 dark:bg-secondary select-none">
+                                            <h2 className="text-light-gray dark:text-white text-sm font-vazir">{notif.title}</h2>
+                                            <p className="text-gray-400 dark:text-gray-500 text-xs line-clamp-1 font-vazir-light">{notif.text}</p>
+                                        </li>
+                                    ))}
+                                    <a href="/my-account/userPanel/notifications" className="mt-2 text-sky-500 hover:bg-sky-500 hover:text-white transition-colors px-2 py-1 rounded-md font-shabnam text-sm">مشاهده کل اعلان ها</a>
+                                </ul>
                             )}
-                        </a>
+                        </div>
                     )}
                     <div className="flex items-center justify-center gap-2">
                         <a href={hasUserLoggedIn ? `/my-account/${user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>

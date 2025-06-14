@@ -187,8 +187,36 @@ export default function AdminAllTickets() {
                         <tbody>
                             {!isPending && !error &&
                                 filteredTickets.length > 0 && (
-                                    filteredTickets.map(ticket => (
-                                        <tr className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
+                                    filteredTickets.sort((a,b) => {
+                                        if(a.priority == 'high' && b.priority != 'high'){
+                                            return -1
+                                        }
+
+                                        if(a.priority !== 'high' && b.priority == 'high'){
+                                            return 1
+                                        }
+
+                                        if(a.priority == 'middle' && b.priority != 'middle'){
+                                            return -1
+                                        }
+
+                                        if(a.priority !== 'middle' && b.priority == 'middle'){
+                                            return 1
+                                        }
+
+                                        return 0
+                                    }).sort((a, b) => {
+                                        if (!a.is_read_by_admin && b.is_read_by_admin) {
+                                            return -1
+                                        }
+
+                                        if (a.is_read_by_admin && !b.is_read_by_admin) {
+                                            return 1
+                                        }
+
+                                        return 0
+                                    }).map(ticket => (
+                                        <tr key={ticket.id} className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
                                             <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
                                                 {!ticket.is_read_by_admin && (
                                                     <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>

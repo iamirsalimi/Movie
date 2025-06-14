@@ -110,7 +110,6 @@ export default function AdminComments() {
 
                         return bDate - aDate
                     }).sort((a, b) => {
-                        console.log(a.status, b.status)
                         if (a.status == 'pending' && b.status != 'pending') {
                             return -1
                         }
@@ -240,11 +239,11 @@ export default function AdminComments() {
                         <li className="flex flex-col md:flex-row items-center justify-center gap-2 md:justify-between w-full font-vazir p-2 text-sm sm:text-base">
                             <h3 className="text-light-gray dark:text-gray-500">دارای اسپویل هست؟</h3>
                             <div className="w-full md:w-fit relative flex items-center justify-center gap-1">
-                                <div className="filter-lang flex items-center">
-                                    <input type="checkbox" className="hidden" id="dubed" checked={commentHasSpoil} onChange={e => setCommentHasSpoil(e.target.checked)} />
-                                    <label htmlFor="dubed" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
-                                        <div className="flex items-center w-12 rounded-full bg-gray-300 dark:bg-gray-700 p-0.5 cursor-pointer transition-colors">
-                                            <span className="inline-block rounded-full w-6 h-6 transition-all translate-x-0 bg-white"></span>
+                                <div className="flex items-center">
+                                    <input type="checkbox" className="hidden" id="spoil-details" checked={commentHasSpoil} onChange={e => setCommentHasSpoil(e.target.checked)} />
+                                    <label htmlFor="spoil-details" className="text-light-gray dark:text-white font-shabnam select-none text-nowrap flex items-center justify-center gap-2">
+                                        <div className={`flex items-center w-12 rounded-full bg-white dark:bg-gray-700 p-0.5 cursor-pointer transition-colors`}>
+                                            <span className={`inline-block rounded-full w-6 h-6 transition-all ${commentHasSpoil ? '!-translate-x-4/5 bg-sky-500' : 'translate-x-0 bg-gray-400 dark:bg-white'}`}></span>
                                         </div>
                                     </label>
                                 </div>

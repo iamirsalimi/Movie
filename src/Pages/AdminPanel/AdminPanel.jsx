@@ -3,12 +3,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { getCookie, getUserInfo, deleteCookie } from '../../utils';
+import { getCookie, deleteCookie } from '../../utils';
 import ThemeContext from '../../Contexts/ThemeContext';
 import UserContext from '../../Contexts/UserContext';
 import LoadingContext from '../../Contexts/LoadingContext';
 import LogoutModal from './../../Components/LogoutModal/LogoutaModal'
 import Loader from '../../Components/Loader/Loader'
+
+import { getUserByToken } from '../../Services/Axios/Requests/Users';
 
 import { FaUser } from "react-icons/fa";
 import { TbLogout2 } from "react-icons/tb";
@@ -74,7 +76,7 @@ export default function AdminPanel() {
         }
 
         const fetchUser = async () => {
-            const user = await getUserInfo(token)
+            const user = await getUserByToken(token)
             if (user) {
                 setUserObj(user)
             } else {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState , useContext } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -44,12 +44,12 @@ export default function MovieDetails() {
     const { loading, setLoading } = useContext(LoadingContext)
 
     // to calc how much users liked movie
-    const calcSiteScores = (siteScores , value) => {
-        let likesCount = siteScores?.reduce((a , b) => b.likeStatus == value ? a + 1 : a , 0)
-        
+    const calcSiteScores = (siteScores, value) => {
+        let likesCount = siteScores?.reduce((a, b) => b.likeStatus == value ? a + 1 : a, 0)
+
         let likedRates = 0
-        if(likesCount > 0){
-            likedRates = siteScores?.length * 100 / likesCount 
+        if (likesCount > 0) {
+            likedRates = siteScores?.length * 100 / likesCount
         }
 
         return likedRates
@@ -135,10 +135,10 @@ export default function MovieDetails() {
     }, [commentSearchValue, commentSearchType])
 
     useEffect(() => {
-        if(movieObj && commentIsPending == null && loading){
+        if (movieObj && commentIsPending == null && loading) {
             setLoading(false)
         }
-    } , [movieObj , commentIsPending])
+    }, [movieObj, commentIsPending])
 
     const getDate = date => {
         let newDate = new Date(date)
@@ -247,11 +247,11 @@ export default function MovieDetails() {
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نظر کاربران (لایک) :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores , 'liked')}% پسندیدند</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores, 'liked')}% پسندیدند</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">نظر کاربران (دیسلایک) :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores , 'disliked')}% نپسندیدند</span>
+                                <span className="text-vazir-light text-primary dark:text-white">{calcSiteScores(movieObj.site_scores, 'disliked')}% نپسندیدند</span>
                             </li>
                             <li className="w-full py-1 flex items-center justify-between">
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">کشورها :</h3>
@@ -293,18 +293,6 @@ export default function MovieDetails() {
                                 <h3 className="text-vazir text-light-gray dark:text-gray-500">داخل جديد ترين فيلم ها باشد؟</h3>
                                 <span className="text-vazir-light text-primary dark:text-white">{movieObj.is_in_new_movies ? 'بله' : 'خیر'}</span>
                             </li>
-                            {/* <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">تعداد كامنت ها :</h3>
-                                <span className="text-vazir-light text-primary dark:text-white">3</span>
-                            </li>
-                            <li className="w-full py-1 flex items-center justify-between">
-                                <h3 className="text-vazir text-light-gray dark:text-gray-500">كامنت ها :</h3>
-                                <button
-                                    className="bg-sky-500 hover:bg-sky-600 transition-colors text-white dark:text-primary cursor-pointer font-vazir py-1 px-2 rounded-md"
-                                    onClick={e => commentsRef.current.scrollIntoView({ behavior: 'smooth' })}
-                                >مشاهده</button>
-
-                            </li> */}
                         </ul>
                         <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">لیست هنر پیشه ها</h2>
@@ -343,6 +331,23 @@ export default function MovieDetails() {
                                     </div>
                                 )) : (
                                     <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">هنرپیشه ای تا الان ثبت نشده</h2>
+                                )}
+                            </ul>
+                        </div>
+
+                        <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
+                            <h2 className="text-gray-700 dark:text-white font-vazir text-lg">لیست فیلم های مشابه ها</h2>
+                            <ul className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
+                                {movieObj.similarMovies.length > 0 ? movieObj.similarMovies.map(movie => (
+                                    <a href={`/my-account/adminPanel/movies/movie-details/${movie.movieId}`} className="pb-2">
+                                        <li className={`group overflow-hidden relative rounded-lg h-64 cursor-pointer mb-2`}>
+                                            <img src={movie.cover} className="w-full h-full object-cover object-center" alt="" />
+                                            <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-white/0 flex items-center justify-center duration-200"></span>
+                                            <span className="absolute text-center text-xs opacity-0 bottom-1 left-1/2 -translate-1/2 scale-50 text-white transition-all group-hover:scale-100 group-hover:opacity-100 duration-200">{movie.title}</span>
+                                        </li>
+                                    </a>
+                                )) : (
+                                    <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">فیلم مشابه ای تا الان ثبت نشده</h2>
                                 )}
                             </ul>
                         </div>

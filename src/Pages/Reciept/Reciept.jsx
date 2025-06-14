@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
-import { getCookie, getUserInfo } from '../../utils'
+import { getCookie } from '../../utils'
+import { getUserByToken } from '../../Services/Axios/Requests/Users';
 
 import Loader from '../../Components/Loader/Loader'
 
@@ -26,7 +27,7 @@ export default function Reciept() {
         }
 
         const fetchUser = async () => {
-            const user = await getUserInfo(token)
+            const user = await getUserByToken(token)
             if (user) {
                 setUserObj(user)
 

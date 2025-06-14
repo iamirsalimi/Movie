@@ -36,7 +36,7 @@ const deleteRelease = id => {
 }
 
 const updateRelease = (id, movieObj) => {
-    return apiRequests.patch('/movies', movieObj, {
+    return apiRequests.patch('/Releases', movieObj, {
         params: {
             id: `eq.${id}`
         }

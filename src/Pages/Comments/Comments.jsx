@@ -46,10 +46,10 @@ export default function Comments() {
   }, [userObj])
 
   useEffect(() => {
-    if(userObj && isPending == null){
+    if (userObj && isPending == null) {
       setLoading(false)
     }
-  } , [userObj , isPending])
+  }, [userObj, isPending])
 
   return (
     <div className="panel-box flex flex-col gap-4 py-4 px-5 mb-16">
@@ -68,7 +68,7 @@ export default function Comments() {
             {comments.length > 0 ? comments?.filter(comment => comment.userId == userObj.id).map(comment => (
               <PanelComment key={comment.id} comments={comments} {...comment} />
             )) : (
-              <h2 className="text-center font-vazir text-red-500 text-sm">شما تا کنون کامنتی نذاشته اید</h2>
+              <h2 className="text-center text-light-gray dark:text-gray-300 text-lg md:text-xl font-vazir text-sm">شما تا کنون کامنتی نذاشته اید</h2>
             )}
           </>
         )}

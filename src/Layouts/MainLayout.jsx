@@ -167,7 +167,11 @@ export default function MainLayout() {
     return (
         <UserContext.Provider value={{ userObj, setUserObj }}>
             <div dir="rtl" className="relative flex flex-col bg-light dark:bg-primary">
-                <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} notifications={notifications} />
+                <NavBar showMenu={showMenu} setShowMenu={setShowMenu} showModal={showSearchModal} setShowModal={setShowSearchModal} hasUserLoggedIn={hasUserLoggedIn} user={userObj} notifications={notifications.sort(notif => {
+                    let aDate = new Date(notif.created_at).getTime()
+                    let bDate = new Date(notif.created_at).getTime()
+                    return bDate - aDate
+                })} />
 
                 <MoviesContext.Provider value={{
                     isPending,

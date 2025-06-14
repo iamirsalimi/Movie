@@ -12,7 +12,7 @@ import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
-import { getRequests as getAllReqs , updateRequest as updateReq } from '../../Services/Axios/Requests/Requests'
+import { getRequests as getAllReqs, updateRequest as updateReq } from '../../Services/Axios/Requests/Requests'
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -84,10 +84,30 @@ export default function AdminRequests() {
                 const data = await getAllReqs()
 
                 if (data.length > 0) {
-                    let sortedRequestsArray = data.sort((a, b) => {
+                    // sorting Requests to make pending Requests above of others
+                    const sortedRequestsArray = data.sort((a, b) => {
                         let aDate = new Date(a.created_at).getTime()
                         let bDate = new Date(b.created_at).getTime()
+
                         return bDate - aDate
+                    }).sort((a, b) => {
+                        if (a.status == 'pending' && b.status != 'pending') {
+                            return -1
+                        }
+
+                        if (a.status != 'pending' && b.status == 'pending') {
+                            return 1
+                        }
+
+                        if (a.status == 'approved' && b.status != 'approved') {
+                            return -1
+                        }
+
+                        if (a.status != 'approved' && b.status == 'approved') {
+                            return 1
+                        }
+
+                        return 0;
                     })
                     setRequests(sortedRequestsArray)
                     setFilteredRequests(sortedRequestsArray)

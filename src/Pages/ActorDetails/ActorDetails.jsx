@@ -117,24 +117,15 @@ export default function ActorDetails() {
                         </ul>
                         <div className="w-full flex flex-col items-start justify-center gap-2 my-5">
                             <h2 className="text-gray-700 dark:text-white font-vazir text-lg">مجموعه آثار هنرپیشه</h2>
-                            <ul className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
+                            <ul className="w-full grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 gap-y-7 font-vazir text-light-gray dark:text-white p-2 border border-gray-200 dark:border-primary rounded-xl">
                                 {actorObj.movies.length > 0 ? actorObj.movies.map(movie => (
-                                    <div key={movie.id} className="flex flex-col items-center justify-center gap-2 py-1 px-2 rounded-md bg-gray-200 dark:bg-primary divide-y divide-white dark:divide-secondary">
-                                        <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">ID فیلم :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{movie.movieId}</span>
+                                    <a href={`/my-account/adminPanel/movies/movie-details/${movie.movieId}`} className="pb-2">
+                                        <li className={`group overflow-hidden relative rounded-lg h-64 cursor-pointer mb-2`}>
+                                            <img src={movie.cover} className="w-full h-full object-cover object-center" alt="" />
+                                            <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-white/0 flex items-center justify-center duration-200"></span>
+                                            <span className="absolute text-center text-xs opacity-0 bottom-1 left-1/2 -translate-1/2 scale-50 text-white transition-all group-hover:scale-100 group-hover:opacity-100 duration-200">{movie.title}</span>
                                         </li>
-
-                                        <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نام فیلم  :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{movie.title}</span>
-                                        </li>
-
-                                        <li className="w-full py-1 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-1">
-                                            <h3 className="text-vazir text-light-gray dark:text-gray-500 text-sm sm:text-base">نقش هنرپیشه :</h3>
-                                            <span className="text-vazir-light text-primary dark:text-white">{movie.role}</span>
-                                        </li>
-                                    </div>
+                                    </a>
                                 )) : (
                                     <h2 className="lg:col-start-1 lg:col-end-3 text-center text-red-500 font-vazir">اثری برای هنرپیشه ثبت نشده</h2>
                                 )}

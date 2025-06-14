@@ -62,7 +62,9 @@ function Movie() {
     const [isAdding, setIsAdding] = useState(false)
     const [showShareModal, setShowShareModal] = useState(false)
     const [showReportModal, setShowReportModal] = useState(false)
-    let toastId = null
+    let watchListToastId = null
+    let likeToastId = null
+    let commentToastId = null
 
     const location = useLocation();
 
@@ -93,17 +95,17 @@ function Movie() {
     }
 
     const addCommentHandler = async newComment => {
-        toastId = toast.loading('در حال افزودن کامنت')
+        commentToastId = toast.loading('در حال افزودن کامنت')
         await addComment(newComment)
             .then(res => {
                 setIsAdding(false)
                 setGetComments(prev => !prev)
-                toast.dismiss(toastId)
+                toast.dismiss(commentToastId)
                 toast.success('دیدگاه شما با موفقیت اضافه شد و پس از تایید ادمین نمایش داده می شود')
             })
             .catch(err => {
                 setIsAdding(false)
-                toast.dismiss(toastId)
+                toast.dismiss(commentToastId)
                 toast.error('مشکلی در افزودن دیدگاه پیش آمده')
             })
     }
@@ -169,8 +171,6 @@ function Movie() {
     const updateUserHandler = async (newUserObj, addFlag) => {
         await updateUser(userObj.id, newUserObj)
             .then(res => {
-                toast.dismiss(toastId)
-                toastId = null
                 if (addFlag) {
                     toast.success('فیلم به لیست تماشا اضافه شد')
                 } else {
@@ -180,9 +180,10 @@ function Movie() {
             })
             .catch(err => {
                 console.log(err)
-                toast.dismiss(toastId)
-                toastId = null
                 toast.error('مشکلی در افزودن فیلم به لیست تماشا پیش آمده')
+            }).finally(res => {
+                toast.dismiss(watchListToastId)
+                watchListToastId = null
             })
     }
 
@@ -215,8 +216,8 @@ function Movie() {
         newUserObj.watchList.push(newWatchListObj)
 
 
-        if (!toastId) {
-            toastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
+        if (!watchListToastId) {
+            watchListToastId = toast.loading('در حال افزودن فیلم به لیست تماشا')
             updateUserHandler(newUserObj, true)
         }
     }
@@ -226,8 +227,8 @@ function Movie() {
         let newWatchList = newUserObj?.watchList.filter(movie => mainMovie.id != movie.movieId)
         newUserObj.watchList = [...newWatchList]
 
-        if (!toastId) {
-            toastId = toast.loading('در حال حذف فیلم از لیست تماشا')
+        if (!watchListToastId) {
+            watchListToastId = toast.loading('در حال حذف فیلم از لیست تماشا')
             updateUserHandler(newUserObj)
         }
     }
@@ -238,7 +239,7 @@ function Movie() {
                 console.log(res)
                 setMainMovie(newMovieObj)
                 if (!removeFlag) {
-                    toast.dismiss(toastId)
+                    toast.dismiss(likeToastId)
                     if (likeFlag) {
                         toast.success('فیلم با موفقیت لایک شد')
                     } else {
@@ -254,7 +255,7 @@ function Movie() {
             })
             .catch(err => {
                 setIsAdding(false)
-                toast.dismiss(toastId)
+                toast.dismiss(likeToastId)
                 toast.error('مشکلی در آپدیت لایک های فیلم پیش آمده')
             })
     }
@@ -308,7 +309,7 @@ function Movie() {
 
             // console.log('removed')
         }
-        toastId = toast.loading('در حال آپدیت لایک های فیلم')
+        likeToastId = toast.loading('در حال آپدیت لایک های فیلم')
         let newMainMovie = { ...mainMovie }
         newMainMovie.site_scores = [...scores]
         updateMovieLikesHandler(newMainMovie, true, removeFlag)
@@ -354,7 +355,7 @@ function Movie() {
         }
         // console.log(scores)
 
-        toastId = toast.loading('در حال آپدیت لایک های فیلم')
+        likeToastId = toast.loading('در حال آپدیت لایک های فیلم')
         let newMainMovie = { ...mainMovie }
         newMainMovie.site_scores = [...scores]
         updateMovieLikesHandler(newMainMovie, false, removeFlag)
@@ -530,7 +531,7 @@ function Movie() {
                                                         <FaTheaterMasks className="text-xl" />
                                                         <span>ژانر</span>
                                                     </span>
-                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genres.map((genreItem , index) => (
+                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.genres.map((genreItem, index) => (
                                                         <span key={index} className="group px-0.5 md:px-1"><span>{genreItem}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                     ))}</span>
                                                 </li>
@@ -548,7 +549,7 @@ function Movie() {
                                                         <FiFlag className="text-xl" />
                                                         <span>محصول</span>
                                                     </span>
-                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.countries.map((country , index) => (
+                                                    <span className="text-nowrap text-white font-vazir-light text-sm">{mainMovie.countries.map((country, index) => (
                                                         <span key={index} className="group px-0.5 md:px-1"><span>{country}</span><span className="group-last:hidden text-slate-500"> .</span></span>
                                                     ))}</span>
                                                 </li>

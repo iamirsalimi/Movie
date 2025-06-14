@@ -21,15 +21,6 @@ import LoadingContext from '../../Contexts/LoadingContext';
 
 dayjs.extend(jalali)
 
-let apiData = {
-    getMovieApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?id=eq.',
-    updateApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases?id=eq.',
-    postApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Releases?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
 const genres = {
     'movie': ['اکشن', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'ماجراجویی', 'انیمه', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی'],
     'series': ['اکشن', 'Talk-Show', 'ترسناک', 'انیمیشن', 'تاریخی', 'جنایی', 'جنگی', 'خانوادگی', 'درام', 'زندگی نامه', 'عاشقانه', 'علمی تخیلی', 'فانتزی', 'کمدی', 'کوتاه', 'انیمه', 'ماجراجویی', 'مستند', 'معمایی', 'موزیکال', 'وسترن', 'نوآر', 'هیجان انگیز', 'ورزشی', 'موسیقی']
@@ -229,7 +220,7 @@ export default function AddRelease() {
             })
             .catch(err => {
                 setIsAdding(false)
-                console.log('مشکلی در آپدیت هنرپیشه پیش آمده')
+                console.log('مشکلی در آپدیت پخش پیش آمده')
             })
     }
 
@@ -261,7 +252,7 @@ export default function AddRelease() {
             })
             .catch(err => {
                 setIsAdding(false)
-                console.log('مشکلی در افزودن فیلم پیش آمده')
+                console.log('مشکلی در افزودن پخش پیش آمده')
             })
     }
 

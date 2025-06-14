@@ -71,8 +71,8 @@ export default function WatchList() {
 
       {!isPending && watchList?.length == 0 && (
         <div className="flex flex-col items-center gap-2">
-          <h2 className="text-center text-red-500 font-vazir text-sm mt-4">فيلمي در ليست تماشا وجود ندارد</h2>
-          <a href="/" className="inline-block py-1 px-2 rounded-md font-vazir bg-sky-500 hover:bg-sky-600 transition-colors text-white">مشاهده فيلم ها</a>
+          <h2 className="text-center text-light-gray dark:text-gray-300 text-lg md:text-xl font-vazir text-sm">فيلمي در ليست تماشا وجود ندارد</h2>
+          <a href="/" className="inline-block py-1 px-2 rounded-md font-vazir bg-sky-500 hover:bg-sky-600 transition-colors text-white">افزودن فيلم ها</a>
         </div>
       )}
     </div>

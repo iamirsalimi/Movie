@@ -11,12 +11,8 @@ import { calculateAge } from '../../utils'
 
 dayjs.extend(jalali)
 
-let apiData = {
-    getAllApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Movies?select=*',
-    getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
-    apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
+import { getMovies } from '../../Services/Axios/Requests/Movies';
+import { getCastById } from '../../Services/Axios/Requests/Actors';
 
 export default function Actors() {
     const [actorObj, setActorObj] = useState(null)
@@ -38,14 +34,7 @@ export default function Actors() {
     useEffect(() => {
         const getActorInfo = async (actorId) => {
             try {
-                const res = await fetch(`${apiData.getApi}${actorId}`, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
+                const data = await getCastById(actorId)
 
                 if (data.length > 0) {
                     setActorObj(data[0])
@@ -68,15 +57,8 @@ export default function Actors() {
     useEffect(() => {
         const getAllMovies = async () => {
             try {
-                const res = await fetch(apiData.getAllApi, {
-                    headers: {
-                        'apikey': apiData.apikey,
-                        'Authorization': apiData.authorization
-                    }
-                })
-
-                const data = await res.json()
-
+                const data = await getMovies()
+                
                 if (data.length > 0) {
                     // find the exact obj of movies
                     let actorMoviesArray = actorObj.movies?.map(actorMovie => {
