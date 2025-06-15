@@ -123,8 +123,8 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
     }, [replies])
 
     // check if user liked comment or not
-    const checkLike = () => likes.includes(userObj.id)
-    const checkDisLike = () => disLikes.includes(userObj.id)
+    const checkLike = () => likes.includes(userObj?.id)
+    const checkDisLike = () => disLikes.includes(userObj?.id)
 
     return (
         <>
