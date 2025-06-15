@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import MoviesFormImage from '../assets/Movies-Form.jpg'
 
 import InfoModal from './../Components/InfoModal/InfoModal'
 import FormContext from './../Contexts/FormContext'
@@ -17,13 +18,11 @@ export default function Form() {
                     <Outlet />
                 </div>
                 <div className="hidden min-h-screen lg:inline lg:w-1/2 xl:w-3/5 rounded-r-2xl overflow-hidden">
-                    <img src="/src/assets/Movies-Form.jpg" className="w-full !min-h-screen object-center object-cover" />
+                    <img src={MoviesFormImage} className="w-full !min-h-screen object-center object-cover" />
                 </div>
 
                 <InfoModal />
             </div>
         </FormContext.Provider>
-
-        
     )
 }
