@@ -154,21 +154,21 @@ export default function AdminAllNotifs() {
                         <table className="w-full">
                             <thead className="min-w-full">
                                 <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ID کاربر</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">type</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ID کاربر</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">type</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {!isPending && filteredNotifications.map(notification => (
                                     <tr key={notification.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.id}</td>
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.userId || 'تعیین نشده'}</td>
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">{notification.title}</td>
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.type}</td>
+                                        <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.id}</td>
+                                        <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.userId || 'تعیین نشده'}</td>
+                                        <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">{notification.title}</td>
+                                        <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.type}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir min-w-36 max-w-36">{notification.text}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                             <a

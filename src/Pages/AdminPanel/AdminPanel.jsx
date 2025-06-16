@@ -109,7 +109,7 @@ export default function AdminPanel() {
                             <div className="relative w-24 h-24 rounded-full bg-gray-400 overflow-hidden ring-8 ring-gray-300/25 dark:ring-gray-700/25">
                                 <FaUser className="text-white absolute -bottom-10 left-1/2 -translate-1/2 w-20 h-20" />
                             </div>
-                            <h2 className="text-light-gray dark:text-white font-vazir">سلام {userObj?.firstName} {userObj?.lastName} خوش آمدید</h2>
+                            <h2 className="text-light-gray dark:text-white font-vazir mt-2 md:mt-0 text-sm md:text-base">سلام {userObj?.firstName} {userObj?.lastName} خوش آمدید</h2>
                         </div>
                         <div className="w-full flex items-center justify-center gap-4">
 
@@ -165,31 +165,31 @@ export default function AdminPanel() {
                 <div className="w-full lg:w-3/4 min-h-screen max-h-fit mr-auto bg-light dark:bg-primary px-2 xs:px-5 py-7">
                     <div className="w-full h-full flex flex-col items-center gap-7 mb-10">
 
-                        <div className="w-full flex items-center justify-between">
-                            <a href="/" className="flex items-center p-2 rounded-xl border text-light-gray dark:text-white border-gray-300 hover:bg-gray-100 hover:border-gray-200 dark:border-none dark:bg-secondary dark:hover:bg-white/5 cursor-pointer transition-all">
-                                <MdKeyboardArrowRight className="stroke-white text-2xl" />
-                                <span className="text-sm font-vazir">بازگشت به صفحه اصلی</span>
+                        <div className="px-5 w-full flex items-center justify-between">
+                            <a href="/" className="flex items-center p-1 md:p-2 rounded-xl border text-light-gray dark:text-white border-gray-300 hover:bg-gray-100 hover:border-gray-200 dark:border-none dark:bg-secondary dark:hover:bg-white/5 cursor-pointer transition-all">
+                                <MdKeyboardArrowRight className="stroke-white text-lg sm:text-xl md:text-2xl" />
+                                <span className="text-sm md:text-sm font-vazir">بازگشت به صفحه اصلی</span>
                             </a>
-                            <span className="text-light-gray dark:text-white font-vazir">{mainLocationObj?.title}</span>
+                            <span className="text-light-gray dark:text-white font-vazir text-sm md:text-base">{mainLocationObj?.title}</span>
                         </div>
 
                         <Outlet />
                     </div>
                 </div>
 
-                <div className="w-full h-fit flex items-center justify-between z-10 fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-3 xs:px-5 py-4 lg:hidden">
+                <div className="w-full h-fit flex items-center justify-between z-10 fixed bottom-0 left-0 bg-gray-100 shadow shadow-black/25 dark:bg-secondary px-5 py-4 lg:hidden">
 
                     <a href="/my-account/userPanel/" className="flex flex-col items-center justify-center gap-1">
                         <LuLayoutDashboard className={`text-light-gray dark:text-white text-xl xs:text-2xl ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
                         <span className={`font-vazir text-xs xs:text-sm ${dashboardLocation == '/my-account/userPanel/' ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>داشبورد</span>
                     </a>
 
-                    <a href="/my-account/userPanel/profile-edit" className="flex flex-col items-center justify-center gap-1">
+                    <a href="/my-account/userPanel/profile-edit" className="ml-3 xs:ml-1 sm:ml-0 flex flex-col items-center justify-center gap-1">
                         <IoSettingsOutline className={`text-light-gray dark:text-white text-xl xs:text-2xl ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
                         <span className={`font-vazir text-xs xs:text-sm ${location.includes('/my-account/userPanel/profile-edit') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>ویرایش</span>
                     </a>
 
-                    <a href="/my-account/userPanel/messages" className="relative flex flex-col items-center justify-center gap-1">
+                    <a href="/my-account/userPanel/messages" className="mr-3 xs:mr-1 sm:mr-0 relative flex flex-col items-center justify-center gap-1">
                         <BiMessageAltDetail className={`text-light-gray dark:text-white text-xl xs:text-2xl ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`} />
                         <span className={`font-vazir text-xs xs:text-sm ${location.includes('/my-account/userPanel/messages') ? '!text-sky-500' : 'text-light-gray dark:text-white'}`}>پیام ها</span>
                         <span className="absolute -top-1 right-0 w-4 h-4 rounded-full bg-sky-500 flex items-center justify-center text-xs text-white">0</span>

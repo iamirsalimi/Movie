@@ -167,13 +167,13 @@ export default function AllUsers() {
                         <table className="w-full">
                             <thead className="min-w-full">
                                 <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربری</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ایمیل</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ عضویت</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اشتراک</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت حساب</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربری</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ایمیل</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ عضویت</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اشتراک</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت حساب</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                 </tr>
                             </thead>
@@ -182,13 +182,13 @@ export default function AllUsers() {
                                     filteredUsers.length > 0 && (
                                         filteredUsers.map(user => user.id !== userObj?.id && (
                                             <tr key={user.id} className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.id}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.firstName} {user.lastName}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.userName}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.email}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(user.created_At)}</td>
-                                                <td className={`py-1 pb-3 px-2 text-sm ${user.subscriptionStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user?.subscriptionStatus == 'active' ? 'فعال' : user.subscriptionStatus == 'expired' ? 'منقضی شده' : 'ندارد'}</td>
-                                                <td className={`py-1 pb-3 px-2 text-sm ${user.accountStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user.accountStatus == 'active' ? 'فعال' : 'بن'}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.id}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.firstName} {user.lastName}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.userName}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{user.email}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(user.created_At)}</td>
+                                                <td className={`text-nowrap py-1 pb-3 px-2 text-sm ${user.subscriptionStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user?.subscriptionStatus == 'active' ? 'فعال' : user.subscriptionStatus == 'expired' ? 'منقضی شده' : 'ندارد'}</td>
+                                                <td className={`text-nowrap py-1 pb-3 px-2 text-sm ${user.accountStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user.accountStatus == 'active' ? 'فعال' : 'بن'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                                     <a
                                                         href={`/my-account/adminPanel/users/edit-user/${user.id}`}

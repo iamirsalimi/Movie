@@ -33,7 +33,7 @@ export default function WithPageContent(Comp, movieContent) {
                 loading,
                 setLoading
             }}>
-                <div className={`container mx-auto ${movieContent && '!px-5'} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-12`}>
+                <div className={`container mx-auto ${movieContent ? '!px-2.5 sm:!px-5' : ''} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-10`}>
                     {/* right side */}
                     <div className="w-full lg:w-2/3 flex flex-col gap-7">
                         <Comp movies={movies?.filter(movie => movie.broadcastStatus !== 'premiere')} />

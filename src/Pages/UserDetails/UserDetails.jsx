@@ -468,13 +468,13 @@ export default function UserDetails() {
                                     <table className="w-full">
                                         <thead className="min-w-full">
                                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">پیام جدید</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان تيكت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">دپارتمان</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ ثبت تیکت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت تیکت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اولویت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">پیام جدید</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان تيكت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">دپارتمان</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ ثبت تیکت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت تیکت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اولویت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                             </tr>
                                         </thead>
@@ -483,17 +483,17 @@ export default function UserDetails() {
                                                 filteredTickets.length > 0 && (
                                                     filteredTickets.map(ticket => (
                                                         <tr key={ticket.id} className="relative py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
-                                                            <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
                                                                 {!ticket.is_read_by_admin && (
                                                                     <div className="mx-auto w-2 h-2 rounded-full bg-green-500"></div>
                                                                 )}
                                                             </td>
-                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.id}</td>
-                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
-                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
-                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
-                                                            <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
-                                                            <td className={`py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.id}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400 text-nowrap">{ticket?.subject}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
+                                                            <td className={`text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
                                                             <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">
                                                                 <a
                                                                     href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
@@ -568,12 +568,12 @@ export default function UserDetails() {
                                     <table className="w-full">
                                         <thead className="min-w-full">
                                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربر</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن کامنت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اسپویل</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">زمان ثبت کامنت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربر</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن کامنت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اسپویل</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">زمان ثبت کامنت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                             </tr>
                                         </thead>
@@ -581,26 +581,26 @@ export default function UserDetails() {
                                             {!isPending && !error &&
                                                 filteredComments?.length > 0 && (
                                                     filteredComments?.map(comment => (
-                                                        <tr key={comment.id} className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
+                                                        <tr key={comment.id} className="text-nowrap py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
                                                                 {comment.has_spoiler ? (
                                                                     <span className="bg-green-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">
                                                                         <FiCheck className="text-green-500 stroke-2 " />
-                                                                        <span className="text-green-500 font-vazir">دارد</span>
+                                                                        <span className="text-nowrap text-green-500 font-vazir">دارد</span>
                                                                     </span>
 
                                                                 ) : (
                                                                     <span className="bg-red-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">
                                                                         <RxCross1 className="text-red-500 stroke-2 " />
-                                                                        <span className="text-red-500 font-vazir">ندارد</span>
+                                                                        <span className="text-nowrap text-red-500 font-vazir">ندارد</span>
                                                                     </span>
                                                                 )}
                                                             </td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-center max-w-20">
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center max-w-20">
                                                                 <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">

@@ -475,7 +475,7 @@ function Movie() {
                 <>
                     <div className="container mx-auto relative flex flex-col gap-7">
                         <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit">
-                            <div className="relative p-4 pb-3 h-max">
+                            <div className="relative p-2.5 md:p-4 pb-3 h-max">
                                 <div className="absolute top-0 left-0 w-full h-full object-cover rounded-t-xl overflow-hidden">
                                     <img src={mainMovie?.banner} alt="" className="w-full h-full object-cover object-center opacity-0.7" />
                                     <span className="absolute top-0 left-0 inline-block w-full h-full bg-gradient-to-t lg:bg-gradient-to-l from-black from-25% lg:from-35% to-black/30"></span>
@@ -571,7 +571,7 @@ function Movie() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                                                     {mainMovie.notifications.length != 0 && (
                                                         <div className="w-fit h-fit flex items-center justify-center gap-2 bg-black/70 px-2 py-1 rounded-lg">
                                                             <div className="p-1 rounded-full w-7 h-7 bg-red-500 flex items-center justify-center">
@@ -801,7 +801,7 @@ function Movie() {
                                             )}
 
                                             {(!commentsIsPending) && (
-                                                <div className="py-2 px-1 sm:px-5 flex flex-col items-center justify-center gap-7">
+                                                <div className="pb-0 py-2 px-0 xs:px-1 sm:px-5 flex flex-col items-center justify-center gap-7">
                                                     <div className="flex flex-col gap-4">
                                                         <div className="bg-gray-100 dark:border-none dark:bg-primary w-full rounded-lg py-4 px-2 text-center space-y-4">
                                                             <h1 className="text-light-gray dark:text-white font-vazir">دوست عزیز لطفا برای سالم و درست نگه داشتن دیدگاه ها قوانین زیر را رعایت کنید</h1>
@@ -819,9 +819,9 @@ function Movie() {
                                                     </div>
 
                                                     {/* Movie's Comments */}
-                                                    <div className="w-full py-5 border-t border-gray-100 dark:border-primary">
+                                                    <div className="w-full py-2 md:py-5 border-t border-gray-100 dark:border-primary">
                                                         {comments?.filter(comment => comment.status == 'approved').length ? (
-                                                            <div className="flex flex-col items-center justify-center gap-7">
+                                                            <div className="flex flex-col items-center justify-center gap-2 lg:gap-5 xl:gap-7">
                                                                 {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
                                                                     <Comment key={comment.id} {...comment} userObj={userObj} comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                                 ))}

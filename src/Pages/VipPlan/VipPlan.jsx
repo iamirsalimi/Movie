@@ -93,21 +93,21 @@ export default function VipPlan() {
                     <table className="w-full">
                         <thead className="min-w-full">
                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">نوع اشتراک</th>
-                                <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">مبلغ</th>
-                                <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">تاریخ فعالسازی</th>
-                                <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">تاریخ انقضا</th>
-                                <th className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400">فاکتور</th>
+                                <th className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400">نوع اشتراک</th>
+                                <th className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400">مبلغ</th>
+                                <th className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400">تاریخ فعالسازی</th>
+                                <th className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400">تاریخ انقضا</th>
+                                <th className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400">فاکتور</th>
                             </tr>
                         </thead>
                         <tbody>
                             {(userObj && userObj.all_subscription_plans.length > 0) && userObj.all_subscription_plans.map(plan => (
                                 <tr key={plan.id} className="py-1 px-2 border-b last:border-b-0 border-gray-200 dark:border-white/5" >
-                                    <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{plan.duration} روزه</td>
-                                    <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{formatPrice(plan.isBought.price)}</td>
-                                    <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.activateDate)}</td>
-                                    <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.expiration)}</td>
-                                    <td className="py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">
+                                    <td className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{plan.duration} روزه</td>
+                                    <td className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{formatPrice(plan.isBought.price)}</td>
+                                    <td className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.activateDate)}</td>
+                                    <td className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">{getJalaliDate(plan.expiration)}</td>
+                                    <td className="text-nowrap py-1 pb-3 px-2 text-light-gray dark:text-gray-400 text-center">
                                         {plan.isBought && (
                                             <a
                                                 href={`/reciept/${plan.id}`}

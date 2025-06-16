@@ -33,7 +33,7 @@ export default function MainMovies({ movies }) {
     // console.log(movies , filteredMovies)
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="w-full flex flex-col gap-5">
             {filteredMovies.map(movie => (
                 <MovieCard key={movie.id} {...movie} />
             ))}

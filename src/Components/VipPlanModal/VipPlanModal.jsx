@@ -87,12 +87,12 @@ export default function VipPlanModal({ userObj, showModal, setShowModal, isUpdat
                 <table className="w-full text-right text-sm">
                     <tbody>
                         <tr className="border-b border-white dark:border-primary">
-                            <th className="bg-yellow-300 px-4 py-2 whitespace-nowrap text-primary font-shabnam rounded-tr-lg">اشتراک</th>
-                            <td className="px-4 py-2 bg-gray-100 dark:bg-secondary text-gray-700 dark:text-white font-vazir-light rounded-tl-lg">{selectedVipPlan.month}</td>
+                            <th className="text-nowrap bg-yellow-300 px-4 py-2 whitespace-nowrap text-primary font-shabnam rounded-tr-lg">اشتراک</th>
+                            <td className="text-nowrap px-4 py-2 bg-gray-100 dark:bg-secondary text-gray-700 dark:text-white font-vazir-light rounded-tl-lg">{selectedVipPlan.month}</td>
                         </tr>
                         <tr>
-                            <th className="bg-yellow-300 px-4 py-2 whitespace-nowrap text-primary font-shabnam rounded-br-lg">جمع کل</th>
-                            <td className="px-4 py-2 bg-gray-100 dark:bg-secondary text-gray-700 dark:text-white font-vazir-light rounded-bl-lg">{formatPrice(selectedVipPlan.price)} تومان</td>
+                            <th className="text-nowrap bg-yellow-300 px-4 py-2 whitespace-nowrap text-primary font-shabnam rounded-br-lg">جمع کل</th>
+                            <td className="text-nowrap px-4 py-2 bg-gray-100 dark:bg-secondary text-gray-700 dark:text-white font-vazir-light rounded-bl-lg">{formatPrice(selectedVipPlan.price)} تومان</td>
                         </tr>
                     </tbody>
                 </table>

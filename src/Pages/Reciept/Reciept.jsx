@@ -71,7 +71,7 @@ export default function Reciept() {
     return (
         <>
             <div className="relative h-screen bg-white">
-                <div className="border border-gray-200 w-1/2 absolute top-1/2 left-1/2 -translate-1/2 p-2 rounded-lg">
+                <div className="border border-gray-200 w-4/5 md:w-1/2 absolute top-1/2 left-1/2 -translate-1/2 p-2 rounded-lg">
                     <h1 className="text-light-gray font-vazir text-center text-xl">فاکتور خرید</h1 >
                     <ul className="w-full flex flex-col items-center gap-2 divide-y divide-gray-100">
                         <li className="w-full flex items-center justify-between">

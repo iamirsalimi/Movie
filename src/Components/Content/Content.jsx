@@ -148,7 +148,7 @@ export default function Content() {
   }, [])
 
   return (
-    <div className="mx-auto container w-full flex-col gap-y-7 gap-x-4 px-7">
+    <div className="mx-auto container w-full flex-col gap-y-7 gap-x-4 px-2.5 md:px-7">
       {searchType && (
         <h1 className="xs:text-lg md:text-xl lg:text-2xl font-vazir text-yellow-600 text-center mb-7">{searchType == 'advanced' ? 'نتايج جستجوي پیشرفته' : `نتايج جستجوي "${searchValue}"`}</h1>
       )}

@@ -100,13 +100,13 @@ export default function Actors() {
 
             {(!isPending && actorObj) && (
                 <div className="flex flex-col gap-5 min-h-screen">
-                    <div className="container mx-auto h-fit py-12 flex flex-col md:flex-row items-center justify-center md:items-start md:justify-start gap-5 border-b border-gray-200 dark:border-secondary px-10 lg:px-0">
-                        <div className="flex items-center justify-center rounded-full overflow-hidden h-32 min-w-32">
+                    <div className="container mx-auto h-fit py-12 px-5 sm:px-10 lg:px-0 flex flex-col md:flex-row items-center justify-center md:items-start md:justify-start gap-5 border-b border-gray-200 dark:border-secondary">
+                        <div className="flex items-center justify-center rounded-full overflow-hidden min-h-32 max-h-32 min-w-32 max-w-32">
                             <img src={actorObj.src} alt="" className="w-full h-full object-cover object-center" />
                         </div>
                         <div className="h-full flex flex-col items-center md:items-start justify-between gap-2">
                             <h2 className="text-gray-700 dark:text-white font-bold">{actorObj.originalName || actorObj.fulLName}</h2>
-                            <div className="flex items-center gap-5">
+                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-5">
                                 <div className="flex items-center justify-center gap-1 font-vazir">
                                     <span className="text-gray-700 dark:text-gray-200">تولد :</span>
                                     <span className="text-gray-700 dark:text-gray-200">{actorObj.birthDate ? getDate(actorObj.birthDate) : 'نامشخص'}</span>
@@ -134,7 +134,7 @@ export default function Actors() {
                             <p className="text-light-gray dark:text-gray-500 font-vazir-light text-center md:text-justify">{actorObj.biography}</p>
                         </div>
                     </div>
-                    <div className="container mx-auto py-5 space-y-9 px-5">
+                    <div className="container mx-auto py-5 space-y-9 px-2.5 sm:px-4 md:px-5">
                         <h2 className="text-center lg:text-justify text-gray-700 dark:text-white text-2xl font-vazir">مجموعه آثار</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
                             {actorMovieIsPending && (

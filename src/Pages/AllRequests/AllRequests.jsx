@@ -117,19 +117,19 @@ export default function AllRequests() {
           <table className="w-full">
             <thead className="min-w-full">
               <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نوع فیلم</th>
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">توضیحات</th>
-                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت درخواست</th>
+                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">عنوان</th>
+                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نوع فیلم</th>
+                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">توضیحات</th>
+                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت درخواست</th>
               </tr>
             </thead>
             <tbody className="min-w-full">
               {!isPending && filteredRequests.map(request => (
                 <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
-                  <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>
-                  <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'series' ? 'سریال' : 'فیلم'}</td>
+                  <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>
+                  <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'series' ? 'سریال' : 'فیلم'}</td>
                   <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.description}</td>
-                  <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'pending' ? 'در حال بررسی ' : request.status == 'approved' ? 'قبول شده ' : 'رد شده'}</td>
+                  <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'pending' ? 'در حال بررسی ' : request.status == 'approved' ? 'قبول شده ' : 'رد شده'}</td>
                 </tr>
               ))}
             </tbody>

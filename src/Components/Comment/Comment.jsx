@@ -26,12 +26,12 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
             if (a.userRole === 'admin' && b.userRole !== 'admin') {
                 return -1
             }
-            
+
             //if a wasn't admin and b was admin we should return 1 and b must be upper
             if (a.userRole !== 'admin' && b.userRole === 'admin') {
                 return 1
             }
-            
+
             //if both were admin or both weren't admin we should keep order
             return 0
         }).filter(comment => comment.parentId == id)
@@ -131,7 +131,7 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
 
             <div id={`comment-${id}`} ref={ref} className={`w-full p-4 rounded-xl border border-gray-200 dark:bg-primary dark:border-none transition-all !text-white flex flex-col gap-5 ${parentId ? 'replied' : ''}`}>
                 <div className="flex items-center justify-start gap-2">
-                    <div className={`w-12 h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center ${userRole == 'admin' ? 'border border-gray-200' : ''}`}>
+                    <div className={`min-w-12 max-w-12 min-h-12 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center ${userRole == 'admin' ? 'border border-gray-200' : ''}`}>
                         {userRole == 'user' ? (
                             <FaUser className="translate-y-2 text-white text-4xl" />
                         ) : (
@@ -139,10 +139,10 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
                         )}
                     </div>
                     <div className="flex flex-col items-start justify-center gap-1">
-                        <div className="flex items-center justify-start gap-4">
-                            <div className="flex items-center justify-start gap-2">
-                                <h2 className="text-light-gray dark:text-white text-base md:text-lg lg:text-xl">{user_name}</h2>
-                                <div className={`font-vazir text-xs px-2 py-1 rounded-full text-white ${userRole == 'user' ? 'bg-gray-400 dark:bg-secondary' : 'bg-sky-400 dark:text-primary'}`}>{userRole == 'user' ? 'کاربر' : 'ادمین'}</div>
+                        <div className="flex flex-col xs:flex-row items-start xs:items-center justify-center gap-0.5 xs:gap-2 md:gap-4">
+                            <div className="flex items-center justify-start gap-1 xs:gap-2">
+                                <h2 className="text-light-gray dark:text-white text-sm xs:text-base md:text-lg lg:text-xl">{user_name}</h2>
+                                <div className={`font-vazir text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded-full text-white ${userRole == 'user' ? 'bg-gray-400 dark:bg-secondary' : 'bg-sky-400 dark:text-primary'}`}>{userRole == 'user' ? 'کاربر' : 'ادمین'}</div>
                             </div>
                             {parentId && (
                                 <span className="text-xs text-gray-400 dark:text-gray-600">در پاسخ به @{replied_to}</span>
@@ -200,7 +200,7 @@ const Comment = forwardRef(({ mainUserId, mainUserName, mainUserRole, movieId, m
 
             <div className="w-full flex flex-col gap-5">
                 {replies?.length > 0 && replies?.map(reply => (
-                    <div key={reply.id} className="w-full pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
+                    <div key={reply.id} className="w-full pr-3 md:pr-4 lg:pr-5 relative flex flex-col gap-5 after:absolute after:inline-block after:h-[calc(100%-1.25rem)] after:w-1 after:rounded-full after:bg-gray-200 dark:after:bg-primary-dark after:top-0 after:right-0">
                         <Comment isReplied {...reply} userObj={userObj} replyId={replyId} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} isAdding={isAdding} setIsAdding={setIsAdding} mainUserId={mainUserId} mainUserName={mainUserName} mainUserRole={mainUserRole} movieId={movieId} movieType={movieType} movieTitle={movieTitle} movieSrc={movieSrc} addCommentHandler={addCommentHandler} updateCommentsLikesHandler={updateCommentsLikesHandler} comments={comments} ref={(el) => replyRefs.current[reply.id] = el} />
                     </div>
                 ))

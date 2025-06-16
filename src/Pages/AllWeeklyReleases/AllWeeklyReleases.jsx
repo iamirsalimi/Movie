@@ -234,12 +234,12 @@ export default function AllWeeklyReleases() {
                         <table className="w-full">
                             <thead className="min-w-full">
                                 <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">#</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">ID فیلم</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">عنوان فیلم</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">نوع فیلم</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">تاریخ انتشار</th>
-                                    <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">شماره فصل</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">#</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">ID فیلم</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">عنوان فیلم</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">نوع فیلم</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">تاریخ انتشار</th>
+                                    <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">شماره فصل</th>
                                     <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-nowrap">Action</th>
                                 </tr>
                             </thead>
@@ -248,12 +248,12 @@ export default function AllWeeklyReleases() {
                                     filteredReleases.length > 0 && (
                                         filteredReleases.map(release => (
                                             <tr key={release.id} className="py-1 px-2 border-b border-gray-200 dark:border-white/5 odd:bg-gray-200 dark:odd:bg-primary" >
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.id}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieId}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieTitle}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieType == 'series' ? 'سریال' : 'فیلم'}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(release.release_schedules[0]?.date)}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.season_number || '-'}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.id}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieId}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieTitle}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieType == 'series' ? 'سریال' : 'فیلم'}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(release.release_schedules[0]?.date)}</td>
+                                                <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.season_number || '-'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 flex items-center justify-center gap-2">
                                                     <a
                                                         href={`/my-account/adminPanel/weekly-release/edit-release/${release?.id}`}

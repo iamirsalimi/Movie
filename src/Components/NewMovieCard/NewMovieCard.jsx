@@ -5,7 +5,7 @@ import { FaPlay } from "react-icons/fa6";
 export default function NewMovieCard({ id , movieId , cover, title, movieType , showTitle }) {
     return (
         <a href={`/${movieType == 'series' ? 'series' : 'movie'}/${movieId || id}`} className="relative pb-2 group">
-            <li key={id} className={`group overflow-hidden relative rounded-lg ${showTitle ? 'h-40' : 'h-32'} cursor-pointer`}>
+            <li key={id} className={`group overflow-hidden relative rounded-lg ${showTitle ? 'h-32 sm:h-40' : 'h-28 sm:h-32'} cursor-pointer`}>
                 <img src={cover} className="w-full h-full object-cover object-center" alt="" />
                 <span className="absolute top-0 left-0 w-full h-full bg-black/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center duration-200"></span>
                 {!showTitle && (

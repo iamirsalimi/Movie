@@ -100,7 +100,7 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                     )}
                     <div className="flex items-center justify-center gap-2">
                         <a href={hasUserLoggedIn ? `/my-account/${user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`hidden md:block bg-sky-500 ${navFlag ? 'hover:bg-white dark:' : 'border-transparent '}hover:bg-primary border hover:border-sky-500 transition-colors p-2 rounded-lg hover:text-sky-500 text-white dark:border-secondary font-vazir cursor-pointer text-nowrap`}>{hasUserLoggedIn ? 'حساب کاربری' : 'ورود / ثبت نام'}</a>
-                        <a href="/account/login" className={`md:hidden  relative w-10 h-10 rounded-full bg-gray-100 overflow-hidden`}>
+                        <a href={hasUserLoggedIn ? `/my-account/${user?.role == 'admin' ? 'adminPanel' : 'userPanel'}` : `/account/login`} className={`md:hidden  relative w-10 h-10 rounded-full bg-gray-100 overflow-hidden`}>
                             <FaUser className="text-gray-400 absolute -bottom-5 left-1/2 -translate-1/2 w-8 h-8" />
                         </a>
                     </div>

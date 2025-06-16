@@ -220,7 +220,7 @@ export default function Register() {
                 </div>
             </div>
 
-            <h2 className="font-vazir text-2xl text-gray-700 dark:text-gray-200">ثبت نام در Movie Website</h2>
+            <h2 className="font-vazir text-2xl text-gray-700 dark:text-gray-200 text-center md:text-justify">ثبت نام در Movie Website</h2>
 
             <form className="w-full flex flex-col justify-center items-center lg:items-start gap-7" onSubmit={registerUser}>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-7">

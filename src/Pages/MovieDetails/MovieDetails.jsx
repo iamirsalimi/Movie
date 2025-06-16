@@ -392,12 +392,12 @@ export default function MovieDetails() {
                                     <table className="w-full">
                                         <thead className="min-w-full">
                                             <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربر</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن کامنت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اسپویل</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">زمان ثبت کامنت</th>
-                                                <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام کاربر</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">متن کامنت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">اسپویل</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">زمان ثبت کامنت</th>
+                                                <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">وضعیت</th>
                                                 <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                                             </tr>
                                         </thead>
@@ -405,26 +405,26 @@ export default function MovieDetails() {
                                             {!isPending && !error &&
                                                 filteredComments?.length > 0 && (
                                                     filteredComments?.map(comment => (
-                                                        <tr className="py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
+                                                        <tr className="text-nowrap py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
                                                                 {comment.has_spoiler ? (
                                                                     <span className="bg-green-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">
                                                                         <FiCheck className="text-green-500 stroke-2 " />
-                                                                        <span className="text-green-500 font-vazir">دارد</span>
+                                                                        <span className="text-nowrap text-green-500 font-vazir">دارد</span>
                                                                     </span>
 
                                                                 ) : (
                                                                     <span className="bg-red-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">
                                                                         <RxCross1 className="text-red-500 stroke-2 " />
-                                                                        <span className="text-red-500 font-vazir">ندارد</span>
+                                                                        <span className="text-nowrap text-red-500 font-vazir">ندارد</span>
                                                                     </span>
                                                                 )}
                                                             </td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
-                                                            <td className="py-1 pb-3 px-2 text-sm text-center max-w-20">
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{getDate(comment.created_at)}</td>
+                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center max-w-20">
                                                                 <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">

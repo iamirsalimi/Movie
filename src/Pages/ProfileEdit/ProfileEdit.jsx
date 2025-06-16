@@ -43,12 +43,12 @@ export default function ProfileEdit() {
     userName: yup
       .string()
       .required('وارد كردن نام کاربری اجباری است')
-      .min(6, 'رمز عبور باید حداقل 6 کاراکتر باشد')
+      .min(5, 'رمز عبور باید حداقل 5 کاراکتر باشد')
       .matches(userNameRegex, 'نام کاربری نامعتبر است')
     ,
     recentPassword: yup
       .string()
-      .min(6, 'رمز عبور حداقل باید 6 کاراکتر باشد')
+      .min(8, 'رمز عبور حداقل باید 8 کاراکتر باشد')
       .max(16, 'رمز عبور حداکثر باید 16 کاراکتر باشد')
       .matches(passwordRegex, 'رمز عبور نامعتبر است'),
     newPassword: yup.string().notRequired(),

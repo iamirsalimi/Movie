@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react'
+import React, { useContext } from 'react'
 
 import toast from "react-hot-toast"
 
@@ -8,19 +8,17 @@ import { updateUser } from './../../Services/Axios/Requests/Users';
 
 import { FaTheaterMasks } from "react-icons/fa";
 import { MdOutlineDateRange } from "react-icons/md";
-import { FaRegFlag } from "react-icons/fa6";
 import { RiTimer2Line } from "react-icons/ri";
 import { SiMetacritic } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import { SiRottentomatoes } from "react-icons/si";
-import { BiLike } from "react-icons/bi";
 import { IoLanguageSharp } from "react-icons/io5";
 import { PiArrowCircleLeftDuotone } from "react-icons/pi";
 import { BsFillCcSquareFill } from "react-icons/bs";
 import { FaMicrophoneAlt } from "react-icons/fa";
-import { CiBookmark } from "react-icons/ci";
+import { RiMedalFill } from "react-icons/ri";
 
-export default function MovieCard({ id, title, mainTitle, movieType, description, cover, languages, countries, genres, imdb_score, rotten_score, metacritic_score, site_scores, year, duration, is_dubbed, has_subtitle, quality }) {
+export default function MovieCard({ id, title, mainTitle, movieType, description, cover, languages, countries, genres, imdb_score, rotten_score, metacritic_score, year, duration, is_dubbed, has_subtitle, is_suggested, quality }) {
     let { userObj, setUserObj } = useContext(UserContext)
     const allGenres = {
         movie: {
@@ -149,7 +147,7 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
     }
 
     return (
-        <div className="bg-white shadow shadow-black/5 dark:bg-secondary rounded-xl p-4 flex flex-col md:flex-row gap-y-5 gap-x-5">
+        <div className="bg-white shadow shadow-black/5 dark:bg-secondary rounded-xl p-2.5 md:p-4 flex flex-col md:flex-row gap-y-5 gap-x-5">
             <div className="relative w-full md:w-1/3 min-h-full">
                 <div className="w-full max-h-[450px] md:h-full md:min-h-full relative rounded-lg overflow-hidden group">
                     <img src={cover} className="w-full md:max-h-full h-full object-cover object-center" alt="" />
@@ -239,27 +237,36 @@ export default function MovieCard({ id, title, mainTitle, movieType, description
                     </li>
                 </ul>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center justify-center xs:justify-start gap-2">
                     {has_subtitle && (
                         <div className="w-fit h-fit flex items-center justify-center gap-1 rounded-md p-2 bg-sky-100 dark:bg-sky-300 glass-effect">
                             <BsFillCcSquareFill className="text-md md:text-xl fill-sky-500 dark:fill-sky-700" />
-                            <span className="text-sm md:text-md text-sky-500 dark:text-sky-700 font-vazir">زیرنویس فارسی</span>
+                            <span className="text-xs xs:text-sm md:text-md text-sky-500 dark:text-sky-700 font-vazir">زیرنویس فارسی</span>
                         </div>
                     )}
 
                     {is_dubbed && (
                         <div className="w-fit h-fit flex items-center justify-center gap-1 rounded-md p-2 bg-red-100 dark:bg-red-300 glass-effect">
                             <FaMicrophoneAlt className="text-md md:text-xl fill-red-500 dark:fill-red-600" />
-                            <span className="text-sm md:text-md text-red-400 dark:text-red-600 font-vazir">دوبله فارسی</span>
+                            <span className="text-xs xs:text-sm md:text-md text-red-400 dark:text-red-600 font-vazir">دوبله فارسی</span>
+                        </div>
+                    )}
+                    {is_suggested && (
+                        <div className="w-fit h-fit flex items-center justify-center gap-1 bg-yellow-500 px-2 py-1 rounded-lg">
+                            <div className="p-1 rounded-full w-7 h-7 bg-primary flex items-center justify-center">
+                                <RiMedalFill className="text-xl text-yellow-500" />
+                            </div>
+                            <span className="text-xs xs:text-sm text-primary font-vazir">پیشنهادی</span>
                         </div>
                     )}
                 </div>
 
+
                 <div className="border-2 border-light dark:border-primary rounded-lg p-2 flex flex-col gap-1">
                     <h1 className="text-gray-500 dark:text-white font-vazir font-bold text-sm md:text-md">خلاصه داستان</h1>
-                    <span className="text-slate-400 dark:text-slate-300 text-sm space-x-1">
+                    <span className="text-slate-400 dark:text-slate-300 text-xs xs:text-sm space-x-1">
                         <span className="font-shabnam-light">{description}</span>
-                        <a href={`/${movieType}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1 font-shabnam">
+                        <a href={`/${movieType}/${id}`} className="group text-sky-600 dark:text-yellow-500 space-x-1 font-shabnam text-xs xs:text-sm">
                             <span>دانلود/جزییات بیشتر</span>
                             <PiArrowCircleLeftDuotone className="inline fill-sky-600 dark:fill-yellow-500 text-2xl group-hover:-translate-x-2 transition-all duration-150" />
                         </a>

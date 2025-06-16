@@ -123,10 +123,10 @@ export default function AllActors() {
             <table className="w-full">
               <thead className="min-w-full">
                 <tr className="py-1 px-2 border-b border-gray-200 dark:border-white/5" >
-                  <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
-                  <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام هنرپیشه</th>
-                  <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ملیت</th>
-                  <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ تولد</th>
+                  <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">#</th>
+                  <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">نام هنرپیشه</th>
+                  <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">ملیت</th>
+                  <th className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">تاریخ تولد</th>
                   <th className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">Action</th>
                 </tr>
               </thead>
@@ -134,10 +134,10 @@ export default function AllActors() {
                 <tbody>
                   {filteredActors?.map(actor => (
                     <tr key={actor.id} className="py-1 px-2 border-b last:border-none border-gray-200 dark:border-white/5" >
-                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.id}</td>
-                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.fullName}</td>
-                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.nationality}</td>
-                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.birthDate || 'نامشخص'}</td>
+                      <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.id}</td>
+                      <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.fullName}</td>
+                      <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.nationality}</td>
+                      <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.birthDate || 'نامشخص'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex items-center justify-center gap-2">
                         <a
                           href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
