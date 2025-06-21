@@ -128,7 +128,7 @@ export default function AllRequests() {
                 <tr className="py-1 px-2 odd:bg-gray-100 dark:odd:bg-primary text-center" >
                   <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.title}</td>
                   <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'series' ? 'سریال' : 'فیلم'}</td>
-                  <td className="py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.description}</td>
+                  <td className="!text-wrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.description}</td>
                   <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'pending' ? 'در حال بررسی ' : request.status == 'approved' ? 'قبول شده ' : 'رد شده'}</td>
                 </tr>
               ))}

@@ -408,7 +408,7 @@ export default function MovieDetails() {
                                                         <tr className="text-nowrap py-1 px-2 odd:bg-gray-200 dark:odd:bg-primary text-center" >
                                                             <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.id}</td>
                                                             <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{comment.user_name}</td>
-                                                            <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
+                                                            <td className="!text-wrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir-light min-w-52 md:max-w-32">{comment.text}</td>
                                                             <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center max-w-20">
                                                                 {comment.has_spoiler ? (
                                                                     <span className="bg-green-100 flex items-center justify-center gap-2 px-2 py-1 rounded-sm">

@@ -169,7 +169,7 @@ export default function AdminAllNotifs() {
                                         <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.userId || 'تعیین نشده'}</td>
                                         <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir">{notification.title}</td>
                                         <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.type}</td>
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir min-w-36 max-w-36">{notification.text}</td>
+                                        <td className="!text-wrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir min-w-36 max-w-36">{notification.text}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                             <a
                                                 href={`/my-account/adminPanel/notifications/edit-notification/${notification.id}`}

@@ -1,3 +1,5 @@
+![website demo picture](images/screencapture-moviewebsite-liara-run-2025-06-21-17_12_25.png)
+
 # 🎬 Movie & TV Series Web Application
 
 This is a full-featured movie and TV series web application built with **React.js** and **Tailwind CSS**, allowing users to browse, filter, and interact with movie content. The platform also includes advanced user features such as ticketing, comments, notifications, and a powerful admin panel.
