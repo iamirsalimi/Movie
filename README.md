@@ -1,4 +1,4 @@
-![website demo picture](images/screencapture-moviewebsite-liara-run-2025-06-21-17_12_25.png)
+![website demo picture](src/images/screencapture-moviewebsite-liara-run-2025-06-21-17_12_25.png)
 
 # 🎬 Movie & TV Series Web Application
 
