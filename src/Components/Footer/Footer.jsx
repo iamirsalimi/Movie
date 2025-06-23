@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="container px-5 mx-auto flex flex-col md:flex-row gap-5">
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-5 lg:gap-x-2 gap-y-5 py-7">
                     <div className="flex flex-col items-center md:items-start gap-2 md:pl-5">
-                        <h1 className="text-primary dark:text-white text-3xl font-bold">LOGO</h1>
+                        <h1 className="text-primary dark:text-white text-3xl font-bold">MovieFlix</h1>
                         <p className="font-vazir text-light-gray dark:text-gray-400 text-center md:text-justify">دانلود رایگان فیلم و سریال با زیرنویس فارسی چسبیده و دوبله فارسی</p>
                     </div>
                     <div className="flex flex-col items-center md:items-start gap-5">

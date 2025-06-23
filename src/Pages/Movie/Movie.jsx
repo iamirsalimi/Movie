@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
+// for tags and seo
+import { Helmet } from 'react-helmet-async';
 
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import toast from "react-hot-toast"
@@ -473,6 +475,16 @@ function Movie() {
                 <></>
             ) : (
                 <>
+                    <Helmet>
+                        <title>{mainMovie.title} | MovieFlix</title>
+                        <meta name="description" content={mainMovie.description} />
+                        <meta name="keywords" content={mainMovie.tags.join(', ')} />
+                        {/* Open Graph tags for sharing in scial medias */}
+                        <meta property="og:title" content={mainMovie.title} />
+                        <meta property="og:description" content={mainMovie.description} />
+                        <meta property="og:image" content={mainMovie.cover} />
+                    </Helmet>
+
                     <div className="container mx-auto relative flex flex-col gap-7">
                         <div className="relative flex flex-col rounded-xl shadow shadow-black/5 bg-white dark:bg-secondary h-fit">
                             <div className="relative p-2.5 md:p-4 pb-3 h-max">
@@ -821,7 +833,7 @@ function Movie() {
                                                     {/* Movie's Comments */}
                                                     <div className="w-full py-2 md:py-5 border-t border-gray-100 dark:border-primary">
                                                         {comments?.filter(comment => comment.status == 'approved').length ? (
-                                                            <div className="flex flex-col items-center justify-center gap-2 lg:gap-5 xl:gap-7">
+                                                            <div className="flex flex-col items-center justify-center gap-2 lg:gap-3">
                                                                 {comments?.filter(comment => !comment.parentId && comment.status == 'approved').map(comment => (
                                                                     <Comment key={comment.id} {...comment} userObj={userObj} comments={comments.filter(comment => comment.status == 'approved')} mainUserId={userObj?.id} mainUserName={userObj?.nickName || userObj?.userName} mainUserRole={userObj?.role} movieId={+movieId} movieType={mainMovie.movieType} movieTitle={mainMovie?.mainTitle} movieSrc={mainMovie.cover} replyId={replyId} isAdding={isAdding} setIsAdding={setIsAdding} setReplyId={setReplyId} setShowAddCommentForm={setShowAddCommentForm} updateCommentsLikesHandler={updateCommentsLikesHandler} addCommentHandler={addCommentHandler} ref={(el) => commentRefs.current[comment.id] = el} />
                                                                 ))}

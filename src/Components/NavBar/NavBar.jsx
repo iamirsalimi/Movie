@@ -43,7 +43,8 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                     </button>
 
                     <a href="/" className="lg:inline-block hidden">
-                        <h1 className={`text-center font-bold text-3xl ${navFlag ? 'text-gray-600 dark:' : ''}text-white`}>Logo</h1>
+                        <h1 className={`text-center font-bold text-3xl ${navFlag ? 'text-gray-600 dark:' : ''}text-white`}>MovieFlix</h1>
+                        {/* <img src={logo} className="w-full h-full object-center object-cover" alt="Logo" /> */}
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">

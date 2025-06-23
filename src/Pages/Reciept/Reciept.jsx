@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 import { useParams } from 'react-router-dom';
 
@@ -70,6 +71,9 @@ export default function Reciept() {
 
     return (
         <>
+            <Helmet>
+                <title>ثبت نام | MovieFlix</title>
+            </Helmet>
             <div className="relative h-screen bg-white">
                 <div className="border border-gray-200 w-4/5 md:w-1/2 absolute top-1/2 left-1/2 -translate-1/2 p-2 rounded-lg">
                     <h1 className="text-light-gray font-vazir text-center text-xl">فاکتور خرید</h1 >

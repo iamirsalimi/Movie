@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -83,6 +84,9 @@ export default function Login() {
 
     return (
         <>
+            <Helmet>
+                <title>ورود | MovieFlix</title>
+            </Helmet>
             <a href="/" className="inline-flex items-center justify-center gap-2 w-fit px-2 py-1.5 rounded-md cursor-pointer bg-gray-200 dark:bg-gray-800" >
                 <IoIosArrowForward className="text-sm text-gray-500 dark:text-white" />
                 <span className="text-sm font-vazir text-gray-500 dark:text-white">بازگشت به صفحه اصلی</span>

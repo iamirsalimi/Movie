@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, Outlet } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -254,6 +255,9 @@ export default function UserPanel() {
                     <Loader words={['Movies', 'Series', 'Animes', 'New Movies', 'Your Account Details']} />
                 )}
             </UserContext.Provider >
+            <Helmet>
+                <title>{mainLocationObj?.title} | MovieFlix</title>
+            </Helmet>
         </LoadingContext.Provider>
     )
 }

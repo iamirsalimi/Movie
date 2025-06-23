@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { useLocation, Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Helmet } from 'react-helmet-async';
 
 import { getCookie, deleteCookie } from './../../utils';
 import ThemeContext from './../../Contexts/ThemeContext';
@@ -99,6 +100,9 @@ export default function AdminPanel() {
                 userObj,
                 setUserObj
             }}>
+                <Helmet>
+                    <title>{mainLocationObj?.title}| MovieFlix</title>
+                </Helmet>
                 <div className={`w-full z-50 fixed right-0 top-0 ${showMenu ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0 transition-all duration-300 bg-white shadow shadow-black/5 dark:bg-secondary lg:w-1/4 h-screen `}>
                     <div className="px-5 py-9 flex flex-col justify-start items-center gap-7 overflow-y-auto pb-12">
                         <button className="block lg:hidden w-fit absolute top-1 right-1 p-1 rounded-sm bg-gray-100 text-gray-800 dark:bg-primary dark:text-white cursor-pointer" onClick={hideMenu}>

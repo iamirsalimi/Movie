@@ -1,10 +1,17 @@
-![website demo picture](images/screencapture-moviewebsite-liara-run-2025-06-21-17_12_25.png)
+![website demo picture](src/assets/movie.png)
+
+
+## ⭐️ Project Demo Link : [Movie Website](https://moviewebsite.liara.run/)
 
 # 🎬 Movie & TV Series Web Application
 
 This is a full-featured movie and TV series web application built with **React.js** and **Tailwind CSS**, allowing users to browse, filter, and interact with movie content. The platform also includes advanced user features such as ticketing, comments, notifications, and a powerful admin panel.
 
 ## 🚀 Features
+
+<h3 align="center">Picture Of User Panel</h3>
+
+![website demo picture](src/assets/userPanel.png)
 
 - ✅ Fully responsive, RTL support for Persian
 - 🔍 Smart filter system (by genre, score, language, year, country)
@@ -32,7 +39,3 @@ This is a full-featured movie and TV series web application built with **React.j
 | **React Icons**    | Icon system with clean vector icons              |
 | **Day.js**         | Date handling, with Jalali calendar support      |
 | **Supabase**       | Backend-as-a-Service (Auth, Database)  |
-
-## 🔗 Project Link
-[Movie Website](https://moviewebsite.liara.run/)
-
