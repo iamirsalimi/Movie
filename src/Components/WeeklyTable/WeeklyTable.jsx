@@ -124,8 +124,10 @@ const WeeklyTable = memo(({ movies }) => {
                                 </div>
                                 <div className="flex flex-col items-start justify-between py-2 w-full text-sm">
                                     <h1 className="text-secondary font-bold dark:text-white mt-1">{movie.movieTitle}</h1>
-                                    {movie.movieType == 'series' && movie?.release_schedules.length > 1 && (
+                                    {(movie.movieType == 'series' && movie?.release_schedules.length > 1) ? (
                                         <span className="text-light-gray dark:text-gray-500 font-shabnam">قسمت {movie.release_schedules?.find(movie => checkDatesOnSameDay(activeDay.date , movie.date))?.episode?.episodes.join(',')} فصل  {movie.season_number}</span>
+                                    ) : movie?.release_schedules[0].episode == "All" && (
+                                        <span className="text-light-gray dark:text-gray-500 font-shabnam">تمام قسمت های فصل  {movie.season_number}</span>
                                     )}
                                 </div>
                             </li>
