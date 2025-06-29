@@ -6,6 +6,7 @@ import jalali from 'jalaliday';
 import BanUserModal from './../../Components/BanUserModal/BanUserModal'
 import UserContext from './../../Contexts/UserContext';
 import LoadingContext from './../../Contexts/LoadingContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import { getUsers as getUsersHandler, updateUser } from './../../Services/Axios/Requests/Users';
 
@@ -190,36 +191,44 @@ export default function AllUsers() {
                                                 <td className={`text-nowrap py-1 pb-3 px-2 text-sm ${user.subscriptionStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user?.subscriptionStatus == 'active' ? 'فعال' : user.subscriptionStatus == 'expired' ? 'منقضی شده' : 'ندارد'}</td>
                                                 <td className={`text-nowrap py-1 pb-3 px-2 text-sm ${user.accountStatus == 'active' ? 'text-green-500' : 'text-red-500'}`}>{user.accountStatus == 'active' ? 'فعال' : 'بن'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
-                                                    <a
-                                                        href={`/my-account/adminPanel/users/edit-user/${user.id}`}
-                                                        className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                                    >
-                                                        <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                    <Tooltip text="ویرایش کاربر">
+                                                        <a
+                                                            href={`/my-account/adminPanel/users/edit-user/${user.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                        >
+                                                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <a
-                                                        href={`/my-account/adminPanel/users/user-details/${user.id}`}
-                                                        className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
-                                                    >
-                                                        <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                    <Tooltip text="مشاهده جزئیات">
+                                                        <a
+                                                            href={`/my-account/adminPanel/users/user-details/${user.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                                                        >
+                                                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <a
-                                                        href={`/my-account/adminPanel/tickets?userId=${user.id}`}
-                                                        className="p-1 rounded-md cursor-pointer bg-orange-200 hover:bg-orange-500 transition-colors group"
-                                                    >
-                                                        <TbTicket className="text-orange-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                    <Tooltip text="مشاهده تیکت ها">
+                                                        <a
+                                                            href={`/my-account/adminPanel/tickets?userId=${user.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-orange-200 hover:bg-orange-500 transition-colors group"
+                                                        >
+                                                            <TbTicket className="text-orange-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                                                        onClick={e => {
-                                                            setMainUserObj(user)
-                                                            setShowBanModal(true)
-                                                        }}
-                                                    >
-                                                        <FaBan className="text-red-500 group-hover:text-white transition-all" />
-                                                    </button>
+                                                    <Tooltip text="بن کردن کاربر">
+                                                        <button
+                                                            className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                                                            onClick={e => {
+                                                                setMainUserObj(user)
+                                                                setShowBanModal(true)
+                                                            }}
+                                                        >
+                                                            <FaBan className="text-red-500 group-hover:text-white transition-all" />
+                                                        </button>
+                                                    </Tooltip>
                                                 </td>
                                             </tr>
                                         ))
@@ -236,14 +245,14 @@ export default function AllUsers() {
                                     <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                         <a
                                             href="/my-account/adminPanel/users/edit-user/1234"
-                                            className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
                                         >
                                             <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
                                         </a>
 
                                         <a
                                             href="/my-account/adminPanel/users/user-details/1234"
-                                            className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
                                         >
                                             <FaEye className="text-green-500 group-hover:text-white transition-all" />
                                         </a>

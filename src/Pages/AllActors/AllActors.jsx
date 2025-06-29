@@ -6,15 +6,9 @@ import { LuTrash2 } from "react-icons/lu";
 
 import DeleteModal from './../../Components/DeleteModal/DeleteModal';
 import LoadingContext from './../../Contexts/LoadingContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
-let apiData = {
-  deleteApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?id=eq.',
-  getApi: 'https://xdxhstimvbljrhovbvhy.supabase.co/rest/v1/Casts?select=*.',
-  apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8',
-  authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkeGhzdGltdmJsanJob3Zidmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY5MDY4NTAsImV4cCI6MjA2MjQ4Mjg1MH0.-EttZTOqXo_1_nRUDFbRGvpPvXy4ONB8KZGP87QOpQ8'
-}
-
-import { addCast , deleteCast, getCasts } from './../../Services/Axios/Requests/Actors';
+import { addCast, deleteCast, getCasts } from './../../Services/Axios/Requests/Actors';
 
 export default function AllActors() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -139,29 +133,35 @@ export default function AllActors() {
                       <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.nationality}</td>
                       <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center">{actor.birthDate || 'نامشخص'}</td>
                       <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex items-center justify-center gap-2">
-                        <a
-                          href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
-                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                        >
-                          <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                        </a>
+                        <Tooltip text="مشاهده جزئیات">
+                          <a
+                            href={`/my-account/adminPanel/actors/actor-details/${actor.id}`}
+                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                          >
+                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                          </a>
+                        </Tooltip>
 
-                        <a
-                          href={`/my-account/adminPanel/actors/edit-actor/${actor.id}`}
-                          className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                        >
-                          <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                        </a>
+                        <Tooltip text="ویرایش هنرپیشه">
+                          <a
+                            href={`/my-account/adminPanel/actors/edit-actor/${actor.id}`}
+                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                          >
+                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                          </a>
+                        </Tooltip>
 
-                        <button
-                          className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                          onClick={e => {
-                            setActorObj(actor)
-                            setShowDeleteModal(true)
-                          }}
-                        >
-                          <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                        </button>
+                        <Tooltip text="حذف هنرپیشه">
+                          <button
+                            className="inline-block p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                            onClick={e => {
+                              setActorObj(actor)
+                              setShowDeleteModal(true)
+                            }}
+                          >
+                            <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                          </button>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))}

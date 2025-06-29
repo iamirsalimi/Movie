@@ -2,6 +2,7 @@ import React, { useState, useEffect , useContext } from 'react'
 
 import DeleteModal from './../../Components/DeleteModal/DeleteModal';
 import LoadingContext from './../../Contexts/LoadingContext'
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
@@ -191,29 +192,35 @@ export default function AllMovies() {
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{movie.broadcastStatus == 'released' ? 'منتشر شده' : movie.broadcastStatus == 'premiere' ? 'پیش نمایش' : movie.broadcastStatus == 'broadcasting' ? 'در حال پخش' : 'کنسل شده'}</td>
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{movie.is_suggested ? 'بله' : 'خیر'}</td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
-                                                    <a
-                                                        href={`/my-account/adminPanel/movies/edit-movie/${movie.id}`}
-                                                        className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                                    >
-                                                        <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                    <Tooltip text="ویرایش فیلم">
+                                                        <a
+                                                            href={`/my-account/adminPanel/movies/edit-movie/${movie.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                        >
+                                                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <a
-                                                        href={`/my-account/adminPanel/movies/movie-details/${movie.id}`}
-                                                        className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
-                                                    >
-                                                        <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                    <Tooltip text="مشاهده جزئیات">
+                                                        <a
+                                                            href={`/my-account/adminPanel/movies/movie-details/${movie.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                                                        >
+                                                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                                                        onClick={e => {
-                                                            setMovieObj(movie)
-                                                            setShowDeleteModal(true)
-                                                        }}
-                                                    >
-                                                        <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                                                    </button>
+                                                    <Tooltip text="حذف فیلم">
+                                                        <button
+                                                            className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                                                            onClick={e => {
+                                                                setMovieObj(movie)
+                                                                setShowDeleteModal(true)
+                                                            }}
+                                                        >
+                                                            <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                                                        </button>
+                                                    </Tooltip>
                                                 </td>
                                             </tr>
                                         ))

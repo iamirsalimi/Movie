@@ -5,6 +5,7 @@ import { LuTrash2 } from "react-icons/lu";
 
 import DeleteModal from './../../Components/DeleteModal/DeleteModal';
 import LoadingContext from './../../Contexts/LoadingContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
@@ -171,23 +172,26 @@ export default function AdminAllNotifs() {
                                         <td className="text-nowrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400">{notification.type}</td>
                                         <td className="!text-wrap py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 font-vazir min-w-36 max-w-36">{notification.text}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
-                                            <a
-                                                href={`/my-account/adminPanel/notifications/edit-notification/${notification.id}`}
-                                                className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                            >
-                                                <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                            </a>
+                                            <Tooltip text="ویرایش اعلان">
+                                                <a
+                                                    href={`/my-account/adminPanel/notifications/edit-notification/${notification.id}`}
+                                                    className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                >
+                                                    <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                                                </a>
+                                            </Tooltip>
 
-                                            <button
-                                                className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                                                onClick={e => {
-                                                    setNotifObj(notification)
-                                                    setShowDeleteModal(true)
-                                                }}
-                                            >
-                                                <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                                            </button>
-
+                                            <Tooltip text="حذف اعلان">
+                                                <button
+                                                    className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                                                    onClick={e => {
+                                                        setNotifObj(notification)
+                                                        setShowDeleteModal(true)
+                                                    }}
+                                                >
+                                                    <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                                                </button>
+                                            </Tooltip>
                                         </td>
                                     </tr>
                                 ))}

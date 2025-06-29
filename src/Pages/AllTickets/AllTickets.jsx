@@ -7,13 +7,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getTicketByUserId } from './../../Services/Axios/Requests/Tickets';
 import UserContext from './../../Contexts/UserContext';
 import LoadingContext from './../../Contexts/LoadingContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import { FaEye } from "react-icons/fa";
 
 // accord this object we ca understand which property and which value should compare to eachother
 const filterSearchObj = {
   'subject': { hasValue: false, property: 'subject' },
-  'movieTitle': { hasValue: false, property: 'movieTitle' },
   'account': { hasValue: true, property: 'category', value: 'account' },
   'payment': { hasValue: true, property: 'category', value: 'payment' },
   'bug': { hasValue: true, property: 'category', value: 'bug' },
@@ -84,6 +84,8 @@ export default function AllTickets() {
           filteredTicketsArray = [...tickets]
         }
       }
+    } else {
+      filteredTicketsArray = [...tickets]
     }
 
     setFilteredTickets(filteredTicketsArray)
@@ -173,13 +175,15 @@ export default function AllTickets() {
                       <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.category == 'account' ? 'حساب' : ticket?.category == 'payment' ? 'پرداخت و اشتراک' : ticket?.category == 'bug' ? 'خطا در سایت یا فیلم' : ticket?.category == 'requests' ? 'درخواست فیلم/سریال' : ticket?.category == 'links' ? 'خرابی یا مشکل لینک فیلم/سریال' : ticket?.category == 'content' ? 'محتوای سایت' : 'سایر موارد'}</td>
                       <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(ticket.created_at)}</td>
                       <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
-                      <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">
-                        <a
-                          href={`/my-account/userPanel/messages/ticket-details/${ticket.id}`}
-                          className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
-                        >
-                          <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                        </a>
+                      <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
+                        <Tooltip text="مشاهده جزئیات">
+                          <a
+                            href={`/my-account/userPanel/messages/ticket-details/${ticket.id}`}
+                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                          >
+                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                          </a>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))

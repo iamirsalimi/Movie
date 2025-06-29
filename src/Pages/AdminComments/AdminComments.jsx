@@ -11,6 +11,8 @@ import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
 
 import LoadingContext from './../../Contexts/LoadingContext';
+import UserContext from './../../Contexts/UserContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 dayjs.extend(jalali)
 
@@ -351,20 +353,17 @@ export default function AdminComments() {
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center max-w-20">
                                                     <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-sm text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                 </td>
+                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
+                                                    <Tooltip text="مشاهده جزئیات">
+                                                        <a
+                                                            href={`/my-account/adminPanel/comments/comment-details/${comment.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                        >
+                                                            <FaEye className="text-sky-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
+                                                </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
-                                                    <button
-                                                        className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                        onClick={e => {
-                                                            if (!commentsIsPending) {
-                                                                setCommentObj(comment)
-                                                                setShowCommentDetails(true)
-                                                                commentDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
-                                                            }
-                                                        }}
-                                                    >
-                                                        <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                        <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
-                                                    </button>
                                                     {comment.status == 'pending' && (
                                                         <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
                                                             <button

@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import UserContext from './../../Contexts/UserContext';
 import LoadingContext from './../../Contexts/LoadingContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import { FaEye } from "react-icons/fa";
 
@@ -230,12 +231,14 @@ export default function AdminAllTickets() {
                                             <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
                                             <td className={`text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
                                             <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">
-                                                <a
-                                                    href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
-                                                    className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
-                                                >
-                                                    <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                </a>
+                                                <Tooltip text="مشاهده جزئیات">
+                                                    <a
+                                                        href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
+                                                        className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                                                    >
+                                                        <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                                                    </a>
+                                                </Tooltip>
                                             </td>
                                         </tr>
                                     ))

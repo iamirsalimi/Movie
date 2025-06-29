@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import jalali from 'jalaliday';
 
 import LoadingContext from './../../Contexts/LoadingContext';
+import UserContext from './../../Contexts/UserContext';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 dayjs.extend(jalali)
 
@@ -279,41 +281,15 @@ export default function AdminRequests() {
                                         <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'series' ? 'سریال' : 'فیلم'}</td>
                                         <td className="!text-wrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.description}</td>
                                         <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'pending' ? 'در حال بررسی ' : request.status == 'approved' ? 'قبول شده ' : 'رد شده'}</td>
-                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex flex-col items-center justify-center gap-5">
-                                            <div className="flex items-center justify-center gap-2">
-                                                <button
-                                                    className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                                    onClick={e => {
-                                                        if (!requestIsPending) {
-                                                            setRequestObj(request)
-                                                            setShowRequestDetails(true)
-                                                            requestDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
-                                                        }
-                                                    }}
+                                        <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
+                                            <Tooltip text="مشاهده جزئیات">
+                                                <a
+                                                    href={`/my-account/adminPanel/requests/request-details/${request.id}`}
+                                                    className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
                                                 >
                                                     <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                </button>
-                                            </div>
-
-                                            {request.status == 'pending' && (
-                                                <div className="flex items-center justify-center gap-2">
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                        onClick={e => approveRequest(request.id)}
-                                                    >
-                                                        <FiCheck className="text-green-500 group-hover:text-white transition-all text-sm" />
-                                                        <span className="text-green-500 font-vazir text-sm group-hover:text-white transition-all text-nowrap">ثبت کردن</span>
-                                                    </button>
-
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                        onClick={e => rejectRequest(request.id)}
-                                                    >
-                                                        <RxCross1 className="text-red-500 group-hover:text-white transition-all text-sm" />
-                                                        <span className="text-red-500 font-vazir text-sm group-hover:text-white transition-all text-nowrap">رد کردن</span>
-                                                    </button>
-                                                </div>
-                                            )}
+                                                </a>
+                                            </Tooltip>
                                         </td>
                                     </tr>
                                 ))}

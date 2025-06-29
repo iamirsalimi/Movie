@@ -15,6 +15,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 // accord this object we ca understand which property and which value should compare to eachother
 const commentFilterSearchObj = {
@@ -428,13 +429,15 @@ export default function MovieDetails() {
                                                                 <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
-                                                                <a
-                                                                    href={`/my-account/adminpanel/comments?id=${comment.id}`}
-                                                                    className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                                >
-                                                                    <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                                    <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
-                                                                </a>
+                                                                <Tooltip text="مشاهده جزئیات">
+                                                                    <a
+                                                                        href={`/my-account/adminpanel/comments?id=${comment.id}`}
+                                                                        className="inline-flex p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                                                                    >
+                                                                        <FaEye className="text-sky-500 group-hover:text-white transition-all" />
+                                                                        <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
+                                                                    </a>
+                                                                </Tooltip>
                                                             </td>
                                                         </tr>
                                                     ))

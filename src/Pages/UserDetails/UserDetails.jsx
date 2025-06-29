@@ -5,8 +5,7 @@ import jalali from 'jalaliday';
 
 import { useParams } from 'react-router-dom'
 import LoadingContext from './../../Contexts/LoadingContext';
-
-dayjs.extend(jalali)
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
@@ -495,13 +494,15 @@ export default function UserDetails() {
                                                             <td className="text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">{ticket?.status == 'pending' ? 'در حال بررسی' : ticket?.status == 'answered' ? 'جواب داده شده' : 'بسته شده'}</td>
                                                             <td className={`text-nowrap py-1 pb-3 px-2 font-vazir-light text-sm text-center ${ticket?.priority == 'middle' ? 'text-light-gray dark:text-gray-400' : ticket?.priority == 'high' ? 'text-red-500' : 'text-sky-500'}`}>{ticket?.priority == 'middle' ? 'متوسط' : ticket?.priority == 'high' ? 'بالا' : 'کم'}</td>
                                                             <td className="py-1 pb-3 px-2 font-vazir-light text-sm text-center text-light-gray dark:text-gray-400">
-                                                                <a
-                                                                    href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
-                                                                    className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                                >
-                                                                    <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                                    <span className="text-sky-500 text-sm font-vazir group-hover:text-white transition-all">مشاهده</span>
-                                                                </a>
+                                                                <Tooltip text="مشاهده جزئیات">
+                                                                    <a
+                                                                        href={`/my-account/adminPanel/tickets/ticket-details/${ticket.id}`}
+                                                                        className="inline-flex p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                                                                    >
+                                                                        <FaEye className="text-sky-500 group-hover:text-white transition-all" />
+                                                                        <span className="text-sky-500 text-sm font-vazir group-hover:text-white transition-all">مشاهده</span>
+                                                                    </a>
+                                                                </Tooltip>
                                                             </td>
                                                         </tr>
                                                     ))
@@ -604,13 +605,15 @@ export default function UserDetails() {
                                                                 <span className={`px-2 py-1 rounded-md font-vazir text-white dark:text-secondary text-nowrap ${comment.status == 'pending' ? 'bg-light-gray dark:bg-gray-400' : comment.status == 'approved' ? 'bg-green-500' : 'bg-red-500'}`}>{comment.status == 'pending' ? 'در حال بررسی' : comment.status == 'approved' ? 'قبول شده' : 'رد شده'}</span>
                                                             </td>
                                                             <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">
-                                                                <a
-                                                                    href={`/my-account/adminpanel/comments?id=${comment.id}`}
-                                                                    className="p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
-                                                                >
-                                                                    <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                                    <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
-                                                                </a>
+                                                                <Tooltip text="مشاهده جزئیات">
+                                                                    <a
+                                                                        href={`/my-account/adminpanel/comments?id=${comment.id}`}
+                                                                        className="inline-flex p-1.5 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group flex items-center justify-center gap-0.5"
+                                                                    >
+                                                                        <FaEye className="text-sky-500 group-hover:text-white transition-all" />
+                                                                        <span className="text-sky-500 font-vazir group-hover:text-white transition-all">مشاهده</span>
+                                                                    </a>
+                                                                </Tooltip>
                                                             </td>
                                                         </tr>
                                                     ))

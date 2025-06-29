@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 
 import DeleteModal from './../../Components/DeleteModal/DeleteModal';
+import Tooltip from './../../Components/Tooltip/Tooltip';
 
 import dayjs from 'dayjs';
 import jalali from 'jalaliday';
@@ -254,34 +255,36 @@ export default function AllWeeklyReleases() {
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.movieType == 'series' ? 'سریال' : 'فیلم'}</td>
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{getDate(release.release_schedules[0]?.date)}</td>
                                                 <td className="text-nowrap py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400">{release?.season_number || '-'}</td>
-                                                <td className="py-1 pb-3 px-2 text-sm text-center text-light-gray dark:text-gray-400 flex items-center justify-center gap-2">
-                                                    <a
-                                                        href={`/my-account/adminPanel/weekly-release/edit-release/${release?.id}`}
-                                                        className="p-1 rounded-md inline-block cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                                                    >
-                                                        <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                                                    </a>
+                                                <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
+                                                    <Tooltip text="ویرایش">
+                                                        <a
+                                                            href={`/my-account/adminPanel/weekly-release/edit-release/${release.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                        >
+                                                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
-                                                        onClick={e => {
-                                                            setShowMovieReleaseDetails(true)
-                                                            setReleaseObj(release)
-                                                            movieReleaseDetailsRef.current.scrollIntoView({ behavior: 'smooth' })
-                                                        }}
-                                                    >
-                                                        <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                    </button>
+                                                    <Tooltip text="مشاهده جزئیات">
+                                                        <a
+                                                            href={`/my-account/adminPanel/weekly-release/release-details/${release.id}`}
+                                                            className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
+                                                        >
+                                                            <FaEye className="text-green-500 group-hover:text-white transition-all" />
+                                                        </a>
+                                                    </Tooltip>
 
-                                                    <button
-                                                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                                                        onClick={e => {
-                                                            setReleaseObj(release)
-                                                            setShowDeleteModal(true)
-                                                        }}
-                                                    >
-                                                        <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                                                    </button>
+                                                    <Tooltip text="حذف">
+                                                        <button
+                                                            className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                                                            onClick={e => {
+                                                                setReleaseObj(release)
+                                                                setShowDeleteModal(true)
+                                                            }}
+                                                        >
+                                                            <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                                                        </button>
+                                                    </Tooltip>
                                                 </td>
                                             </tr>
                                         ))

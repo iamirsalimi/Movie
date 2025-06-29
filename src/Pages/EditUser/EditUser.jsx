@@ -44,7 +44,7 @@ export default function EditUser() {
         userName: yup
             .string()
             .required('وارد كردن نام کاربری اجباری است')
-            .min(6, 'رمز عبور باید حداقل 6 کاراکتر باشد')
+            .min(5, 'نام کاربری باید حداقل 5 کاراکتر باشد')
             .matches(userNameRegex, 'نام کاربری نامعتبر است'),
         role: yup
             .string()

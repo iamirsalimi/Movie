@@ -4,7 +4,9 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import { LuTrash2 } from "react-icons/lu";
 
-export default function AnnouncementElem({ text, created_at, getDate, setUpdateFlag , setAnnouncementObj, setShowAnnouncementModal , setShowDeleteModal, announcementObj, adminFlag, base }) {
+import Tooltip from '../Tooltip/Tooltip';
+
+export default function AnnouncementElem({ text, created_at, getDate, setUpdateFlag, setAnnouncementObj, setShowAnnouncementModal, setShowDeleteModal, announcementObj, adminFlag, base }) {
     return (
         <div className="w-full flex items-center justify-between gap-5 py-3 px-3 rounded-l-md border border-gray-100 dark:border-primary border-r-4 !border-r-yellow-400">
             <span className="w-full rounded-sm inline-flex items-center gap-2">
@@ -15,26 +17,30 @@ export default function AnnouncementElem({ text, created_at, getDate, setUpdateF
             </span>
             {adminFlag && (
                 <div className="flex items-center justify-center gap-2">
-                    <button
-                        className="p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
-                        onClick={e => {
-                            setAnnouncementObj(announcementObj)
-                            setUpdateFlag(true)
-                            setShowAnnouncementModal(true)
-                        }}
-                    >
-                        <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
-                    </button>
+                    <Tooltip text="ویرایش اطلاعیه">
+                        <button
+                            className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                            onClick={e => {
+                                setAnnouncementObj(announcementObj)
+                                setUpdateFlag(true)
+                                setShowAnnouncementModal(true)
+                            }}
+                        >
+                            <MdEdit className="text-sky-500 group-hover:text-white transition-all" />
+                        </button>
+                    </Tooltip>
 
-                    <button
-                        className="p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
-                        onClick={e => {
-                            setAnnouncementObj(announcementObj)
-                            setShowDeleteModal(true)
-                        }}
-                    >
-                        <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
-                    </button>
+                    <Tooltip text="حذف اطلاعیه">
+                        <button
+                            className="inline-block p-1 rounded-md cursor-pointer bg-red-200 hover:bg-red-500 transition-colors group"
+                            onClick={e => {
+                                setAnnouncementObj(announcementObj)
+                                setShowDeleteModal(true)
+                            }}
+                        >
+                            <LuTrash2 className="text-red-500 group-hover:text-white transition-all" />
+                        </button>
+                    </Tooltip>
                 </div>
             )}
         </div>
