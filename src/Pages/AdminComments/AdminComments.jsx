@@ -355,12 +355,15 @@ export default function AdminComments() {
                                                 </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                                     <Tooltip text="مشاهده جزئیات">
-                                                        <a
-                                                            href={`/my-account/adminPanel/comments/comment-details/${comment.id}`}
+                                                        <button
                                                             className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
+                                                            onClick={e => {
+                                                                setCommentObj(comment)
+                                                                setShowCommentDetails(true)
+                                                            }}
                                                         >
                                                             <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                        </a>
+                                                        </button>
                                                     </Tooltip>
                                                 </td>
                                                 <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 text-center flex flex-col items-center justify-center gap-2">

@@ -283,12 +283,15 @@ export default function AdminRequests() {
                                         <td className="text-nowrap py-1 pb-3 px-2 font-vazir text-sm text-light-gray dark:text-gray-400">{request.status == 'pending' ? 'در حال بررسی ' : request.status == 'approved' ? 'قبول شده ' : 'رد شده'}</td>
                                         <td className="py-1 pb-3 px-2 text-sm text-light-gray dark:text-gray-400 flex items-center justify-center gap-1">
                                             <Tooltip text="مشاهده جزئیات">
-                                                <a
-                                                    href={`/my-account/adminPanel/requests/request-details/${request.id}`}
+                                                <button
+                                                    onClick={e => {
+                                                        setRequestObj(request)
+                                                        setShowRequestDetails(true)
+                                                    }}
                                                     className="inline-block p-1 rounded-md cursor-pointer bg-sky-200 hover:bg-sky-500 transition-colors group"
                                                 >
                                                     <FaEye className="text-sky-500 group-hover:text-white transition-all" />
-                                                </a>
+                                                </button>
                                             </Tooltip>
                                         </td>
                                     </tr>

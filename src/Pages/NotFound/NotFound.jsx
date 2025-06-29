@@ -1,10 +1,8 @@
 import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async';
+import notFoundImage from "../../assets/404Page.png"
 
 export default function NotFound() {
-    // const navigate = useNavigate()
-
     return (
         <>
             <Helmet>
@@ -27,7 +25,7 @@ export default function NotFound() {
                     </div>
                 </div>
                 <div className="w-fit lg:min-w-1/2 h-full rounded-md">
-                    <img src="/src/assets/404 Page.png" alt="" className="w-full h-full object-contain object-center" />
+                    <img src={notFoundImage} alt="" className="w-full h-full object-contain object-center" />
                 </div>
             </div>
         </>

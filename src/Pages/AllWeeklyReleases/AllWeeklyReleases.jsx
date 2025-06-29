@@ -266,12 +266,15 @@ export default function AllWeeklyReleases() {
                                                     </Tooltip>
 
                                                     <Tooltip text="مشاهده جزئیات">
-                                                        <a
-                                                            href={`/my-account/adminPanel/weekly-release/release-details/${release.id}`}
+                                                        <button
+                                                            onClick={e => {
+                                                                setReleaseObj(release)
+                                                                setShowMovieReleaseDetails(true)
+                                                            }}
                                                             className="inline-block p-1 rounded-md cursor-pointer bg-green-200 hover:bg-green-500 transition-colors group"
                                                         >
                                                             <FaEye className="text-green-500 group-hover:text-white transition-all" />
-                                                        </a>
+                                                        </button>
                                                     </Tooltip>
 
                                                     <Tooltip text="حذف">
