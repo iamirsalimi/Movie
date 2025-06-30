@@ -2,8 +2,9 @@ import React from 'react'
 
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
+import logo from "../../../public/MovieFlix.png"
 
-let links = [{ title: 'صفحه اصلی', href: '/' },{ title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
+let links = [{ title: 'صفحه اصلی', href: '/' }, { title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: '/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
 
 export default function Footer() {
     return (
@@ -11,13 +12,18 @@ export default function Footer() {
             <div className="container px-5 mx-auto flex flex-col md:flex-row gap-5">
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-5 lg:gap-x-2 gap-y-5 py-7">
                     <div className="flex flex-col items-center md:items-start gap-2 md:pl-5">
-                        <h1 className="text-primary dark:text-white text-3xl font-bold">MovieFlix</h1>
+                        <a href="/" className="lg:inline-flex hidden items-center justify-center gap-0.5">
+                            <h1 className="text-center font-bold text-2xl text-sky-300">ovieFlix</h1>
+                            <div className="w-7 h-7">
+                                <img src={logo} className="w-full h-full object-center object-cover" alt="Logo" />
+                            </div>
+                        </a>
                         <p className="font-vazir text-light-gray dark:text-gray-400 text-center md:text-justify">دانلود رایگان فیلم و سریال با زیرنویس فارسی چسبیده و دوبله فارسی</p>
                     </div>
                     <div className="flex flex-col items-center md:items-start gap-5">
                         <h2 className="text-sky-500 font-bold font-vazir text-2xl">دسترسی سریع</h2>
                         <ul className="grid grid-cols-2 items-center place-items-center md:place-items-start gap-2">
-                            {links.map((link , index) => (
+                            {links.map((link, index) => (
                                 <a key={index} href={link.href} >
                                     <li className="text-light-gray dark:text-white hover:text-sky-300 transition-colors font-vazir">{link.title}</li>
                                 </a>

@@ -7,6 +7,8 @@ import { BsFillMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import logo from "../../../public/MovieFlix.png"
+
 
 const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notifications }) => {
     let { theme, changeTheme, navFlag } = useContext(ThemeContext)
@@ -27,7 +29,7 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
         return filteredNotifs
     }
 
-    console.log(notifications)
+    // console.log(notifications)
 
     let links = [{ title: 'صفحه اصلی', href: '/', paginate: "/page/" }, { title: 'DMCA', href: '/dmca' }, { title: 'خرید اشتراک', href: 'my-account/userPanel/vip-plan' }, { title: 'فیلم های برتر', href: '/imdb-top/movies' }, { title: 'سریال های برتر', href: '/imdb-top/series' }, { title: 'انیمه های برتر', href: '/imdb-top/anime' }]
 
@@ -42,9 +44,11 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
                         <span className={`inline-block absolute right-0 top-0.5 translate-y-4 -black-y-1/2 w-1/3 h-0.5 ${navFlag ? 'bg-primary dark:bg-white' : 'bg-white'} rounded-full`}></span>
                     </button>
 
-                    <a href="/" className="lg:inline-block hidden">
-                        <h1 className={`text-center font-bold text-3xl ${navFlag ? 'text-gray-600 dark:' : ''}text-white`}>MovieFlix</h1>
-                        {/* <img src={logo} className="w-full h-full object-center object-cover" alt="Logo" /> */}
+                    <a href="/" className="lg:inline-flex hidden items-center justify-center gap-0.5">
+                        <h1 className="text-center font-bold text-2xl text-sky-300">ovieFlix</h1>
+                        <div className="w-7 h-7">
+                            <img src={logo} className="w-full h-full object-center object-cover" alt="Logo" />
+                        </div>
                     </a>
 
                     <ul className="hidden lg:flex items-center gap-1">
