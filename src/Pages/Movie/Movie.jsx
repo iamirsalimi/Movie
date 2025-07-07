@@ -50,7 +50,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { GrUpdate } from "react-icons/gr";
 import { RiMedalFill } from "react-icons/ri";
 
-function Movie() {
+function Movie({setMovieName}) {
     const [mainMovie, setMainMovie] = useState(null)
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState(null)
@@ -465,6 +465,10 @@ function Movie() {
     useEffect(() => {
         if (mainMovie && movies.length > 0 && loading) {
             setLoading(false)
+        }
+
+        if(mainMovie){
+            setMovieName(mainMovie.mainTitle)
         }
     }, [mainMovie, movies])
 

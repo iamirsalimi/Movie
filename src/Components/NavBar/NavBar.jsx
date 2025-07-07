@@ -35,7 +35,7 @@ const Navbar = memo(({ setShowModal, setShowMenu, hasUserLoggedIn, user, notific
 
     return (
         <nav className={`${navFlag ? 'shadow shadow-black/5 bg-white dark:bg-secondary' : 'absolute top-0'} w-full z-40 transition-colors`}>
-            <div className="mx-auto container flex items-center justify-between py-3 px-7">
+            <div className="mx-auto container flex items-center justify-between py-3 px-4 sm:px-7">
                 <div className="w-2/3 flex items-center justify-between gap-2 sm:gap-5">
 
                     <button className="lg:hidden relative p-2 h-5 w-5 rounded-md cursor-pointer" onClick={ToggleMenu}>

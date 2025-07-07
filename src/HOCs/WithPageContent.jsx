@@ -10,11 +10,14 @@ import LoadingContext from './../Contexts/LoadingContext'
 
 import { IoLogoInstagram } from "react-icons/io";
 import { PiTelegramLogoDuotone } from "react-icons/pi";
-
+import { TbHome } from "react-icons/tb";
+import { SlArrowLeft } from "react-icons/sl";
 
 export default function WithPageContent(Comp, movieContent) {
     const NewComponent = () => {
         const [loading, setLoading] = useState(true)
+        const [moviePageObj , setMoviePageObj] = useState(null)
+        const [movieName , setMovieName] = useState('')
 
         let { movies: moviesArray } = useContext(MoviesContext)
         const [movies, setMovies] = useState(moviesArray)
@@ -28,15 +31,43 @@ export default function WithPageContent(Comp, movieContent) {
             setMovies(moviesArray)
         }, [moviesArray])
 
+
+        useEffect(() => {
+            let location = window.location.pathname
+            let moviePageFlag = location.includes('/movie/') || location.includes('/series/')
+            let moviePageType = location.includes('/movie/') ? 'movie' : location.includes('/series/') ? 'series' : null 
+            setMoviePageObj({moviePageFlag , moviePageType})
+        } , [])
+
         return (
             <LoadingContext.Provider value={{
                 loading,
                 setLoading
             }}>
-                <div className={`container mx-auto ${movieContent ? '!px-2.5 sm:!px-5' : ''} flex flex-col lg:flex-row gap-x-4 gap-y-7 mt-10`}>
+
+                <ul className={`container mx-auto flex items-center justify-start gap-1 select-none !px-5 mt-4 ${moviePageObj?.moviePageFlag ? 'flex' : 'hidden'} overflow-x-auto no-scrollbar`}>
+                    <li className="inline-flex items-center justify-center gap-1">
+                        <a href="/" className="inline-flex items-center justify-center gap-0.5">
+                            <TbHome className="text-gray-700 dark:text-gray-100 text-base" />
+                            <span className="font-vazir text-gray-700 dark:text-gray-100 text-xs text-nowrap">مووی فلیکس</span>
+                        </a>
+                        <SlArrowLeft className="text-light-gray text-xs" />
+                    </li>
+                    <li className="inline-flex items-center justify-center gap-1">
+                        <a href={`/?search-type=advanced&movieType=${moviePageObj?.moviePageType}`} className="inline-flex items-center justify-center gap-0.5">
+                            <span className="font-vazir text-gray-700 dark:text-gray-100 text-xs text-nowrap">{moviePageObj?.moviePageType == 'movie' ? 'فیلم ها' : 'سریال ها'}</span>
+                        </a>
+                        <SlArrowLeft className="text-light-gray text-xs" />
+                    </li>
+                    <li className="inline-flex items-center justify-center gap-1">
+                            <span className="font-vazir-light text-light-gray dark:text-gray-300 text-xs text-nowrap">{movieName}</span>
+                    </li>
+                </ul>
+
+                <div className={`container mx-auto ${movieContent ? '!px-2.5 sm:!px-5' : ''} flex flex-col lg:flex-row gap-x-4 gap-y-7 ${!moviePageObj?.moviePageFlag ? 'mt-10' : 'mt-4'}`}>
                     {/* right side */}
                     <div className="w-full lg:w-2/3 flex flex-col gap-7">
-                        <Comp movies={movies?.filter(movie => movie.broadcastStatus !== 'premiere')} />
+                        <Comp movies={movies?.filter(movie => movie.broadcastStatus !== 'premiere')} setMovieName={setMovieName} />
                     </div>
 
                     {/* left side */}
